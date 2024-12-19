@@ -25,16 +25,56 @@
 <p>​		（2）、焊接电阻、LED灯</p>
 <p>​			—&gt;LED反面有箭头，必须保证箭头朝上</p>
 <p>​			然后在电阻的右侧焊接AMS芯片</p>
+<p>​					(c1、c2全是电容)</p>
 <p>​			可以用锂电池进行测试—确保开关已拨通</p>
+<p><img src="/../image/Smart_table_pets/hj_1-2.jpg"></p>
 <p>​		（3）、焊接电容</p>
 <p>​			—&gt;C1为10UF、C2为100NF</p>
-<p><img src="D:\Desktop\blog\blog\themes\next\source\images\apple-touch-icon-next.png" alt="apple-touch-icon-next"></p>
+<p>​			<img src="/../image/Smart_table_pets/Soldering_capacitors.jpg"></p>
+<p><img src="/../image/Smart_table_pets/Soldering_capacitors2.jpg"></p>
+<p>​			—&gt;当然右侧开关那还有一堆电容</p>
+<p>​		（4）、焊接电源排针</p>
+<p><img src="/../image/Smart_table_pets/hj_1-4.jpg"></p>
+<p>​		（5）、焊接1X20P的排母</p>
+<p>​			—&gt;只需要焊接两部分，即开头、结尾两行：</p>
+<p><img src="/../image/Smart_table_pets/hj_1-5.jpg"></p>
+<p>​			<img src="/../image/Smart_table_pets/hj_1-5_2.jpg"></p>
+<p>​			—&gt;单片机的两种选择{<a href="%E6%8E%92%E9%92%88%E8%BF%87%E9%95%BF%E4%BC%9A%E5%8E%8B%E5%88%B0%E4%B8%8B%E9%9D%A2%E7%9A%84%E7%94%B5%E6%B1%A0">焊接好排针的</a>、[直接带排针的]、<a href="%E8%80%83%E9%AA%8C%E7%84%8A%E6%8E%A5%E8%83%BD%E5%8A%9B%EF%BC%8C%E5%BB%BA%E8%AE%AE%E9%80%890%EF%BC%8C%E7%84%B6%E5%90%8E%E5%89%AA%E6%8E%89%E9%95%BF%E7%9A%84">不焊接排针的</a>}</p>
+<p>​	<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=815">STM32智能桌面-跳转到第13:35</a>  —不焊接排查麻烦但可以避免压到电池和语音模块不好插上</p>
+<p>​		（6）、焊接XH直针</p>
+<p>​		—&gt;右上角焊接XH直针     &#x2F;&#x2F;语音模块的咪头和喇叭处也是</p>
+<p>​		—&gt;语音模块焊接排针</p>
+<h6 id="2-其余相关注意事项"><a href="#2-其余相关注意事项" class="headerlink" title="2&gt;其余相关注意事项"></a>2&gt;其余相关注意事项</h6><p>​		（1）、锂电池的正负极分别充放电模块的B+和B</p>
+<p>​		（2）、输出电源线要接好—是焊接到模块中央位置两侧：</p>
+<p><img src="/../image/Smart_table_pets/zy_2-2.jpg"></p>
+<p>​		（3）、喇叭没有正负，味头上有三条线的是负极</p>
+<h6 id="3-程序"><a href="#3-程序" class="headerlink" title="3&gt;程序"></a>3&gt;程序</h6><p>​		（1）、串口下载单片机程序</p>
+<p>​			—&gt;使用前需要安装CH340的环境驱动</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=900">STM32智能桌面-跳转到第15:00</a> </p>
+<p>​		（2）、接线部分</p>
+<p>​			接线—接线烧录 &#x2F; CH340</p>
+<p>​			—&gt;使用前拔跳线帽</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=941">STM32智能桌面-跳转到第15:41</a> </p>
+<p>​		（3）、烧录语音部分</p>
+<p>​			—&gt;点击烧录后，需要拔5V线等两秒再接上去</p>
+<p>​			</p>
+<h6 id="4-组装"><a href="#4-组装" class="headerlink" title="4&gt;组装"></a>4&gt;组装</h6><p>​		（1）、模型组装</p>
+<p>​			—&gt;考验手工了，前面都完成了，这里应该没什么问题了</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1114">STM32智能桌面-跳转到第18:34</a></p>
+<p>​			—&gt;用面包板线将OLED的排母与做成的排母相连时，要看好你OLED屏幕左侧是GND还是VCC</p>
+<p>​		（2）、排线</p>
+<p>​			—&gt;太长了剪掉重新接应该也可以</p>
+<h6 id="5-语音网站配置"><a href="#5-语音网站配置" class="headerlink" title="5&gt;语音网站配置"></a>5&gt;语音网站配置</h6><p>​		（1）、智能公元网址</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1640">STM32智能桌面-跳转到第27:20</a></p>
+<p>​		（2）、代码逻辑</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1860">STM32智能桌面-跳转到第31:00</a></p>
+<p>结束语：此篇文章为制作前的准备，如果爆炸了不想做了与我无关</p>
 ]]></content>
       <categories>
         <category>microcontroller</category>
       </categories>
       <tags>
-        <tag>单片机、三次元、狗</tag>
+        <tag>单片机、狗、finish_date:2024-12-19 10:57:50</tag>
       </tags>
   </entry>
   <entry>
