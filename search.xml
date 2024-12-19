@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>智能桌宠</title>
+    <url>/2024/12/18/%E6%99%BA%E8%83%BD%E6%A1%8C%E9%9D%A2%E5%AE%A0%E7%89%A9/</url>
+    <content><![CDATA[<p>​	该文章为尝试进行智能桌宠的搭建中遇到的问题以及相关流程和笔记，以免自己做过就忘，步骤不对直接爆炸；</p>
+<h2 id="教程视频"><a href="#教程视频" class="headerlink" title="教程视频"></a>教程视频</h2><p>​	<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc">STM32智能桌面宠物总教程_哔哩哔哩_bilibili</a>	该视频为搭建桌宠的教程</p>
+<p>​	总计花费3.6元购买了总材料</p>
+<h3 id="视频步骤"><a href="#视频步骤" class="headerlink" title="视频步骤"></a>视频步骤</h3><span id="more"></span>
+
+<h5 id="嘉立创下单PCB和3D打印"><a href="#嘉立创下单PCB和3D打印" class="headerlink" title="嘉立创下单PCB和3D打印"></a>嘉立创下单PCB和3D打印</h5><p>​		—&gt;用他的模板，导出文件后去领卷买东西</p>
+<p>​		（1）、<a href="https://pro.lceda.cn/">构建单片机的软件</a>	可有可无</p>
+<p>​		（2）、<a href="https://www.jlc.com/portal/appDownloadsWithConfig.html">嘉立创PCB下单</a></p>
+<p><img src="/../image/Smart_table_pets/buy_pcb.png"></p>
+<p>​			后面下单参数太多懒得截图：</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=390">STM32智能桌面-跳转到第390秒</a></p>
+<p>​			哔哩哔哩把跳转参数关了的话就是该教程的6:30分处</p>
+<p>​			（3）、嘉立创3D打印下单</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=461">STM32智能桌面-跳转到第7:41</a></p>
+<h5 id="焊接"><a href="#焊接" class="headerlink" title="焊接"></a>焊接</h5><h6 id="1-焊接视频"><a href="#1-焊接视频" class="headerlink" title="1&gt;焊接视频"></a>1&gt;焊接视频</h6><p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=481">STM32智能桌面-跳转到第8:01</a></p>
+<p>​		（1）、焊接开关</p>
+<p>​			—&gt;焊接开关时，一定要先焊接开关左侧的</p>
+<p>​			—&gt;先上锡固定开关左侧一角，然后直接焊其他角</p>
+<p><img src="/../image/Smart_table_pets/Welding_switches.jpg" alt="焊接开关后成品"></p>
+<p>​		（2）、焊接电阻、LED灯</p>
+<p>​			—&gt;LED反面有箭头，必须保证箭头朝上</p>
+<p>​			然后在电阻的右侧焊接AMS芯片</p>
+<p>​			可以用锂电池进行测试—确保开关已拨通</p>
+<p>​		（3）、焊接电容</p>
+<p>​			—&gt;C1为10UF、C2为100NF</p>
+<p><img src="D:\Desktop\blog\blog\themes\next\source\images\apple-touch-icon-next.png" alt="apple-touch-icon-next"></p>
+]]></content>
+      <categories>
+        <category>microcontroller</category>
+      </categories>
+      <tags>
+        <tag>单片机、三次元、狗</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>My New Post</title>
     <url>/2024/12/06/My-New-Post/</url>
     <content><![CDATA[]]></content>
@@ -30,42 +67,5 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>智能桌宠</title>
-    <url>/2024/12/18/%E6%99%BA%E8%83%BD%E6%A1%8C%E9%9D%A2%E5%AE%A0%E7%89%A9/</url>
-    <content><![CDATA[<p>​	该文章为尝试进行智能桌宠的搭建中遇到的问题以及相关流程和笔记，以免自己做过就忘，步骤不对直接爆炸；</p>
-<h2 id="教程视频"><a href="#教程视频" class="headerlink" title="教程视频"></a>教程视频</h2><p>​	<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc">STM32智能桌面宠物总教程_哔哩哔哩_bilibili</a>	该视频为搭建桌宠的教程</p>
-<p>​	总计花费3.6元购买了总材料</p>
-<h3 id="视频步骤"><a href="#视频步骤" class="headerlink" title="视频步骤"></a>视频步骤</h3><span id="more"></span>
-
-<h5 id="嘉立创下单PCB和3D打印"><a href="#嘉立创下单PCB和3D打印" class="headerlink" title="嘉立创下单PCB和3D打印"></a>嘉立创下单PCB和3D打印</h5><p>​		—&gt;用他的模板，导出文件后去领卷买东西</p>
-<p>​		（1）、<a href="https://pro.lceda.cn/">构建单片机的软件</a>	可有可无</p>
-<p>​		（2）、<a href="https://www.jlc.com/portal/appDownloadsWithConfig.html">嘉立创PCB下单</a></p>
-<p><img src="/../image/Smart_table_pets/buy_pcb.png"></p>
-<p>​			后面下单参数太多懒得截图：</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=390">STM32智能桌面-跳转到第390秒</a></p>
-<p>​			哔哩哔哩把跳转参数关了的话就是该教程的6:30分处</p>
-<p>​			（3）、嘉立创3D打印下单</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=461">STM32智能桌面-跳转到第7:41</a></p>
-<h5 id="焊接"><a href="#焊接" class="headerlink" title="焊接"></a>焊接</h5><h6 id="1-焊接视频"><a href="#1-焊接视频" class="headerlink" title="1&gt;焊接视频"></a>1&gt;焊接视频</h6><p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=481">STM32智能桌面-跳转到第8:01</a></p>
-<p>​		（1）、焊接开关</p>
-<p>​			—&gt;焊接开关时，一定要先焊接开关左侧的</p>
-<p>​			—&gt;先上锡固定开关左侧一角，然后直接焊其他角</p>
-<p><img src="/../image/Smart_table_pets/Welding_switches.jpg" alt="焊接开关后成品"></p>
-<p>​		（2）、焊接电阻、LED灯</p>
-<p>​			—&gt;LED反面有箭头，必须保证箭头朝上</p>
-<p>​			然后在电阻的右侧焊接AMS芯片</p>
-<p>​			可以用锂电池进行测试—确保开关已拨通</p>
-<p>​		（3）、焊接电容</p>
-<p>​			—&gt;C1为10UF、C2为100NF</p>
-<p><img src="D:\Desktop\blog\blog\source\image\Smart_table_pets\Soldering_capacitors.jpg"></p>
-]]></content>
-      <categories>
-        <category>microcontroller</category>
-      </categories>
-      <tags>
-        <tag>单片机、三次元、狗</tag>
-      </tags>
   </entry>
 </search>
