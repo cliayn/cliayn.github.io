@@ -1,9 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>web和小程序的漏洞排查</title>
+    <url>/2024/12/20/%E7%AC%94%E8%AE%B0_js-request/</url>
+    <content><![CDATA[<p>该篇文章为记录在工作时遇到的基本问题以及对应的解决方式，以免自己把一些方法用完就忘，下次遇到又得🐔🐔</p>
+<h2 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h2><h3 id="过前端加密"><a href="#过前端加密" class="headerlink" title="过前端加密"></a>过前端加密</h3><p>​	在web端或者小程序中可能遇到请求包中的参数加密的情况，这种加密我一般用下面的两种处理方式。</p>
+<span id="more"></span>
+
+<h6 id="1、在js中找加密和解密算法"><a href="#1、在js中找加密和解密算法" class="headerlink" title="1、在js中找加密和解密算法"></a>1、在js中找加密和解密算法</h6><p>​		—如果是自定义算法你可中大奖了，你得解算法</p>
+<p>​		—&gt;适用于简单的、有框架可套的算法，例如：AES、DES、RSA-酌情考虑</p>
+<p>​		1&gt;主要是排查js代码中的加密函数和解密函数，小程序的话需要用工具调出控制台进行调试</p>
+<p>​		2&gt;排查的函数通常为encrypt、decrypt函数，简单的直接在源代码处ctrl+f找这两单词就行，复杂的需要交数据前暂停执行进行调试，可能有点抽象，给个图就好了</p>
+<p><img src="/../image/note_24_12/1_1-2.jpg" alt="1_1-2"></p>
+<p>​		3&gt;复杂的需要一步步找，一般是小程序需要调试，步骤如下：</p>
+<p>​			（1）、暂停执行</p>
+<p>​			（2）、输入框中输入数据</p>
+<p>​			（3）、点下一步，或者下一个函数</p>
+<p>​			（4）、等监视的数据突然加密了，就记下那个函数分析</p>
+<p>​			（5）、主要找加密算法是什么、iv和key，自定义算法和国密那些就用第二个方法吧</p>
+<p>​	小程序需要用工具调出，工具推荐如下：</p>
+<p>​			①、<a href="https://github.com/eeeeeeeeee-code/e0e1-wx">windows_自动化反编译</a> </p>
+<p>​			②、<a href="https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/releases/">WeChatOpenDevTools-Python</a> </p>
+<h6 id="2、在控制台中定义函数直接输入数据"><a href="#2、在控制台中定义函数直接输入数据" class="headerlink" title="2、在控制台中定义函数直接输入数据"></a>2、在控制台中定义函数直接输入数据</h6><p>​		1&gt;这个如果处理的好，在web端基本可以直接无需理会加密</p>
+<p>​			—&gt;需要比较熟练的使用python或者其他的代码，但是，熟练使用ai也行</p>
+<p>​		2&gt;有篇文章讲的很细，如下：</p>
+<p>​			—&gt;<a href="https://xz.aliyun.com/t/14629?time__1311=GqAhYK0KBKAIP05DKBOxmEr8RpQcC1aoD">保姆级教程—前端加密的对抗（附带靶场） - 先知社区</a> </p>
+<h6 id="3、other"><a href="#3、other" class="headerlink" title="3、other"></a>3、other</h6><p>​	—&gt;在应用软件中去壳逆向分析伪代码</p>
+<h3 id="jwt-api问题"><a href="#jwt-api问题" class="headerlink" title="jwt_api问题"></a>jwt_api问题</h3><p>​	我见识现在不多，有错误的地方，想起来了就回来改一下，没有想起来就错下去喽。</p>
+<p>​	jwt身份验证，一般情况不会给人伪造为空或者爆破出来密钥的机会，对我们有利的地方是通过正规途径获得一个合法的jwt后他们的接口通常不会有过多的权限管理，人话就是越权，逻辑洞可能比较多</p>
+<h6 id="1、尝试jwt绕过"><a href="#1、尝试jwt绕过" class="headerlink" title="1、尝试jwt绕过"></a>1、尝试jwt绕过</h6><h6 id="—-生产环境没成功过"><a href="#—-生产环境没成功过" class="headerlink" title="—&gt;生产环境没成功过"></a>—&gt;生产环境没成功过</h6><p>在渗透测试中，可以尝试以下几种JWT绕过方法—没有也要试试，成功就爽了</p>
+<p>​	1&gt;<strong>修改JWT令牌</strong>：通过修改JWT的Payload部分，可以尝试提升权限。例如，将用户角色从普通用户修改为管理员<a href="https://xz.aliyun.com/t/12906">1</a>。</p>
+<p>​	2&gt;<strong>利用过期令牌</strong>：有时即使JWT令牌已过期，服务器端可能仍然接受该令牌。通过修改令牌中的<em>exp</em>（过期时间）字段，可以尝试让过期令牌重新生效<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
+<p>​	3&gt;<strong>历史令牌伪造</strong>：如果能够获取到历史JWT令牌，可以尝试修改其中的<em>iat</em>（签发时间）和<em>exp</em>字段，使其看起来像是新签发的令牌<a href="https://blog.csdn.net/weixin_51559599/article/details/134860478">3</a>。</p>
+<p>​	4&gt;<strong>算法混淆</strong>：JWT头部中的<em>alg</em>字段指定了签名算法。如果服务器端没有正确验证该字段，可以尝试将其修改为<em>none</em>，绕过签名验证<a href="https://xz.aliyun.com/t/12906">1</a>。</p>
+<p>​	5&gt;<strong>密钥爆破</strong>：如果服务器使用了弱密钥，可以尝试使用密钥字典进行爆破，获取用于签名的密钥<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
+<p>​	6&gt;<strong>SQL注入绕过key</strong>：在某些情况下，如果JWT令牌中包含SQL注入漏洞，可以通过注入攻击绕过密钥验证<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
+<h6 id="2、利用jwt"><a href="#2、利用jwt" class="headerlink" title="2、利用jwt"></a>2、利用jwt</h6><h6 id="—-主要是找api看越权"><a href="#—-主要是找api看越权" class="headerlink" title="—&gt;主要是找api看越权"></a>—&gt;主要是找api看越权</h6><p>​	拿小程序来说，一般会直接给你一个jwt，这个jwt在服务器里面没有绑定任何用户，里面一般会有一个类似于openid的存在，当然有些要你注册或者登录才会响应一个jwt或者token</p>
+<p>​	1&gt;将小程序反编译出来的代码进行分析整理，可以用我上面给的自动化反编译的那个软件，主要整理出接口和网址</p>
+<p>​	2&gt;有接口就直接爆GET、POST、PUT、HEAD、TRACE等（生产环境没事别爆delete，爆成功等死）分析响应包，很明显的，一般就几种响应，要么200，要么权限不足，要么返回数据，要么说你类型错误，当然还有给你拉小黑屋的</p>
+<p>​	3&gt;有响应就分析操作；该方法主要是找api，不一定只有反编译的js里有，其本身小程序也是前端，可以尝试更改响应包跑前端的接口</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Cybersecurity</tag>
+        <tag>js</tag>
+        <tag>api</tag>
+        <tag>jwt</tag>
+        <tag>keys</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>智能桌宠</title>
     <url>/2024/12/18/%E6%99%BA%E8%83%BD%E6%A1%8C%E9%9D%A2%E5%AE%A0%E7%89%A9/</url>
-    <content><![CDATA[<p>​	该文章为尝试进行智能桌宠的搭建中遇到的问题以及相关流程和笔记，以免自己做过就忘，步骤不对直接爆炸；</p>
+    <content><![CDATA[<p>该文章为尝试进行智能桌宠的搭建前记录的相关流程和笔记，以免自己行动时步骤不对直接爆炸；</p>
 <h2 id="教程视频"><a href="#教程视频" class="headerlink" title="教程视频"></a>教程视频</h2><p>​	<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc">STM32智能桌面宠物总教程_哔哩哔哩_bilibili</a>	该视频为搭建桌宠的教程</p>
 <p>​	总计花费3.6元购买了总材料</p>
 <h3 id="视频步骤"><a href="#视频步骤" class="headerlink" title="视频步骤"></a>视频步骤</h3><span id="more"></span>
@@ -74,7 +125,82 @@
         <category>microcontroller</category>
       </categories>
       <tags>
-        <tag>单片机、狗、三次元</tag>
+        <tag>单片机</tag>
+        <tag>狗</tag>
+        <tag>三次元</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>信息搜集思路</title>
+    <url>/2024/12/20/%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86%E6%80%9D%E8%B7%AF/</url>
+    <content><![CDATA[<h1 id="信息搜集思路扩散"><a href="#信息搜集思路扩散" class="headerlink" title="信息搜集思路扩散"></a>信息搜集思路扩散</h1><p>​	1.ico图标搜集</p>
+<p>​	2.icp备案号&#x2F;icp.name备案公司搜集</p>
+<p>​	3.域名搜集———简写域名搜集&#x2F;子域名搜集</p>
+<span id="more"></span>
+
+<p>​	4.关键字搜寻-title&#x2F;body</p>
+<p>​	5.中标公司，名下公司查询—涉及就查</p>
+<p>​	6.证书查询</p>
+<p>​	7.图片搜索—基本没用</p>
+<p>​		1&gt;联合&#x2F;递归查询</p>
+<p>​		2&gt;爆破域名查询——-针对空间测绘找不到的影子资产</p>
+<p>​		3&gt;域名目录更改—–例如，ab.sb.com——&gt;ab.sb.com&#x2F;ab          目录爆破**</p>
+<h1 id="找网址漏洞的信息搜集思路"><a href="#找网址漏洞的信息搜集思路" class="headerlink" title="找网址漏洞的信息搜集思路"></a>找网址漏洞的信息搜集思路</h1><p>​	1.要是信息搜集能力强于web渗透思路如下</p>
+<p>​		1&gt;与其在网址上找漏洞不如，根据漏洞找对应网址</p>
+<p>​	2.web渗透强于其他</p>
+<p>​		2&gt;搜集边缘&#x2F;影子资产，从易到难</p>
+<h1 id="根据公众号找web的思路"><a href="#根据公众号找web的思路" class="headerlink" title="根据公众号找web的思路"></a>根据公众号找web的思路</h1><p>​	1.找合作公司的公众号，找相关的功能web</p>
+<p>​	2.找到公众号所有的web，根据域名找公司，根据公司找公众号，以此往复***</p>
+<p>​	3.根据全称公众号，找下面的无关公众号点点，可能存在你要找的内容功能</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Information</tag>
+        <tag>Official account</tag>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>蜜罐怎么获取个人信息</title>
+    <url>/2024/12/20/%E8%9C%9C%E7%BD%90%E8%8E%B7%E5%8F%96%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF/</url>
+    <content><![CDATA[<h3 id="蜜罐防守"><a href="#蜜罐防守" class="headerlink" title="蜜罐防守"></a>蜜罐防守</h3><p>​	蜜罐主要是通过web蜜罐和mysql蜜罐来获取个人信息</p>
+<p>​	蜜罐通过模拟各种服务来获取个人信息，但也跟漏洞JSONP有关</p>
+<p>​	蜜罐获取个人信息主要是依赖用户所注册的网址存在JSONP、XSS等信息泄露的漏洞</p>
+<span id="more"></span>
+
+<p><strong>JSONP漏洞与CSRF非常相似，但JSONP劫持只能获得js返回的敏感数据</strong></p>
+<p><strong>JSONP劫持步骤：</strong></p>
+<p>​	1.蜜罐被访问url</p>
+<p>​	2.蜜罐返回包含回调函数的JS代码</p>
+<p>​	3.访问网址B时-将回调函数作为参数请求</p>
+<p>​	4.返回包含用户信息的JSON数据</p>
+<p>​	5.上传用户信息数据到蜜罐</p>
+<p><strong>读取微信号</strong></p>
+<p>win系统下，读取手机号和微信ID的方法（默认常见微信文件路径）</p>
+<p>我们可以下面的步骤来获取用户的微信号</p>
+<p>1）通过C:&#x2F;Windows&#x2F;PFRO.log获取windows用户名</p>
+<p>2）通过C:&#x2F;Users&#x2F;用户名&#x2F;Documents&#x2F;WeChat Files&#x2F;All Users&#x2F;config&#x2F;config.data获取wxid</p>
+<p>3）通过C:&#x2F;Users&#x2F;用户名&#x2F;Documents&#x2F;WeChat Files&#x2F;wx_id&#x2F;config&#x2F;AccInfo.dat获取微信号、手机号</p>
+<p><strong>读取chrome的登录数据</strong></p>
+<p>读取chrome的login data，虽然无法解密出密码，但是还是可以获取到对方的一些账号</p>
+<p>C:&#x2F;Users&#x2F;‘ + username + ‘&#x2F;AppData&#x2F;Local&#x2F;Google&#x2F;Chrome&#x2F;User Data&#x2F;Default&#x2F;Login Data</p>
+<p><strong>chrome的历史记录</strong></p>
+<p>我们还可以读取chrome的历史记录</p>
+<p>C:&#x2F;Users&#x2F;‘ + username + ‘&#x2F;AppData&#x2F;Local&#x2F;Google&#x2F;Chrome&#x2F;User Data&#x2F;Default&#x2F;History</p>
+<p>开源蜜罐系统hfish中的mysql蜜罐就利用了这种方式来获取攻击者的文件，如下首先在蜜罐中设置要读取的文件。</p>
+<p><img src="/../image/Honeypot/%E8%9C%9C%E7%BD%90.png" alt="蜜罐"></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Cybersecurity</tag>
+        <tag>Honeypot</tag>
+        <tag>Information Gathering</tag>
+        <tag>Intrusion Detection</tag>
+        <tag>Attack Analysis</tag>
       </tags>
   </entry>
   <entry>
@@ -82,30 +208,23 @@
     <url>/2024/12/06/My-New-Post/</url>
     <content><![CDATA[]]></content>
       <tags>
-        <tag>标签1, 标签2, 标签3</tag>
+        <tag>标签1</tag>
+        <tag>标签2</tag>
+        <tag>标签3</tag>
       </tags>
   </entry>
   <entry>
     <title>test测试博客名</title>
     <url>/2024/12/06/test%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2%E5%90%8D/</url>
     <content><![CDATA[]]></content>
+      <tags>
+        <tag>test1</tag>
+        <tag>test2</tag>
+      </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
+    <title></title>
     <url>/2024/12/06/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
+    <content><![CDATA[]]></content>
   </entry>
 </search>
