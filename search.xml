@@ -54,10 +54,11 @@
 <p>​	4&gt;<strong>算法混淆</strong>：JWT头部中的<em>alg</em>字段指定了签名算法。如果服务器端没有正确验证该字段，可以尝试将其修改为<em>none</em>，绕过签名验证<a href="https://xz.aliyun.com/t/12906">1</a>。</p>
 <p>​	5&gt;<strong>密钥爆破</strong>：如果服务器使用了弱密钥，可以尝试使用密钥字典进行爆破，获取用于签名的密钥<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
 <p>​	6&gt;<strong>SQL注入绕过key</strong>：在某些情况下，如果JWT令牌中包含SQL注入漏洞，可以通过注入攻击绕过密钥验证<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
-<h6 id="2、利用jwt"><a href="#2、利用jwt" class="headerlink" title="2、利用jwt"></a>2、利用jwt</h6><h6 id="—-主要是找api看越权"><a href="#—-主要是找api看越权" class="headerlink" title="—&gt;主要是找api看越权"></a>—&gt;主要是找api看越权</h6><p>​	拿小程序来说，一般会直接给你一个jwt，这个jwt在服务器里面没有绑定任何用户，里面一般会有一个类似于openid的存在，当然有些要你注册或者登录才会响应一个jwt或者token</p>
+<h6 id="2、利用jwt"><a href="#2、利用jwt" class="headerlink" title="2、利用jwt"></a>2、利用jwt</h6><h6 id="—-找api看越权"><a href="#—-找api看越权" class="headerlink" title="—&gt;找api看越权"></a>—&gt;找api看越权</h6><p>​	拿小程序来说，一般会直接给你一个jwt，这个jwt在服务器里面没有绑定任何用户，里面一般会有一个类似于openid的存在，当然有些要你注册或者登录才会响应一个jwt或者token</p>
 <p>​	1&gt;将小程序反编译出来的代码进行分析整理，可以用我上面给的自动化反编译的那个软件，主要整理出接口和网址</p>
 <p>​	2&gt;有接口就直接爆GET、POST、PUT、HEAD、TRACE等（生产环境没事别爆delete，爆成功等死）分析响应包，很明显的，一般就几种响应，要么200，要么权限不足，要么返回数据，要么说你类型错误，当然还有给你拉小黑屋的</p>
 <p>​	3&gt;有响应就分析操作；该方法主要是找api，不一定只有反编译的js里有，其本身小程序也是前端，可以尝试更改响应包跑前端的接口</p>
+<h6 id="—-同一域名使用"><a href="#—-同一域名使用" class="headerlink" title="—&gt;同一域名使用"></a>—&gt;同一域名使用</h6><p>​	拿网址举例，123.123.com的合法jwt，或许是可以到111.123.com的网址使用的，也就是说，如果你一个网址没有权限，可以先尝试去找一样域名的其他网址去注册一个合法用户，获得jwt后尝试直接使用该网址的功能</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
