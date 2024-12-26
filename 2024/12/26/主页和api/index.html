@@ -21,25 +21,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="记录笔记的网址">
-<meta property="og:type" content="website">
-<meta property="og:title" content="乌篷船的博客">
-<meta property="og:url" content="http://example.com/tags/Intrusion-Detection/index.html">
+    <meta name="description" content="记录在工作期间所遇到的小程序和web端所用的方式如下： 1、主页由其子域名显示，其他功能显示皆由该子域名指向，xxx#&#x2F;page&#x2F;xxx 2、其信息由专门的api子域名来传回，有时会有sms子域名用作短信的发送 3、若没有登录，部分功能的显示可以显示，但无实际信息，即，空白，json为{} 特点1.页面和小程序反编译爬取出的js文件或者json文件通常会有上述两个子域名的指向&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主页和api">
+<meta property="og:url" content="http://example.com/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="记录笔记的网址">
+<meta property="og:description" content="记录在工作期间所遇到的小程序和web端所用的方式如下： 1、主页由其子域名显示，其他功能显示皆由该子域名指向，xxx#&#x2F;page&#x2F;xxx 2、其信息由专门的api子域名来传回，有时会有sms子域名用作短信的发送 3、若没有登录，部分功能的显示可以显示，但无实际信息，即，空白，json为{} 特点1.页面和小程序反编译爬取出的js文件或者json文件通常会有上述两个子域名的指向&amp;">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-26T07:22:28.633Z">
 <meta property="article:author" content="乌篷船">
-<meta property="article:tag" content="python,网络安全,娱乐">
+<meta property="article:tag" content="api">
+<meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/tags/Intrusion-Detection/">
+<link rel="canonical" href="http://example.com/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/Intrusion-Detection/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/","path":"2024/12/26/主页和api/","title":"主页和api"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: Intrusion Detection | 乌篷船的博客</title>
+<title>主页和api | 乌篷船的博客</title>
   
 
 
@@ -125,7 +128,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -138,6 +141,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">1.2.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">利用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E5%B0%BE"><span class="nav-number">2.</span> <span class="nav-text">结尾</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -194,50 +198,128 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">Intrusion Detection
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乌篷船">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="乌篷船的博客">
+      <meta itemprop="description" content="记录笔记的网址">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="主页和api | 乌篷船的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          主页和api
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2024</span>
+
+      <time title="创建时间：2024-12-26 00:00:00 / 修改时间：15:22:28" itemprop="dateCreated datePublished" datetime="2024-12-26T00:00:00+08:00">2024-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Cybersecurity/" itemprop="url" rel="index"><span itemprop="name">Cybersecurity</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>604</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>在工作期间所遇到的小程序和web端所用的方式如下：</p>
+<p>1、主页由其子域名显示，其他功能显示皆由该子域名指向，xxx#&#x2F;page&#x2F;xxx</p>
+<p>2、其信息由专门的api子域名来传回，有时会有sms子域名用作短信的发送</p>
+<p>3、若没有登录，部分功能的显示可以显示，但无实际信息，即，空白，json为{}</p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><p>1.页面和小程序反编译爬取出的js文件或者json文件通常会有上述两个子域名的指向&#x2F;接口</p>
+<p>2.找到指向&#x2F;接口，能够查看页面的功能以及接口的作用，用作于测试接口</p>
+<p>3.通常会有登录接口用作返回token，大概率为jwt</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.有些网址不登录，后台的接口，以及其他的接口无法查看，只能看到个登录接口，即后续网址接口信息需要后台返回，但不代表不存在，通常即使是一个服务器其功能和作用都会十分广泛，毕竟好的服务器很贵的。</p>
+<p>—&gt;所以可以从多方入手，例如：该子域名的其他小程序，该接口子域名是否存在被其他网址或小程序被调用的可能</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>1.web需要登录就找它对应的小程序，一般来说小程序一旦授权就会给合法jwt</p>
+<p>2.用jwt深度爬取js，就是哪里能点点哪里，都点一遍，然后把js脚本下下来，分析指向#&#x2F;xxx&#x2F;和api</p>
+<p>3.看有无越权，逻辑漏洞，版本泄露，路径泄露和框架泄露等等</p>
+<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>认真分析一个事物就会形成一条思路明显的线路，整体的框架和内容就会完整，认真很久了还没思路那就去睡觉</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2024-12-20T00:00:00+08:00"
-              content="2024-12-20">
-          12-20
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2024/12/20/%E8%9C%9C%E7%BD%90%E8%8E%B7%E5%8F%96%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF/" itemprop="url">
-            <span itemprop="name">蜜罐怎么获取个人信息</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/api/" rel="tag"># api</a>
+              <a href="/tags/web/" rel="tag"># web</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/12/26/%E6%BC%8F%E6%B4%9E%E5%BA%93/" rel="prev" title="漏洞库">
+                  <i class="fa fa-angle-left"></i> 漏洞库
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
+
 
 </div>
   </main>
