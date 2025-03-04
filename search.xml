@@ -1,83 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Windows注册表防更新</title>
-    <url>/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:0000F423F</span><br><span class="line">&quot;PauseFeatureUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseFeatureUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseUpdatesExpiryTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>直接去注册表如下位置添加DWORD(32位)值(D)，值自己设，进制改为10按道理也行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:00002710</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Windows update</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>信息搜集思路</title>
-    <url>/2024/12/20/%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86%E6%80%9D%E8%B7%AF/</url>
-    <content><![CDATA[<h1 id="信息搜集思路扩散"><a href="#信息搜集思路扩散" class="headerlink" title="信息搜集思路扩散"></a>信息搜集思路扩散</h1><p>​	1.ico图标搜集</p>
-<p>​	2.icp备案号&#x2F;icp.name备案公司搜集</p>
-<p>​	3.域名搜集———简写域名搜集&#x2F;子域名搜集</p>
-<span id="more"></span>
-
-<p>​	4.关键字搜寻-title&#x2F;body</p>
-<p>​	5.中标公司，名下公司查询—涉及就查</p>
-<p>​	6.证书查询</p>
-<p>​	7.图片搜索—基本没用</p>
-<p>​		1&gt;联合&#x2F;递归查询</p>
-<p>​		2&gt;爆破域名查询——-针对空间测绘找不到的影子资产</p>
-<p>​		3&gt;域名目录更改—–例如，ab.sb.com——&gt;ab.sb.com&#x2F;ab          目录爆破**</p>
-<h1 id="找网址漏洞的信息搜集思路"><a href="#找网址漏洞的信息搜集思路" class="headerlink" title="找网址漏洞的信息搜集思路"></a>找网址漏洞的信息搜集思路</h1><p>​	1.要是信息搜集能力强于web渗透思路如下</p>
-<p>​		1&gt;与其在网址上找漏洞不如，根据漏洞找对应网址</p>
-<p>​	2.web渗透强于其他</p>
-<p>​		2&gt;搜集边缘&#x2F;影子资产，从易到难</p>
-<h1 id="根据公众号找web的思路"><a href="#根据公众号找web的思路" class="headerlink" title="根据公众号找web的思路"></a>根据公众号找web的思路</h1><p>​	1.找合作公司的公众号，找相关的功能web</p>
-<p>​	2.找到公众号所有的web，根据域名找公司，根据公司找公众号，以此往复***</p>
-<p>​	3.根据全称公众号，找下面的无关公众号点点，可能存在你要找的内容功能</p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>Information</tag>
-        <tag>Official account</tag>
-        <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>主页和api</title>
-    <url>/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/</url>
-    <content><![CDATA[<h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>在工作期间所遇到的小程序和web端所用的方式如下：</p>
-<p>1、主页由其子域名显示，其他功能显示皆由该子域名指向，xxx#&#x2F;page&#x2F;xxx</p>
-<p>2、其信息由专门的api子域名来传回，有时会有sms子域名用作短信的发送</p>
-<p>3、若没有登录，部分功能的显示可以显示，但无实际信息，即，空白，json为{}</p>
-<span id="more"></span>
-
-<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><p>1.页面和小程序反编译爬取出的js文件或者json文件通常会有上述两个子域名的指向&#x2F;接口</p>
-<p>2.找到指向&#x2F;接口，能够查看页面的功能以及接口的作用，用作于测试接口</p>
-<p>3.通常会有登录接口用作返回token，大概率为jwt</p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.有些网址不登录，后台的接口，以及其他的接口无法查看，只能看到个登录接口，即后续网址接口信息需要后台返回，但不代表不存在，通常即使是一个服务器其功能和作用都会十分广泛，毕竟好的服务器很贵的。</p>
-<p>—&gt;所以可以从多方入手，例如：该子域名的其他小程序，该接口子域名是否存在被其他网址或小程序被调用的可能</p>
-<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>1.web需要登录就找它对应的小程序，一般来说小程序一旦授权就会给合法jwt</p>
-<p>2.用jwt深度爬取js，就是哪里能点点哪里，都点一遍，然后把js脚本下下来，分析指向#&#x2F;xxx&#x2F;和api</p>
-<p>3.看有无越权，逻辑漏洞，版本泄露，路径泄露和框架泄露等等</p>
-<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>认真分析一个事物就会形成一条思路明显的线路，整体的框架和内容就会完整，认真很久了还没思路那就去睡觉</p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>api</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>前端游走</title>
     <url>/2025/03/04/%E5%89%8D%E7%AB%AF%E6%B8%B8%E8%B5%B0/</url>
     <content><![CDATA[<h1 id="前端加密对抗"><a href="#前端加密对抗" class="headerlink" title="前端加密对抗"></a>前端加密对抗</h1><p>网址教学：<a href="https://xz.aliyun.com/news/14066">https://xz.aliyun.com/news/14066</a></p>
@@ -120,7 +43,7 @@
 
 <p>​			一般来说，就会跳转到第一种情况，当然，具体情况还得看js咋写的</p>
 <p><img src="/../image/web-js-freely/test1.jpg"></p>
-<p>跳转到后台页面后一般是不能点击里面的链接的，这个时候要跳到f12的网络功能，将返回”Unauthorized”或者相关的都禁用，禁用完之后，再运行一次控制台指令就不会强制出去了</p>
+<p>跳转到后台页面后一般是不能点击里面的链接的，这个时候要跳到f12的网络功能或者打开burp拦截包，将返回”Unauthorized”或者相关的都禁用或者拦截，禁用完之后，再运行一次控制台指令就不会强制跳转了</p>
 <p><img src="/../image/web-js-freely/3.png"></p>
 <p>！！！值得注意的是：</p>
 <p>1&gt;<strong>记得提前删除网络日历，要不然太多了影响判断</strong></p>
@@ -145,85 +68,6 @@
         <tag>web-net</tag>
         <tag>js</tag>
         <tag>key</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>智能桌宠</title>
-    <url>/2024/12/18/%E6%99%BA%E8%83%BD%E6%A1%8C%E9%9D%A2%E5%AE%A0%E7%89%A9/</url>
-    <content><![CDATA[<p>该文章为尝试进行智能桌宠的搭建前记录的相关流程和笔记，以免自己行动时步骤不对直接爆炸；</p>
-<h2 id="教程视频"><a href="#教程视频" class="headerlink" title="教程视频"></a>教程视频</h2><p>​	<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc">STM32智能桌面宠物总教程_哔哩哔哩_bilibili</a>	该视频为搭建桌宠的教程</p>
-<p>​	总计花费3.6元购买了总材料</p>
-<h3 id="视频步骤"><a href="#视频步骤" class="headerlink" title="视频步骤"></a>视频步骤</h3><span id="more"></span>
-
-<h5 id="嘉立创下单PCB和3D打印"><a href="#嘉立创下单PCB和3D打印" class="headerlink" title="嘉立创下单PCB和3D打印"></a>嘉立创下单PCB和3D打印</h5><p>​		—&gt;用他的模板，导出文件后去领卷买东西</p>
-<p>​		（1）、<a href="https://pro.lceda.cn/">构建单片机的软件</a>	可有可无</p>
-<p>​		（2）、<a href="https://www.jlc.com/portal/appDownloadsWithConfig.html">嘉立创PCB下单</a></p>
-<p><img src="/../image/Smart_table_pets/buy_pcb.png"></p>
-<p>​			后面下单参数太多懒得截图：</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=390">STM32智能桌面-跳转到第390秒</a></p>
-<p>​			哔哩哔哩把跳转参数关了的话就是该教程的6:30分处</p>
-<p>​			（3）、嘉立创3D打印下单</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=461">STM32智能桌面-跳转到第7:41</a></p>
-<h5 id="焊接"><a href="#焊接" class="headerlink" title="焊接"></a>焊接</h5><h6 id="1-焊接视频"><a href="#1-焊接视频" class="headerlink" title="1&gt;焊接视频"></a>1&gt;焊接视频</h6><p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=481">STM32智能桌面-跳转到第8:01</a></p>
-<p>​		（1）、焊接开关</p>
-<p>​			—&gt;焊接开关时，一定要先焊接开关左侧的</p>
-<p>​			—&gt;先上锡固定开关左侧一角，然后直接焊其他角</p>
-<p><img src="/../image/Smart_table_pets/Welding_switches.jpg" alt="焊接开关后成品"></p>
-<p>​		（2）、焊接电阻、LED灯</p>
-<p>​			—&gt;LED反面有箭头，必须保证箭头朝上</p>
-<p>​			然后在电阻的右侧焊接AMS芯片</p>
-<p>​					(c1、c2全是电容)</p>
-<p>​			可以用锂电池进行测试—确保开关已拨通</p>
-<p><img src="/../image/Smart_table_pets/hj_1-2.jpg"></p>
-<p>​		（3）、焊接电容</p>
-<p>​			—&gt;C1为10UF、C2为100NF</p>
-<p>​			<img src="/../image/Smart_table_pets/Soldering_capacitors.jpg"></p>
-<p><img src="/../image/Smart_table_pets/Soldering_capacitors2.jpg"></p>
-<p>​			—&gt;当然右侧开关那还有一堆电容</p>
-<p>​		（4）、焊接电源排针</p>
-<p><img src="/../image/Smart_table_pets/hj_1-4.jpg"></p>
-<p>​		（5）、焊接1X20P的排母</p>
-<p>​			—&gt;只需要焊接两部分，即开头、结尾两行：</p>
-<p><img src="/../image/Smart_table_pets/hj_1-5.jpg"></p>
-<p>​			<img src="/../image/Smart_table_pets/hj_1-5_2.jpg"></p>
-<p>​			—&gt;单片机的两种选择{<a href="%E6%8E%92%E9%92%88%E8%BF%87%E9%95%BF%E4%BC%9A%E5%8E%8B%E5%88%B0%E4%B8%8B%E9%9D%A2%E7%9A%84%E7%94%B5%E6%B1%A0">焊接好排针的</a>、[直接带排针的]、<a href="%E8%80%83%E9%AA%8C%E7%84%8A%E6%8E%A5%E8%83%BD%E5%8A%9B%EF%BC%8C%E5%BB%BA%E8%AE%AE%E9%80%890%EF%BC%8C%E7%84%B6%E5%90%8E%E5%89%AA%E6%8E%89%E9%95%BF%E7%9A%84">不焊接排针的</a>}</p>
-<p>​	<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=815">STM32智能桌面-跳转到第13:35</a>  —不焊接排查麻烦但可以避免压到电池和语音模块不好插上</p>
-<p>​		（6）、焊接XH直针</p>
-<p>​		—&gt;右上角焊接XH直针     &#x2F;&#x2F;语音模块的咪头和喇叭处也是</p>
-<p>​		—&gt;语音模块焊接排针</p>
-<h6 id="2-其余相关注意事项"><a href="#2-其余相关注意事项" class="headerlink" title="2&gt;其余相关注意事项"></a>2&gt;其余相关注意事项</h6><p>​		（1）、锂电池的正负极分别充放电模块的B+和B</p>
-<p>​		（2）、输出电源线要接好—是焊接到模块中央位置两侧：</p>
-<p><img src="/../image/Smart_table_pets/zy_2-2.jpg"></p>
-<p>​		（3）、喇叭没有正负，味头上有三条线的是负极</p>
-<h6 id="3-程序"><a href="#3-程序" class="headerlink" title="3&gt;程序"></a>3&gt;程序</h6><p>​		（1）、串口下载单片机程序</p>
-<p>​			—&gt;使用前需要安装CH340的环境驱动</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=900">STM32智能桌面-跳转到第15:00</a> </p>
-<p>​		（2）、接线部分</p>
-<p>​			接线—接线烧录 &#x2F; CH340</p>
-<p>​			—&gt;使用前拔跳线帽</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=941">STM32智能桌面-跳转到第15:41</a> </p>
-<p>​		（3）、烧录语音部分</p>
-<p>​			—&gt;点击烧录后，需要拔5V线等两秒再接上去</p>
-<p>​			</p>
-<h6 id="4-组装"><a href="#4-组装" class="headerlink" title="4&gt;组装"></a>4&gt;组装</h6><p>​		（1）、模型组装</p>
-<p>​			—&gt;考验手工了，前面都完成了，这里应该没什么问题了</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1114">STM32智能桌面-跳转到第18:34</a></p>
-<p>​			—&gt;用面包板线将OLED的排母与做成的排母相连时，要看好你OLED屏幕左侧是GND还是VCC</p>
-<p>​		（2）、排线</p>
-<p>​			—&gt;太长了剪掉重新接应该也可以</p>
-<h6 id="5-语音网站配置"><a href="#5-语音网站配置" class="headerlink" title="5&gt;语音网站配置"></a>5&gt;语音网站配置</h6><p>​		（1）、智能公元网址</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1640">STM32智能桌面-跳转到第27:20</a></p>
-<p>​		（2）、代码逻辑</p>
-<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1860">STM32智能桌面-跳转到第31:00</a></p>
-<p>结束语：此篇文章为制作前的准备，如果爆炸了不想做了与我无关</p>
-]]></content>
-      <categories>
-        <category>microcontroller</category>
-      </categories>
-      <tags>
-        <tag>单片机</tag>
-        <tag>狗</tag>
-        <tag>三次元</tag>
       </tags>
   </entry>
   <entry>
@@ -342,6 +186,51 @@
       </tags>
   </entry>
   <entry>
+    <title>Windows注册表防更新</title>
+    <url>/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:0000F423F</span><br><span class="line">&quot;PauseFeatureUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseFeatureUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseUpdatesExpiryTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>直接去注册表如下位置添加DWORD(32位)值(D)，值自己设，进制改为10按道理也行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:00002710</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows update</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>主页和api</title>
+    <url>/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/</url>
+    <content><![CDATA[<h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>在工作期间所遇到的小程序和web端所用的方式如下：</p>
+<p>1、主页由其子域名显示，其他功能显示皆由该子域名指向，xxx#&#x2F;page&#x2F;xxx</p>
+<p>2、其信息由专门的api子域名来传回，有时会有sms子域名用作短信的发送</p>
+<p>3、若没有登录，部分功能的显示可以显示，但无实际信息，即，空白，json为{}</p>
+<span id="more"></span>
+
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><p>1.页面和小程序反编译爬取出的js文件或者json文件通常会有上述两个子域名的指向&#x2F;接口</p>
+<p>2.找到指向&#x2F;接口，能够查看页面的功能以及接口的作用，用作于测试接口</p>
+<p>3.通常会有登录接口用作返回token，大概率为jwt</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.有些网址不登录，后台的接口，以及其他的接口无法查看，只能看到个登录接口，即后续网址接口信息需要后台返回，但不代表不存在，通常即使是一个服务器其功能和作用都会十分广泛，毕竟好的服务器很贵的。</p>
+<p>—&gt;所以可以从多方入手，例如：该子域名的其他小程序，该接口子域名是否存在被其他网址或小程序被调用的可能</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>1.web需要登录就找它对应的小程序，一般来说小程序一旦授权就会给合法jwt</p>
+<p>2.用jwt深度爬取js，就是哪里能点点哪里，都点一遍，然后把js脚本下下来，分析指向#&#x2F;xxx&#x2F;和api</p>
+<p>3.看有无越权，逻辑漏洞，版本泄露，路径泄露和框架泄露等等</p>
+<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>认真分析一个事物就会形成一条思路明显的线路，整体的框架和内容就会完整，认真很久了还没思路那就去睡觉</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>api</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>漏洞库</title>
     <url>/2024/12/26/%E6%BC%8F%E6%B4%9E%E5%BA%93/</url>
     <content><![CDATA[<p><a href="https://wiki.wy876.cn/#/">漏洞文库</a></p>
@@ -352,6 +241,28 @@
       </categories>
       <tags>
         <tag>poc</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>自动追番网址</title>
+    <url>/2024/12/25/%E8%87%AA%E5%8A%A8%E8%BF%BD%E7%95%AA%E7%BD%91%E5%9D%80/</url>
+    <content><![CDATA[<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><p><a href="https://www.autobangumi.org/">AutoBangumi官网</a> —利用rss订阅字幕组，实现自动追番，部署比较轻松，docker部署</p>
+<p><a href="https://www.qbittorrent.org/download">qbittorrent下载地址</a> —下载器，订阅后这玩意负责自动下载，我1kG的流量就这么没的</p>
+<p><a href="https://emby.media/download.html">Emby下载地址</a> —播放器，其他的也可以，具体看bangumi和服务器支不支持</p>
+<span id="more"></span>
+
+<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../image/auto_anime/1.png"></p>
+<hr>
+<p><a href="https://github.com/wushuo894/ani-rss?tab=readme-ov-file">ani-rss项目地址-GitHub</a> —支持 <strong>Transmission</strong> <strong>qBittorrent</strong> <strong>Aria2</strong> 下载器</p>
+<p>ani-rss部署参考别个博客<a href="https://www.himiku.com/archives/ani-rss.html">初之音博客</a></p>
+]]></content>
+      <categories>
+        <category>anime</category>
+      </categories>
+      <tags>
+        <tag>rss</tag>
+        <tag>qBitTorrent</tag>
+        <tag>Two-dimensional</tag>
       </tags>
   </entry>
   <entry>
@@ -426,25 +337,114 @@
       </tags>
   </entry>
   <entry>
-    <title>自动追番网址</title>
-    <url>/2024/12/25/%E8%87%AA%E5%8A%A8%E8%BF%BD%E7%95%AA%E7%BD%91%E5%9D%80/</url>
-    <content><![CDATA[<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><p><a href="https://www.autobangumi.org/">AutoBangumi官网</a> —利用rss订阅字幕组，实现自动追番，部署比较轻松，docker部署</p>
-<p><a href="https://www.qbittorrent.org/download">qbittorrent下载地址</a> —下载器，订阅后这玩意负责自动下载，我1kG的流量就这么没的</p>
-<p><a href="https://emby.media/download.html">Emby下载地址</a> —播放器，其他的也可以，具体看bangumi和服务器支不支持</p>
-<span id="more"></span>
+    <title>智能桌宠</title>
+    <url>/2024/12/18/%E6%99%BA%E8%83%BD%E6%A1%8C%E9%9D%A2%E5%AE%A0%E7%89%A9/</url>
+    <content><![CDATA[<p>该文章为尝试进行智能桌宠的搭建前记录的相关流程和笔记，以免自己行动时步骤不对直接爆炸；</p>
+<h2 id="教程视频"><a href="#教程视频" class="headerlink" title="教程视频"></a>教程视频</h2><p>​	<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc">STM32智能桌面宠物总教程_哔哩哔哩_bilibili</a>	该视频为搭建桌宠的教程</p>
+<p>​	总计花费3.6元购买了总材料</p>
+<h3 id="视频步骤"><a href="#视频步骤" class="headerlink" title="视频步骤"></a>视频步骤</h3><span id="more"></span>
 
-<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../image/auto_anime/1.png"></p>
-<hr>
-<p><a href="https://github.com/wushuo894/ani-rss?tab=readme-ov-file">ani-rss项目地址-GitHub</a> —支持 <strong>Transmission</strong> <strong>qBittorrent</strong> <strong>Aria2</strong> 下载器</p>
-<p>ani-rss部署参考别个博客<a href="https://www.himiku.com/archives/ani-rss.html">初之音博客</a></p>
+<h5 id="嘉立创下单PCB和3D打印"><a href="#嘉立创下单PCB和3D打印" class="headerlink" title="嘉立创下单PCB和3D打印"></a>嘉立创下单PCB和3D打印</h5><p>​		—&gt;用他的模板，导出文件后去领卷买东西</p>
+<p>​		（1）、<a href="https://pro.lceda.cn/">构建单片机的软件</a>	可有可无</p>
+<p>​		（2）、<a href="https://www.jlc.com/portal/appDownloadsWithConfig.html">嘉立创PCB下单</a></p>
+<p><img src="/../image/Smart_table_pets/buy_pcb.png"></p>
+<p>​			后面下单参数太多懒得截图：</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=390">STM32智能桌面-跳转到第390秒</a></p>
+<p>​			哔哩哔哩把跳转参数关了的话就是该教程的6:30分处</p>
+<p>​			（3）、嘉立创3D打印下单</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=461">STM32智能桌面-跳转到第7:41</a></p>
+<h5 id="焊接"><a href="#焊接" class="headerlink" title="焊接"></a>焊接</h5><h6 id="1-焊接视频"><a href="#1-焊接视频" class="headerlink" title="1&gt;焊接视频"></a>1&gt;焊接视频</h6><p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=481">STM32智能桌面-跳转到第8:01</a></p>
+<p>​		（1）、焊接开关</p>
+<p>​			—&gt;焊接开关时，一定要先焊接开关左侧的</p>
+<p>​			—&gt;先上锡固定开关左侧一角，然后直接焊其他角</p>
+<p><img src="/../image/Smart_table_pets/Welding_switches.jpg" alt="焊接开关后成品"></p>
+<p>​		（2）、焊接电阻、LED灯</p>
+<p>​			—&gt;LED反面有箭头，必须保证箭头朝上</p>
+<p>​			然后在电阻的右侧焊接AMS芯片</p>
+<p>​					(c1、c2全是电容)</p>
+<p>​			可以用锂电池进行测试—确保开关已拨通</p>
+<p><img src="/../image/Smart_table_pets/hj_1-2.jpg"></p>
+<p>​		（3）、焊接电容</p>
+<p>​			—&gt;C1为10UF、C2为100NF</p>
+<p>​			<img src="/../image/Smart_table_pets/Soldering_capacitors.jpg"></p>
+<p><img src="/../image/Smart_table_pets/Soldering_capacitors2.jpg"></p>
+<p>​			—&gt;当然右侧开关那还有一堆电容</p>
+<p>​		（4）、焊接电源排针</p>
+<p><img src="/../image/Smart_table_pets/hj_1-4.jpg"></p>
+<p>​		（5）、焊接1X20P的排母</p>
+<p>​			—&gt;只需要焊接两部分，即开头、结尾两行：</p>
+<p><img src="/../image/Smart_table_pets/hj_1-5.jpg"></p>
+<p>​			<img src="/../image/Smart_table_pets/hj_1-5_2.jpg"></p>
+<p>​			—&gt;单片机的两种选择{<a href="%E6%8E%92%E9%92%88%E8%BF%87%E9%95%BF%E4%BC%9A%E5%8E%8B%E5%88%B0%E4%B8%8B%E9%9D%A2%E7%9A%84%E7%94%B5%E6%B1%A0">焊接好排针的</a>、[直接带排针的]、<a href="%E8%80%83%E9%AA%8C%E7%84%8A%E6%8E%A5%E8%83%BD%E5%8A%9B%EF%BC%8C%E5%BB%BA%E8%AE%AE%E9%80%890%EF%BC%8C%E7%84%B6%E5%90%8E%E5%89%AA%E6%8E%89%E9%95%BF%E7%9A%84">不焊接排针的</a>}</p>
+<p>​	<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=815">STM32智能桌面-跳转到第13:35</a>  —不焊接排查麻烦但可以避免压到电池和语音模块不好插上</p>
+<p>​		（6）、焊接XH直针</p>
+<p>​		—&gt;右上角焊接XH直针     &#x2F;&#x2F;语音模块的咪头和喇叭处也是</p>
+<p>​		—&gt;语音模块焊接排针</p>
+<h6 id="2-其余相关注意事项"><a href="#2-其余相关注意事项" class="headerlink" title="2&gt;其余相关注意事项"></a>2&gt;其余相关注意事项</h6><p>​		（1）、锂电池的正负极分别充放电模块的B+和B</p>
+<p>​		（2）、输出电源线要接好—是焊接到模块中央位置两侧：</p>
+<p><img src="/../image/Smart_table_pets/zy_2-2.jpg"></p>
+<p>​		（3）、喇叭没有正负，味头上有三条线的是负极</p>
+<h6 id="3-程序"><a href="#3-程序" class="headerlink" title="3&gt;程序"></a>3&gt;程序</h6><p>​		（1）、串口下载单片机程序</p>
+<p>​			—&gt;使用前需要安装CH340的环境驱动</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=900">STM32智能桌面-跳转到第15:00</a> </p>
+<p>​		（2）、接线部分</p>
+<p>​			接线—接线烧录 &#x2F; CH340</p>
+<p>​			—&gt;使用前拔跳线帽</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=941">STM32智能桌面-跳转到第15:41</a> </p>
+<p>​		（3）、烧录语音部分</p>
+<p>​			—&gt;点击烧录后，需要拔5V线等两秒再接上去</p>
+<p>​			</p>
+<h6 id="4-组装"><a href="#4-组装" class="headerlink" title="4&gt;组装"></a>4&gt;组装</h6><p>​		（1）、模型组装</p>
+<p>​			—&gt;考验手工了，前面都完成了，这里应该没什么问题了</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1114">STM32智能桌面-跳转到第18:34</a></p>
+<p>​			—&gt;用面包板线将OLED的排母与做成的排母相连时，要看好你OLED屏幕左侧是GND还是VCC</p>
+<p>​		（2）、排线</p>
+<p>​			—&gt;太长了剪掉重新接应该也可以</p>
+<h6 id="5-语音网站配置"><a href="#5-语音网站配置" class="headerlink" title="5&gt;语音网站配置"></a>5&gt;语音网站配置</h6><p>​		（1）、智能公元网址</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1640">STM32智能桌面-跳转到第27:20</a></p>
+<p>​		（2）、代码逻辑</p>
+<p>​			<a href="https://www.bilibili.com/video/BV1xD6MYGEzD/?spm_id_from=333.999.0.0&vd_source=62ec56a0e96ac07702343ec20500f1cc&t=1860">STM32智能桌面-跳转到第31:00</a></p>
+<p>结束语：此篇文章为制作前的准备，如果爆炸了不想做了与我无关</p>
 ]]></content>
       <categories>
-        <category>anime</category>
+        <category>microcontroller</category>
       </categories>
       <tags>
-        <tag>rss</tag>
-        <tag>qBitTorrent</tag>
-        <tag>Two-dimensional</tag>
+        <tag>单片机</tag>
+        <tag>狗</tag>
+        <tag>三次元</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>信息搜集思路</title>
+    <url>/2024/12/20/%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86%E6%80%9D%E8%B7%AF/</url>
+    <content><![CDATA[<h1 id="信息搜集思路扩散"><a href="#信息搜集思路扩散" class="headerlink" title="信息搜集思路扩散"></a>信息搜集思路扩散</h1><p>​	1.ico图标搜集</p>
+<p>​	2.icp备案号&#x2F;icp.name备案公司搜集</p>
+<p>​	3.域名搜集———简写域名搜集&#x2F;子域名搜集</p>
+<span id="more"></span>
+
+<p>​	4.关键字搜寻-title&#x2F;body</p>
+<p>​	5.中标公司，名下公司查询—涉及就查</p>
+<p>​	6.证书查询</p>
+<p>​	7.图片搜索—基本没用</p>
+<p>​		1&gt;联合&#x2F;递归查询</p>
+<p>​		2&gt;爆破域名查询——-针对空间测绘找不到的影子资产</p>
+<p>​		3&gt;域名目录更改—–例如，ab.sb.com——&gt;ab.sb.com&#x2F;ab          目录爆破**</p>
+<h1 id="找网址漏洞的信息搜集思路"><a href="#找网址漏洞的信息搜集思路" class="headerlink" title="找网址漏洞的信息搜集思路"></a>找网址漏洞的信息搜集思路</h1><p>​	1.要是信息搜集能力强于web渗透思路如下</p>
+<p>​		1&gt;与其在网址上找漏洞不如，根据漏洞找对应网址</p>
+<p>​	2.web渗透强于其他</p>
+<p>​		2&gt;搜集边缘&#x2F;影子资产，从易到难</p>
+<h1 id="根据公众号找web的思路"><a href="#根据公众号找web的思路" class="headerlink" title="根据公众号找web的思路"></a>根据公众号找web的思路</h1><p>​	1.找合作公司的公众号，找相关的功能web</p>
+<p>​	2.找到公众号所有的web，根据域名找公司，根据公司找公众号，以此往复***</p>
+<p>​	3.根据全称公众号，找下面的无关公众号点点，可能存在你要找的内容功能</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Information</tag>
+        <tag>Official account</tag>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>
