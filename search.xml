@@ -4,36 +4,29 @@
     <title>渗透工具</title>
     <url>/2025/05/09/hunter%E8%AF%AD%E6%B3%95%E6%89%B9%E9%87%8F%E6%90%9C%E7%B4%A2/</url>
     <content><![CDATA[<h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>工作的时候，要求要找不同地方的同一性质的资产，为了避免麻烦，所以干脆找ai写了一个脚本，感觉蛮好用的，想着以后若是更新或者增加功能点，方便回想功能的构造，所用api为hunter，在此记录如下</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>全组合</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>全组合-笛卡尔积</p>
 <table>
 <thead>
 <tr>
-<th>title</th>
-<th>all-title</th>
-<th>body</th>
 <th>all-body</th>
 <th>domain</th>
-<th>all-domain</th>
-<th>!title</th>
-<th>all-!title</th>
+<th>all-title</th>
 <th>|body</th>
-<th>all-|body</th>
-<th>&amp;domain</th>
-<th>all-&amp;domain</th>
+<th>title!</th>
 </tr>
 </thead>
 <tbody><tr>
+<td>河南</td>
+<td>pay</td>
+<td>读书</td>
+<td>a</td>
+<td>湖北</td>
+</tr>
+<tr>
 <td>郑州</td>
-<td>员工</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>go</td>
+<td>支付</td>
+<td>b</td>
 <td></td>
 </tr>
 <tr>
@@ -42,56 +35,20 @@
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>洛阳</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
 </tr>
 </tbody></table>
 <span id="more"></span>
 
-<p>all-“标题”会与”标题”全组合</p>
+<p>all-“标题”一行会与”标题”一列全组合</p>
 <p>!代表减去标题；如：web.title!&#x3D;””</p>
 <p>|代表括号中的或语句；如：(web.title&#x3D;”” || web.title&#x3D;””)</p>
-<p>&amp;代表括号中的和语句；如：(web.title&#x3D;”” || web.title&#x3D;””)</p>
 <h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>“””生成所有搜索组合”””</p>
 <p>“””构造搜索查询语句并编码”””</p>
 <p>“””发送API请求”””</p>
 <p>“””处理API返回结果”””</p>
 <p>“””保存为Excel文件”””</p>
 <h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>延迟访问，避免请求过快</p>
-<p>查询中f-string 中的反斜杠错误</p>
+<p>查询中的反斜杠错误</p>
 <p>处理json考虑返回none</p>
 ]]></content>
       <categories>
