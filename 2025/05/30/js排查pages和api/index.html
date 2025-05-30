@@ -21,25 +21,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="记录笔记的网址">
-<meta property="og:type" content="website">
-<meta property="og:title" content="乌篷船的博客">
-<meta property="og:url" content="http://example.com/tags/console/index.html">
+    <meta name="description" content="述注：这个只是为了学习原理，更好的工具推荐是F6JO大佬的bp插件JsRouteScan 或者自己访问所有链接把所有js保存到同一目录，再用正则表达式提取比较全面 原理通过伪造请求头，遍历所有的src跳转链接，保存所有响应为200的js放在同一目录下，用脚本遍历js，过滤出正则表达式对应的前端目录，拼接目录进行如上循环，直到连续两次路径集合相同或达到最大迭代次数，最后对js目录提取规定的正则表达式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js排查pages和api">
+<meta property="og:url" content="http://example.com/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="记录笔记的网址">
+<meta property="og:description" content="述注：这个只是为了学习原理，更好的工具推荐是F6JO大佬的bp插件JsRouteScan 或者自己访问所有链接把所有js保存到同一目录，再用正则表达式提取比较全面 原理通过伪造请求头，遍历所有的src跳转链接，保存所有响应为200的js放在同一目录下，用脚本遍历js，过滤出正则表达式对应的前端目录，拼接目录进行如上循环，直到连续两次路径集合相同或达到最大迭代次数，最后对js目录提取规定的正则表达式">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-30T04:04:10.627Z">
 <meta property="article:author" content="乌篷船">
-<meta property="article:tag" content="python,网络安全,娱乐">
+<meta property="article:tag" content="project">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/tags/console/">
+<link rel="canonical" href="http://example.com/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/console/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/","path":"2025/05/30/js排查pages和api/","title":"js排查pages和api"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: console | 乌篷船的博客</title>
+<title>js排查pages和api | 乌篷船的博客</title>
   
 
 
@@ -125,7 +127,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -138,6 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">正则表达式</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -196,50 +199,123 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">console
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乌篷船">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="乌篷船的博客">
+      <meta itemprop="description" content="记录笔记的网址">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="js排查pages和api | 乌篷船的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          js排查pages和api
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2025</span>
+
+      <time title="创建时间：2025-05-30 00:00:00 / 修改时间：12:04:10" itemprop="dateCreated datePublished" datetime="2025-05-30T00:00:00+08:00">2025-05-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Cybersecurity/" itemprop="url" rel="index"><span itemprop="name">Cybersecurity</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>注：这个只是为了学习原理，更好的工具推荐是F6JO大佬的bp插件<a target="_blank" rel="noopener" href="https://github.com/F6JO/JsRouteScan">JsRouteScan</a></p>
+<p>或者自己访问所有链接把所有js保存到同一目录，再用正则表达式提取比较全面</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>通过伪造请求头，遍历所有的src跳转链接，保存所有响应为200的js放在同一目录下，用脚本遍历js，过滤出正则表达式对应的前端目录，拼接目录进行如上循环，直到连续两次路径集合相同或达到最大迭代次数，最后对js目录提取规定的正则表达式</p>
+<span id="more"></span>
+
+<p>不足：</p>
+<p>仅仅对url的目录排查和哈希路由排查，后续能力提升可能会功能进行增强</p>
+<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">pattern_groups = &#123;</span><br><span class="line">    <span class="string">&quot;PagePath Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;pagePath:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;pagePath:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;Path Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;path:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;path:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url:\s*&quot;([^&quot;]+)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url: &quot;([^&quot;]+)&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;GET Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;get\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;get\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;POST Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;post\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;POST\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-04-29T00:00:00+08:00"
-              content="2025-04-29">
-          04-29
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/04/29/%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/" itemprop="url">
-            <span itemprop="name">console常见命令</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/project/" rel="tag"># project</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/05/09/hunter%E8%AF%AD%E6%B3%95%E6%89%B9%E9%87%8F%E6%90%9C%E7%B4%A2/" rel="prev" title="hunter批量搜索">
+                  <i class="fa fa-angle-left"></i> hunter批量搜索
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
+
 
 </div>
   </main>
