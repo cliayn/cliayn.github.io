@@ -2,8 +2,8 @@
 <search>
   <entry>
     <title>靶场练习-身份认证</title>
-    <url>//https://portswigger.net/web-security/authentication/password-based</url>
-    <content><![CDATA[<h1 id="靶场练习"><a href="#靶场练习" class="headerlink" title="靶场练习"></a>靶场练习</h1><h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><h3 id="1-响应时间异常"><a href="#1-响应时间异常" class="headerlink" title="1.响应时间异常"></a>1.响应时间异常</h3><h5 id="利用因子：存在响应时间判断用户名的可能"><a href="#利用因子：存在响应时间判断用户名的可能" class="headerlink" title="利用因子：存在响应时间判断用户名的可能"></a>利用因子：存在响应时间判断用户名的可能</h5><p>密码账号认证存在响应时间差距，当密码长度100+时，用户名正确，校验密码时间将过长，适用于按顺序解析的账号密码</p>
+    <url>/2025/06/17/%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="靶场练习"><a href="#靶场练习" class="headerlink" title="靶场练习"></a>靶场练习</h1><h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><h3 id="响应时间异常"><a href="#响应时间异常" class="headerlink" title="响应时间异常"></a>响应时间异常</h3><h5 id="利用因子：存在响应时间判断用户名的可能"><a href="#利用因子：存在响应时间判断用户名的可能" class="headerlink" title="利用因子：存在响应时间判断用户名的可能"></a>利用因子：存在响应时间判断用户名的可能</h5><p>密码账号认证存在响应时间差距，当密码长度100+时，用户名正确，校验密码时间将过长，适用于按顺序解析的账号密码</p>
 <p>注：新版bp没有respose time了，可以用如下列，也可以用logger++插件</p>
 <table>
 <thead>
@@ -23,16 +23,16 @@
 </tbody></table>
 <span id="more"></span>
 
-<h3 id="2-限制失败次数"><a href="#2-限制失败次数" class="headerlink" title="2.限制失败次数"></a>2.限制失败次数</h3><h5 id="利用因子：登录会刷新积累的失败次数"><a href="#利用因子：登录会刷新积累的失败次数" class="headerlink" title="利用因子：登录会刷新积累的失败次数"></a>利用因子：登录会刷新积累的失败次数</h5><p>正确账号密码绕过爆破限制，就是时不时登录已知的正确账号刷新失败次数</p>
+<h3 id="限制失败次数"><a href="#限制失败次数" class="headerlink" title="限制失败次数"></a>限制失败次数</h3><h5 id="利用因子：登录会刷新积累的失败次数"><a href="#利用因子：登录会刷新积累的失败次数" class="headerlink" title="利用因子：登录会刷新积累的失败次数"></a>利用因子：登录会刷新积累的失败次数</h5><p>正确账号密码绕过爆破限制，就是时不时登录已知的正确账号刷新失败次数</p>
 <p>注：X-Forwarded-For: 116.23.165.1 一般不用这个了，比较远古</p>
-<h3 id="3-限制账号登录"><a href="#3-限制账号登录" class="headerlink" title="3.限制账号登录"></a>3.限制账号登录</h3><h5 id="利用因子：用户体量极大"><a href="#利用因子：用户体量极大" class="headerlink" title="利用因子：用户体量极大"></a>利用因子：用户体量极大</h5><p>爆破随机账号，适用于用户体量大的</p>
+<h3 id="限制账号登录"><a href="#限制账号登录" class="headerlink" title="限制账号登录"></a>限制账号登录</h3><h5 id="利用因子：用户体量极大"><a href="#利用因子：用户体量极大" class="headerlink" title="利用因子：用户体量极大"></a>利用因子：用户体量极大</h5><p>爆破随机账号，适用于用户体量大的</p>
 <p>即任意账号，限制密码个数</p>
-<h3 id="4-常规账号登录"><a href="#4-常规账号登录" class="headerlink" title="4.常规账号登录"></a>4.常规账号登录</h3><h5 id="利用因子：存在多个认证因素时，不报错"><a href="#利用因子：存在多个认证因素时，不报错" class="headerlink" title="利用因子：存在多个认证因素时，不报错"></a>利用因子：存在多个认证因素时，不报错</h5><p>例如：</p>
+<h3 id="常规账号登录"><a href="#常规账号登录" class="headerlink" title="常规账号登录"></a>常规账号登录</h3><h5 id="利用因子：存在多个认证因素时，不报错"><a href="#利用因子：存在多个认证因素时，不报错" class="headerlink" title="利用因子：存在多个认证因素时，不报错"></a>利用因子：存在多个认证因素时，不报错</h5><p>例如：</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span><span class="string">&quot;carlos&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pass&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;abc&quot;</span><span class="punctuation">,</span><span class="string">&quot;123456&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="5-多因素认证"><a href="#5-多因素认证" class="headerlink" title="5.多因素认证"></a>5.多因素认证</h3><h5 id="利用因子：第二因素易绕过"><a href="#利用因子：第二因素易绕过" class="headerlink" title="利用因子：第二因素易绕过"></a>利用因子：第二因素易绕过</h5><p>例如：图形验证码可用captcha-killer插件绕过</p>
+<h3 id="多因素认证"><a href="#多因素认证" class="headerlink" title="多因素认证"></a>多因素认证</h3><h5 id="利用因子：第二因素易绕过"><a href="#利用因子：第二因素易绕过" class="headerlink" title="利用因子：第二因素易绕过"></a>利用因子：第二因素易绕过</h5><p>例如：图形验证码可用captcha-killer插件绕过</p>
 <p>如果是人脸或者指纹、加密狗这类的，建议直接<strong>前端绕过</strong>跑api，或者寻找<strong>注册接口</strong>，也可以尝试<strong>伪造用户标识</strong></p>
 ]]></content>
       <categories>
@@ -1475,8 +1475,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>Honeypot</tag>
         <tag>Cybersecurity</tag>
+        <tag>Honeypot</tag>
         <tag>Information Gathering</tag>
         <tag>Intrusion Detection</tag>
         <tag>Attack Analysis</tag>
