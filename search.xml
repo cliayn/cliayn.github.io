@@ -9,6 +9,7 @@
 <p>来测试是否存在jackson的反序列漏洞</p>
 <span id="more"></span>
 
+<p>参考文章<a href="https://zhuanlan.zhihu.com/p/344568487">Jackson反序列化漏洞 - 知乎</a></p>
 <h3 id="Jackson-反序列化漏洞原理"><a href="#Jackson-反序列化漏洞原理" class="headerlink" title="Jackson 反序列化漏洞原理"></a>Jackson 反序列化漏洞原理</h3><h5 id="1-1-多态反序列化（Polymorphic-Deserialization）"><a href="#1-1-多态反序列化（Polymorphic-Deserialization）" class="headerlink" title="1.1 多态反序列化（Polymorphic Deserialization）"></a>1.1 多态反序列化（Polymorphic Deserialization）</h5><p>Jackson 支持将 JSON 自动反序列化为多种类型的 Java 对象，特别是当某字段的类型为 <code>Object</code>、接口或抽象类时，Jackson 允许通过类型信息确定具体类。</p>
 <h5 id="常见两种类型标识方式："><a href="#常见两种类型标识方式：" class="headerlink" title="常见两种类型标识方式："></a>常见两种类型标识方式：</h5><ul>
 <li><p><strong>外部数组型标识（默认启用）</strong>：</p>
