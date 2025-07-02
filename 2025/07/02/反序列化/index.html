@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1-反序列化[1] jackson记录以目的为导向就是，用[]进行测试判断该参数是否为object类型，是则用ssrf的payload 1&#123;&quot;test&quot;:[&quot;javax.swing.JEditorPane&quot;, &#123;&quot;page&quot;:&quot;http:&#x2F;&#x2F;你的服务ip:8000&quot;&#125;]&#125;  来测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反序列化漏洞积累">
+<meta property="og:url" content="http://example.com/2025/07/02/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/index.html">
+<meta property="og:site_name" content="乌篷船的博客">
+<meta property="og:description" content="1-反序列化[1] jackson记录以目的为导向就是，用[]进行测试判断该参数是否为object类型，是则用ssrf的payload 1&#123;&quot;test&quot;:[&quot;javax.swing.JEditorPane&quot;, &#123;&quot;page&quot;:&quot;http:&#x2F;&#x2F;你的服务ip:8000&quot;&#125;]&#125;  来测">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-02T08:55:13.002Z">
+<meta property="article:author" content="乌篷船">
+<meta property="article:tag" content="Backend">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2025/07/02/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/07/02/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/","path":"2025/07/02/反序列化/","title":"反序列化漏洞积累"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>反序列化漏洞积累 | 乌篷船的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">乌篷船的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-sitemap fa-fw"></i>友情链接</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">1-反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-jackson%E8%AE%B0%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">[1] jackson记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Jackson-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">Jackson 反序列化漏洞原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-%E5%A4%9A%E6%80%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%88Polymorphic-Deserialization%EF%BC%89"><span class="nav-number">1.1.1.0.1.</span> <span class="nav-text">1.1 多态反序列化（Polymorphic Deserialization）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E4%B8%A4%E7%A7%8D%E7%B1%BB%E5%9E%8B%E6%A0%87%E8%AF%86%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="nav-number">1.1.1.0.2.</span> <span class="nav-text">常见两种类型标识方式：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-%E9%BB%98%E8%AE%A4-Typing-%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">1.1.1.0.3.</span> <span class="nav-text">1.3 默认 Typing 的影响</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%80%94-Fastjson%E5%AF%B9%E6%AF%94%E2%80%94"><span class="nav-number">1.1.2.</span> <span class="nav-text">—-Fastjson对比—-</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-%E6%8E%A8%E8%8D%90%E5%B7%A5%E5%85%B7%E5%88%A9%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">[0]推荐工具利用</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乌篷船"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乌篷船</p>
+  <div class="site-description" itemprop="description">记录笔记的网址</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:cliay55555@gmail.com" title="E-Mail → mailto:cliay55555@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+    
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+    
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/02/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乌篷船">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="乌篷船的博客">
+      <meta itemprop="description" content="记录笔记的网址">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="反序列化漏洞积累 | 乌篷船的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          反序列化漏洞积累
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-07-02 00:00:00 / 修改时间：16:55:13" itemprop="dateCreated datePublished" datetime="2025-07-02T00:00:00+08:00">2025-07-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Cybersecurity/" itemprop="url" rel="index"><span itemprop="name">Cybersecurity</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="1-反序列化"><a href="#1-反序列化" class="headerlink" title="1-反序列化"></a>1-反序列化</h1><h2 id="1-jackson记录"><a href="#1-jackson记录" class="headerlink" title="[1] jackson记录"></a>[1] jackson记录</h2><p>以目的为导向就是，用[]进行测试判断该参数是否为object类型，是则用ssrf的payload</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;test&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;javax.swing.JEditorPane&quot;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span><span class="attr">&quot;page&quot;</span><span class="punctuation">:</span><span class="string">&quot;http://你的服务ip:8000&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>来测试是否存在jackson的反序列漏洞</p>
+<span id="more"></span>
+
+<h3 id="Jackson-反序列化漏洞原理"><a href="#Jackson-反序列化漏洞原理" class="headerlink" title="Jackson 反序列化漏洞原理"></a>Jackson 反序列化漏洞原理</h3><h5 id="1-1-多态反序列化（Polymorphic-Deserialization）"><a href="#1-1-多态反序列化（Polymorphic-Deserialization）" class="headerlink" title="1.1 多态反序列化（Polymorphic Deserialization）"></a>1.1 多态反序列化（Polymorphic Deserialization）</h5><p>Jackson 支持将 JSON 自动反序列化为多种类型的 Java 对象，特别是当某字段的类型为 <code>Object</code>、接口或抽象类时，Jackson 允许通过类型信息确定具体类。</p>
+<h5 id="常见两种类型标识方式："><a href="#常见两种类型标识方式：" class="headerlink" title="常见两种类型标识方式："></a>常见两种类型标识方式：</h5><ul>
+<li><p><strong>外部数组型标识（默认启用）</strong>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;com.example.SomeClass&quot;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;field&quot;</span><span class="punctuation">:</span> <span class="string">&quot;value&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>注解型标识（显式开启）</strong>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@class&quot;</span><span class="punctuation">:</span> <span class="string">&quot;com.example.SomeClass&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;field&quot;</span><span class="punctuation">:</span> <span class="string">&quot;value&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>1.2 漏洞产生的根因</p>
+<ul>
+<li>Jackson 允许用户从 JSON 中指定任意类名。</li>
+<li>反序列化时会自动调用类的构造函数、setter 或 <code>readObject</code> 方法，甚至可能触发危险行为。</li>
+<li>攻击者可伪造 payload 利用 Gadget（利用链）执行任意代码。</li>
+</ul>
+<h5 id="1-3-默认-Typing-的影响"><a href="#1-3-默认-Typing-的影响" class="headerlink" title="1.3 默认 Typing 的影响"></a>1.3 默认 Typing 的影响</h5><p>如果后端配置了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ObjectMapper</span> <span class="variable">mapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectMapper</span>();</span><br><span class="line">mapper.enableDefaultTyping(); <span class="comment">// 旧版本默认启用</span></span><br></pre></td></tr></table></figure>
+
+<p>那么所有非 final 类型（如 Object、Map、List 等）都会被自动启用多态反序列化</p>
+<h3 id="—-Fastjson对比—"><a href="#—-Fastjson对比—" class="headerlink" title="—-Fastjson对比—-"></a>—-Fastjson对比—-</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Jackson</th>
+<th>Fastjson</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否支持多态反序列化</td>
+<td>✅ 支持（默认 Object 类型自动支持）</td>
+<td>✅ 支持（需要特定字段）</td>
+</tr>
+<tr>
+<td>默认是否开启</td>
+<td>✅ <code>Object</code>, <code>Object[]</code> 自动支持多态</td>
+<td>❌ 需显示写入 <code>@type</code></td>
+</tr>
+<tr>
+<td>多态字段名称</td>
+<td>类名写在数组或配置的 <code>@class</code> 字段中</td>
+<td><strong>@type</strong>（固定字段名）</td>
+</tr>
+<tr>
+<td>利用条件</td>
+<td>字段为 Object 或接口（或启用了 DefaultTyping）</td>
+<td>JSON 中有 <code>@type</code> 且服务未禁用 AutoType</td>
+</tr>
+<tr>
+<td>修复方法</td>
+<td>禁用 DefaultTyping、白名单类</td>
+<td>关闭 <code>autoTypeSupport</code>、升级版本、白名单</td>
+</tr>
+<tr>
+<td>gadget 丰富程度</td>
+<td>中等（依赖 commons-* 等库）</td>
+<td>非常多（内置支持多类库）</td>
+</tr>
+</tbody></table>
+<h2 id="0-推荐工具利用"><a href="#0-推荐工具利用" class="headerlink" title="[0]推荐工具利用"></a>[0]推荐工具利用</h2><p><a target="_blank" rel="noopener" href="https://github.com/mbechler/marshalsec">marshalsec</a></p>
+<p>生成恶意 LDAP&#x2F;RMI 服务，配合 Java 反序列化漏洞实现 RCE</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Backend/" rel="tag"># Backend</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/24/emby%E9%80%86%E5%90%91%E7%A0%94%E7%A9%B6/" rel="prev" title="emby逆向记录">
+                  <i class="fa fa-angle-left"></i> emby逆向记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa-regular fa-user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">乌篷船</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">41k</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/cliayn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+
+</body>
+</html>

