@@ -21,27 +21,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="述工作的时候，要求要找不同地方的同一性质的资产，为了避免麻烦，所以干脆找ai写了一个脚本，感觉蛮好用的，想着以后若是更新或者增加功能点，方便回想功能的构造，所用api为hunter，在此记录如下 原理全组合-笛卡尔积    all-body domain all-title |body title!    河南 pay 读书 a 湖北   郑州 go 支付 b    开封">
+    <meta name="description" content="前言真是一个渗透半个开发 有时根据api直接构造请求包会报错500，不是发不了，只是可能请求头或请求体构造的不一样，已接触的报错记录如下： Spring MVC、Spring Boot的文件上传报错记录">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hunter批量搜索">
-<meta property="og:url" content="http://example.com/2025/05/09/hunter%E8%AF%AD%E6%B3%95%E6%89%B9%E9%87%8F%E6%90%9C%E7%B4%A2/index.html">
+<meta property="og:title" content="spring常见报错构造发包">
+<meta property="og:url" content="http://example.com/2025/07/03/spring%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E4%BF%AE%E5%A4%8D/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="述工作的时候，要求要找不同地方的同一性质的资产，为了避免麻烦，所以干脆找ai写了一个脚本，感觉蛮好用的，想着以后若是更新或者增加功能点，方便回想功能的构造，所用api为hunter，在此记录如下 原理全组合-笛卡尔积    all-body domain all-title |body title!    河南 pay 读书 a 湖北   郑州 go 支付 b    开封">
+<meta property="og:description" content="前言真是一个渗透半个开发 有时根据api直接构造请求包会报错500，不是发不了，只是可能请求头或请求体构造的不一样，已接触的报错记录如下： Spring MVC、Spring Boot的文件上传报错记录">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-05-08T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-05-12T01:12:57.863Z">
+<meta property="article:published_time" content="2025-07-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-03T08:30:03.479Z">
 <meta property="article:author" content="乌篷船">
-<meta property="article:tag" content="project">
+<meta property="article:tag" content="article">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/05/09/hunter%E8%AF%AD%E6%B3%95%E6%89%B9%E9%87%8F%E6%90%9C%E7%B4%A2/">
+<link rel="canonical" href="http://example.com/2025/07/03/spring%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E4%BF%AE%E5%A4%8D/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/05/09/hunter%E8%AF%AD%E6%B3%95%E6%89%B9%E9%87%8F%E6%90%9C%E7%B4%A2/","path":"2025/05/09/hunter语法批量搜索/","title":"hunter批量搜索"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/07/03/spring%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E4%BF%AE%E5%A4%8D/","path":"2025/07/03/spring常见报错修复/","title":"spring常见报错构造发包"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>hunter批量搜索 | 乌篷船的博客</title>
+<title>spring常见报错构造发包 | 乌篷船的博客</title>
   
 
 
@@ -140,7 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.1.1.0.1.</span> <span class="nav-text">注意事项</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97-multipart-request"><span class="nav-number">1.1.</span> <span class="nav-text">关键字&#x3D;&#x3D;&gt;multipart request</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%9A%E5%B8%B8%E5%87%BA%E7%8E%B0%E4%BA%8E%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="nav-number">1.1.0.0.1.</span> <span class="nav-text">通常出现于文件上传</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.1.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Content-Type%EF%BC%9Amultipart-form-data"><span class="nav-number">1.1.1.0.1.</span> <span class="nav-text">&#x3D;&#x3D;&gt;Content-Type：multipart&#x2F;form-data</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="nav-number">1.1.2.</span> <span class="nav-text">注意：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%90%8E%E9%9D%A2%E7%9B%B4%E6%8E%A5%E8%B7%9F%E5%8F%82%E6%95%B0%E5%8D%B3%E5%8F%AF"><span class="nav-number">1.1.2.0.1.</span> <span class="nav-text">类型后面直接跟参数即可</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97-is-not-present"><span class="nav-number">1.2.</span> <span class="nav-text">关键字&#x3D;&#x3D;&gt;is not present</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#param-xxx"><span class="nav-number">1.2.1.0.1.</span> <span class="nav-text">&#x3D;&#x3D;&gt;?param&#x3D;&amp;xxx&#x3D;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#form-data-name-%E2%80%9Dparm%E2%80%9D"><span class="nav-number">1.2.1.0.2.</span> <span class="nav-text">&#x3D;&#x3D;&gt;form-data;name&#x3D;”parm”</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97-Failed-to-parse"><span class="nav-number">1.3.</span> <span class="nav-text">关键字&#x3D;&#x3D;&gt;Failed to parse</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%8F%E5%B0%91%E5%86%85%E5%AE%B9"><span class="nav-number">1.3.1.0.1.</span> <span class="nav-text">&#x3D;&#x3D;&gt;减少内容</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97-%E2%80%9Dxxx%E2%80%9D-not-supported"><span class="nav-number">1.4.</span> <span class="nav-text">关键字&#x3D;&#x3D;&gt;”xxx” not supported</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%9DPOST%E2%80%9D-%E2%80%9DGET%E2%80%9D"><span class="nav-number">1.4.1.0.1.</span> <span class="nav-text">&#x3D;&#x3D;&gt;”POST”&#x3D;&#x3D;&gt;”GET”</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97-request-body"><span class="nav-number">1.5.</span> <span class="nav-text">关键字&#x3D;&#x3D;&gt;request body</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95-4"><span class="nav-number">1.5.1.</span> <span class="nav-text">解决方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E4%BD%93"><span class="nav-number">1.5.1.0.1.</span> <span class="nav-text">&#x3D;&#x3D;&gt;修改请求体</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -210,7 +210,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/05/09/hunter%E8%AF%AD%E6%B3%95%E6%89%B9%E9%87%8F%E6%90%9C%E7%B4%A2/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/03/spring%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E4%BF%AE%E5%A4%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -223,12 +223,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="hunter批量搜索 | 乌篷船的博客">
+      <meta itemprop="name" content="spring常见报错构造发包 | 乌篷船的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          hunter批量搜索
+          spring常见报错构造发包
         </h1>
 
         <div class="post-meta-container">
@@ -238,15 +238,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2025-05-09 00:00:00" itemprop="dateCreated datePublished" datetime="2025-05-09T00:00:00+08:00">2025-05-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-12 09:12:57" itemprop="dateModified" datetime="2025-05-12T09:12:57+08:00">2025-05-12</time>
+      <time title="创建时间：2025-07-03 00:00:00 / 修改时间：16:30:03" itemprop="dateCreated datePublished" datetime="2025-07-03T00:00:00+08:00">2025-07-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -265,14 +259,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.8k</span>
+      <span>2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -282,64 +276,69 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>工作的时候，要求要找不同地方的同一性质的资产，为了避免麻烦，所以干脆找ai写了一个脚本，感觉蛮好用的，想着以后若是更新或者增加功能点，方便回想功能的构造，所用api为hunter，在此记录如下</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>全组合-笛卡尔积</p>
-<table>
-<thead>
-<tr>
-<th>all-body</th>
-<th>domain</th>
-<th>all-title</th>
-<th>|body</th>
-<th>title!</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>河南</td>
-<td>pay</td>
-<td>读书</td>
-<td>a</td>
-<td>湖北</td>
-</tr>
-<tr>
-<td>郑州</td>
-<td>go</td>
-<td>支付</td>
-<td>b</td>
-<td></td>
-</tr>
-<tr>
-<td>开封</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>真是一个渗透半个开发</p>
+<p>有时根据api直接构造请求包会报错500，不是发不了，只是可能请求头或请求体构造的不一样，已接触的报错记录如下：</p>
+<p>Spring MVC、Spring Boot的文件上传报错记录</p>
 <span id="more"></span>
 
-<p>all-“标题”一行会与”标题”一列全组合</p>
-<p>!代表减去标题；如：web.title!&#x3D;””</p>
-<p>|代表括号中的或语句；如：(web.title&#x3D;”” || web.title&#x3D;””)</p>
-<p>上方查询语句如下</p>
-<ol>
-<li>组合1**<br><code>body=&quot;河南&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;)</code> &amp;&amp; title !&#x3D; “湖北”<br>（<code>all-body</code>取”河南” + <code>all-title</code>取”读书” + 普通列<code>domain</code>取”pay”和”go” + OR列<code>body</code>取”a”或”b” + !取”湖北”）</li>
-<li><strong>组合2</strong><br><code>body=&quot;河南&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code><br>（<code>all-body</code>取”河南” + <code>all-title</code>取”支付” + 其他条件同上）</li>
-<li><strong>组合3</strong><br><code>body=&quot;郑州&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
-<li><strong>组合4</strong><br><code>body=&quot;郑州&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
-<li><strong>组合5</strong><br><code>body=&quot;开封&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
-<li><strong>组合6</strong><br><code>body=&quot;开封&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
-</ol>
-<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>“””生成所有搜索组合”””</p>
-<p>“””构造搜索查询语句并编码”””</p>
-<p>“””发送API请求”””</p>
-<p>“””处理API返回结果”””</p>
-<p>“””保存为Excel文件”””</p>
-<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>延迟访问，避免请求过快</p>
-<p>查询中的反斜杠错误</p>
-<p>处理json考虑返回none</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/cliayn/hunter_batch-Surveying">https://github.com/cliayn/hunter_batch-Surveying</a></p>
 
+
+<h2 id="关键字-multipart-request"><a href="#关键字-multipart-request" class="headerlink" title="关键字&#x3D;&#x3D;&gt;multipart request"></a>关键字&#x3D;&#x3D;&gt;multipart request</h2><h5 id="通常出现于文件上传"><a href="#通常出现于文件上传" class="headerlink" title="通常出现于文件上传"></a>通常出现于文件上传</h5><p>详细报错大致如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">current request is not a multipart request</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="Content-Type：multipart-form-data"><a href="#Content-Type：multipart-form-data" class="headerlink" title="&#x3D;&#x3D;&gt;Content-Type：multipart&#x2F;form-data"></a>&#x3D;&#x3D;&gt;Content-Type：multipart&#x2F;form-data</h5><p>原因如下：</p>
+<ol>
+<li>前端上传表单没设置 <code>enctype=&quot;multipart/form-data&quot;</code></li>
+</ol>
+<ul>
+<li>如果你用的是 <code>&lt;form&gt;</code> 提交，必须加上：</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file&quot;</span> /&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 其他参数 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<ol start="2">
+<li>使用 Ajax&#x2F;Fetch 上传时，没用 FormData 对象</li>
+</ol>
+<ul>
+<li>用 JS 上传文件时，必须使用 <code>FormData</code> 对象，并且不能手动设置 <code>Content-Type</code>，浏览器会自动加。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&#x27;file&#x27;</span>, fileInput.<span class="property">files</span>[<span class="number">0</span>]);</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&#x27;term&#x27;</span>, <span class="string">&#x27;2&#x27;</span>);</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;xxx&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;/upload&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">  <span class="attr">body</span>: formData</span><br><span class="line">  <span class="comment">// 不要手动设置 headers 的 Content-Type</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<ol start="3">
+<li>后台接口没有正确解析 multipart 请求</li>
+</ol>
+<ul>
+<li>例如在 Spring Boot 中，需要用 <code>@RequestParam MultipartFile file</code> 来接收文件。</li>
+<li>还需要确保依赖（如 Commons FileUpload）已导入并且 Multipart 解析已开启。</li>
+</ul>
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><p>后续可能还会报错说你缺乏什么参数，例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The request was rejected because no multipart boundary was found</span><br></pre></td></tr></table></figure>
+
+<p>解决方法：</p>
+<h5 id="类型后面直接跟参数即可"><a href="#类型后面直接跟参数即可" class="headerlink" title="类型后面直接跟参数即可"></a>类型后面直接跟参数即可</h5><p>例如：</p>
+<p>Content-Type: multipart&#x2F;form-data; boundary&#x3D;—-WebKitFormBoundaryxxxxxx</p>
+<p>请求体注意同样，我的建议是直接在同一个网址下找到另外一个文件上传，直接copy过来，或者找到对应的js，直接本地部署一下，实话说能不猜就别猜</p>
+<h2 id="关键字-is-not-present"><a href="#关键字-is-not-present" class="headerlink" title="关键字&#x3D;&#x3D;&gt;is not present"></a>关键字&#x3D;&#x3D;&gt;is not present</h2><p>全称</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">required string parameter &#x27;xxx&#x27; is not present</span><br></pre></td></tr></table></figure>
+
+<p>意思是少了一个参数，直接把xxx接在url后面就行了</p>
+<h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="param-xxx"><a href="#param-xxx" class="headerlink" title="&#x3D;&#x3D;&gt;?param&#x3D;&amp;xxx&#x3D;"></a>&#x3D;&#x3D;&gt;?param&#x3D;&amp;xxx&#x3D;</h5><h5 id="form-data-name-”parm”"><a href="#form-data-name-”parm”" class="headerlink" title="&#x3D;&#x3D;&gt;form-data;name&#x3D;”parm”"></a>&#x3D;&#x3D;&gt;form-data;name&#x3D;”parm”</h5><p>第二中方法适用于上传多参数：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">----WebKitFormBoundaryxxxxxx---</span><br><span class="line"></span><br><span class="line">content-Disposition: form-data; name=&quot;parm&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">math</span><br><span class="line"></span><br><span class="line">----WebKitFormBoundaryxxxxxx---</span><br></pre></td></tr></table></figure>
+
+<h2 id="关键字-Failed-to-parse"><a href="#关键字-Failed-to-parse" class="headerlink" title="关键字&#x3D;&#x3D;&gt;Failed to parse"></a>关键字&#x3D;&#x3D;&gt;Failed to parse</h2><p>全称</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Failed to parse multipart servlet request</span><br></pre></td></tr></table></figure>
+
+<p>意思是文件过大了</p>
+<h3 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="减少内容"><a href="#减少内容" class="headerlink" title="&#x3D;&#x3D;&gt;减少内容"></a>&#x3D;&#x3D;&gt;减少内容</h5><h2 id="关键字-”xxx”-not-supported"><a href="#关键字-”xxx”-not-supported" class="headerlink" title="关键字&#x3D;&#x3D;&gt;”xxx” not supported"></a>关键字&#x3D;&#x3D;&gt;”xxx” not supported</h2><p>全称</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Request method &#x27;POST&#x27; not supported</span><br></pre></td></tr></table></figure>
+
+<p>意思是不支持post</p>
+<h3 id="解决方法-3"><a href="#解决方法-3" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="”POST”-”GET”"><a href="#”POST”-”GET”" class="headerlink" title="&#x3D;&#x3D;&gt;”POST”&#x3D;&#x3D;&gt;”GET”"></a>&#x3D;&#x3D;&gt;”POST”&#x3D;&#x3D;&gt;”GET”</h5><h2 id="关键字-request-body"><a href="#关键字-request-body" class="headerlink" title="关键字&#x3D;&#x3D;&gt;request body"></a>关键字&#x3D;&#x3D;&gt;request body</h2><p>全称</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Could not parse request body</span><br></pre></td></tr></table></figure>
+
+<p>前端发的是 JSON，但后端没用 <code>@RequestBody</code> 接收；或者反之。</p>
+<h3 id="解决方法-4"><a href="#解决方法-4" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="修改请求体"><a href="#修改请求体" class="headerlink" title="&#x3D;&#x3D;&gt;修改请求体"></a>&#x3D;&#x3D;&gt;修改请求体</h5>
     </div>
 
     
@@ -348,21 +347,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/project/" rel="tag"># project</a>
+              <a href="/tags/article/" rel="tag"># article</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/04/29/%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/" rel="prev" title="console常见命令">
-                  <i class="fa fa-angle-left"></i> console常见命令
+                <a href="/2025/07/02/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="prev" title="反序列化漏洞积累">
+                  <i class="fa fa-angle-left"></i> 反序列化漏洞积累
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/" rel="next" title="js排查pages和api">
-                  js排查pages和api <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

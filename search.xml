@@ -1,6 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>spring常见报错构造发包</title>
+    <url>/2025/07/03/spring%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E4%BF%AE%E5%A4%8D/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>真是一个渗透半个开发</p>
+<p>有时根据api直接构造请求包会报错500，不是发不了，只是可能请求头或请求体构造的不一样，已接触的报错记录如下：</p>
+<p>Spring MVC、Spring Boot的文件上传报错记录</p>
+<span id="more"></span>
+
+
+
+<h2 id="关键字-multipart-request"><a href="#关键字-multipart-request" class="headerlink" title="关键字&#x3D;&#x3D;&gt;multipart request"></a>关键字&#x3D;&#x3D;&gt;multipart request</h2><h5 id="通常出现于文件上传"><a href="#通常出现于文件上传" class="headerlink" title="通常出现于文件上传"></a>通常出现于文件上传</h5><p>详细报错大致如下：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">current request is not a multipart request</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="Content-Type：multipart-form-data"><a href="#Content-Type：multipart-form-data" class="headerlink" title="&#x3D;&#x3D;&gt;Content-Type：multipart&#x2F;form-data"></a>&#x3D;&#x3D;&gt;Content-Type：multipart&#x2F;form-data</h5><p>原因如下：</p>
+<ol>
+<li>前端上传表单没设置 <code>enctype=&quot;multipart/form-data&quot;</code></li>
+</ol>
+<ul>
+<li>如果你用的是 <code>&lt;form&gt;</code> 提交，必须加上：</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file&quot;</span> /&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 其他参数 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<ol start="2">
+<li>使用 Ajax&#x2F;Fetch 上传时，没用 FormData 对象</li>
+</ol>
+<ul>
+<li>用 JS 上传文件时，必须使用 <code>FormData</code> 对象，并且不能手动设置 <code>Content-Type</code>，浏览器会自动加。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&#x27;file&#x27;</span>, fileInput.<span class="property">files</span>[<span class="number">0</span>]);</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&#x27;term&#x27;</span>, <span class="string">&#x27;2&#x27;</span>);</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;xxx&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;/upload&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">  <span class="attr">body</span>: formData</span><br><span class="line">  <span class="comment">// 不要手动设置 headers 的 Content-Type</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<ol start="3">
+<li>后台接口没有正确解析 multipart 请求</li>
+</ol>
+<ul>
+<li>例如在 Spring Boot 中，需要用 <code>@RequestParam MultipartFile file</code> 来接收文件。</li>
+<li>还需要确保依赖（如 Commons FileUpload）已导入并且 Multipart 解析已开启。</li>
+</ul>
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><p>后续可能还会报错说你缺乏什么参数，例如：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">The request was rejected because no multipart boundary was found</span><br></pre></td></tr></table></figure>
+
+<p>解决方法：</p>
+<h5 id="类型后面直接跟参数即可"><a href="#类型后面直接跟参数即可" class="headerlink" title="类型后面直接跟参数即可"></a>类型后面直接跟参数即可</h5><p>例如：</p>
+<p>Content-Type: multipart&#x2F;form-data; boundary&#x3D;—-WebKitFormBoundaryxxxxxx</p>
+<p>请求体注意同样，我的建议是直接在同一个网址下找到另外一个文件上传，直接copy过来，或者找到对应的js，直接本地部署一下，实话说能不猜就别猜</p>
+<h2 id="关键字-is-not-present"><a href="#关键字-is-not-present" class="headerlink" title="关键字&#x3D;&#x3D;&gt;is not present"></a>关键字&#x3D;&#x3D;&gt;is not present</h2><p>全称</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">required string parameter &#x27;xxx&#x27; is not present</span><br></pre></td></tr></table></figure>
+
+<p>意思是少了一个参数，直接把xxx接在url后面就行了</p>
+<h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="param-xxx"><a href="#param-xxx" class="headerlink" title="&#x3D;&#x3D;&gt;?param&#x3D;&amp;xxx&#x3D;"></a>&#x3D;&#x3D;&gt;?param&#x3D;&amp;xxx&#x3D;</h5><h5 id="form-data-name-”parm”"><a href="#form-data-name-”parm”" class="headerlink" title="&#x3D;&#x3D;&gt;form-data;name&#x3D;”parm”"></a>&#x3D;&#x3D;&gt;form-data;name&#x3D;”parm”</h5><p>第二中方法适用于上传多参数：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">----WebKitFormBoundaryxxxxxx---</span><br><span class="line"></span><br><span class="line">content-Disposition: form-data; name=&quot;parm&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">math</span><br><span class="line"></span><br><span class="line">----WebKitFormBoundaryxxxxxx---</span><br></pre></td></tr></table></figure>
+
+<h2 id="关键字-Failed-to-parse"><a href="#关键字-Failed-to-parse" class="headerlink" title="关键字&#x3D;&#x3D;&gt;Failed to parse"></a>关键字&#x3D;&#x3D;&gt;Failed to parse</h2><p>全称</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Failed to parse multipart servlet request</span><br></pre></td></tr></table></figure>
+
+<p>意思是文件过大了</p>
+<h3 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="减少内容"><a href="#减少内容" class="headerlink" title="&#x3D;&#x3D;&gt;减少内容"></a>&#x3D;&#x3D;&gt;减少内容</h5><h2 id="关键字-”xxx”-not-supported"><a href="#关键字-”xxx”-not-supported" class="headerlink" title="关键字&#x3D;&#x3D;&gt;”xxx” not supported"></a>关键字&#x3D;&#x3D;&gt;”xxx” not supported</h2><p>全称</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Request method &#x27;POST&#x27; not supported</span><br></pre></td></tr></table></figure>
+
+<p>意思是不支持post</p>
+<h3 id="解决方法-3"><a href="#解决方法-3" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="”POST”-”GET”"><a href="#”POST”-”GET”" class="headerlink" title="&#x3D;&#x3D;&gt;”POST”&#x3D;&#x3D;&gt;”GET”"></a>&#x3D;&#x3D;&gt;”POST”&#x3D;&#x3D;&gt;”GET”</h5><h2 id="关键字-request-body"><a href="#关键字-request-body" class="headerlink" title="关键字&#x3D;&#x3D;&gt;request body"></a>关键字&#x3D;&#x3D;&gt;request body</h2><p>全称</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Could not parse request body</span><br></pre></td></tr></table></figure>
+
+<p>前端发的是 JSON，但后端没用 <code>@RequestBody</code> 接收；或者反之。</p>
+<h3 id="解决方法-4"><a href="#解决方法-4" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="修改请求体"><a href="#修改请求体" class="headerlink" title="&#x3D;&#x3D;&gt;修改请求体"></a>&#x3D;&#x3D;&gt;修改请求体</h5>]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>反序列化漏洞积累</title>
     <url>/2025/07/02/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</url>
     <content><![CDATA[<h1 id="1-反序列化"><a href="#1-反序列化" class="headerlink" title="1-反序列化"></a>1-反序列化</h1><h2 id="1-jackson记录"><a href="#1-jackson记录" class="headerlink" title="[1] jackson记录"></a>[1] jackson记录</h2><p>以目的为导向就是，用[]进行测试判断该参数是否为object类型，是则用ssrf的payload</p>
@@ -1483,11 +1556,24 @@
     <title>正则匹配脚本</title>
     <url>/2024/12/23/%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<h2 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h2><p>今天上班的时候，老是发现uuid这些长id，我要想利用又懒得一个个复制，所以搞了一个脚本扩展，因为我是新手嘛，所以这个脚本有蛮多毛病，这章专门用来介绍哪些毛病，方便以后想改了，拿出来看看好找到要改的地方，我脚本放到github了，以防自己改炸了还有备份</p>
+<p>顺便记录一下排查api的正则</p>
 <span id="more"></span>
 
 <h2 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h2><p>1、python代码里只匹配了双引号和单引号</p>
 <p>2、直接将匹配到的内容写入文件—空格字符和回车字符</p>
 <p>3、没有检查匹配字符的过程—不能实时的查看自己的匹配过程	&#x2F;&#x2F;主要</p>
+<h1 id="正则记录"><a href="#正则记录" class="headerlink" title="正则记录"></a>正则记录</h1><h3 id="以method为特征值"><a href="#以method为特征值" class="headerlink" title="以method为特征值"></a>以method为特征值</h3><p>&#x3D;&#x3D;&gt;遍历 js 跑出 api 的个数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">method\s*:\s*&quot;(post|get)&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="以path为特征值"><a href="#以path为特征值" class="headerlink" title="以path为特征值"></a>以path为特征值</h3><p>&#x3D;&#x3D;&gt;遍历 js 尽可能跑出 api 以及虚拟页面的值：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 定义匹配的正则表达式和分类标签</span><br><span class="line">	含重复的正则</span><br><span class="line">pattern_groups = &#123;</span><br><span class="line">    &quot;PagePath Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Aa][Gg][Ee][Pp][Aa][Tt][Hh]:\s*&quot;(.*?)&quot;&#x27;), &quot;pagePath_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Aa][Gg][Ee][Pp][Aa][Tt][Hh]:\s*&#x27;(.*?)&#x27;&quot;), &quot;pagePath_double_quotes&quot;),</span><br><span class="line">    ],</span><br><span class="line">    &quot;Path Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Aa][Tt][Hh]:\s*&quot;(.*?)&quot;&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Aa][Tt][Hh]:\s*&#x27;(.*?)&#x27;&quot;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Uu][Rr][Ll]:\s*&quot;([^&quot;]+)&quot;&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Uu][Rr][Ll]: &quot;([^&quot;]+)&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">    ],</span><br><span class="line">    &quot;GET Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Gg][Ee][Tt]\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&quot;[Gg][Ee][Tt]\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Gg][Ee][Tt]\(\s*[&quot;\&#x27;]([^&quot;\&#x27;]+)[&quot;\&#x27;]\s*,&#x27;), &quot;&quot;)，</span><br><span class="line">    ],</span><br><span class="line">    &quot;POST Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Oo][Ss][Tt]\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Oo][Ss][Tt]\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Pp][Oo][Ss][Tt]\(\s*[&quot;\&#x27;]([^&quot;\&#x27;]+)[&quot;\&#x27;]\s*,&#x27;), &quot;&quot;)，</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="以特殊符号为特征值"><a href="#以特殊符号为特征值" class="headerlink" title="以特殊符号为特征值"></a>以特殊符号为特征值</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 1. 匹配完整 URL（含协议或协议相对）</span><br><span class="line">(?:&quot;|&#x27;)                              # 起始引号（单引号或双引号）</span><br><span class="line">((?:[a-zA-Z]&#123;1,10&#125;://|//)            # 协议：例如 http://、https://、ftp:// 或协议相对 //</span><br><span class="line">[^&quot;&#x27;/]&#123;1,&#125;\.                         # 主域名（不含引号或斜线）+ 点</span><br><span class="line">[a-zA-Z]&#123;2,&#125;[^&quot;&#x27;]&#123;0,&#125;)               # 顶级域名后缀（如 com/net）+ 可选路径</span><br><span class="line">(?:&quot;|&#x27;)                              # 结束引号</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;https://example.com/path&quot; 或 &#x27;//cdn.xxx.com&#x27; 的完整 URL</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 2. 匹配相对路径（以 /、../ 或 ./ 开头）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">((?:/|\.\./|\./)                     # 以 /、../ 或 ./ 开头</span><br><span class="line">[^&quot;&#x27;&gt;&lt;,;| *()(%%$^/\\\[\]]           # 第一个字符不能为特殊符号</span><br><span class="line">[^&quot;&#x27;&gt;&lt;,;|()]&#123;1,&#125;)                    # 后续字符为路径</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;/api/user&quot;、&quot;../img/pic.png&quot; 的相对路径链接</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 3. 匹配目录+资源文件（如 action、js、png）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-/]&#123;1,&#125;/                # 至少一个目录名 + 斜杠</span><br><span class="line">[a-zA-Z0-9_\-/]&#123;1,&#125;                  # 文件名</span><br><span class="line">\.(?:[a-zA-Z]&#123;1,4&#125;|action)           # 文件后缀（如 .js/.css/.action）</span><br><span class="line">(?:[\?|/][^&quot;&#x27; ]&#123;0,&#125;|))               # 可选参数或路径，如 ?id=1</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;admin/login.action&quot;、&quot;static/app.js?v=1&quot; 的接口或资源路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 4. 匹配单文件名 + 参数（如 login.php?id=1）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-]&#123;1,&#125;                  # 文件名</span><br><span class="line">\.(?:php|asp|aspx|jsp|json|          # 特定后缀（可扩展）</span><br><span class="line">action|html|js|txt|xml)</span><br><span class="line">(?:\?[^&quot;&#x27;]&#123;0,&#125;|))                    # 可选参数</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;index.php?id=1&quot;、&quot;test.jsp&quot; 的单独接口文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 5. 匹配 .do/.cgi/.py 等其他接口风格</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-/.]&#123;1,&#125;</span><br><span class="line">\.(?:do|cgi|py|rb|go)</span><br><span class="line">(?:\?[^&quot;&#x27;]&#123;0,&#125;|))</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取 &quot;.do&quot;、&quot;.cgi&quot;、&quot;.py&quot; 等扩展名接口（例如 WebLogic、老系统常见）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h1><p><a href="https://github.com/cliayn/bp_py_regular-expressions">bp插件</a></p>
+<p><a href="https://github.com/cliayn/re_js_api-dir">api脚本</a></p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
