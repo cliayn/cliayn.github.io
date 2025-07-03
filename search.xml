@@ -6,11 +6,48 @@
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>真是一个渗透半个开发</p>
 <p>有时根据api直接构造请求包会报错500，不是发不了，只是可能请求头或请求体构造的不一样，已接触的报错记录如下：</p>
 <p>Spring MVC、Spring Boot的文件上传报错记录</p>
+<p>大致如下：</p>
+<table>
+<thead>
+<tr>
+<th>错误提示</th>
+<th>常见原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>not a multipart</td>
+<td>没用 multipart&#x2F;form-data</td>
+</tr>
+<tr>
+<td>no boundary</td>
+<td>自己写 Content-Type 没有 boundary</td>
+</tr>
+<tr>
+<td>required param missing</td>
+<td>必填参数没传</td>
+</tr>
+<tr>
+<td>file too big</td>
+<td>超出上传限制</td>
+</tr>
+<tr>
+<td>method not supported</td>
+<td>请求方法错</td>
+</tr>
+<tr>
+<td>parse body failed</td>
+<td>格式不一致</td>
+</tr>
+<tr>
+<td>missing part</td>
+<td>FormData 里漏了某个字段</td>
+</tr>
+</tbody></table>
 <span id="more"></span>
 
 
 
-<h2 id="关键字-multipart-request"><a href="#关键字-multipart-request" class="headerlink" title="关键字&#x3D;&#x3D;&gt;multipart request"></a>关键字&#x3D;&#x3D;&gt;multipart request</h2><h5 id="通常出现于文件上传"><a href="#通常出现于文件上传" class="headerlink" title="通常出现于文件上传"></a>通常出现于文件上传</h5><p>详细报错大致如下：</p>
+<h2 id="关键字-not-a-multipart"><a href="#关键字-not-a-multipart" class="headerlink" title="关键字&#x3D;&#x3D;&gt;not a multipart"></a>关键字&#x3D;&#x3D;&gt;not a multipart</h2><h5 id="通常出现于文件上传"><a href="#通常出现于文件上传" class="headerlink" title="通常出现于文件上传"></a>通常出现于文件上传</h5><p>详细报错大致如下：</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">current request is not a multipart request</span><br></pre></td></tr></table></figure>
 
 <h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><h5 id="Content-Type：multipart-form-data"><a href="#Content-Type：multipart-form-data" class="headerlink" title="&#x3D;&#x3D;&gt;Content-Type：multipart&#x2F;form-data"></a>&#x3D;&#x3D;&gt;Content-Type：multipart&#x2F;form-data</h5><p>原因如下：</p>
