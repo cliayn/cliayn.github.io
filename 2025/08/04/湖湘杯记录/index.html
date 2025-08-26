@@ -21,15 +21,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="– 湖湘杯的分值只有权限分和信息分（新手记录） 1.攻击顺序1&gt;私企-水利&#x2F;电力&#x2F;服务类别，找越权的信息分 2&gt;医院&#x2F;学院，找后台的权限和信息分 3&gt;地区&#x2F;县区，找内网的权限分和信息分 4&gt;省&#x2F;市，随便找找 5&gt;记得专门划分一个写报告，要不然挖到也没有首发，30%的分，后面信息分没了就直接不给分 2.攻击手法1&gt;">
+    <meta name="description" content="– 湖湘杯的分值只有权限分和信息分（新手记录） 1.攻击顺序1&gt;私企-水利&#x2F;电力&#x2F;服务类别，找越权的信息分 2&gt;医院&#x2F;学院，找后台的权限和信息分 3&gt;地区&#x2F;县区，找内网的权限分和信息分 4&gt;省&#x2F;市，随便找找 5&gt;记得专门划分一个写报告，要不然挖到也没有首发，30%的分，后面信息分没了就直接不给分">
 <meta property="og:type" content="article">
 <meta property="og:title" content="湖湘杯记录">
 <meta property="og:url" content="http://example.com/2025/08/04/%E6%B9%96%E6%B9%98%E6%9D%AF%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="– 湖湘杯的分值只有权限分和信息分（新手记录） 1.攻击顺序1&gt;私企-水利&#x2F;电力&#x2F;服务类别，找越权的信息分 2&gt;医院&#x2F;学院，找后台的权限和信息分 3&gt;地区&#x2F;县区，找内网的权限分和信息分 4&gt;省&#x2F;市，随便找找 5&gt;记得专门划分一个写报告，要不然挖到也没有首发，30%的分，后面信息分没了就直接不给分 2.攻击手法1&gt;">
+<meta property="og:description" content="– 湖湘杯的分值只有权限分和信息分（新手记录） 1.攻击顺序1&gt;私企-水利&#x2F;电力&#x2F;服务类别，找越权的信息分 2&gt;医院&#x2F;学院，找后台的权限和信息分 3&gt;地区&#x2F;县区，找内网的权限分和信息分 4&gt;省&#x2F;市，随便找找 5&gt;记得专门划分一个写报告，要不然挖到也没有首发，30%的分，后面信息分没了就直接不给分">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-08-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-05T01:57:08.240Z">
+<meta property="article:modified_time" content="2025-08-26T03:03:14.845Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="Red team">
 <meta name="twitter:card" content="summary">
@@ -246,7 +246,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-08-05 09:57:08" itemprop="dateModified" datetime="2025-08-05T09:57:08+08:00">2025-08-05</time>
+      <time title="修改时间：2025-08-26 11:03:14" itemprop="dateModified" datetime="2025-08-26T11:03:14+08:00">2025-08-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -288,6 +288,8 @@
 <p>3&gt;地区&#x2F;县区，找内网的权限分和信息分</p>
 <p>4&gt;省&#x2F;市，随便找找</p>
 <p>5&gt;记得专门划分一个写报告，要不然挖到也没有首发，30%的分，后面信息分没了就直接不给分</p>
+<span id="more"></span>
+
 <h1 id="2-攻击手法"><a href="#2-攻击手法" class="headerlink" title="2.攻击手法"></a>2.攻击手法</h1><p>1&gt;快速确定框架，导出api和目录，查看是否存在敏感目录</p>
 <p>2&gt;框架漏洞扫描和漏扫，爆破api和访问目录找未授权和越权</p>
 <p>3&gt;有未授权或者越权就扩大危害（找信息分或者其他设备权限分），无则查看存在目录是否存在登录端第⑤步</p>

