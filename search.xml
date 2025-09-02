@@ -1,6 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>p2p点对点通信</title>
+    <url>/2025/09/02/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E9%80%9A%E4%BF%A1%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>学习的文章：</p>
+<p><a href="https://www.cnblogs.com/xiugeng/p/12029388.html">P2P中的NAT穿越(打洞)方案详解 - 休耕 - 博客园</a></p>
+<p>通信能否建立成功取决于当前的NAT设备是否支持不同端口之间的UDP数据包能否到达（即Hairpin转换特性）</p>
+<span id="more"></span>
+
+<h1 id="1-UDP打洞情景"><a href="#1-UDP打洞情景" class="headerlink" title="1-UDP打洞情景"></a>1-UDP打洞情景</h1><h2 id="1-两个客户端位于同一个NAT设备后"><a href="#1-两个客户端位于同一个NAT设备后" class="headerlink" title="1&gt;两个客户端位于同一个NAT设备后"></a>1&gt;两个客户端位于同一个NAT设备后</h2><p>​	当A向集中服务器发出消息请求与B连接，集中服务器将B的外网地址二元组以及内网地址二元组发给A，同时把A的外网以及内网的地址二元组信息发给B。</p>
+<p><img src="/../image/p2p-image/1.png"></p>
+<h2 id="2-两个客户端位于不同NAT设备后"><a href="#2-两个客户端位于不同NAT设备后" class="headerlink" title="2&gt;两个客户端位于不同NAT设备后"></a>2&gt;两个客户端位于不同NAT设备后</h2><p>​	在A向服务器发送的登陆消息中，包含有A的内网地址二元组信息，即10.0.0.1:4321；服务器会记录下A的内网地址二元组信息，同时会把自己观察到的A的外网地址二元组信息记录下来。同理，服务器也会记录下B的内网地址二元组信息和由服务器观察到的客户端B的外网地址二元组信息。无论A与B二者中的任何一方向服务器发送P2P连接请求，服务器都会将其记录下来的上述的外网和内网地址二元组发送给A或B。</p>
+<p>​	<strong>一旦A与B都向对方的NAT设备在外网上的地址二元组发送了数据包，就打开了A与B之间的“洞”</strong></p>
+<p><img src="/../image/p2p-image/2.png"></p>
+<h2 id="3-两个客户端位于两层（多层）NAT设备后"><a href="#3-两个客户端位于两层（多层）NAT设备后" class="headerlink" title="3&gt;两个客户端位于两层（多层）NAT设备后"></a>3&gt;两个客户端位于两层（多层）NAT设备后</h2><p>经典示例是家庭路由器：</p>
+<p>​	现在的家用网，即便是路由器映射端口过了一层但上面还有一层运营商提供的nat</p>
+<p>​	<strong>存在内网地址重复的可能性</strong></p>
+<p>​	因此客户端别无选择，只能使用由公网服务器观察到的A，B的公网地址二元组进行“打洞”操作，用于“打洞”的数据包将由NAT C进行转发。</p>
+<p><img src="/../image/p2p-image/3.png"></p>
+<h1 id="2-P2P的TCP流"><a href="#2-P2P的TCP流" class="headerlink" title="2-P2P的TCP流"></a>2-P2P的TCP流</h1><p>​	<strong>从协议层来看，TCP“打洞”与UDP“打洞”是几乎完全相同的过程</strong></p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ul>
+<li>客户端A使用其与服务器的连接向服务器发送请求，要求服务器协助其连接客户端B；</li>
+<li>服务器将B的公网和内网的TCP地址的二元组信息返回给A，同时服务器将A的公网和内网的地址二元组也发送给B；</li>
+<li>客户端A和B使用连接服务器的端口异步地发起向对方的公网、内网地址二元组的TCP连接，同时监听各自的本地TCP端口是否有外部的连接联入；</li>
+<li>A和B开始等待向外的连接是否成功，检查是否有新连接联入。如果向外的连接由于某种网络错误而失败，如：“连接被重置”或者“节点无法访问”，客户端只需要延迟一小段时间（例如延迟一秒钟），然后重新发起连接即可，延迟的时间和重复连接的次数可以由应用程序编写者来确定；</li>
+<li>TCP连接建立起来以后，客户端之间应该开始鉴权操作，确保目前联入的连接就是所希望的连接。如果鉴权失败，客户端将关闭连接，并且继续等待新的连接联入。客户端通常采用“先入为主”的策略，只接受第一个通过鉴权操作的客户端，然后将进入P2P通信过程不再继续等待是否有新的连接联入。</li>
+</ul>
+<p><img src="/../image/p2p-image/4.png"></p>
+<h1 id="3-应用"><a href="#3-应用" class="headerlink" title="3-应用"></a>3-应用</h1><p><a href="https://n2nc.sourceforge.net/reference/index.html">n2nc：Nat 2 Nat 连接器项目</a></p>
+<p>n2n 是一个开放源代码的2层跨越3层的VPN程序</p>
+<p>n2nc的应用介绍：<a href="https://www.codercto.com/a/7138.html">树莓派通过 n2n 实现内网穿透 | 码农网</a></p>
+<p><a href="https://github.com/samyk/pwnat">pwnat</a></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>代理记录</title>
+    <url>/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到</p>
+<h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
+<p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
+<p><img src="/../image/proxy-/1.png"></p>
+<h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
+<p>#<strong>解决方案</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
+<p>无互联网开热点的解决方案如下：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>oscp靶场训练</title>
     <url>/2025/08/25/oscp_attack-log/</url>
     <content><![CDATA[<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1-前言"></a>1-前言</h2><p>准备条件：</p>
@@ -1806,7 +1868,7 @@
 <p>更改参考文字</p>
 <p>###########需要更改<br>\Compass-master\Compass-master\app\src\main\java\com\bobek\compass\view\CompassView.kt<br>R.string.degrees—动态更改距离</p>
 <p>\Compass-master\Compass-master\app\src\main\java\com\bobek\compass\model\Azimuth.kt<br>val degrees—偏转角度</p>
-<h6 id="方向角的计算公式："><a href="#方向角的计算公式：" class="headerlink" title="方向角的计算公式："></a>方向角的计算公式：</h6><p><img src="/..%5Cimage%5Cmap-app%5Cazimuth.png" alt="azimuth"></p>
+<h6 id="方向角的计算公式："><a href="#方向角的计算公式：" class="headerlink" title="方向角的计算公式："></a>方向角的计算公式：</h6><p><img src="/../image/map-app/azimuth.png" alt="azimuth"></p>
 ]]></content>
       <categories>
         <category>Android Studio</category>
@@ -2310,8 +2372,8 @@
         <category>Cybersecurity</category>
       </categories>
       <tags>
-        <tag>Cybersecurity</tag>
         <tag>Honeypot</tag>
+        <tag>Cybersecurity</tag>
         <tag>Information Gathering</tag>
         <tag>Intrusion Detection</tag>
         <tag>Attack Analysis</tag>
