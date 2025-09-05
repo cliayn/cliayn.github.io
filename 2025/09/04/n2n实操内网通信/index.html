@@ -21,27 +21,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="12345678Windows Registry Editor Version 5.00[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]&quot;FlightSettingsMaxPauseDays&quot;&#x3D;dword:0000F423F&quot;PauseFeatureUpdatesStartTime&amp;qu">
+    <meta name="description" content="0-前言​	本着垃圾佬的原则，准备将家里吃灰的树莓派利用起来，所以准备openmediavault+n2n+frr实现任意地点访问屋里内网设备，但是frr老是学习不到内网设备，所以直接用iptables端口映射实现了 ​	主要记录n2n以及iptables映射，优点是少量的内网设备无需使用复杂的frr，缺点是无法支持动态的ip映射以及过多的内网设备映射管理程度直线上升 参考网址： 树莓派4b安装O">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows注册表防更新">
-<meta property="og:url" content="http://example.com/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/index.html">
+<meta property="og:title" content="n2n实操内网通信">
+<meta property="og:url" content="http://example.com/2025/09/04/n2n%E5%AE%9E%E6%93%8D%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="12345678Windows Registry Editor Version 5.00[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]&quot;FlightSettingsMaxPauseDays&quot;&#x3D;dword:0000F423F&quot;PauseFeatureUpdatesStartTime&amp;qu">
+<meta property="og:description" content="0-前言​	本着垃圾佬的原则，准备将家里吃灰的树莓派利用起来，所以准备openmediavault+n2n+frr实现任意地点访问屋里内网设备，但是frr老是学习不到内网设备，所以直接用iptables端口映射实现了 ​	主要记录n2n以及iptables映射，优点是少量的内网设备无需使用复杂的frr，缺点是无法支持动态的ip映射以及过多的内网设备映射管理程度直线上升 参考网址： 树莓派4b安装O">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-12-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-12-30T01:27:47.597Z">
+<meta property="og:image" content="http://example.com/image/n2n-iptables/1.png">
+<meta property="article:published_time" content="2025-09-04T02:54:01.000Z">
+<meta property="article:modified_time" content="2025-09-04T07:52:13.868Z">
 <meta property="article:author" content="乌篷船">
-<meta property="article:tag" content="Windows update">
+<meta property="article:tag" content="n2n">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/n2n-iptables/1.png">
 
 
-<link rel="canonical" href="http://example.com/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/">
+<link rel="canonical" href="http://example.com/2025/09/04/n2n%E5%AE%9E%E6%93%8D%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/","path":"2024/12/30/Windows注册表防更新/","title":"Windows注册表防更新"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/09/04/n2n%E5%AE%9E%E6%93%8D%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1/","path":"2025/09/04/n2n实操内网通信/","title":"n2n实操内网通信"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Windows注册表防更新 | 乌篷船的博客</title>
+<title>n2n实操内网通信 | 乌篷船的博客</title>
   
 
 
@@ -127,7 +129,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -140,6 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%AE%9E%E6%93%8D%E8%AE%B0%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">1-实操记录</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -209,7 +212,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/09/04/n2n%E5%AE%9E%E6%93%8D%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -222,12 +225,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Windows注册表防更新 | 乌篷船的博客">
+      <meta itemprop="name" content="n2n实操内网通信 | 乌篷船的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Windows注册表防更新
+          n2n实操内网通信
         </h1>
 
         <div class="post-meta-container">
@@ -239,7 +242,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-12-30 00:00:00 / 修改时间：09:27:47" itemprop="dateCreated datePublished" datetime="2024-12-30T00:00:00+08:00">2024-12-30</time>
+      <time title="创建时间：2025-09-04 10:54:01 / 修改时间：15:52:13" itemprop="dateCreated datePublished" datetime="2025-09-04T10:54:01+08:00">2025-09-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -247,7 +250,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+          <a href="/categories/p2p/" itemprop="url" rel="index"><span itemprop="name">p2p</span></a>
         </span>
     </span>
 
@@ -258,14 +261,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>720</span>
+      <span>3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>6 分钟</span>
     </span>
 </div>
 
@@ -275,13 +278,38 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:0000F423F</span><br><span class="line">&quot;PauseFeatureUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseFeatureUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseUpdatesExpiryTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br></pre></td></tr></table></figure>
-
+    <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	本着垃圾佬的原则，准备将家里吃灰的树莓派利用起来，所以准备openmediavault+n2n+frr实现任意地点访问屋里内网设备，但是frr老是学习不到内网设备，所以直接用iptables端口映射实现了</p>
+<p>​	主要记录n2n以及iptables映射，优点是少量的内网设备无需使用复杂的frr，缺点是无法支持动态的ip映射以及过多的内网设备映射管理程度直线上升</p>
+<p>参考网址：</p>
+<p><a target="_blank" rel="noopener" href="https://xyzbz.cn/archives/944/">树莓派4b安装OpenMediaVault</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1760345?policyId=1003">通过N2N组网并运行OSPF动态路由</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ntop/n2n">n2n开源地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/happynclient/happynwindows">n2n-windows软件</a></p>
+<p>注：OpenMediaVault安装docker的话需要注意自身网络考虑是否要换源</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/opus/1008600304150642709">OMV7.0部署及docker安装 - 哔哩哔哩</a></p>
+<p><strong>建立n2n无需在意它在几层nat，只要能通网就成</strong></p>
 <span id="more"></span>
 
-<p>直接去注册表如下位置添加DWORD(32位)值(D)，值自己设，进制改为10按道理也行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:00002710</span><br></pre></td></tr></table></figure>
+<h1 id="1-实操记录"><a href="#1-实操记录" class="headerlink" title="1-实操记录"></a>1-实操记录</h1><p>目前运营商一般会有两层nat如下图：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">                   互联网 (云)</span><br><span class="line">                        │</span><br><span class="line">        ┌───────────────┼───────────────┐</span><br><span class="line">        │               │               │</span><br><span class="line">┌───────┴───────┐   ┌───┴───┐   ┌───────┴───────┐</span><br><span class="line">│ 运营商/NAT网关  │   │       │   │ 外网电脑       │</span><br><span class="line">│(分配路由器/光猫) │   │       │   │ (公网IP)      │</span><br><span class="line">└───────┬───────┘   │       │   │ 对等网:10.0.0.2│</span><br><span class="line">        │           │       │   └───────┬───────┘</span><br><span class="line">        │           │       │           │ (互联网访问)</span><br><span class="line">┌───────┴───────┐   │       │           │</span><br><span class="line">│    路由器      │   │       │           │</span><br><span class="line">│ 192.168.2.1   │   │       │           │</span><br><span class="line">└───────┬───────┘   │       │           │</span><br><span class="line">        │           │       │           │</span><br><span class="line">┌───────┴───────┐   │       │           │</span><br><span class="line">│   树莓派4B     │   │       │           │</span><br><span class="line">│192.168.2.x    │   │       │           │</span><br><span class="line">│对等网:10.0.0.1 │   │       │           │</span><br><span class="line">└───────────────┘   │       │           │</span><br><span class="line">            |       │       │           │</span><br><span class="line">            ┌───────┴───────┴───────┐   │</span><br><span class="line">            │   VPN隧道10.0.0.0/24   ├───┘</span><br><span class="line">            │ (例如: N2N/openVPN)    │</span><br><span class="line">            └───────────────────────┘</span><br></pre></td></tr></table></figure>
 
+<p>安装相应依赖（编译安装出错了可以问ai缺乏了什么依赖）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install -y libcap-dev miniupnpc libssl-dev zlib1g-dev</span><br></pre></td></tr></table></figure>
+
+<p>编译安装（版本为3.0）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./autogen.sh</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>一个服务端的配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/systemd/system/n2n-supernode.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=N2N Supernode Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/sbin/supernode -p 0.0.0.0:&#123;port&#125; -f -v</span><br><span class="line">Restart=always</span><br><span class="line">RestartSec=3</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">#系统自启</span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable n2n-supernode</span><br><span class="line">systemctl start n2n-supernode</span><br></pre></td></tr></table></figure>
+
+<p>两个客户端的系统配置（只需要变化虚拟网卡的ip）：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#树莓派</span><br><span class="line">vim /etc/systemd/system/n2n-edge.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=N2N Edge Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/sbin/edge -c &#123;账号&#125; -k &#123;密码&#125; -a &#123;设定的虚拟网卡ip例如<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>和<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">2</span>&#125; -f -v -l &#123;公网ip:port&#125;</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">#系统自启</span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable n2n-edge</span><br><span class="line">systemctl <span class="built_in">start</span> n2n-edge</span><br></pre></td></tr></table></figure>
+
+<p>内网端口映射：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#启用 IP 转发</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#将 edge0 上到 <span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">1010</span> 的流量转发到 <span class="number">192</span>.<span class="number">168</span>.<span class="number">2</span>.<span class="number">1</span>:<span class="number">80</span></span><br><span class="line">sudo iptables -t nat -A PREROUTING -i &#123;虚拟网卡&#125; -p tcp --dport <span class="number">1010</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">2</span>.<span class="number">1</span>:<span class="number">80</span></span><br><span class="line"></span><br><span class="line">#保证返回流量能正确返回</span><br><span class="line">sudo iptables -t nat -A POSTROUTING -o &#123;内网网卡&#125; -p tcp --dport <span class="number">80</span> -d <span class="number">192</span>.<span class="number">168</span>.<span class="number">2</span>.<span class="number">1</span> -j MASQUERADE</span><br><span class="line"></span><br><span class="line">！确保转发规则允许流量通过</span><br><span class="line">sudo iptables -A FORWARD -i &#123;虚拟网卡&#125; -o &#123;内网网卡&#125; -p tcp --dport <span class="number">80</span> -d <span class="number">192</span>.<span class="number">168</span>.<span class="number">2</span>.<span class="number">1</span> -j ACCEPT</span><br><span class="line"></span><br><span class="line">！确保转发规则允许流量通过</span><br><span class="line">sudo iptables -A FORWARD -i &#123;内网网卡&#125; -o &#123;虚拟网卡&#125; -m state --state ESTABLISHED,RELATED -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+<p>windows可以使用<a target="_blank" rel="noopener" href="https://github.com/happynclient/happynwindows">n2n-windows软件</a>进行连接：<br><img src="/../image/n2n-iptables/1.png"></p>
+<p>! 该方法可以使得所有输入同一服务ID和服务密钥的用户在同一局域网中<br>服务ID和服务密钥就是之前输入的账号和密码</p>
 
     </div>
 
@@ -291,21 +319,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Windows-update/" rel="tag"># Windows update</a>
+              <a href="/tags/n2n/" rel="tag"># n2n</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/" rel="prev" title="主页和api">
-                  <i class="fa fa-angle-left"></i> 主页和api
+                <a href="/2025/09/02/host-config/" rel="prev" title="host-config">
+                  <i class="fa fa-angle-left"></i> host-config
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/02/18/%E6%96%B9%E8%A8%80%E8%AF%86%E5%88%AB/" rel="next" title="方言识别">
-                  方言识别 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>

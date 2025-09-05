@@ -29,7 +29,7 @@
 <p><img src="/../image/p2p-image/4.png"></p>
 <h1 id="3-应用"><a href="#3-应用" class="headerlink" title="3-应用"></a>3-应用</h1><p><a href="https://n2nc.sourceforge.net/reference/index.html">n2nc：Nat 2 Nat 连接器项目</a></p>
 <p>n2n 是一个开放源代码的2层跨越3层的VPN程序</p>
-<p>n2nc的应用介绍：<a href="https://www.codercto.com/a/7138.html">树莓派通过 n2n 实现内网穿透 | 码农网</a></p>
+<p>n2nc的应用介绍：<a href="https://cloud.tencent.com/developer/article/2345307">n2n动态路由异地组网方案</a></p>
 <p><a href="https://github.com/samyk/pwnat">pwnat</a></p>
 <hr>
 <p>VPN介绍:</p>
@@ -2309,6 +2309,49 @@
         <tag>单片机</tag>
         <tag>狗</tag>
         <tag>三次元</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>n2n实操内网通信</title>
+    <url>/2025/09/04/n2n%E5%AE%9E%E6%93%8D%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	本着垃圾佬的原则，准备将家里吃灰的树莓派利用起来，所以准备openmediavault+n2n+frr实现任意地点访问屋里内网设备，但是frr老是学习不到内网设备，所以直接用iptables端口映射实现了</p>
+<p>​	主要记录n2n以及iptables映射，优点是少量的内网设备无需使用复杂的frr，缺点是无法支持动态的ip映射以及过多的内网设备映射管理程度直线上升</p>
+<p>参考网址：</p>
+<p><a href="https://xyzbz.cn/archives/944/">树莓派4b安装OpenMediaVault</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1760345?policyId=1003">通过N2N组网并运行OSPF动态路由</a></p>
+<p><a href="https://github.com/ntop/n2n">n2n开源地址</a></p>
+<p><a href="https://github.com/happynclient/happynwindows">n2n-windows软件</a></p>
+<p>注：OpenMediaVault安装docker的话需要注意自身网络考虑是否要换源</p>
+<p><a href="https://www.bilibili.com/opus/1008600304150642709">OMV7.0部署及docker安装 - 哔哩哔哩</a></p>
+<p><strong>建立n2n无需在意它在几层nat，只要能通网就成</strong></p>
+<span id="more"></span>
+
+<h1 id="1-实操记录"><a href="#1-实操记录" class="headerlink" title="1-实操记录"></a>1-实操记录</h1><p>目前运营商一般会有两层nat如下图：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">                   互联网 (云)</span><br><span class="line">                        │</span><br><span class="line">        ┌───────────────┼───────────────┐</span><br><span class="line">        │               │               │</span><br><span class="line">┌───────┴───────┐   ┌───┴───┐   ┌───────┴───────┐</span><br><span class="line">│ 运营商/NAT网关  │   │       │   │ 外网电脑       │</span><br><span class="line">│(分配路由器/光猫) │   │       │   │ (公网IP)      │</span><br><span class="line">└───────┬───────┘   │       │   │ 对等网:10.0.0.2│</span><br><span class="line">        │           │       │   └───────┬───────┘</span><br><span class="line">        │           │       │           │ (互联网访问)</span><br><span class="line">┌───────┴───────┐   │       │           │</span><br><span class="line">│    路由器      │   │       │           │</span><br><span class="line">│ 192.168.2.1   │   │       │           │</span><br><span class="line">└───────┬───────┘   │       │           │</span><br><span class="line">        │           │       │           │</span><br><span class="line">┌───────┴───────┐   │       │           │</span><br><span class="line">│   树莓派4B     │   │       │           │</span><br><span class="line">│192.168.2.x    │   │       │           │</span><br><span class="line">│对等网:10.0.0.1 │   │       │           │</span><br><span class="line">└───────────────┘   │       │           │</span><br><span class="line">            |       │       │           │</span><br><span class="line">            ┌───────┴───────┴───────┐   │</span><br><span class="line">            │   VPN隧道10.0.0.0/24   ├───┘</span><br><span class="line">            │ (例如: N2N/openVPN)    │</span><br><span class="line">            └───────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>安装相应依赖（编译安装出错了可以问ai缺乏了什么依赖）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install -y libcap-dev miniupnpc libssl-dev zlib1g-dev</span><br></pre></td></tr></table></figure>
+
+<p>编译安装（版本为3.0）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./autogen.sh</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line"></span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>一个服务端的配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim /etc/systemd/system/n2n-supernode.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=N2N Supernode Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/sbin/supernode -p 0.0.0.0:&#123;port&#125; -f -v</span><br><span class="line">Restart=always</span><br><span class="line">RestartSec=3</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">#系统自启</span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable n2n-supernode</span><br><span class="line">systemctl start n2n-supernode</span><br></pre></td></tr></table></figure>
+
+<p>两个客户端的系统配置（只需要变化虚拟网卡的ip）：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#树莓派</span><br><span class="line">vim /etc/systemd/system/n2n-edge.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=N2N Edge Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/sbin/edge -c &#123;账号&#125; -k &#123;密码&#125; -a &#123;设定的虚拟网卡ip例如<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>和<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">2</span>&#125; -f -v -l &#123;公网ip:port&#125;</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">#系统自启</span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl enable n2n-edge</span><br><span class="line">systemctl <span class="built_in">start</span> n2n-edge</span><br></pre></td></tr></table></figure>
+
+<p>内网端口映射：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#启用 IP 转发</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#将 edge0 上到 <span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">1010</span> 的流量转发到 <span class="number">192</span>.<span class="number">168</span>.<span class="number">2</span>.<span class="number">1</span>:<span class="number">80</span></span><br><span class="line">sudo iptables -t nat -A PREROUTING -i &#123;虚拟网卡&#125; -p tcp --dport <span class="number">1010</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">2</span>.<span class="number">1</span>:<span class="number">80</span></span><br><span class="line"></span><br><span class="line">#保证返回流量能正确返回</span><br><span class="line">sudo iptables -t nat -A POSTROUTING -o &#123;内网网卡&#125; -p tcp --dport <span class="number">80</span> -d <span class="number">192</span>.<span class="number">168</span>.<span class="number">2</span>.<span class="number">1</span> -j MASQUERADE</span><br><span class="line"></span><br><span class="line">！确保转发规则允许流量通过</span><br><span class="line">sudo iptables -A FORWARD -i &#123;虚拟网卡&#125; -o &#123;内网网卡&#125; -p tcp --dport <span class="number">80</span> -d <span class="number">192</span>.<span class="number">168</span>.<span class="number">2</span>.<span class="number">1</span> -j ACCEPT</span><br><span class="line"></span><br><span class="line">！确保转发规则允许流量通过</span><br><span class="line">sudo iptables -A FORWARD -i &#123;内网网卡&#125; -o &#123;虚拟网卡&#125; -m state --state ESTABLISHED,RELATED -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+<p>windows可以使用<a href="https://github.com/happynclient/happynwindows">n2n-windows软件</a>进行连接：<br><img src="/../image/n2n-iptables/1.png"></p>
+<p>! 该方法可以使得所有输入同一服务ID和服务密钥的用户在同一局域网中<br>服务ID和服务密钥就是之前输入的账号和密码</p>
+]]></content>
+      <categories>
+        <category>p2p</category>
+      </categories>
+      <tags>
+        <tag>n2n</tag>
       </tags>
   </entry>
   <entry>
