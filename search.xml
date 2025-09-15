@@ -1,6 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>渗透测试的简单排查</title>
+    <url>/2025/09/15/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%B0%B4%E6%B4%9E%E7%9A%84%E6%8C%96%E6%8E%98/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	渗透测试中包含太多重复且单一的漏洞排查，记录排查过程中的心得，以便之后可以快速进行排查缺陷，所采用的方法是正则匹配</p>
+<table>
+<thead>
+<tr>
+<th align="left">元字符</th>
+<th align="left">含义与作用</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>[]</strong></td>
+<td align="left"><strong>匹配内部所有字符</strong></td>
+<td align="left">[a-z]</td>
+</tr>
+<tr>
+<td align="left"><strong>\d</strong></td>
+<td align="left"><strong>匹配任意一个数字</strong>。等价于 <code>[0-9]</code></td>
+<td align="left"><code>\d\d</code> 匹配 <code>&quot;12&quot;</code>, <code>&quot;01&quot;</code>，但不匹配 <code>&quot;A1&quot;</code> (因为 A 不是数字)</td>
+</tr>
+<tr>
+<td align="left"><strong>\w</strong></td>
+<td align="left"><strong>匹配任意一个字母、数字或下划线</strong>。等价于 <code>[A-Za-z0-9_]</code></td>
+<td align="left"><code>\w\w</code> 匹配 <code>&quot;Ab&quot;</code>, <code>&quot;a1&quot;</code>, <code>&quot;_x&quot;</code>，但不匹配 <code>&quot;@#&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong>\s</strong></td>
+<td align="left"><strong>匹配任意一个空白字符</strong>，包括空格、制表符(<code>\t</code>)、换行符(<code>\n</code>)等</td>
+<td align="left"><code>a\sb</code> 匹配 <code>&quot;a b&quot;</code> (中间有空格)</td>
+</tr>
+<tr>
+<td align="left"><strong>\D</strong></td>
+<td align="left"><strong>匹配任意一个非数字字符</strong>。等价于 <code>[^0-9]</code></td>
+<td align="left"><code>\D</code> 匹配 <code>&quot;a&quot;</code>, <code>&quot;@&quot;</code>，但不匹配 <code>&quot;1&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong>\W</strong></td>
+<td align="left"><strong>匹配任意一个非字母、数字、下划线的字符</strong>。等价于 <code>[^A-Za-z0-9_]</code></td>
+<td align="left"><code>\W</code> 匹配 <code>&quot;@&quot;</code>, <code>&quot;+&quot;</code>，但不匹配 <code>&quot;a&quot;</code> 或 <code>&quot;1&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong>\S</strong></td>
+<td align="left"><strong>匹配任意一个非空白字符</strong></td>
+<td align="left"><code>\S</code> 匹配 <code>&quot;a&quot;</code>, <code>&quot;1&quot;</code>，但不匹配空格</td>
+</tr>
+<tr>
+<td align="left"><strong>+</strong></td>
+<td align="left"><strong>匹配前面的元素一次或多次</strong></td>
+<td align="left">用于贪婪模式，不包含0次</td>
+</tr>
+<tr>
+<td align="left">*****</td>
+<td align="left"><strong>匹配前面的元素零次或多次</strong></td>
+<td align="left">用于贪婪模式，包含0次</td>
+</tr>
+<tr>
+<td align="left"><strong>?</strong></td>
+<td align="left"><strong>匹配前面的元素零次或一次</strong></td>
+<td align="left">用于非贪婪模式，只包含0和1次</td>
+</tr>
+<tr>
+<td align="left"><strong>{n,m}</strong></td>
+<td align="left"><strong>匹配前面的元素至少 n 次，至多 m 次</strong></td>
+<td align="left"><code>a&#123;2,4&#125;</code> 匹配 <code>&quot;aa&quot;</code>, <code>&quot;aaa&quot;</code>, <code>&quot;aaaa&quot;</code></td>
+</tr>
+</tbody></table>
+<p>只有在特定的组合中，<code>!</code> 可能参与构成有特殊意义的序列：</p>
+<ul>
+<li><code>(?!)</code> - 否定型先行断言（但通常写作 <code>(?!...)</code>）</li>
+<li><code>(?&lt;!)</code> - 否定型后发断言（但通常写作 <code>(?&lt;!...)</code>）</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="1-信息泄露"><a href="#1-信息泄露" class="headerlink" title="1-信息泄露"></a>1-信息泄露</h1><h3 id="1-绝对地址泄露"><a href="#1-绝对地址泄露" class="headerlink" title="1&gt;绝对地址泄露"></a>1&gt;绝对地址泄露</h3><p>浏览器正则匹配，最好采用<strong>贪婪模式</strong>进行排查	</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#windows-address</span><br><span class="line">[\W\s][A-Z]:[\/\\]+(\w&#123;<span class="number">2</span>,&#125;)+</span><br><span class="line">#注：浏览器中有忽略大小写，根据相应项目进行适当调整</span><br><span class="line"></span><br><span class="line">#当内容过多可以采用</span><br><span class="line">#否定型先行断言（Lookahead）- 排除后面括号的内容</span><br><span class="line">([\W\s][A-Z]:[\/\\]+(\w&#123;<span class="number">2</span>,&#125;)+)(?![\\d\\])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#/-address</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-内网地址泄露"><a href="#2-内网地址泄露" class="headerlink" title="2&gt;内网地址泄露"></a>2&gt;内网地址泄露</h3><p>主要匹配常见的192、172和127地址</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#net-address</span><br><span class="line">\b(?:127\.|192\.168\.|10\.|172\.(?:1[6-9]|2[0-9]|3[0-1])\.)(?:\d&#123;1,3&#125;\.)&#123;1,2&#125;\d&#123;1,3&#125;\b</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="3-哈希匹配"><a href="#3-哈希匹配" class="headerlink" title="3&gt;哈希匹配"></a>3&gt;哈希匹配</h3><p>主要匹配</p>
+<p><code>abc123def456ghi789jkl012mno345pqr678stu901vwx234yz</code></p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">#publickey</span><br><span class="line">&quot;(?=.*[0-9])(?=.*[a-z])[a-z0-9]&#123;50,&#125;&quot;</span><br><span class="line"></span><br><span class="line">#哈希匹配，改变后面的最少数字用于匹配密钥或者加密密码等</span><br><span class="line">:&quot;(?=.*[0-9])(?=.*[a-z])[a-z0-9]&#123;39,&#125;&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Article</category>
+      </categories>
+      <tags>
+        <tag>Test</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软考中级纠错记录</title>
+    <url>/2025/09/05/%E8%BD%AF%E8%80%83%E4%B8%AD%E7%BA%A7%E7%BA%A0%E9%94%99%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="0"><a href="#0" class="headerlink" title="0-"></a>0-</h1><p>错题记录—软考中级（信息安全工程师）</p>
+<span id="more"></span>
+
+<p>1、计算机信息系统安全保护等级从低到高分为：用户自主保护级、系统审计保护级、安全标注保护级、结构化保护级、访问验证保护级</p>
+<p>2、隐私保护不当：收集的个人信息因为保护算法缺少等策略问题被被别人非法得到了</p>
+<p>3、网络流量不可控：信息部署在第三方平台，传输过程中的流量被获取</p>
+<p>4、病毒案例</p>
+<p><img src="/../image/Soft-exam-intermediate/%E7%97%85%E6%AF%92%E6%A1%88%E4%BE%8B.png"></p>
+<p>5、Kerberos 由美国麻省理工学院(MIT)研制实现，已经历了五个版本的发展。一个Kerberos系统涉及四个基本实体:<br>(1)Kerberos 客户机，用户用来访问服务器设备;<br>(2)AS (Authentication Server,认证服务器)，识别用户身份并提供TGS 会话密钥;<br>(3)TGS (Ticket Granting Server,票据发放服务器)，为申请服务的用户授予票据(Ticket);</p>
+<p>(4)应用服务器(Application Server)，为用户提供服务的设备或系统。</p>
+<p>其中，通常将AS 和TGS 统称为KDC(Key Distribution Center)</p>
+<p>6、《信息安全技术ICT 供应链安全风险管理指南》描述:ICT是Infommation and Communication Technology的缩写。ICT 供应链风,险管理的主要目标如下:·完整性。确保在ICT 供应链的所有环节中，产品、系统、服务及其所包含的组件、部件、元器件、数据等不被植入、篡改、替换和伪造。<br>保密性。在确保ICT 供应链上传递的信息不被泄露给未授权者,<br>可用性。确保需方对ICT 供应链的使用不会被不合理地拒绝。<br>可控性。可控性是指需方对ICT 产品、服务或供应链的控制能力。<br>ICT 供应链主要面临恶意篡改、假冒伪劣、供应中断、信息泄露或违规操作和其他威胁五类安全威胁。</p>
+<p>7、NAT是Network Address Translation的英文缩写，中文含义是“网络地址转换”。NAT技术主要是为了解决公开地址不足而出现的,它可以缓解少量因特网IP地址和大量主机之间的矛盾。实现网络地址转换的方式主要有:静态NAT(StaticNAT)、NAT池(pooledNAT)和端囗NAT(PAT)三种类型。<br>其中静态NAT设置起来最为简单，内部网络中的每个主机都被永久映射成外部网络中的某个合法的地址。而NAT池则是在外部网络中配置合法地址集，采用动态分配的方法映射到内部网络。PAT则是把内部地址映射到外部网络的一个iP地址的不同端口上。</p>
+<p>8、安全事件</p>
+<p><img src="/../image/Soft-exam-intermediate/%E5%AE%89%E5%85%A8%E4%BA%8B%E4%BB%B6.png"></p>
+<p>9、目前，隐私保护的常见技术措施有抑制、泛化、置换、扰动、裁剪等。其中抑制是通过将数据置空的方式限制数据发布;<br>泛化是通过降低数据精度来提供匿名的方法，<br>置换方法改变数据的属主;<br>扰动是在数据发布时添加一定的噪声，包括数据增删、变换等，使攻击者无法区分真实数据和噪声数据，从而对攻击者造成干扰;裁剪是将敏感数据分开发布。</p>
+<p>10、John the Ripper:密码破解工具，用于检査Unix&#x2F;Linux系统的弱囗令</p>
+<p>LOphtCrack:密码破解工具，常用户破解Windows系统口令</p>
+<p>11、运维安全审计产品的主要功能有字符会话审计、图形操作审计、数据库运维审计、文件传输审计、合规审计等</p>
+<p>(1)字符会话审计，审计SSH、Telnet等协议的操作行为，审计内容包括访问起始和终止时间、用户名、用户IP、设备名称、设备IP、协议类型、危险等级和操作命令等。</p>
+<p>(2)图形操作审计，审计RDP、VNC等远程桌面以及HTTP&#x2F;HTTPS协议的图形操作行为，审计内容包括访问起始和终止时间、用户名、用户IP、设备名称、设备IP、协议类型、危险等级和操作内容等。</p>
+<p>(3)数据库运维审计，审计Oracle、MSSQLServer、IBMDB2、PostgreSQL等各主流数据库的操作行为，审计内容包括访问起始和终止时间、用户名、用户IP、设备名称、设备IP、协议类型、危险等级和操作内容等</p>
+<p>(4)文件传输审计，审计FTP、SFTP等协议的操作行为，审计内容包括访问起始和终止时间、用户名、用户IP、设备名称、目标设备IP、协议类型、文件名称、危险等级和操作命令等。</p>
+<p>(5)合规审计，根据上述审计内容，参照相关的安全管理制度，对运维操作进行合规检查，给出符合性审查</p>
+<p>12、数字签名过程为:假设Alice需要签名发送一份电子合同文件给Bob。（签名放篡改）<br>Alice 的签名步骤如下:<br>第一步，Alice使用Hash函数将电子合同文件生成一个消息摘要;:第二步，Alice 使用自己的私钥，把消息摘要加密处理，形成一个数字签名:<br>第三步，Alice把电子合同文件和数字签名一同发送给Bob。<br>Bob收到Alice发送的电子合同文件及数字签名后,为确信电子合同文件是Alice所认可的，验证步骤如下:<br>第一步，Bob使用与Alice相同的Hash算法，计算所收到的电子合同文件的消息摘要:第二步，Bob使用Alice的公钥，解密来自Aice的加密消息摘要，恢复Alice原来的消息摘要:<br>第三步，Bob比较自己产生的消息摘要和恢复出来的消息摘要之间的异同。若两个消息摘要相同，则表明电子合同文件来自Alice。如果两个消息摘要的比较结果不一致，则表明电子合同文件已被篡改。</p>
+<p>13、端口复用技术利用系统网络打开的端口(如25和139等)传送数据。</p>
+<p>木马Executor用80端口传递控制信息和数据</p>
+<p>BladeRunner、Doly Trojan、Fore、FTPTrojan、Larva、ebEx、WinCrash等木马复用21端口</p>
+<p>Shtrilitz Stealth、Terminator、WinPC、WinSpy等木马复用25 端口。</p>
+<p>14、VPN有多种实现技术,按照VPN在TCP&#x2F;IP协议层的实现方式,可以将其分为链路层VPN、网络层VPN、传输层VPN。<br>链路层VPN的实现方式:ATM、FrameRelay、多协议标签交换MPLS</p>
+<p>网络层VPN的实现方式:受控路由过滤、隧道技术</p>
+<p>传输层VPN:通过SSL来实现</p>
+<p>15、W32.Blaster.Worm是一种利用DCOMRPC漏洞进行传播的网络蠕虫，其传播能力很强。感染蠕虫的计算机系统运行不稳定，系统会不断重启。并且该蠕虫还将对windowsupdate.com进行拒绝服务攻击，使得受害用户不能及时地得到这个漏洞的补丁。当W32.Blaster.Worm运行时，会进行以下操作。<br>(1)创建一个名为BILLY的互斥体。如果这个互斥体存在，蠕虫将放弃感染并退出。</p>
+<p>(2)在注册表中添加下列键值:”windows auto update”&#x3D;”msblast.exe”，并且将其添加至:HKEY LOCAL MACHINESOFTWAREMicrosoftWindowsCurrentVersionRun，这样就可以传懦虫在系统被重起的时候能够自动运行。<br>(3)蠕虫生成攻击IP地址列表，尝试去感染列表中的计算机，蠕虫对有DCOM RPC 漏洞的机器发起TCP135端口的连接，进行感染。<br>(4)在TCP4444端口绑定一个cmd.exe的后门。<br>(5)在UDPport 69口上进行监听。如果收到了一个请求，将把Msblast.exe发送给目标机器。</p>
+<p>(6)发送命令给远端的机器使它回联已经受到感染的机器并下载Msblast.exe。</p>
+<p>(7)检查当前日期及月份，若当前日期为16日或以后，或当前月份处在9月到12月之间，则W32.Blaster.Worm 蠕虫将对windowsupdate.com发动TCP同步风显拒绝服务攻击.</p>
+<p>16、防火墙是由一些软、硬件组合而成的网络访问控制器，它根据一定的安全规则来控制流过防火墙的网络包，如禁止或转发，能够屏蔽被保护网络内部的信息、拓扑结构和运行状况，从而起到网络安全屏障的作用。防火墙一般用来将内部网络与因特网或者其他外部网络互相隔 离，限制网络互访，保护内部网络的安全。防火墙的安全策略有两种类型:黑名单策略和白名单策略。<br>防火墙的功能主要有以下几个方面:<br>1.过滤非安全网络访问。将防火墙设置为只有预先被允许的服务和用户才能通过防火墙，禁止未授权的用户访问受保护的网络，降低被保护网络受非法攻击的风险，</p>
+<p>2.限制网络访问。防火墙只允许外部网络访问受保护网络的指定主机或网络服务，通常受保护网络中的Mail.FTP、WWW服务器等可让外部网访问，而其他类型的访问则予以禁止。防火墙也用来限制受保护网络中的丰机访问外部网络的某些服务，例如某些不良网址。<br>3.网络访问审计。防火墙是外部网络与受保护网络之间的唯一网络通道，可以记录所有通过它的访问，并提供网络使用情况的统计数据。依据防火墙的日志，可以掌握网络的使用情况，例如网络通信带宽和访问外部网络的服务数据。防火墙的日志也可用于入侵检测和网络攻击取证。</p>
+<p>4.网络带宽控制。防火墙可以控制网络带宽的分配使用，实现部分网络质量服务(QoS)保障。</p>
+<p>5.协同防御。防火墙和入侵检测系统通过交换信息实现联动，根据网络的实际情况配置并修改安全策略，增强网络安全。<br>尽管防火墙有许多防范功能，但也有一些力不能及的地方。比如:</p>
+<p>防火墙功能缺陷，防火墙主要安全缺陷如下:</p>
+<p>防火墙不能完全防止感染病毒的软件或文件传输</p>
+<p>防火墙不能防止基于数据驱动式的攻击</p>
+<p>防火墙不能完全防止后门攻击。</p>
+<p>17、路由器使用Enable secret命令保存口今密文</p>
+<p>18、Unix&#x2F;Linux操作系统的常见日志文件</p>
+<p>日志文件wtmp:记录每一次用户登录和注销的历史信息。</p>
+<p>utmp:记录当前登录的每个用户</p>
+<p>acct:记录每个用户使用过的命令</p>
+<p>lastlog:记录用户最近成功登录的时间</p>
+<p>19、网络安全漏洞利用防范技术主要针对漏洞触发利用的条件进行干扰或拦截，以防止攻击者成功利用漏洞。常见的网络安全漏洞利用防范技术主要如下。</p>
+<p>1.地址空间随机化技术（ASLR）</p>
+<p>缓冲区溢出攻击是利用缓冲区溢出漏洞所进行的攻击行动，会以shelcode地址来覆盖程序原有的返回地址。地址空间随机化(AddressSpaceLayout Randomizaton，ASLR)就是通过对程序加载到内存的地址进行随机化处理，使得攻击者不能事先确定程序的返回地址值，从而降低攻击成功的概率。目前，针对Linux系统，通过ExecShield、PaX工具可以实现程序地址空间的随机化处理。<br>2.数据执行阻止（DEP）<br>数据执行阻止(DataExecution Prevention，DEP)是指操作系统通过对特定的内存区域标注为非执行，使得代码不<br>能够在指定的内存区域运行。利用DEP，可以有效地保护应用程序的堆栈区域，防止被攻击者利用。</p>
+<p>3.SEHOP</p>
+<p>SEHOP是Structured Exception Handler Overwrite Protection的缩写，其原理是防止攻击者利用Structured Exception Handler(SEH)重写。</p>
+<p>4.堆栈保护<br>堆栈保护(StackProtection)的技术原理是通过设置堆栈完整性标记以检测函数调用返回地址是否被篡改，从而阻止攻击者利用缓冲区漏洞。<br>5.虚拟补丁<br>虚拟补丁的工作原理是对尚未进行漏洞永久补丁修复的目标系统程序，在不修改可执行程序的前提下，检测进入目标系统的网络流量而过滤掉漏洞攻击数据包，从而保护目标系统程序免受攻击。虚拟补丁通过入侵阻断、Web防火墙等相关技术来实现给目标系统程序“打补丁”，使得黑客无法利用漏洞进行攻击。</p>
+<p>20.Windows用户登录到系统时，WinLogon进程为用户创建访问令牌，包含用户及所属组的安全标识符(SID)，作为用户的身份标识。</p>
+<p>文件等客体则含有自主访问控制列表(DACL)，标明谁有权访问，</p>
+<p>还含有系统访问控制列表(SACL)，标明哪些主体的访问需要被记录。</p>
+<p>用户进程访问客体对象时，通过WIN32子系统向核心请求访问服务，</p>
+<p>核心的安全参考监视器(SRM)将访问令牌与客体的DACL进行比较，决定客体是否拥有访问权限，</p>
+<p>同时检查客体的SACL，确定本次访问是否落在既定的审计范围内，是则送至审计子系统。</p>
+<p>21.unix命令</p>
+<p>rmdir，是一个linux命令，用于删除空目录<br>pwd显示当前所处的目录，该命令显示整个路径名。<br>scp 命令用于 Linux 之间复制文件和目录。<br>cmp 命令用于比较两个文件是否有差异。当相互比较的两个文件完全一样时，则该指令不会显示任何信息。若发现有所差异，预设会标示出第一个不同之处的字符和列数编号。</p>
+<p>22.交换机是构成网络的基础设备，主要的功能是负责网络通信数据包的交换传输。目前，工业界按照交换机的功能变化，将交换机分为第一代交换机、第二代交换机、第三代交换机、第四代交换机、第五代交换机。第二代交换机又称为以太网交换机，工作于OSI的数据链路层，称为二层交换机。二层交换机识别数据中的MAC地址信息，并根据MAC地址选择转发端口。</p>
+]]></content>
+      <categories>
+        <category>Information Security Engineer</category>
+      </categories>
+      <tags>
+        <tag>Error correcting</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>p2p点对点通信</title>
     <url>/2025/09/02/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E9%80%9A%E4%BF%A1%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>学习的文章：</p>
@@ -51,6 +224,8 @@
 <h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
 <p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
 <p><img src="/../image/proxy-/1.png"></p>
+<span id="more"></span>
+
 <h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
 <p>#<strong>解决方案</strong></p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
