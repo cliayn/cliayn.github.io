@@ -1,6 +1,294 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>软考中级纠错记录-填空题</title>
+    <url>/2025/09/18/%E8%BD%AF%E8%80%83%E4%B8%AD%E7%BA%A7%E7%BA%A0%E9%94%99%E8%AE%B0%E5%BD%95-%E4%B8%8B%E5%8D%8A/</url>
+    <content><![CDATA[<h1 id="0"><a href="#0" class="headerlink" title="0-"></a>0-</h1><p>错题记录（下半场题目）—软考中级（信息安全工程师）</p>
+<span id="more"></span>
+
+<h2 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h2><table>
+<thead>
+<tr>
+<th align="left">字符类别</th>
+<th align="left">规律</th>
+<th align="left">十六进制 &#x2F; 十进制</th>
+<th align="left">记忆技巧 &#x2F; 推导关键</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>数字 ‘0’</strong></td>
+<td align="left">所有数字字符的起点</td>
+<td align="left"><code>0x30</code> &#x2F; <strong>48</strong></td>
+<td align="left"><strong>记住 ‘0’ 是 48</strong>。那么 ‘1’ 就是 49，以此类推到 ‘9’ 是 57。</td>
+</tr>
+<tr>
+<td align="left"><strong>大写字母 ‘A’</strong></td>
+<td align="left">大写字母的起点</td>
+<td align="left"><code>0x41</code> &#x2F; <strong>65</strong></td>
+<td align="left"><strong>记住 ‘A’ 是 65</strong>。那么 ‘B’ 是 66，…，‘Z’ 是 90。</td>
+</tr>
+<tr>
+<td align="left"><strong>小写字母 ‘a’</strong></td>
+<td align="left">小写字母的起点</td>
+<td align="left"><code>0x61</code> &#x2F; <strong>97</strong></td>
+<td align="left"><strong>记住 ‘a’ 是 97</strong>。那么 ‘b’ 是 98，…，‘z’ 是 122。</td>
+</tr>
+<tr>
+<td align="left"><strong>空字符 (NULL)</strong></td>
+<td align="left">字符串的结束标志</td>
+<td align="left"><code>0x00</code> &#x2F; <strong>0</strong></td>
+<td align="left">最小的值，表示空。</td>
+</tr>
+<tr>
+<td align="left"><strong>空格 (Space)</strong></td>
+<td align="left"></td>
+<td align="left"><code>0x20</code> &#x2F; <strong>32</strong></td>
+<td align="left">这是一个非常常见的字符，建议记住。</td>
+</tr>
+<tr>
+<td align="left"><strong>换行 (LF, <code>\n</code>)</strong></td>
+<td align="left"></td>
+<td align="left"><code>0x0A</code> &#x2F; <strong>10</strong></td>
+<td align="left">在编程和文本处理中极其重要。</td>
+</tr>
+<tr>
+<td align="left"><strong>大小写差值</strong></td>
+<td align="left"><strong>小写字母 - 大写字母 &#x3D; 32</strong></td>
+<td align="left"><code>0x20</code></td>
+<td align="left"><strong>这是最重要的规律之一！</strong> 知道了一个大写字母的码，加32就是其小写字母的码。</td>
+</tr>
+</tbody></table>
+<h3 id="错误1-安卓的代码的考察"><a href="#错误1-安卓的代码的考察" class="headerlink" title="错误1-安卓的代码的考察"></a>错误1-安卓的代码的考察</h3><hr>
+<p>第1题（案例题）：</p>
+<p> 阅读下列说明和图，回答问题1至问题4,将解答填入答题纸的对应栏内。</p>
+<p>【说明】<br>近期，按照网络安全审查工作安排，国家网信办会同公安部、国家安全部、自然资源部、 交通运输部、税务总局、市场监管总局等部门联合进驻某出行科技有限公司，开展网络安全 审查。移动App安全检测和个人数据安全再次成为关注焦点。<br><a href="4%E5%88%86">问题1</a></p>
+<p>为保护Android系统及应用终端平台安全，Android系统在内核层、系统运行层、应用 框架层以及应用程序层采取了相应的安全措施，以尽可能地保护移动用户数据、应用程序和 设备安全。<br>在Android系统提供的安全措施中有安全沙箱、应用程序签名机制、权限声明机制、地 址空间布局随机化等。请将上述四种安全措施按照其所在层次划分填入表4-1的空(1)〜(4)。</p>
+<p><img src="/../image/Soft-exam-intermediate/after/1-1.png"></p>
+<p><a href="6%E5%88%86">问题2</a><br>权限声明机制为操作权限和对象之间设定了一些限制，只有把权限和对象进行绑定，才 可以有权操作对象。<br>(1) 请问Android系统的应用程序权限信息声明都在哪个配置文件中？给出该配置文件名。<br>(2) Android 系统定义的权限组包括:CALENDAR、CAMERA、CONTACTS、LOCATION、 MICROPHONE、PHONE、SENSORS、SMS、STORAGE。按照《信息安全技术移动互联 网应用程序(App)收集个人信息基本规范》，运行在Android 9.0系统中提供网络约车服务 的某某出行App可以有的最小必要权限是以上权限组的哪几个？<br>(3) 假如有移动应用A提供了如下服务AService,对应的权限描述如下：</p>
+<p><img src="/../image/Soft-exam-intermediate/after/1-2.png"></p>
+<p>如果其他应用B要访问该服务，应该申明使用该服务，将以下申明语句补充完整。</p>
+<p><img src="/../image/Soft-exam-intermediate/after/1-3.png"></p>
+<p>【问题3】(3分)<br>应用程序框架层集中了很多Android开发需要的组件，其中最主要的就是Activities、 Broadcast Receiver、Services以及Content Providers这四大组件。围绕四大组件存在很多的攻 击方法，请说明以下三种攻击分别是针对哪个组件。<br>(1) 目录遍历攻击；<br>(2) 界面劫持攻击；<br>(3) 短信拦截攻击。<br>【问题4】(2分)<br>移动终端设备常见的数据存储方式包括：<br>① SharedPreferences ；<br>② 文件存储；<br>③ SQLite数据库；<br>④ ContentProvider；<br>⑤网络存储。<br>从以上5种方式中选出Android系统支持的数据存储方式，给出对应存储方式的编号。</p>
+<p>【问题1】<br>(1) 权限声明机制<br>(2)应用程序签名机制<br>(3) 安全沙箱<br>(4)地址空间布局随机化<br>【问题2】<br>(1) AndroidManifest.xml<br>(2) LOCATION、PHONE<br>(3) uses-permission<br>【问题3】<br>(1) 目录遍历攻击：Content Providers<br>(2) 界面劫持攻击：Activities<br>(3) 短信拦截攻击：Broadcast Receiver<br>【问题4】<br>①②③④⑤</p>
+<p>【问题1】<br>权限声明机制就在App当中，应用程序签名机制则是属于应用框架层，安全沙箱在系统运行层，地址空间布局随机化是系统内核层实现的。</p>
+<hr>
+<p>【问题2】</p>
+<p><img src="/../image/Soft-exam-intermediate/after/%E5%AE%89%E5%8D%93%E6%9D%83%E9%99%90%E6%96%87%E4%BB%B6.png"></p>
+<p>解开App文件，在 AndroidManifest.xml中可以看到运行App所需的权限。某出行属于网约车范畴，需要地理位置和打电话权限即可。<br>Android 的权限在AndroidManifest.xml文件里配置。</p>
+<p>其中有四个标签与权限有关，分别是permission, permission-group, permisson-tree, uses-permission，最常用的是uses-permission,当我们需要获取某个权限的时候，就需要在文件中声明。</p>
+<p>（1）Android权限组及其常见用途：</p>
+<ul>
+<li>CALENDAR：访问日历事件。约车App通常不需要这个。</li>
+<li>CAMERA：访问相机。可能用于扫描二维码或拍照上传，但不是核心功能。</li>
+<li>CONTACTS：访问联系人。可能用于分享行程，但可能不是绝对必要，用户可以直接输入号码。</li>
+<li>LOCATION：位置访问。绝对必要。</li>
+<li>MICROPHONE：麦克风访问。可能用于语音输入，但不是核心功能。</li>
+<li>PHONE：电话权限。可能用于读取手机状态和拨打电话。</li>
+<li>SENSORS：传感器访问。可能用于检测运动，但不必要。</li>
+<li>SMS：短信权限。可能用于验证码或发送短信，但验证码可以通过其他方式处理。</li>
+<li>STORAGE：存储权限。可能用于缓存地图或保存数据。</li>
+</ul>
+<p>（2）对于网络约车服务，必要的权限可能包括：</p>
+<ul>
+<li>LOCATION：这是核心功能，因为需要实时位置来叫车和导航。</li>
+<li>PHONE：可能需要读取手机状态（如IMEI）用于设备标识，或者拨打电话。</li>
+<li>CONTACTS：可能用于分享行程或邀请联系人。</li>
+<li>STORAGE：可能用于保存数据。</li>
+</ul>
+<p>【问题3】<br>Android系统中界面和Activities关联，因此界面劫持攻击属于Activities组件。Content Providers用来保存或获取数据，目录遍历攻击属于Content Providers。<br>Broadcast Receiver用于广播发送和接收消息，短信拦截攻击属于Broadcast Receiver。</p>
+<p>–纯靠英文意思猜–</p>
+<p>【问题4】<br>题干所述的5种方式全是Android支持的存储方式。</p>
+<p>–没点话说–</p>
+<hr>
+<h3 id="错误2-wireshark-iptables的熟悉"><a href="#错误2-wireshark-iptables的熟悉" class="headerlink" title="错误2-wireshark+iptables的熟悉"></a>错误2-wireshark+iptables的熟悉</h3><hr>
+<p>域名前的子域名是异常字符，推测是加密的信息，通过子域名用dns服务器将信息外带出去，而txt信息中包含ipconfig，可能所外带的信息便是ipconfig的回显</p>
+<p>dns服务只要与外界沟通，非极端情况是必须开启的</p>
+<p><strong>表（-t table）</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">表名</th>
+<th align="left">主要功能</th>
+<th align="left">内置链</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>filter</strong></td>
+<td align="left"><strong>过滤数据包</strong>，决定是否允许数据包通过（默认表）</td>
+<td align="left">INPUT, FORWARD, OUTPUT</td>
+</tr>
+<tr>
+<td align="left"><strong>nat</strong></td>
+<td align="left">网络地址转换，用于修改数据包的源或目标地址</td>
+<td align="left">PREROUTING, OUTPUT, POSTROUTING</td>
+</tr>
+<tr>
+<td align="left"><strong>mangle</strong></td>
+<td align="left">修改数据包内容（如 TOS、TTL），或给数据包打标记</td>
+<td align="left">所有五个链（PREROUTING, INPUT, FORWARD, OUTPUT, POSTROUTING）</td>
+</tr>
+<tr>
+<td align="left"><strong>raw</strong></td>
+<td align="left">决定数据包是否被状态跟踪机制处理</td>
+<td align="left">PREROUTING, OUTPUT</td>
+</tr>
+</tbody></table>
+<p><strong>命令选项（Command Options）</strong></p>
+<p>指定要对规则进行的操作，如添加、删除、查看等。</p>
+<table>
+<thead>
+<tr>
+<th align="left">命令选项</th>
+<th align="left">全称</th>
+<th align="left">功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-A</code></td>
+<td align="left"><code>--append</code></td>
+<td align="left"><strong>追加</strong>一条规则到链的末尾</td>
+</tr>
+<tr>
+<td align="left"><code>-I</code></td>
+<td align="left"><code>--insert</code></td>
+<td align="left"><strong>插入</strong>一条规则到链的指定位置（默认为链首）</td>
+</tr>
+<tr>
+<td align="left"><code>-D</code></td>
+<td align="left"><code>--delete</code></td>
+<td align="left"><strong>删除</strong>链中的一条规则</td>
+</tr>
+<tr>
+<td align="left"><code>-R</code></td>
+<td align="left"><code>--replace</code></td>
+<td align="left"><strong>替换</strong>链中的一条规则</td>
+</tr>
+<tr>
+<td align="left"><code>-L</code></td>
+<td align="left"><code>--list</code></td>
+<td align="left"><strong>列出</strong>链中的所有规则</td>
+</tr>
+<tr>
+<td align="left"><code>-F</code></td>
+<td align="left"><code>--flush</code></td>
+<td align="left"><strong>清空</strong>链中的所有规则（刷掉）</td>
+</tr>
+<tr>
+<td align="left"><code>-Z</code></td>
+<td align="left"><code>--zero</code></td>
+<td align="left">将链的计数器清零（与 <code>-L</code> 一起用可看清零前的统计）</td>
+</tr>
+<tr>
+<td align="left"><code>-P</code></td>
+<td align="left"><code>--policy</code></td>
+<td align="left">设置链的<strong>默认策略</strong>（ACCEPT, DROP, REJECT）</td>
+</tr>
+<tr>
+<td align="left"><code>-N</code></td>
+<td align="left"><code>--new-chain</code></td>
+<td align="left">创建一条新的用户自定义链</td>
+</tr>
+<tr>
+<td align="left"><code>-X</code></td>
+<td align="left"><code>--delete-chain</code></td>
+<td align="left">删除一条用户自定义链（必须为空）</td>
+</tr>
+<tr>
+<td align="left"><code>-E</code></td>
+<td align="left"><code>--rename-chain</code></td>
+<td align="left">重命名一条用户自定义链</td>
+</tr>
+</tbody></table>
+<p><strong>综合示例</strong></p>
+<ol>
+<li><p><strong>允许所有已建立的连接</strong>：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>开放本机的SSH（22）、HTTP（80）、HTTPS（443）端口</strong>：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">iptables -A INPUT -p tcp -m multiport --dports <span class="number">22</span>,<span class="number">80</span>,<span class="number">443</span> -m state --state NEW -j ACCEPT</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>允许Ping（ICMP回声请求）</strong>：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">iptables -A INPUT -p icmp --icmp-<span class="built_in">type</span> <span class="number">8</span> -j ACCEPT</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>设置默认策略为拒绝，并记录被拒绝的包</strong>：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">iptables -P INPUT DROP</span><br><span class="line">iptables -A INPUT -j LOG --log-prefix &quot;IPTABLES-DROPPED: &quot; # 先记录</span><br><span class="line">iptables -A INPUT -j DROP # 再丢弃</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>端口转发（将到达本机8080端口的流量转发到192.168.1.10的80端口）</strong>：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">iptables -t nat -A PREROUTING -p tcp --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">10</span>:<span class="number">80</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<p> 阅读下列说明和图，回答问题1至问题5，将解答填入答题纸的对应栏内。<br>【说明】<br>域名系统是网络空间的中枢神经系统，其安全性影响范围大，也是网络攻防的重点。李 工在日常的流量监控中，发现以下可疑流量，请协助分析其中可能的安全事件。</p>
+<p><img src="/../image/Soft-exam-intermediate/after/wireshark%E5%AE%89%E5%85%A8%E6%A3%80%E6%9F%A51.png"></p>
+<p><a href="4%E5%88%86">问题1</a><br>域名系统采用授权的分布式数据查询系统，完成域名和IP地址的解析。李工通过上述 流量可以判断域名解析是否正常、有无域名劫持攻击等安全事件发生。<br>(1) 域名系统的服务端程序工作在网络的哪一层？<br>(2) 图3-1中的第一个网络分组要解析的域名是什么？<br>(3) 给出上述域名在DNS查询包中的表示形式(16进制)。<br>(4) 由图3-1可知李工所在单位的域名服务器的IP地址是什么？<br><a href="2%E5%88%86">问题2</a><br>鉴于上述DNS协议分组包含大量奇怪的子域名，如想知道是哪个应用程序发送的上述 网络分组，请问在Windows系统下，李工应执行哪条命令以确定上述DNS流量来源？<br><a href="6%E5%88%86">问题3</a><br>通过上述的初步判断，李工认为192.168.229.1的计算机可能己经被黑客所控制(CC攻 击)。黑客惯用的手法就是建立网络隐蔽通道，也就是指利用网络协议的某些字段秘密传输 信息，以掩盖恶意程序的通信内容和通信状态。<br>(1) 请问上述流量最有可能对应的恶意程序类型是什么？<br>(2) 上述流量中隐藏的异常行为是什么？请简要说明。<br>(3) 信息安全目标包括保密性、完整性、不可否认性、可用性和可控性。请问上述流量 所对应的网络攻击违反了信息安全的哪个目标？<br><a href="6%E5%88%86">问题4</a><br>通过上述的攻击流分析，李工决定用防火墙隔离该计算机。李工所运维的防火墙是 Ubuntu系统自带的iptables防火墙。<br>(1) 请问iptables默认实现数据包过滤的表是什么？该表默认包含哪几条链？<br>(2) 李工首先要在iptables防火墙中查看现有的过滤规则，请给出该命令。<br>(3) 李工要禁止该计算机继续发送DNS数据包，请给出相应过滤规则。 <br>【问题5】（2分）<br>在完成上述处置以后，李工需要分析事件原因，请说明导致DNS成为CC攻击的首选 隐蔽传输通道协议的原因。</p>
+<p>【问题1】<br>(1) 应用层<br>(2) <a href="http://www.humen.com/">www.humen.com</a><br>(3) 7777770568756d656e03636f6d<br>(4) 192.168.229.133<br>【问题2】<br>由流量的源端口号和netstat&#x2F;b对应的进程关联即可得知<br>【问题3】<br>(1) 特洛伊木马<br>(2) 执行ipconfig命令，回传网络信息<br>(3) 机密性<br>【问题4】<br>(1) filter； INPUT, FORWARD, OUTPUT<br>(2) iptables -L<br>(3) iptables -I INPUT -s 192.168.229.1 -j DROP<br>【问题5】<br>放行</p>
+<p>【问题1】<br>域名协议是典型的网络应用，工作在应用层。<br>从Wireshark第一个分组中的info栏可以明确得知其查询的域名为<a href="http://www.humen.com.而且从图中下半部分可以知道上述域名的编码方法,分别是长度+每一级域名的ascii/">www.humen.com。而且从图中下半部分可以知道上述域名的编码方法，分别是长度+每一级域名的ASCII</a> 码。字母w的ASCII 码值可以从图中t的ASCII 码值（十六进制74）推导出来，为77，字母a的ASCII码值为十六进制61，因此com的 ASCII码值为636f6d，以此类推。<br>域名解析的目的IP地址就是域名服务器的IP地址。所以查看查询分组的目的地址即可，即李工所在单位的域名服务器的P地址为192.168.229.133。<br>【问题2】<br>由流量的源端口号和netstat&#x2F;b对应的进程关联，即可得知 DNS流量来源。</p>
+<p>【问题3】<br>病毒是能够自我复制和传播的代码片段，通常病毒无法远程控制。<br>蠕虫也是一种类似病毒的计算机程序，但它不会去修改其他程序，它越来越多地自我复制导致计算机系统变慢。蠕虫可以进行远程控制。<br>特洛伊木马不会像病毒和蠕虫那样自我复制。它具备很好的隐藏能力，悄悄地窃取用户的重要信息。根据题目所给信息（具有远程控制功能、隐蔽通信、窃取敏感信息)，判断其属于特洛伊木马。<br>题目所给出的是域名的 TXT记录，在该记录的最后包含命令信息，从图中最下面一行可知执行的是ipconfig命令。<br>【问题4】<br>iptables 的4表5链当中，filter表是负责过滤的，其包含INPUT, OUTPUT和转发FORWARD。<br>查看选项是list的缩写L。<br>对隧道流量可以禁止（丢弃，DROP）其发送的所有流量，只要其源IP地址为攻击者的机器。<br>【问题5】<br>只要计算机能够上网，DNS域名系统就必须是放行的，不会被安全设备所拦截，这就是最根本的原因。</p>
+<h3 id="错误3-日志分析"><a href="#错误3-日志分析" class="headerlink" title="错误3-日志分析"></a>错误3-日志分析</h3><hr>
+<p> 阅读下列说明，回答问题1至问题5，将解答填入对应栏内。<br>【说明】<br>通常由于机房电磁环境复杂，运维人员很少在现场进行运维工作，在出现安全事件需要 紧急处理时，需要运维人员随时随地远程开展处置工作。<br>SSH（安全外壳协议）是一种加密的网络传输协议，提供安全方式访问远程计算机。李工作为公司的安全运维工程师，也经常使用SSH远程登录到公司的Ubuntu18.04服务器中进 行安全维护。<br>【问题1】（2分）<br>SSH协议默认工作的端口号是多少？<br>【问题2】（2分）<br>网络设备之间的远程运维可以采用两种安全通信方式：一种是SSH，还有一种是什么？<br> 【问题3】（4分）<br>日志包含设备、系统和应用软件的各种运行信息，是安全运维的重点关注对象。李工在 定期巡检服务器的SSH日志时，发现了以下可疑记录：</p>
+<p><img src="/../image/Soft-exam-intermediate/after/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90.png"></p>
+<p>（1）请问李工打开的是系统的哪个日志文件？请给出该文件名字。<br>（2）李工怀疑有黑客在攻击该系统，请给出判断攻击成功与否的命令以便李工评估攻击 的影响。<br>【问题4】（10分）<br>经过上次SSH的攻击事件之后，李工为了加强口令安全，降低远程连接风险，考虑采 用免密证书登录。<br>（1）Linux系统默认不允许证书方式登录，李工需要实现免密证书登录的功能，应该修 改哪个配置文件？请给出文件名。<br>（2）李工在创建证书后需要拷贝公钥信息到服务器中。他在终端输入了以下拷贝命令， 请说明命令中“&gt;&gt;”的含义。<br>ssh xiaoming@server cat &#x2F;home&#x2F;xiaoming&#x2F;.ssh&#x2F;id_rsa.pub&gt;&gt;authorized_keys<br>（3）服务器中的authorized_keys文件详细信息如下，请给出该文权限的数字表示。</p>
+<p><img src="/../image/Soft-exam-intermediate/after/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%902.png"></p>
+<p>（4）李工完成SSH配置修改后需要重启服务，请给出systemctl重启SSH服务的命令。<br>（5）在上述服务配置过程中，配置命令中可能包含各种敏感信息，因此在配置结束后应 该及时清除历史命令信息，请给出清除系统历史记录应执行的命令。</p>
+<p>【问题5】（2分）<br>SSH之所以可以实现安全的远程访问，归根结底还是密码技术的有效使用。对于SSH 协议，不管是李工刚开始使用的基于口令的认证还是后来的基于密钥的免密认证，都是密码 算法和密码协议在为李工的远程访问保驾护航。请问上述安全能力是基于对称密码体制还是 非对称密码体制来实现的？</p>
+<p>【问题1】<br>22<br>【问题2】<br>VPN<br>【问题3】<br>（1）&#x2F;var&#x2F;log&#x2F;auth.log<br>（2）cat .&#x2F;auth.log | grep “Accepted password”<br>【问题4】<br>（1）&#x2F;etc&#x2F;ssh&#x2F;sshd_config<br>（2）追加文件内容<br>（3）600<br>（4）systemctl restart ssh<br>systemctl restart sshd<br>systemctl restart ssh.service<br>systemctl restart sshd.service<br>（5）rm ~&#x2F;.bash_history<br>【问题5】<br>非对称密码体制</p>
+<p> 本题考查Linux系统基本的安全配置，要求对Linux系统SSH服务相关的端口、日志和免密登录有清晰的了解。<br>【问题1】<br>SSH服务的默认端口号是22。</p>
+<p>【问题2】<br>远程安全运维的另外一种常见方法就是虚拟专用网VPN,可以直接在不安全的公网之上以隧道方式开辟安全通道。<br>【问题3】<br>Ubuntu系统中日志都位于&#x2F;var&#x2F;log目录，其中的登录认证日志都在 auth.log文件中。所谓攻击的评估，对于日志所反应的口令爆破攻击就是想知道攻击是否成功，也就是口令是否已经泄露，这可以从SSH登录成功的字符串“Accepted password”作为过滤依据，因此可以使用cat命令内容，然后用grep过滤内容的上述字符串，两个命令之间用管道符连接即可。<br>【问题4】<br>Ubuntu系统的配置基本都在&#x2F;etc目录下，ssh服务在letc&#x2F;ssh，对应的配置文件为sshd_config。</p>
+<p>一个尖括号是改写原有文件中的内容，而两个尖括号则是在原有文件内容的后面进行追加。<br>上述权限字符串“rw——-”对应的就是110000000，即600。<br>最新的Linux系统服务管理程序是systemctl，其语法就是命令+动作+服务名字。<br>命令历史记录都在每个用户 home目录下的.bash_history 文件中，home目录可以用~表示，因此组合起来就是 rm ~&#x2F;.bash_history 。<br>【问题5】<br>SSH的实现是基于公钥密码体制。私钥在用户本地主机上，公钥则保存在SSH服务器上。</p>
+<hr>
+<h3 id="错误4-网络拓扑和编码熟悉"><a href="#错误4-网络拓扑和编码熟悉" class="headerlink" title="错误4-网络拓扑和编码熟悉"></a>错误4-网络拓扑和编码熟悉</h3><hr>
+<p>在某政府单位信息中心工作的李工主要负责网站的设计、开发工作。为了确保部门新业务的顺利上线，李工邀请信息安全部的王工按照等级保护2.0的要求对其开展安全测评。李工提供网站所在的网络拓扑图如图1-1所示。图中，网站服务器的IP地址是192.168.70.140, 数据库服务器的IP地址是192.168.70.141。</p>
+<p><img src="/../image/Soft-exam-intermediate/after/%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91%E5%9B%BE.png"></p>
+<p>王工接到网站安全测评任务以后，决定在内网办公区的信息安全部开展各项运维工作。王工使用的办公电脑IP地址为192.168.11.2。</p>
+<p>【问题1】（2分）</p>
+<p>按照等级保护2.0的要求，政府网站的定级不应低于几级？该等级的测评每几年开展一次？</p>
+<p>【问题2】(6分)</p>
+<p>按照网络安全测评的实施方式，测评主要包括安全功能检测、安全管理检测、代码安全审查、安全渗透、信息系统攻击测试等。王工调阅了部分网站后台处理代码，发现网站某页面的数据库查询代码存在安全漏洞，代码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;Submit&#x27;</span>])) &#123;</span><br><span class="line">    <span class="comment">// Retrieve data</span></span><br><span class="line">    <span class="variable">$id</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line">    <span class="variable">$getid</span> = <span class="string">&quot;SELECT first_name, last_name FROM users WHERE user id = &#x27;<span class="subst">$id</span>&#x27; &quot;</span>;</span><br><span class="line">    <span class="variable">$result</span> = <span class="title function_ invoke__">mysql_query</span>(<span class="variable">$getid</span>) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">&#x27;&lt;pre&gt;&#x27;</span> . <span class="title function_ invoke__">mysql_error</span>() . <span class="string">&#x27;&lt;/pre&gt;&#x27;</span>);</span><br><span class="line">    <span class="variable">$num</span> = <span class="title function_ invoke__">mysql_numrows</span>(<span class="variable">$result</span>);</span><br><span class="line">    <span class="variable">$i</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="variable">$i</span> &lt; <span class="variable">$num</span>)&#123;</span><br><span class="line">        <span class="variable">$first</span> = <span class="title function_ invoke__">mysql_result</span>(<span class="variable">$result</span>, <span class="variable">$i</span>, <span class="string">&quot;first_narae&quot;</span>);</span><br><span class="line">        <span class="variable">$last</span> = <span class="title function_ invoke__">mysql_result</span>(<span class="variable">$result</span>, <span class="variable">$i</span>, <span class="string">&quot;last_name&quot;</span>);</span><br><span class="line">        ehco <span class="string">&#x27;&lt;pre&gt;&#x27;</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&#x27;ID: &#x27;</span> . <span class="variable">$id</span> . <span class="string">&#x27;&lt;br&gt;First name: &#x27;</span>. <span class="variable">$first</span> . <span class="string">&#x27;&lt;br&gt;Surname: &#x27;</span> . <span class="variable">$last</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&#x27;&lt;/pre&gt;&#x27;</span>;</span><br><span class="line">        <span class="variable">$i</span>++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>(1) 请问上述代码存在哪种漏洞？<br>(2) 为了进一步验证自己的判断，王工在该页面的编辑框中输入了漏洞测试语句，发起测试。请问王工最有可能输入的测试语句对应以下哪个选项？<br>A. or 1&#x3D;1– order by 1<br>B. 1 or ‘1’&#x3D;’1’&#x3D;1 order by 1#<br>C. 1’ or 1&#x3D;1 order by 1#<br>D. 1’ and ‘1’&#x3D;’2’ order by 1#</p>
+<p>(3) 根据上述代码，网站后台使用的是哪种数据库系统？<br>(4) 王工对数据库中保存口令的数据表进行检查的过程中，发现口令为明文保存，遂给出整改建议，建议李工对源码进行修改，以加强口令的安全防护，降低敏感信息泄露风险。下面给出四种在数据库中保存口令信息的方法，李工应该采用哪一种口令安全实践方法？<br>A. Base64<br>B. MD5<br>C.哈希加盐<br>D.加密存储</p>
+<p>【问题3】(2分)</p>
+<p>按照等级保护2.0的要求，系统当中没有必要开放的服务应当尽量关闭。王工在命令行窗口运行了一条命令，端口开放情况一目了然。请给出王工所运行命令的名字。</p>
+<p>【问题4】(2分)</p>
+<p>防火墙是网络安全区域边界保护的重要技术，防火墙防御体系结构主要有基于双宿主主机防火墙、基于代理型防火墙和基于屏蔽子网的防火墙。图1-1拓扑图中的防火墙布局属于哪种体系结构类型？</p>
+<p>【问题5】（8分）</p>
+<p>根据李工提供的网络拓扑图，王工建议部署开源的Snort入侵检测系统以提高整体的安全检测和态势感知能力。</p>
+<p>（1）针对王工建议，李工查阅了入侵检测系统的基本组成和技术原理等资料。请问以下有关Snort入侵检测系统的描述哪几项是正确的？（2分）<br>A.基于异常的检测系统<br>B.基于误用的检测系统<br>C.基于网络的入侵检测系统<br>D.基于主机的入侵检测系统</p>
+<p>（2）为了部署Snort入侵检测系统，李工应该把入侵检测系统连接到图1-1网络拓扑中的哪台交换机？（1分）</p>
+<p>（3）李工还需要把网络流量导入入侵检测系统才能识别流量中的潜在攻击。图1-1中使用的均为华为交换机，李工要将交换机网口 GigabitEthernet1&#x2F;0&#x2F;2的流量镜像到部署Snort的网口 GigabitEthernet1&#x2F;0&#x2F;1上，他应该选择下列选项中哪一个配置？ （2分）<br>A. observe-port 1 interface GigabitEthernet1&#x2F;0&#x2F;2<br>interface GigabitEthernet1&#x2F;0&#x2F;1<br>port-mirroring to observe-port 1 inbound&#x2F;outbound&#x2F;both<br>B. observe-port 2 interface GigabitEthernet1&#x2F;0&#x2F;2<br>interface GigabitEthernet1&#x2F;0&#x2F;1<br>port-mirroring to observe-port 1 inbound&#x2F;outbound&#x2F;both<br>C. port-mirroring to observe-port 1 inbound&#x2F;outbound&#x2F;both<br>observe-port 1 interface GigabitEthernet1&#x2F;0&#x2F;2 interface<br>GigabitEthernet1&#x2F;0&#x2F;1<br>D. observe-port 1 interface GigabitEthernet1&#x2F;0&#x2F;1<br>interface GigabitEthernet1&#x2F;0&#x2F;2<br>port-mirroring to observe-port 1 inbound&#x2F;outbound&#x2F;both</p>
+<p>（4）Snort入侵检测系统部署不久，就发现了一起网络攻击。李工打开攻击分组查看，发现很多字符看起来不像是正常字母，如图1-2所示，请问该用哪种编码方式去解码该网络分组内容？ （1分）</p>
+<p><img src="/../image/Soft-exam-intermediate/after/hex%E8%A7%A3%E6%9E%90.png"></p>
+<p>（5）针对图1-2所示的网络分组，李工查看了该攻击对应的Snort检测规则，以更好地掌握Snort入侵检测系统的工作机制。请完善以下规则，填充空（a）、（b）处的内容。（2分）<br>（a） tcp any any -&gt; any any （msg:”XXX”;content:” （b） “;nocase;sid: 1106;）</p>
+<p>【问题1】（2分）</p>
+<p>按照等级保护2.0的要求，政府网站的定级不应低于<strong>二级</strong>。该等级的测评每<strong>两</strong>年开展一次。</p>
+<p>【问题2】（6分）</p>
+<p>(1) <strong>SQL注入漏洞</strong><br>(2) <strong>C. 1’ or 1&#x3D;1 order by 1#</strong><br>(3) <strong>MySQL</strong><br>(4) <strong>C. 哈希加盐</strong></p>
+<p>【问题3】（2分）</p>
+<p>王工运行的命令是 <strong>netstat</strong>（或 <code>netstat -an</code>）。</p>
+<p>【问题4】（2分）</p>
+<p>图1-1拓扑图中的防火墙布局属于<strong>基于屏蔽子网的防火墙</strong>体系结构。</p>
+<p>【问题5】（8分）</p>
+<p>（1）<strong>B. 基于误用的检测系统</strong> 和 <strong>C. 基于网络的入侵检测系统</strong><br>（2）应连接到<strong>交换机2</strong>（或DMZ区交换机）。<br>（3）正确配置是：<br><strong>A. observe-port 1 interface GigabitEthernet1&#x2F;0&#x2F;2<br>  interface GigabitEthernet1&#x2F;0&#x2F;1<br>  port-mirroring to observe-port 1 inbound&#x2F;outbound&#x2F;both</strong><br>（4）应使用<strong>URL编码</strong>方式解码。<br>（5）规则完善：<br>（a）<strong>alert</strong><br>（b）<strong>union</strong></p>
+<p>完整规则：<br><code>alert tcp any any -&gt; any any (msg:&quot;XXX&quot;;content:&quot;union&quot;;nocase;sid:1106;)</code></p>
+<p>解析摘要</p>
+<ul>
+<li><strong>问题1</strong>：根据《网络安全等级保护条例》，政府网站通常定为二级或以上，二级系统每两年测评一次。</li>
+<li><strong>问题2</strong>：代码中用户输入未过滤直接拼接SQL语句，导致SQL注入；测试语句需闭合引号并用<code>#</code>注释；<code>mysql_*</code>函数表明使用MySQL数据库；口令存储应采用加盐哈希增强安全性。</li>
+<li><strong>问题3</strong>：<code>netstat</code>命令可查看系统开放端口和连接状态。</li>
+<li><strong>问题4</strong>：拓扑中包含DMZ区（屏蔽子网），内外网间有防火墙隔离，符合屏蔽子网结构。</li>
+<li><strong>问题5</strong>：Snort是基于规则（误用）和网络的IDS；需部署在DMZ交换机（交换机2）以监控外部流量；华为交换机镜像配置需先定义观察端口再应用镜像；HTTP请求中的特殊字符通常需URL解码；Snort规则中<code>alert</code>为动作类型，<code>union</code>是SQL注入常见特征。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Information Security Engineer</category>
+      </categories>
+      <tags>
+        <tag>Error correcting</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>渗透测试的简单排查</title>
     <url>/2025/09/15/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%B0%B4%E6%B4%9E%E7%9A%84%E6%8C%96%E6%8E%98/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	渗透测试中包含太多重复且单一的漏洞排查，记录排查过程中的心得，以便之后可以快速进行排查缺陷，所采用的方法是正则匹配</p>
@@ -98,9 +386,9 @@
       </tags>
   </entry>
   <entry>
-    <title>软考中级纠错记录</title>
-    <url>/2025/09/05/%E8%BD%AF%E8%80%83%E4%B8%AD%E7%BA%A7%E7%BA%A0%E9%94%99%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="0"><a href="#0" class="headerlink" title="0-"></a>0-</h1><p>错题记录—软考中级（信息安全工程师）</p>
+    <title>软考中级纠错记录-选择题</title>
+    <url>/2025/09/05/%E8%BD%AF%E8%80%83%E4%B8%AD%E7%BA%A7%E7%BA%A0%E9%94%99%E8%AE%B0%E5%BD%95-%E4%B8%8A%E5%8D%8A/</url>
+    <content><![CDATA[<h1 id="0"><a href="#0" class="headerlink" title="0-"></a>0-</h1><p>错题记录（上半场题目）—软考中级（信息安全工程师）</p>
 <span id="more"></span>
 
 <p>1、计算机信息系统安全保护等级从低到高分为：用户自主保护级、系统审计保护级、安全标注保护级、结构化保护级、访问验证保护级</p>
@@ -166,6 +454,39 @@
 <p>rmdir，是一个linux命令，用于删除空目录<br>pwd显示当前所处的目录，该命令显示整个路径名。<br>scp 命令用于 Linux 之间复制文件和目录。<br>cmp 命令用于比较两个文件是否有差异。当相互比较的两个文件完全一样时，则该指令不会显示任何信息。若发现有所差异，预设会标示出第一个不同之处的字符和列数编号。</p>
 <p>22.交换机是构成网络的基础设备，主要的功能是负责网络通信数据包的交换传输。目前，工业界按照交换机的功能变化，将交换机分为第一代交换机、第二代交换机、第三代交换机、第四代交换机、第五代交换机。第二代交换机又称为以太网交换机，工作于OSI的数据链路层，称为二层交换机。二层交换机识别数据中的MAC地址信息，并根据MAC地址选择转发端口。</p>
 <p>23.认证一般由标识(Identification)和鉴别(Authentication)两部分组成。标识是用来代表实体对象(如人员、设备、数据、服务、应用)的身份标志，确保实体的唯一性和可辨识性</p>
+<p>24.Oracle数据库建立数据库保险库(DatabaseVault，DV)机制，该机制用于保护敏感数据，具有防止数据系统未授权变更、多因素可信授权、职责隔 离、最小化特权的功能。DV机制通过设置安全域(Realm)和命令规则(Command Rules)对特权进行控制</p>
+<ol start="25">
+<li></li>
+</ol>
+<p><img src="/../image/Soft-exam-intermediate/PCBC%E5%8A%A0%E5%AF%86.png"></p>
+<p>图为明密文链接工作原理图，即PCBC。官方教材（第一版）P109。<br>电码本模式ECB直接利用分组密码对明文的各分组进行加密。<br>计数模式（CTR模式）加密是对一系列输入数据块（称为计数）进行加密，产生一系列的输出块，输出块与明文异或得到密文。<br>密文反馈模式（CFB模式）。在CFB模式中，前一个密文分组会被送回到密码算法的输入端。</p>
+<p>26.监控网络流量并不是监控流量的具体内容，网络流量是单位时间内通过设备的信息量，即水流</p>
+<ol start="27">
+<li></li>
+</ol>
+<p>（1）计算安全的：如果破译加密算法所需要的计算能力和计算时间是现实条件所不具备的，那么就认为相应的密码体制是满足计算安全性的。这意味着强力破解证明是安全的，即实际安全。<br>（2）可证明安全的：如果对一个密码体制的破译依赖于对某一个经过深入研究的数学难题的解决，就认为相应的密码体制是满足可证明安全性的。这意味着理论保证是安全的。<br>（3）无条件安全的：如果假设攻击者在用于无限计算能力和计算时间的前提下，也无法破译加密算法，就认为相应的密码体制是无条件安全性的。这意味着在极限状态上是安全的。</p>
+<p>只要需要接收，就没有绝对安全的存在</p>
+<p>28.可以理解的是内网IP地址的常用划分为专用地址范围</p>
+<p>专用地址范围：<br>A类：10.0.0.0-10.255.255.255；<br>B类：172.16.0.0-172.31.255.255；<br>C类：192.168.0.0-192.168.255.255。</p>
+<p>公有IP地址分为：<br>A：0.0.0.1–9.255.255.255 &amp; 11.0.0.0–126.255.255.255；<br>B：128.0.0.0–172.15.255.255 &amp; 172.32.0.0–191.255.255.255；<br>C：192.0.0.0–192.167.255.255 &amp; 192.169.0.0–223.169.255.255。</p>
+<ol start="29">
+<li></li>
+</ol>
+<p>密码系统一般从以下三个方面进行分类：<br>一是按照密码系统对明文的处理方法分为分组密码和序列密码；<br>二是按将明文转化为密文的操作类型分为替换密码和位移密码；<br>三是按密钥的使用个数分为对称密码体制和非对称密码体制。</p>
+<ul>
+<li><strong>第一维</strong>（分组&#x2F;序列）是<strong>操作模式</strong>。</li>
+<li><strong>第二维</strong>（替换&#x2F;置换）是<strong>基础构件</strong>。</li>
+<li><strong>第三维</strong>（对称&#x2F;非对称）是<strong>系统架构</strong></li>
+</ul>
+<p>30.信息安全保护等级分为：用户自主保护级、系统审计保护级、安全标记保护级、结构化保护级、访问验证保护级。其中结构化保护级要求对所有主体和客体进行自主和强制访问控制。</p>
+<p>第一级，用户自主保护级：本级的计算机信息系统可信计算基通过隔 离用户与数据，使用户具备自主安全保护的能力。它具有多种形式的控制能力，对用户实施访问控制，即为用户提供可行的手段，保护用户和用户组信息，避免其他用户对数据的非法读写与破坏。</p>
+<p>第二级，系统审计保护级：与用户自主保护级相比，本级的计算机信息系统可信计算基实施了粒度更细的自主访问控制，它通过登录规程、审计安全性相关事件和隔 离资源，使用户对自己的行为负责。</p>
+<p>第三级，安全标记保护级：本级的计算机信息系统可信计算基具有系统审计保护级所有功能。此外，还提供有关安全策略模型、数据标记以及主体对客体强制访问控制的非形式化描述；具有准确地标记输出信息的能力；消除通过测试发现的任何错误。</p>
+<p>第四级，结构化保护级：本级的计算机信息系统可信计算基建立于一个明确定义的形式化安全策略模型之上，它要求将第三级系统中的自主和强制访问控制扩展到所有主体与客体。此外，还要考虑隐蔽通道。本级的计算机信息系统可信计算基必须结构化为关键保护元素和非关键保护元素。计算机信息系统可信计算基的接口也必须明确定义，使其设计与实现能经受更充分的测试和更完整的复审。加强了鉴别机制；支持系统管理员和操作员的职能；提供可信设施管理；增强了配置管理控制。系统具有相当的抗渗透能力。</p>
+<p>第五级，访问验证保护级：本级的计算机信息系统可信计算基满足访问监控器需求。访问监控器仲裁主体对客体的全部访问。访问监控器本身是抗篡改的；必须足够小，能够分析和测试。为了满足访问监控器需求，计算机信息系统可信计算基在其构造时，排除那些对实施安全策略来说并非必要的代码；在设计和实现时，从系统工程角度将其复杂性降低到最小程度。支持安全管理员职能；扩充审计机制，当发生与安全相关的事件时发出信号；提供系统恢复机制。系统具有很高的抗渗透能力。</p>
+<ol start="31">
+<li></li>
+</ol>
 ]]></content>
       <categories>
         <category>Information Security Engineer</category>
@@ -1551,7 +1872,7 @@
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;</span>; alert<span class="string">`1`</span>; <span class="comment">//&quot;;</span></span><br><span class="line"><span class="number">0</span>||alert%0D<span class="string">`1`</span><span class="comment">//</span></span><br><span class="line">%0a<span class="string">`<span class="subst">$&#123;alert%0D(<span class="number">1</span>)&#125;</span>`</span></span><br><span class="line">onload=alert<span class="string">`1`</span> <span class="comment">//</span></span><br><span class="line"></span><br><span class="line">\u0022\u003b+alert\u00601\u0060\u003b+<span class="comment">//</span></span><br></pre></td></tr></table></figure>
 
 <hr>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#normal</span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line">#img</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">#svg</span><br><span class="line">&lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">    </span><br><span class="line">#标签</span><br><span class="line">&lt;aaaa id=&quot;c&quot; onfocus=&quot;alert(1)&quot; tabindex=0&gt;</span><br><span class="line">        </span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;);&lt;/script&gt;</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">&lt;a href=&quot;javascript:alert(&#x27;XSS&#x27;)&quot;&gt;Click me&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#normal</span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line">#img</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">#svg</span><br><span class="line">&lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">    </span><br><span class="line">#标签</span><br><span class="line">&lt;aaaa id=&quot;c&quot; onfocus=&quot;alert(1)&quot; tabindex=0&gt;</span><br><span class="line">        </span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;);&lt;/script&gt;</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">&lt;a href=&quot;javascript:alert(&#x27;XSS&#x27;)&quot;&gt;Click me&lt;/a&gt;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">#base64加密</span><br><span class="line">    </span><br><span class="line">    &lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://116.205.161.165/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
