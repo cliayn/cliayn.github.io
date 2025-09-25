@@ -21,29 +21,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="0-前言​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到 1&gt;回显地址默认不经代理的解决办法stackoverflow网址中的解决办法 简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：">
+    <meta name="description" content="0-前言​	毕业工作第二年，才明白渗透测试工程师与红队差别很大，一个是固定的漏洞排查，一个是穷尽方法的绕过。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="代理记录">
-<meta property="og:url" content="http://example.com/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:title" content="渗透测试基本流程">
+<meta property="og:url" content="http://example.com/2025/09/24/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%96%E6%8E%98%E6%B5%81%E7%A8%8B/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="0-前言​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到 1&gt;回显地址默认不经代理的解决办法stackoverflow网址中的解决办法 简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：">
+<meta property="og:description" content="0-前言​	毕业工作第二年，才明白渗透测试工程师与红队差别很大，一个是固定的漏洞排查，一个是穷尽方法的绕过。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/image/proxy-/1.png">
-<meta property="article:published_time" content="2025-08-27T06:40:42.000Z">
-<meta property="article:modified_time" content="2025-09-05T07:06:11.209Z">
+<meta property="article:published_time" content="2025-09-24T08:30:00.000Z">
+<meta property="article:modified_time" content="2025-09-25T01:40:51.666Z">
 <meta property="article:author" content="乌篷船">
-<meta property="article:tag" content="article">
+<meta property="article:tag" content="Test">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/image/proxy-/1.png">
 
 
-<link rel="canonical" href="http://example.com/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/">
+<link rel="canonical" href="http://example.com/2025/09/24/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%96%E6%8E%98%E6%B5%81%E7%A8%8B/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/","path":"2025/08/27/代理详解/","title":"代理记录"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/09/24/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%96%E6%8E%98%E6%B5%81%E7%A8%8B/","path":"2025/09/24/渗透测试挖掘流程/","title":"渗透测试基本流程"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>代理记录 | 乌篷船的博客</title>
+<title>渗透测试基本流程 | 乌篷船的博客</title>
   
 
 
@@ -142,7 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-%E5%9B%9E%E6%98%BE%E5%9C%B0%E5%9D%80%E9%BB%98%E8%AE%A4%E4%B8%8D%E7%BB%8F%E4%BB%A3%E7%90%86%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="nav-number">1.0.0.0.0.1.</span> <span class="nav-text">1&gt;回显地址默认不经代理的解决办法</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%B1%80%E5%9F%9F%E7%BD%91%E6%98%A0%E5%B0%84%E7%AB%AF%E5%8F%A3"><span class="nav-number">2.</span> <span class="nav-text">1-局域网映射端口</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F-%E5%B1%80%E5%9F%9F%E7%BD%91%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84"><span class="nav-number">2.0.0.0.0.1.</span> <span class="nav-text">1&gt;内网穿透-&gt;局域网端口映射</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">1-基本流程</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -212,7 +210,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/09/24/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%96%E6%8E%98%E6%B5%81%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -225,12 +223,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="代理记录 | 乌篷船的博客">
+      <meta itemprop="name" content="渗透测试基本流程 | 乌篷船的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          代理记录
+          渗透测试基本流程
         </h1>
 
         <div class="post-meta-container">
@@ -241,14 +239,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2025-08-27 14:40:42" itemprop="dateCreated datePublished" datetime="2025-08-27T14:40:42+08:00">2025-08-27</time>
+      <time title="创建时间：2025-09-24 16:30:00" itemprop="dateCreated datePublished" datetime="2025-09-24T16:30:00+08:00">2025-09-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-09-05 15:06:11" itemprop="dateModified" datetime="2025-09-05T15:06:11+08:00">2025-09-05</time>
+      <time title="修改时间：2025-09-25 09:40:51" itemprop="dateModified" datetime="2025-09-25T09:40:51+08:00">2025-09-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -256,7 +254,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Cybersecurity/" itemprop="url" rel="index"><span itemprop="name">Cybersecurity</span></a>
+          <a href="/categories/Article/" itemprop="url" rel="index"><span itemprop="name">Article</span></a>
         </span>
     </span>
 
@@ -267,14 +265,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.9k</span>
+      <span>655</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -284,20 +282,132 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到</p>
-<h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
-<p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
-<p><img src="/../image/proxy-/1.png"></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	毕业工作第二年，才明白渗透测试工程师与红队差别很大，一个是固定的漏洞排查，一个是穷尽方法的绕过。</p>
 <span id="more"></span>
 
-<h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
-<p>#<strong>解决方案</strong></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
-
-<p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
-<p>无互联网开热点的解决方案如下：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
-
+<h1 id="1-基本流程"><a href="#1-基本流程" class="headerlink" title="1-基本流程"></a>1-基本流程</h1><p>1&gt;领取用例</p>
+<p>2&gt;默认通过</p>
+<p>3&gt;排查漏洞	&#x3D;&#x3D;	常见漏洞排查	&#x3D;&#x3D;	不符合</p>
+<table>
+<thead>
+<tr>
+<th>漏洞类型</th>
+<th>内容</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cors</td>
+<td>origin</td>
+<td>回显存在对应字符</td>
+</tr>
+<tr>
+<td>csrf</td>
+<td>referer</td>
+<td>存在且可访问</td>
+</tr>
+<tr>
+<td><strong>信息泄露</strong></td>
+<td>正则表达式匹配所有请求响应包（通常匹配url和响应体，包含js）</td>
+<td>正则的构造最好用贪婪</td>
+</tr>
+<tr>
+<td>异常回显</td>
+<td>暴露的异常java类</td>
+<td>java.xxx.xxx</td>
+</tr>
+<tr>
+<td>中间件</td>
+<td>403禁止访问&#x2F;异常回显的apache等中间件</td>
+<td>403</td>
+</tr>
+<tr>
+<td>业务覆盖</td>
+<td>可操作理论不可操作的业务</td>
+<td>id覆盖即数据覆盖</td>
+</tr>
+<tr>
+<td>重定向</td>
+<td>登录登出</td>
+<td>跳转页面</td>
+</tr>
+<tr>
+<td>步骤跳跃</td>
+<td>前端认证响应</td>
+<td>第二步骤无需第一步骤参数</td>
+</tr>
+<tr>
+<td>伪造ip</td>
+<td>bp插件fakeIP</td>
+<td>日志查看异常ip</td>
+</tr>
+<tr>
+<td>后台泄露</td>
+<td>嵌套爆破目录</td>
+<td>401状态和403状态</td>
+</tr>
+<tr>
+<td>RCE</td>
+<td>object参数的排查或者框架漏洞的排查</td>
+<td>回显的中间件</td>
+</tr>
+<tr>
+<td>sql注入</td>
+<td>闭合sql语句</td>
+<td>两单引号双引号的变形</td>
+</tr>
+<tr>
+<td>未授权</td>
+<td>路径的爆破</td>
+<td>端口、目录、接口爆破</td>
+</tr>
+<tr>
+<td>xss</td>
+<td>页面是否解析&lt;&#x2F;&gt;页面是否存在预览pdf</td>
+<td>能否直接页面注入反射</td>
+</tr>
+<tr>
+<td>其他服务</td>
+<td>排查端口开放情况</td>
+<td>多个port</td>
+</tr>
+<tr>
+<td>越权</td>
+<td>水平垂直越权</td>
+<td>替换token且可访问</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>其他漏洞类型</th>
+<th>内容</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>伪造用户名</td>
+<td>修改识别的用户名</td>
+<td>如果靠token确认user就算了</td>
+</tr>
+<tr>
+<td>源代码泄露</td>
+<td>暴露copy的源代码</td>
+<td>github的地址</td>
+</tr>
+<tr>
+<td>CRLF</td>
+<td>%c4%8d%c4%8a或者%0d%0a</td>
+<td>回显请求体同理出现</td>
+</tr>
+<tr>
+<td>逻辑问题</td>
+<td>不能却能</td>
+<td>脑袋清晰的时候测</td>
+</tr>
+</tbody></table>
+<p>4&gt;缺陷发布</p>
+<p>5&gt;生成报告</p>
 
     </div>
 
@@ -307,21 +417,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/article/" rel="tag"># article</a>
+              <a href="/tags/Test/" rel="tag"># Test</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/08/25/oscp_attack-log/" rel="prev" title="oscp靶场训练">
-                  <i class="fa fa-angle-left"></i> oscp靶场训练
+                <a href="/2025/09/18/%E8%BD%AF%E8%80%83%E4%B8%AD%E7%BA%A7%E7%BA%A0%E9%94%99%E8%AE%B0%E5%BD%95-%E4%B8%8B%E5%8D%8A/" rel="prev" title="软考中级纠错记录-填空题">
+                  <i class="fa fa-angle-left"></i> 软考中级纠错记录-填空题
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/09/02/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E9%80%9A%E4%BF%A1%E8%AF%A6%E8%A7%A3/" rel="next" title="p2p点对点通信">
-                  p2p点对点通信 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
