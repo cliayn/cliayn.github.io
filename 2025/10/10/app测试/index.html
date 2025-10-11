@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0-前言刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试 app测试较为麻烦 主要麻烦存在：app虚拟机检测，app代理检测，approot环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法 记录如下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="app测试">
+<meta property="og:url" content="http://example.com/2025/10/10/app%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="乌篷船的博客">
+<meta property="og:description" content="0-前言刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试 app测试较为麻烦 主要麻烦存在：app虚拟机检测，app代理检测，approot环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法 记录如下">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-10T02:30:17.000Z">
+<meta property="article:modified_time" content="2025-10-11T09:27:12.175Z">
+<meta property="article:author" content="乌篷船">
+<meta property="article:tag" content="Test">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2025/10/10/app%E6%B5%8B%E8%AF%95/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/10/10/app%E6%B5%8B%E8%AF%95/","path":"2025/10/10/app测试/","title":"app测试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>app测试 | 乌篷船的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">乌篷船的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-sitemap fa-fw"></i>友情链接</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-root-%E8%A7%A3%E9%94%81BootLoader"><span class="nav-number">2.</span> <span class="nav-text">1-root+解锁BootLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">操作流程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%A6%81%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">简要：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%94%81-Bootloader"><span class="nav-number">2.2.1.</span> <span class="nav-text">解锁 Bootloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E7%BA%BF%E5%88%B7%E5%87%BA%E5%8E%82%E6%98%A0%E5%83%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">下载线刷出厂映像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Magic-%E8%BD%AF%E4%BB%B6%E5%B9%B6%E6%89%93%E8%A1%A5%E4%B8%81"><span class="nav-number">2.2.3.</span> <span class="nav-text">安装 Magic 软件并打补丁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%BB%95%E8%BF%87"><span class="nav-number">3.</span> <span class="nav-text">2-绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%95%E8%BF%87root"><span class="nav-number">3.1.</span> <span class="nav-text">绕过root</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85%E7%9B%B8%E5%85%B3%E8%BD%AF%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">3-安装相关软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%88windows%EF%BC%89"><span class="nav-number">4.0.1.</span> <span class="nav-text">Frida使用方法（windows）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E7%9A%84Frida%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%90%E8%A1%8C-%E9%9C%80root"><span class="nav-number">4.0.2.</span> <span class="nav-text">Android的Frida服务端运行(需root)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD"><span class="nav-number">4.0.2.0.1.</span> <span class="nav-text">未完待续</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乌篷船"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乌篷船</p>
+  <div class="site-description" itemprop="description">记录笔记的网址</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:cliay55555@gmail.com" title="E-Mail → mailto:cliay55555@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+    
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+    
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/10/10/app%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乌篷船">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="乌篷船的博客">
+      <meta itemprop="description" content="记录笔记的网址">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="app测试 | 乌篷船的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          app测试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-10-10 10:30:17" itemprop="dateCreated datePublished" datetime="2025-10-10T10:30:17+08:00">2025-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-10-11 17:27:12" itemprop="dateModified" datetime="2025-10-11T17:27:12+08:00">2025-10-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Article/" itemprop="url" rel="index"><span itemprop="name">Article</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试</p>
+<p>app测试较为麻烦</p>
+<p>主要麻烦存在：app虚拟机检测，app代理检测，app<code>root</code>环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法</p>
+<p>记录如下</p>
+<span id="more"></span>
+
+<h1 id="1-root-解锁BootLoader"><a href="#1-root-解锁BootLoader" class="headerlink" title="1-root+解锁BootLoader"></a>1-root+解锁BootLoader</h1><p>参考文章<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/581342570">如何root一台Google Pixel 7 Pro</a></p>
+<p>默认电脑装有<a target="_blank" rel="noopener" href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"><code>adb</code></a>，手机开启<code>usb调试</code></p>
+<p>注（需要获取对应版本号）：</p>
+<p>设置 → 关于手机 → Android 版本 → Android 版本号 &#x2F; 版本号（Build number）</p>
+<p><strong>所需网址</strong>：</p>
+<p><a target="_blank" rel="noopener" href="https://developers.google.com/android/images?hl=zh-cn">pixel出厂映像（注意版本号对应！）</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/topjohnwu/Magisk/releases">Magisk 官方下载地址(用于root)</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/anaelle-dev/P7P_Magisk_init_boot">获取 <code>init_boot.img</code> 的第二个方法（注意版本号对应！）</a></p>
+<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a><strong>操作流程</strong>：</h2><p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/an9p9670/">24 年，Google Pixel 7 国内使用指南_手机_什么值得买</a></p>
+<h2 id="简要："><a href="#简要：" class="headerlink" title="简要："></a>简要：</h2><h3 id="解锁-Bootloader"><a href="#解锁-Bootloader" class="headerlink" title="解锁 Bootloader"></a>解锁 Bootloader</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 重启手机 进入 bootloader 模式</span><br><span class="line">adb reboot bootloader</span><br><span class="line"></span><br><span class="line"># 进入 bootloader 模式之后</span><br><span class="line">fastboot flashing unlock</span><br><span class="line"></span><br><span class="line"># 没有重启就自己重启</span><br><span class="line">fastboot reboot</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载线刷出厂映像"><a href="#下载线刷出厂映像" class="headerlink" title="下载线刷出厂映像"></a>下载线刷出厂映像</h3><p><a target="_blank" rel="noopener" href="https://developers.google.com/android/images?hl=zh-cn">pixel出厂映像（注意版本号对应！）</a></p>
+<p>下载后：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 进入到解压的文件夹中</span><br><span class="line"></span><br><span class="line"># 重启手机 进入 bootloader 模式</span><br><span class="line">adb reboot bootloader</span><br><span class="line"></span><br><span class="line"># mac 电脑 执行刷入</span><br><span class="line">./flash-all.sh </span><br><span class="line"></span><br><span class="line"># windows 电脑</span><br><span class="line">flash-all.bat</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-Magic-软件并打补丁"><a href="#安装-Magic-软件并打补丁" class="headerlink" title="安装 Magic 软件并打补丁"></a>安装 Magic 软件并打补丁</h3><p><a target="_blank" rel="noopener" href="https://github.com/topjohnwu/Magisk/releases"><code>Magisk</code> <code>GitHub</code>下载地址(用于root或者其他组件)</a></p>
+<p>安装好后点击「安装 → 选择并修补一个文件」选择对应的<code>init_boot.img</code>安装（正常来说出厂映像就有对应的，没有就采用下面的第二个方法）</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/anaelle-dev/P7P_Magisk_init_boot">获取 <code>init_boot.img</code> 的第二个方法（注意版本号对应！）</a></p>
+<p>选择刚刚的 <code>init_boot.img</code></p>
+<p>打完补丁后，会生成一个 <code>magisk_patched-xxx.img</code></p>
+<p>拖出来然后用电脑执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb reboot bootloader</span><br><span class="line">fastboot flash init_boot magisk_patched-xxx.img</span><br><span class="line">fastboot reboot</span><br></pre></td></tr></table></figure>
+
+<p>检查是否可以赋予root权限：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#电脑使用</span><br><span class="line">adb shell</span><br><span class="line">su</span><br><span class="line"></span><br><span class="line">#手机点击确定即可</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-绕过"><a href="#2-绕过" class="headerlink" title="2-绕过"></a>2-绕过</h1><p>参考文章</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/470468650"><code>隐藏Root - Zygisk版面具过银行App等Root检测，妙用Shamiko模块 - 知乎</code></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/564699416"><code>一例APP绕过root检测解密 - 知乎</code></a></p>
+<p>绕过虚拟机–直接买真机</p>
+<p>绕过认证和代理–hook+分析包</p>
+<h2 id="绕过root"><a href="#绕过root" class="headerlink" title="绕过root"></a>绕过root</h2><p>简述：</p>
+<p>在 <code>Magisk</code> 引入 <strong><code>Zygisk</code></strong> 后，官方移除了原有的 <code>MagiskHide</code>；要在新版 <code>Magisk</code> 上“对银行类&#x2F;敏感 <code>app</code> 隐藏 <code>root</code> 检测”，可以用 <strong><code>Zygisk</code> + <code>Shamiko</code>（或类似模块例如：<code>Zygisk-Assistant</code>）</strong> 的组合来实现对这些 <code>app</code> 的伪装与屏蔽，从而让它们在有 <code>Root</code> 的设备上也能运行</p>
+<p>基础方案：</p>
+<p><strong>基础方案</strong>：<br> <code>Zygisk（Magisk 设置开启） + Zygisk-Assistant（或 Shamiko） + safetynet-fix（过于久远） + MagiskHidePropsConf（过于久远）</code></p>
+<p>(并非万能，面对银行app的多层检测，也要采用组合策略（Play Integrity Fix、修改 fingerprint、Hide props、patch app 等）)</p>
+<h1 id="3-安装相关软件"><a href="#3-安装相关软件" class="headerlink" title="3-安装相关软件"></a>3-安装相关软件</h1><p>参考文章</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/73008784">APP逆向神器之Frida【Android初级篇】 - 知乎</a></p>
+<p>所需工具：</p>
+<p><a target="_blank" rel="noopener" href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"><code>adb</code></a>+<strong><code>pip install frida-tools</code></strong>    (windows)</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/frida/frida/releases">frida服务器（手机上）</a>或者使用<a target="_blank" rel="noopener" href="https://github.com/ViRb3/magisk-frida">magisk-frida放到magisk里直接自启</a></p>
+<h3 id="Frida使用方法（windows）"><a href="#Frida使用方法（windows）" class="headerlink" title="Frida使用方法（windows）"></a>Frida使用方法（windows）</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">frida -U -l exploit.js -f xxx #启动app并注入脚本</span><br><span class="line">frida-ps -U</span><br><span class="line">frida-ps -Ua</span><br><span class="line">frida -U -l exploit.js &quot;XXXX&quot; #app已经启动 注入脚本</span><br></pre></td></tr></table></figure>
+
+<h3 id="Android的Frida服务端运行-需root"><a href="#Android的Frida服务端运行-需root" class="headerlink" title="Android的Frida服务端运行(需root)"></a>Android的Frida服务端运行(需root)</h3><p><a target="_blank" rel="noopener" href="https://github.com/ViRb3/magisk-frida">magisk-frida放到magisk里自启</a></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#该符号代表后台运行&#x27;&amp;&#x27;</span><br><span class="line">frida-server &amp;</span><br><span class="line"></span><br><span class="line"># 或用 nohup</span><br><span class="line"></span><br><span class="line"># 可以写一个模块控制frida-server放到magisk里</span><br><span class="line">/data/adb/modules</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a><strong>未完待续</strong></h5><p>用于测试的apk举例</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ctfs/write-ups-2015/raw/master/seccon-quals-ctf-2015/binary/reverse-engineering-android-apk-1/rps.apk">CTF用于测试的apk-x86</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dineshshetty/Android-InsecureBankv2/releases/tag/2.3.1">银行测试apk-arm</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Test/" rel="tag"># Test</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/09/24/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%96%E6%8E%98%E6%B5%81%E7%A8%8B/" rel="prev" title="渗透测试基本流程">
+                  <i class="fa fa-angle-left"></i> 渗透测试基本流程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/10/%E5%81%9A%E6%B5%8B%E8%AF%95%E8%A6%81%E5%87%86%E5%A4%87%E7%9A%84%E5%B7%A5%E5%85%B7/" rel="next" title="做测试要准备的工具">
+                  做测试要准备的工具 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa-regular fa-user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">乌篷船</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">105k</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/cliayn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+
+</body>
+</html>
