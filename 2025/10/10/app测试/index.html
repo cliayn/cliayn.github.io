@@ -21,15 +21,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="0-前言刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试 app测试较为麻烦 主要麻烦存在：app虚拟机检测，app代理检测，approot环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法 记录如下">
+    <meta name="description" content="0-前言刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试 app测试较为麻烦 主要麻烦存在：app虚拟机检测，app代理检测，approot环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法 因为鸿蒙5脱离了安卓系统即脱离 AOSP&#x2F;Android 兼容层， 记录如下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="app测试">
 <meta property="og:url" content="http://example.com/2025/10/10/app%E6%B5%8B%E8%AF%95/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="0-前言刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试 app测试较为麻烦 主要麻烦存在：app虚拟机检测，app代理检测，approot环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法 记录如下">
+<meta property="og:description" content="0-前言刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试 app测试较为麻烦 主要麻烦存在：app虚拟机检测，app代理检测，approot环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法 因为鸿蒙5脱离了安卓系统即脱离 AOSP&#x2F;Android 兼容层， 记录如下">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-10T02:30:17.000Z">
-<meta property="article:modified_time" content="2025-10-11T09:27:12.175Z">
+<meta property="article:modified_time" content="2025-10-14T01:55:39.521Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="Test">
 <meta name="twitter:card" content="summary">
@@ -140,7 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-root-%E8%A7%A3%E9%94%81BootLoader"><span class="nav-number">2.</span> <span class="nav-text">1-root+解锁BootLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">操作流程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%A6%81%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">简要：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%94%81-Bootloader"><span class="nav-number">2.2.1.</span> <span class="nav-text">解锁 Bootloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E7%BA%BF%E5%88%B7%E5%87%BA%E5%8E%82%E6%98%A0%E5%83%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">下载线刷出厂映像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Magic-%E8%BD%AF%E4%BB%B6%E5%B9%B6%E6%89%93%E8%A1%A5%E4%B8%81"><span class="nav-number">2.2.3.</span> <span class="nav-text">安装 Magic 软件并打补丁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%BB%95%E8%BF%87"><span class="nav-number">3.</span> <span class="nav-text">2-绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%95%E8%BF%87root"><span class="nav-number">3.1.</span> <span class="nav-text">绕过root</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85%E7%9B%B8%E5%85%B3%E8%BD%AF%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">3-安装相关软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%88windows%EF%BC%89"><span class="nav-number">4.0.1.</span> <span class="nav-text">Frida使用方法（windows）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E7%9A%84Frida%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%90%E8%A1%8C-%E9%9C%80root"><span class="nav-number">4.0.2.</span> <span class="nav-text">Android的Frida服务端运行(需root)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD"><span class="nav-number">4.0.2.0.1.</span> <span class="nav-text">未完待续</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-root-%E8%A7%A3%E9%94%81BootLoader"><span class="nav-number">2.</span> <span class="nav-text">1-root+解锁BootLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">操作流程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%A6%81%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">简要：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%94%81-Bootloader"><span class="nav-number">2.2.1.</span> <span class="nav-text">解锁 Bootloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E7%BA%BF%E5%88%B7%E5%87%BA%E5%8E%82%E6%98%A0%E5%83%8F"><span class="nav-number">2.2.2.</span> <span class="nav-text">下载线刷出厂映像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Magic-%E8%BD%AF%E4%BB%B6%E5%B9%B6%E6%89%93%E8%A1%A5%E4%B8%81"><span class="nav-number">2.2.3.</span> <span class="nav-text">安装 Magic 软件并打补丁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%BB%95%E8%BF%87"><span class="nav-number">3.</span> <span class="nav-text">2-绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%95%E8%BF%87root"><span class="nav-number">3.1.</span> <span class="nav-text">绕过root</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E7%BC%96%E8%AF%91-%E9%80%86%E5%90%91%EF%BC%9A"><span class="nav-number">3.2.</span> <span class="nav-text">反编译&#x2F;\逆向：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85%E7%9B%B8%E5%85%B3%E8%BD%AF%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">3-安装相关软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Frida%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%88windows%EF%BC%89"><span class="nav-number">4.0.1.</span> <span class="nav-text">Frida使用方法（windows）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android%E7%9A%84Frida%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%90%E8%A1%8C-%E9%9C%80root"><span class="nav-number">4.0.2.</span> <span class="nav-text">Android的Frida服务端运行(需root)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD"><span class="nav-number">4.0.2.0.1.</span> <span class="nav-text">未完待续</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -155,13 +155,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -186,7 +186,7 @@
       <div class="widget-wrap">
           <div id="myCanvasContainer" class="widget tagcloud">
               <canvas width="250" height="250" id="resCanvas" style="width:100%">
-                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
               </canvas>
           </div>
       </div>
@@ -246,7 +246,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-10-11 17:27:12" itemprop="dateModified" datetime="2025-10-11T17:27:12+08:00">2025-10-11</time>
+      <time title="修改时间：2025-10-14 09:55:39" itemprop="dateModified" datetime="2025-10-14T09:55:39+08:00">2025-10-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -265,14 +265,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2k</span>
+      <span>2.6k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
+      <span>5 分钟</span>
     </span>
 </div>
 
@@ -285,6 +285,7 @@
     <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试</p>
 <p>app测试较为麻烦</p>
 <p>主要麻烦存在：app虚拟机检测，app代理检测，app<code>root</code>环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法</p>
+<p>因为鸿蒙5脱离了安卓系统<strong>即</strong>脱离 AOSP&#x2F;Android 兼容层，</p>
 <p>记录如下</p>
 <span id="more"></span>
 
@@ -321,9 +322,60 @@
 <p>绕过认证和代理–hook+分析包</p>
 <h2 id="绕过root"><a href="#绕过root" class="headerlink" title="绕过root"></a>绕过root</h2><p>简述：</p>
 <p>在 <code>Magisk</code> 引入 <strong><code>Zygisk</code></strong> 后，官方移除了原有的 <code>MagiskHide</code>；要在新版 <code>Magisk</code> 上“对银行类&#x2F;敏感 <code>app</code> 隐藏 <code>root</code> 检测”，可以用 <strong><code>Zygisk</code> + <code>Shamiko</code>（或类似模块例如：<code>Zygisk-Assistant</code>）</strong> 的组合来实现对这些 <code>app</code> 的伪装与屏蔽，从而让它们在有 <code>Root</code> 的设备上也能运行</p>
-<p>基础方案：</p>
 <p><strong>基础方案</strong>：<br> <code>Zygisk（Magisk 设置开启） + Zygisk-Assistant（或 Shamiko） + safetynet-fix（过于久远） + MagiskHidePropsConf（过于久远）</code></p>
 <p>(并非万能，面对银行app的多层检测，也要采用组合策略（Play Integrity Fix、修改 fingerprint、Hide props、patch app 等）)</p>
+<h2 id="反编译-逆向："><a href="#反编译-逆向：" class="headerlink" title="反编译&#x2F;\逆向："></a><strong>反编译&#x2F;\逆向</strong>：</h2><p>安卓生态：classes.dex<code>或</code>classes*.dex）</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/skylot/jadx">jadx</a></p>
+<p>鸿蒙生态：看到 <code>.hap</code>、<code>.har</code>、<code>panda</code>、<code>.abc</code>、大量 <code>.so</code>、或 <code>resources</code> 结构</p>
+<p>（使用 HAP 解包工具 &#x2F; ark 相关工具）</p>
+<p>苹果生态：<code>.ipa</code></p>
+<p> IDA&#x2F;Ghidra 反汇编</p>
+<table>
+<thead>
+<tr>
+<th>对比点</th>
+<th>安卓 &#x2F; 鸿蒙兼容包</th>
+<th>鸿蒙原生（Ark）</th>
+<th>苹果生态（iOS&#x2F;macOS）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代码语言</td>
+<td>Java &#x2F; Kotlin &#x2F; ArkTS</td>
+<td>ArkTS &#x2F; C++</td>
+<td>Objective-C &#x2F; Swift</td>
+</tr>
+<tr>
+<td>字节码</td>
+<td>DEX &#x2F; Panda bytecode</td>
+<td>Panda bytecode &#x2F; AOT</td>
+<td><strong>LLVM Bitcode → ARM64 本地机器码</strong></td>
+</tr>
+<tr>
+<td>运行时</td>
+<td>ART &#x2F; ArkVM</td>
+<td>ArkVM</td>
+<td><strong>无虚拟机</strong>（直接在 Darwin 内核上执行）</td>
+</tr>
+<tr>
+<td>包格式</td>
+<td><code>.apk</code> &#x2F; <code>.hap</code></td>
+<td><code>.hap</code> &#x2F; <code>.app</code></td>
+<td><code>.ipa</code>（其实是 zip 格式）</td>
+</tr>
+<tr>
+<td>可否被 JADX 反编译</td>
+<td>✅ dex 可反编译</td>
+<td>❌（需要专用 Ark 工具）</td>
+<td>❌ 完全不同体系，不能用 jadx</td>
+</tr>
+<tr>
+<td>典型反编译工具</td>
+<td>JADX, apktool</td>
+<td>arkdecompiler, DevEco unpacker</td>
+<td>Hopper、IDA、Ghidra、class-dump、frida、Cycript</td>
+</tr>
+</tbody></table>
 <h1 id="3-安装相关软件"><a href="#3-安装相关软件" class="headerlink" title="3-安装相关软件"></a>3-安装相关软件</h1><p>参考文章</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/73008784">APP逆向神器之Frida【Android初级篇】 - 知乎</a></p>
 <p>所需工具：</p>
@@ -394,7 +446,7 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">105k</span>
+    <span title="站点总字数">128k</span>
   </span>
 </div>
 
