@@ -27,9 +27,9 @@
 <p>①国内最好下载js和css到jellyfin-web目录下进行本地化的部署，否则会访问慢或者干脆无响应</p>
 <p>②js文件内500左右那行规定了list.txt在容器内的位置，注意放到对应内部位置（web指web服务下的目录，即jellyfin-web，我的版本-10.9.11）</p>
 <p><code>/jellyfin/jellyfin-web/avatars/list.txt</code></p>
-<p><img src="/..%5Cimage%5Cjellyfin-image%5Cjs-conten.png"></p>
+<p><img src="/../image/jellyfin-image/js-conten.png"></p>
 <p>③该js用于轮播的图片是logo（即<strong>徽标</strong>），如果刮削元数据没有刮削下logo（<strong>徽标</strong>）的话需要自己导入进去，建议直接在前端导入<code>徽标</code>和<code>背景图</code>（更好看一点），不想改的话，可以直接把js代码中访问logo图片的<strong>接口</strong>改成刮削数据肯定会刮削的封面图<code>Primary</code></p>
-<p><img src="/..%5Cimage%5Cjellyfin-image%5Clogo.png"></p>
+<p><img src="/../image/jellyfin-image/logo.png"></p>
 <h1 id="3-微调"><a href="#3-微调" class="headerlink" title="3-微调"></a>3-微调</h1><p>！最后因为版本的问题，可能需要微调一下间距然后加上主题，最好在控制台增加，应用所有客户端，也就是</p>
 <p>主题推荐</p>
 <p><a href="https://github.com/lscambo13/ElegantFin">https://github.com/lscambo13/ElegantFin</a></p>
@@ -37,7 +37,7 @@
 <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@import</span> url(<span class="string">&quot;ElegantFin.css&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#homeTab</span> <span class="selector-class">.homeSectionsContainer</span> &#123;</span><br><span class="line">    <span class="attribute">margin-top</span>: <span class="number">150px</span> <span class="meta">!important</span>;  <span class="comment">/* 调整这个值控制下移距离 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/* 登录页面的背景图 */</span></span><br><span class="line"><span class="selector-pseudo">:root</span>&#123;</span><br><span class="line">  <span class="attr">--loginPageBgUrl</span>: <span class="built_in">url</span>(<span class="string">&quot;/web/avatars/login.jpg?format=webp&amp;foregroundLayer=1&amp;quality=33&amp;width=3840&amp;height=2160&amp;blur=2&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>①最后一行是图片的地址，我把图片放到本地了，作为首页登录的地址（注意，jellyfin的访问地址默认为web下所以需要加入&#x2F;web&#x2F;目录）</p>
-<p><img src="/..%5Cimage%5Cjellyfin-image%5Cmian-content.png"></p>
+<p><img src="/../image/jellyfin-image/mian-content.png"></p>
 ]]></content>
       <categories>
         <category>Docker</category>
@@ -628,6 +628,30 @@
 <td>- <strong>安全标签（Security Labels）</strong>：列级标签，如 Confidential、Secret- 系统强制判断访问许可，用户无法修改</td>
 </tr>
 </tbody></table>
+<table>
+<thead>
+<tr>
+<th>访问控制模型</th>
+<th>形式</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基于列的<strong>自主访问控制</strong></td>
+<td>保护位、访问控制表</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
 <h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><h3 id="栈缓冲区溢出漏洞-题目"><a href="#栈缓冲区溢出漏洞-题目" class="headerlink" title="栈缓冲区溢出漏洞-题目"></a>栈缓冲区溢出漏洞-题目</h3><p>【说明】基于 Windows32 位系统分析下列代码，回答相关问题 。</p>
 <p><img src="/../image/Soft-exam-intermediate/after/windows32-demo.png"></p>
 <p>【问题 1】(3 分)</p>
@@ -824,6 +848,227 @@
 <p>针对要求点“应能对远程访问的用户行为、访问互联网的用户行为等单独进行行为审计和数据分析”选购的设备是（4）；</p>
 <p>针对要求点“应对系统管理员进行身份鉴别，只允许其通过特定的命令或操作界面进行系统管理操作，并针对这些操作进行审计”选购的设备是（5）；</p>
 <p>针对要求点“应能发现可能存在的已知漏洞，并在经过充分测试评估后，及时修补漏洞”选购的设备是（6）。</p>
+<h2 id="常见危险端口"><a href="#常见危险端口" class="headerlink" title="常见危险端口"></a>常见危险端口</h2><table>
+<thead>
+<tr>
+<th>端口号</th>
+<th>协议</th>
+<th>服务名称</th>
+<th>功能说明</th>
+<th>开放后的危险描述</th>
+<th>被攻击或滥用时的典型特征</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>135</strong></td>
+<td>TCP &#x2F; UDP</td>
+<td>RPC Endpoint Mapper（远程过程调用）</td>
+<td>用于定位 Windows 系统中 RPC 服务的动态端口，是 DCOM、WMI、远程服务调用等的基础</td>
+<td>被利用进行 <strong>远程命令执行</strong>（如 MS03-026、MS08-067 等漏洞），攻击者可远程执行任意代码或控制主机；勒索病毒常用此端口扫描横向传播</td>
+<td>网络中出现对 135 端口的大量扫描；防火墙日志中频繁有 “MSRPC” 请求；系统 RPCSS 服务异常消耗 CPU</td>
+</tr>
+<tr>
+<td><strong>137</strong></td>
+<td>UDP</td>
+<td>NetBIOS Name Service</td>
+<td>负责将计算机名解析为 IP 地址（早期局域网主机发现）</td>
+<td>泄露主机名、工作组名、NetBIOS 名称等信息；可被用于 <strong>主机枚举、信息收集</strong>，甚至名称欺骗（NetBIOS spoofing）</td>
+<td>出现异常 UDP 137 请求；网络嗅探可见主机名广播；局域网内频繁广播 NBNS 包</td>
+</tr>
+<tr>
+<td><strong>138</strong></td>
+<td>UDP</td>
+<td>NetBIOS Datagram Service</td>
+<td>提供广播消息及无连接数据报服务，用于 LAN 内共享发现</td>
+<td>攻击者可利用其做 <strong>局域网嗅探、共享枚举、欺骗攻击</strong>；广播包会泄露设备信息</td>
+<td>网络广播频繁；可见大量 UDP 138 流量；攻击中常出现 NB-Datagram 包</td>
+</tr>
+<tr>
+<td><strong>139</strong></td>
+<td>TCP</td>
+<td>NetBIOS Session Service</td>
+<td>建立有连接会话以进行文件、打印共享等操作（SMB over NetBIOS）</td>
+<td>可被攻击者通过 <strong>空会话（Null Session）连接</strong> 或 弱口令爆破访问共享文件；也常被用于 SMB relay 攻击、横向移动</td>
+<td>局域网中出现 TCP 139 会话请求；可用 <code>net use</code>、<code>smbclient</code> 等直接访问共享；攻击日志中显示匿名访问尝试</td>
+</tr>
+<tr>
+<td><strong>445</strong></td>
+<td>TCP</td>
+<td>SMB（Server Message Block） &#x2F; CIFS</td>
+<td>现代 SMB 协议直接运行在 TCP 上（不依赖 NetBIOS），用于文件共享、IPC、远程管理</td>
+<td><strong>勒索病毒最常利用的端口</strong>：WannaCry、NotPetya、EternalBlue 等均利用 SMBv1 漏洞通过 445 扩散；也可被用于 SMB relay、凭证嗅探、横向传播</td>
+<td>局域网中爆发异常 SMB 流量；主机之间相互访问 445；出现文件共享自动创建&#x2F;修改、勒索文件加密迹象</td>
+</tr>
+</tbody></table>
+<h2 id="常见日志路径"><a href="#常见日志路径" class="headerlink" title="常见日志路径"></a>常见日志路径</h2><h5 id="Linux-用户登录与行为日志"><a href="#Linux-用户登录与行为日志" class="headerlink" title="Linux 用户登录与行为日志"></a>Linux 用户登录与行为日志</h5><table>
+<thead>
+<tr>
+<th align="left">日志文件</th>
+<th align="left">绝对路径</th>
+<th align="left">特点</th>
+<th align="left">功能描述</th>
+<th align="left">查看命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>lastlog</strong></td>
+<td align="left"><code>/var/log/lastlog</code></td>
+<td align="left"><strong>二进制格式</strong>，记录所有用户的最近登录时间。</td>
+<td align="left"><strong>用户登录时间审计</strong>：快速查看每个用户最后一次成功登录系统的时间。</td>
+<td align="left"><code>lastlog</code></td>
+</tr>
+<tr>
+<td align="left"><strong>btmp</strong></td>
+<td align="left"><code>/var/log/btmp</code></td>
+<td align="left"><strong>二进制格式</strong>，记录<strong>失败</strong>的登录尝试。</td>
+<td align="left"><strong>安全监控</strong>：记录所有失败的登录尝试，用于检测暴力破解等安全威胁。</td>
+<td align="left"><code>lastb</code></td>
+</tr>
+<tr>
+<td align="left"><strong>utmp</strong></td>
+<td align="left"><code>/var/run/utmp</code></td>
+<td align="left"><strong>二进制格式</strong>，记录<strong>当前</strong>登录用户会话。</td>
+<td align="left"><strong>当前用户会话监控</strong>：记录当前登录系统的用户信息，是 <code>who</code>, <code>w</code> 等命令的数据源。</td>
+<td align="left"><code>who</code>, <code>w</code>, <code>users</code></td>
+</tr>
+<tr>
+<td align="left"><strong>wtmp</strong></td>
+<td align="left"><code>/var/log/wtmp</code></td>
+<td align="left"><strong>二进制格式</strong>，记录所有的登录、注销历史。</td>
+<td align="left"><strong>用户登录历史审计</strong>：记录所有用户的登录、注销、重启事件，可用于追溯用户活动。</td>
+<td align="left"><code>last</code></td>
+</tr>
+<tr>
+<td align="left"><strong>utmpx</strong> <strong>wtmpx</strong></td>
+<td align="left"><code>/var/log/utmpx</code> <code>/var/log/wtmpx</code></td>
+<td align="left"><strong>扩展格式</strong>（在某些Unix系统中，如Solaris）。</td>
+<td align="left">功能同utmp&#x2F;wtmp，但提供更详细的信息。<strong>注意</strong>：在大多数Linux发行版中，主要使用utmp和wtmp。</td>
+<td align="left">系统相关</td>
+</tr>
+</tbody></table>
+<h5 id="Linux-服务与命令审计日志"><a href="#Linux-服务与命令审计日志" class="headerlink" title="Linux 服务与命令审计日志"></a>Linux 服务与命令审计日志</h5><table>
+<thead>
+<tr>
+<th align="left">绝对路径</th>
+<th align="left">特点</th>
+<th align="left">功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>/var/log/messages</code></td>
+<td align="left">历史遗留名称，在许多系统（如RHEL&#x2F;CentOS 7）中是<strong>核心系统日志</strong>。记录内核、服务等广泛信息。</td>
+<td align="left"><strong>通用系统活动记录</strong>：包含系统启动、服务状态变化、硬件检测、非关键错误等信息。是排查系统级问题的首选。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/syslog</code></td>
+<td align="left">在 Debian&#x2F;Ubuntu 等系统中充当核心系统日志的角色，功能类似 <code>/var/log/messages</code>。</td>
+<td align="left"><strong>通用系统活动记录</strong>：记录除身份验证外的大部分系统级日志。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/auth.log</code> <code>/var/log/secure</code></td>
+<td align="left"><strong>身份验证和安全相关日志</strong>。 - <code>auth.log</code> (Debian&#x2F;Ubuntu) - <code>secure</code> (RHEL&#x2F;CentOS)</td>
+<td align="left"><strong>用户登录&#x2F;认证审计</strong>：记录所有用户的登录、注销、sudo提权、SSH登录成功&#x2F;失败等安全事件。是安全审计的关键。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/kern.log</code></td>
+<td align="left"><strong>内核专用日志</strong>。记录内核产生的信息，包括硬件驱动、内核模块加载&#x2F;卸载等。</td>
+<td align="left"><strong>内核问题诊断</strong>：用于排查硬件兼容性、内核崩溃、驱动故障等问题。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/boot.log</code></td>
+<td align="left"><strong>系统启动过程日志</strong>。记录本次开机启动过程中各个服务的启动状态。</td>
+<td align="left"><strong>启动故障排查</strong>：当系统启动失败或服务未能正常启动时，查看此日志。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/dmesg</code></td>
+<td align="left"><strong>内核环形缓冲区日志</strong>。内容与 <code>dmesg</code> 命令相同，但会持久化到磁盘。</td>
+<td align="left"><strong>硬件和设备信息</strong>：记录系统启动时检测到的硬件信息，以及运行过程中的硬件错误（如USB设备故障、磁盘错误）。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/cron</code></td>
+<td align="left"><strong>计划任务日志</strong>。记录 <code>cron</code> 和 <code>anacron</code> 任务的执行情况。</td>
+<td align="left"><strong>定时任务监控</strong>：查看定时任务是否按时执行、执行结果（成功或错误输出）。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/maillog</code></td>
+<td align="left"><strong>邮件服务日志</strong>。记录邮件系统（如Postfix, Sendmail）的收发信活动。</td>
+<td align="left"><strong>邮件服务调试</strong>：用于排查邮件发送&#x2F;接收失败的问题。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/httpd/</code> <code>/var/log/apache2/</code></td>
+<td align="left"><strong>Apache Web服务器日志目录</strong>。 - <code>access_log</code>：访问日志 - <code>error_log</code>：错误日志</td>
+<td align="left"><strong>网站访问分析</strong>：记录所有HTTP请求，用于分析流量、访客行为。 <strong>Web服务错误诊断</strong>：记录Apache服务运行中的错误、PHP致命错误等。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/nginx/</code></td>
+<td align="left"><strong>Nginx Web服务器日志目录</strong>。 - <code>access.log</code>：访问日志 - <code>error.log</code>：错误日志</td>
+<td align="left">功能同Apache，记录Nginx的访问和错误信息。</td>
+</tr>
+<tr>
+<td align="left"><code>/var/log/apt/</code></td>
+<td align="left"><strong>APT包管理器日志目录</strong>。<code>history.log</code> 和 <code>term.log</code> 最为有用。</td>
+<td align="left"><strong>软件包管理历史</strong>：记录所有通过 <code>apt</code> 进行的软件包安装、更新、删除操作，便于回溯。</td>
+</tr>
+</tbody></table>
+<h5 id="windows常见日志"><a href="#windows常见日志" class="headerlink" title="windows常见日志"></a>windows常见日志</h5><table>
+<thead>
+<tr>
+<th align="left">绝对路径</th>
+<th align="left">特点</th>
+<th align="left">功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>C:\Windows\System32\winevt\Logs\</code></td>
+<td align="left"><strong>事件查看器日志文件存储目录</strong>。日志为二进制的 <code>.evtx</code> 格式，需用事件查看器或 <code>Get-WinEvent</code> PowerShell命令解析。</td>
+<td align="left"><strong>所有Windows系统、应用程序和服务日志的集中存储位置</strong>。</td>
+</tr>
+<tr>
+<td align="left"><code>C:\Windows\System32\winevt\Logs\System.evtx</code></td>
+<td align="left"><strong>系统组件日志</strong>。记录由Windows操作系统组件（如驱动、系统服务）产生的事件。</td>
+<td align="left"><strong>系统稳定性诊断</strong>：查看硬件错误、服务启动失败、驱动程序崩溃、蓝屏相关事件等。</td>
+</tr>
+<tr>
+<td align="left"><code>C:\Windows\System32\winevt\Logs\Application.evtx</code></td>
+<td align="left"><strong>应用程序日志</strong>。记录由用户应用程序或非系统程序产生的事件。</td>
+<td align="left"><strong>应用程序问题排查</strong>：查看软件安装错误、程序崩溃、应用程序特定的错误和警告。</td>
+</tr>
+<tr>
+<td align="left"><code>C:\Windows\System32\winevt\Logs\Security.evtx</code></td>
+<td align="left"><strong>安全审计日志</strong>。记录所有与安全相关的事件，如登录、对象访问、权限变更等。默认部分审计策略未开启。</td>
+<td align="left"><strong>安全审计与入侵检测</strong>：监控成功&#x2F;失败的登录尝试、用户权限变更、文件访问审计、策略更改等。是安全调查的核心。</td>
+</tr>
+<tr>
+<td align="left"><code>C:\Windows\System32\winevt\Logs\Setup.evtx</code></td>
+<td align="left"><strong>系统安装日志</strong>。记录在系统安装或更新过程中发生的事件。</td>
+<td align="left"><strong>系统安装&#x2F;更新问题排查</strong>。</td>
+</tr>
+<tr>
+<td align="left"><code>C:\Windows\System32\winevt\Logs\ForwardedEvents.evtx</code></td>
+<td align="left"><strong>转发事件日志</strong>。用于存储从其他计算机转发过来的事件。</td>
+<td align="left"><strong>集中式日志管理</strong>。</td>
+</tr>
+<tr>
+<td align="left"><code>C:\Windows\Logs\</code></td>
+<td align="left">一些Windows组件和功能的独立日志目录。</td>
+<td align="left">包含一些更具体的日志，如：</td>
+</tr>
+<tr>
+<td align="left"><code>C:\Windows\Logs\CBS\CBS.log</code></td>
+<td align="left"><strong>组件基于服务的堆栈日志</strong>。非常详细且庞大。</td>
+<td align="left"><strong>Windows更新失败排查</strong>：当Windows Update失败时，这是最关键的日志，记录了每个更新组件的处理过程。</td>
+</tr>
+<tr>
+<td align="left"><code>C:\Windows\Logs\DISM\dism.log</code></td>
+<td align="left"><strong>部署映像服务和管理工具日志</strong>。</td>
+<td align="left"><strong>系统映像处理问题排查</strong>：在使用DISM工具修复系统映像时查看。</td>
+</tr>
+<tr>
+<td align="left"><code>%SystemRoot%\System32\Winevt\Logs\</code></td>
+<td align="left">同上，使用了环境变量。</td>
+<td align="left">与 <code>C:\Windows\System32\winevt\Logs\</code> 是同一个目录。</td>
+</tr>
+</tbody></table>
 ]]></content>
       <categories>
         <category>Information Security Engineer</category>
