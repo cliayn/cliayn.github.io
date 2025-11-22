@@ -51,11 +51,12 @@
     <url>/2025/10/10/app%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试</p>
 <p>app测试较为麻烦</p>
-<p>主要麻烦存在：app虚拟机检测，app代理检测，app<code>root</code>环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法</p>
-<p>因为鸿蒙5脱离了安卓系统<strong>即</strong>脱离 AOSP&#x2F;Android 兼容层，</p>
-<p>记录如下</p>
+<p>主要麻烦存在：app虚拟机检测，app代理检测，app<code>root</code>环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法，国密tls</p>
+<p>记录学习笔记如下</p>
 <span id="more"></span>
 
+<p>注：鸿蒙5脱离了安卓系统</p>
+<p>注：国密网址测试可以用yakit</p>
 <h1 id="1-root-解锁BootLoader"><a href="#1-root-解锁BootLoader" class="headerlink" title="1-root+解锁BootLoader"></a>1-root+解锁BootLoader</h1><p>参考文章<a href="https://zhuanlan.zhihu.com/p/581342570">如何root一台Google Pixel 7 Pro</a></p>
 <p>默认电脑装有<a href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"><code>adb</code></a>，手机开启<code>usb调试</code></p>
 <p>注（需要获取对应版本号）：</p>
@@ -153,6 +154,7 @@
 <p><a href="https://zhuanlan.zhihu.com/p/73008784">APP逆向神器之Frida【Android初级篇】 - 知乎</a></p>
 <p>所需工具：</p>
 <p><a href="https://www.androidtcpdump.com/android-tcpdump/downloads">Tcpdump</a></p>
+<p><a href="https://www.gmproxy.cn/">国密测试工具</a></p>
 <p><a href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"><code>adb</code></a>+<strong><code>pip install frida-tools</code></strong>    (windows)</p>
 <p><a href="https://github.com/frida/frida/releases">frida服务器（手机上）</a>或者使用<a href="https://github.com/ViRb3/magisk-frida">magisk-frida放到magisk里直接自启</a></p>
 <h2 id="Frida使用方法（windows）"><a href="#Frida使用方法（windows）" class="headerlink" title="Frida使用方法（windows）"></a>Frida使用方法（windows）</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">frida -U -l exploit.js -f xxx #启动app并注入脚本</span><br><span class="line">frida-ps -U</span><br><span class="line">frida-ps -Ua</span><br><span class="line">frida -U -l exploit.js &quot;XXXX&quot; #app已经启动 注入脚本</span><br></pre></td></tr></table></figure>
@@ -165,10 +167,10 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -i any -nnvvXSs 0</span><br><span class="line"></span><br><span class="line"><span class="comment">#`-i any`：监听所有网卡</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#`-nn`：不解析域名/IP/端口</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#`-vv`：更详细</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#`-X`：显示包的十六进制和 ASCII</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#`-s 0`：抓取完整包</span></span><br></pre></td></tr></table></figure>
 
 <p><strong>实时抓取指定端口的包（以 58384 为例）</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">tcpdump -i any port 58384 -nnvvXSs 0</span><br><span class="line">抓取 TCP：</span><br><span class="line">tcpdump -i any tcp port 58384 -nnvvXSs 0</span><br><span class="line">抓取 UDP：</span><br><span class="line">tcpdump -i any udp port 58384 -nnvvXSs 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -i any port 58384 -nnvvXSs 0</span><br><span class="line">抓取 TCP：</span><br><span class="line">tcpdump -i any tcp port 58384 -nnvvXSs 0</span><br><span class="line">抓取 UDP：</span><br><span class="line">tcpdump -i any udp port 58384 -nnvvXSs 0</span><br></pre></td></tr></table></figure>
 
 <p><strong>抓取所有包并保存到 &#x2F;sdcard&#x2F;xxx</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -i any -s 0 -w /sdcard/xxx.pcap</span><br><span class="line"><span class="comment">#建议加时间戳：</span></span><br><span class="line">tcpdump -i any -s 0 -w /sdcard/tcpdump_$(<span class="built_in">date</span> +%Y%m%d_%H%M%S).pcap</span><br><span class="line"><span class="comment">#抓取特定端口并保存：</span></span><br><span class="line">tcpdump -i any port 58384 -s 0 -w /sdcard/58384.pcap</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -i any -s 0 -w /sdcard/test.pcap</span><br><span class="line"><span class="comment">#建议加时间戳：</span></span><br><span class="line">tcpdump -i any -s 0 -w /sdcard/tcpdump_$(<span class="built_in">date</span> +%Y%m%d_%H%M%S).pcap</span><br><span class="line"><span class="comment">#抓取特定端口并保存：</span></span><br><span class="line">tcpdump -i any port 58384 -s 0 -w /sdcard/58384.pcap</span><br></pre></td></tr></table></figure>
 
 <h1 id="4-测试方法"><a href="#4-测试方法" class="headerlink" title="4-测试方法"></a>4-测试方法</h1><p>1.找到app的密钥和服务器证书和客户端证书，向外联ip直接测试【困难】</p>
 <p>​	如果能够获取到App内部的密钥和证书，那么我们可以模拟客户端直接与服务器进行TLCP通信。但这通常需要逆向工程来提取这些材料，而且如果App做了保护，可能比较困难。另外，如果通信过程中有客户端证书认证，那么我们需要同时获取客户端证书和私钥。如果成功，这种方法可以直接模拟客户端与服务器通信，进行自动化测试。</p>
@@ -176,7 +178,11 @@
 <p>​	使用Frida hook网络库，可以拦截和修改App发出的请求，从而观察和测试通信。这种方法不需要获取证书和密钥，但需要知道App使用的是什么网络库，以及如何hook。对于TLCP这种协议，如果网络库是标准的（如OpenSSL、GMSSL等），那么可能有现成的hook方法。这种方法可以动态分析App的通信，也可以修改通信数据，进行安全测试。</p>
 <p>3.用app内的调试模式进行测试【看情况】—【无需root】</p>
 <p>​	如果App有调试模式，那么可能可以通过调试模式获取更多的日志信息或者直接进行测试。这需要App本身支持，并且通常需要知道如何开启调试模式。如果调试模式能够提供详细的通信日志或者允许我们直接本地发送测试请求，那么这将是最简单的方法。</p>
-<h1 id="5-具体落实"><a href="#5-具体落实" class="headerlink" title="5-具体落实"></a>5-具体落实</h1><p><strong>未完待续</strong></p>
+<h1 id="5-具体落实"><a href="#5-具体落实" class="headerlink" title="5-具体落实"></a>5-具体落实</h1><p>参考文章：</p>
+<p><a href="https://juejin.cn/post/7195489874409373755">商密TLCP协议浅析</a></p>
+<p><a href="https://www.cnblogs.com/yurang/p/11505741.html">Wireshark解密HTTPS流量的两种方法</a></p>
+<p><a href="https://muhe-blog.github.io/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/">国密站点抓包流程</a></p>
+<p><strong>未完待续</strong></p>
 <p>用于测试的apk举例</p>
 <p><a href="https://github.com/ctfs/write-ups-2015/raw/master/seccon-quals-ctf-2015/binary/reverse-engineering-android-apk-1/rps.apk">CTF用于测试的apk-x86</a></p>
 <p><a href="https://github.com/dineshshetty/Android-InsecureBankv2/releases/tag/2.3.1">银行测试apk-arm</a></p>
