@@ -182,6 +182,8 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#监听10808端口</span></span><br><span class="line">./gost -L socks5://0.0.0.0:10808  &gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
 
 <p><a href="https://github.com/2dust/v2rayNG">v2rayn</a>(最新)</p>
+<p>配置文件：</p>
+<p><a href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/v2rayNG-phone-json/test.json">https://github.com/cliayn/cliayn.github.io/blob/master/tool/v2rayNG-phone-json/test.json</a></p>
 <h1 id="4-测试方法"><a href="#4-测试方法" class="headerlink" title="4-测试方法"></a>4-测试方法</h1><p>1.找到app的密钥和服务器证书和客户端证书，向外联ip直接测试【困难】</p>
 <p>​	如果能够获取到App内部的密钥和证书，那么我们可以模拟客户端直接与服务器进行TLCP通信。但这通常需要逆向工程来提取这些材料，而且如果App做了保护，可能比较困难。另外，如果通信过程中有客户端证书认证，那么我们需要同时获取客户端证书和私钥。如果成功，这种方法可以直接模拟客户端与服务器通信，进行自动化测试。</p>
 <p>2.frida找到发包的网络库hook，然后测试【容易】</p>
