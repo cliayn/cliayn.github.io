@@ -177,15 +177,23 @@
 
 <h2 id="adb代理"><a href="#adb代理" class="headerlink" title="adb代理"></a>adb代理</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#设置全局代理</span><br><span class="line">adb shell settings put global http_proxy 127.0.0.1:8080</span><br><span class="line">#开启端口映射</span><br><span class="line">adb reverse tcp:8080 tcp:8080</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#取消代理</span><br><span class="line">adb shell settings put global http_proxy :0</span><br><span class="line">#取消映射</span><br><span class="line">adb reverse --remove-all</span><br></pre></td></tr></table></figure>
 
+<h2 id="手机设置代理服务器"><a href="#手机设置代理服务器" class="headerlink" title="手机设置代理服务器"></a>手机设置代理服务器</h2><p>推荐软件</p>
+<p><a href="https://github.com/ginuerzh/gost">gost</a>(root)</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#监听10808端口</span></span><br><span class="line">./gost -L socks5://0.0.0.0:10808  &gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
 
-
+<p><a href="https://github.com/2dust/v2rayNG">v2rayn</a>(最新)</p>
 <h1 id="4-测试方法"><a href="#4-测试方法" class="headerlink" title="4-测试方法"></a>4-测试方法</h1><p>1.找到app的密钥和服务器证书和客户端证书，向外联ip直接测试【困难】</p>
 <p>​	如果能够获取到App内部的密钥和证书，那么我们可以模拟客户端直接与服务器进行TLCP通信。但这通常需要逆向工程来提取这些材料，而且如果App做了保护，可能比较困难。另外，如果通信过程中有客户端证书认证，那么我们需要同时获取客户端证书和私钥。如果成功，这种方法可以直接模拟客户端与服务器通信，进行自动化测试。</p>
 <p>2.frida找到发包的网络库hook，然后测试【容易】</p>
 <p>​	使用Frida hook网络库，可以拦截和修改App发出的请求，从而观察和测试通信。这种方法不需要获取证书和密钥，但需要知道App使用的是什么网络库，以及如何hook。对于TLCP这种协议，如果网络库是标准的（如OpenSSL、GMSSL等），那么可能有现成的hook方法。这种方法可以动态分析App的通信，也可以修改通信数据，进行安全测试。</p>
 <p>3.用app内的调试模式进行测试【极简】—【无需root】</p>
 <p>​	如果App有调试模式，那么可能可以通过调试模式获取更多的日志信息或者直接进行测试。这需要App本身支持，并且通常需要知道如何开启调试模式。如果调试模式能够提供详细的通信日志或者允许我们直接本地发送测试请求，那么这将是最简单的方法。</p>
-<h1 id="5-具体落实"><a href="#5-具体落实" class="headerlink" title="5-具体落实"></a>5-具体落实</h1><h2 id="①调试情况（无需root）"><a href="#①调试情况（无需root）" class="headerlink" title="①调试情况（无需root）"></a>①调试情况（无需root）</h2><p>1&gt;打开手机调试模式</p>
+<h1 id="5-具体落实"><a href="#5-具体落实" class="headerlink" title="5-具体落实"></a>5-具体落实</h1><h2 id="①调试情况（无需root）"><a href="#①调试情况（无需root）" class="headerlink" title="①调试情况（无需root）"></a>①调试情况（无需root）</h2><p>需要<a href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"><code>adb</code></a></p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>1.手机对外开启一个代理服务器0.0.0.0:10808</p>
+<p>2.局域网设备通过代理服务器访问手机app的进程监听ip:port&#x3D;&gt;127.0.0.1:2222</p>
+<p>3.数据包可以通过手机app的调试模式(webview)获得，可以进行接口测试</p>
+<p>自动化测试最好还是需要root</p>
+<h3 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h3><p>1&gt;打开手机调试模式</p>
 <p>注：要先点击版本号打开开发者选项</p>
 <p><img src="/../image/app-Debug/phone-debug.png"></p>
 <p>2&gt;打开电脑Google的chrome:&#x2F;&#x2F;inspect&#x2F;#devices</p>
