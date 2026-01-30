@@ -11,7 +11,10 @@
 <p>5-双向认证</p>
 <span id="more"></span>
 
-<h1 id="1-frida的去壳"><a href="#1-frida的去壳" class="headerlink" title="1-frida的去壳"></a>1-frida的去壳</h1><p>学习文章：</p>
+<h1 id="1-frida的去壳"><a href="#1-frida的去壳" class="headerlink" title="1-frida的去壳"></a>1-frida的去壳</h1><p><strong><code>前言</code></strong></p>
+<p><code>开发环境下的app一般属于无需去壳的，生产环境的app大多加固混淆以及反调试，UAT环境应该是用来保护证书的</code></p>
+<p><code>所以要学习去壳从而可以删除里面的反调试之类的代码，然后重打包App，进而可以用objection进行排查类找到hook点</code></p>
+<p>学习文章：</p>
 <p><a href="https://juejin.cn/post/6962096676576165918">Android脱壳之整体脱壳原理与实践这里所说的壳都是指dex加壳,不涉及到so的加壳。 涉及到的代码分析基于AOSP - 掘金</a></p>
 <h2 id="Frida-动态-dump-dex"><a href="#Frida-动态-dump-dex" class="headerlink" title="Frida 动态 dump dex"></a><strong>Frida 动态 dump dex</strong></h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#应对的壳如下：</span><br><span class="line">Java 壳</span><br><span class="line">延迟加载 dex</span><br><span class="line">商业壳 / 自研壳</span><br></pre></td></tr></table></figure>
 
@@ -33,7 +36,9 @@
 <p><code>OWTOP</code>漏洞，值得注意的是：默认jwt密钥</p>
 <h1 id="4-反序列化框架的学习"><a href="#4-反序列化框架的学习" class="headerlink" title="4-反序列化框架的学习"></a>4-反序列化框架的学习</h1><p>学习文章：<br><a href="https://www.freebuf.com/articles/web/276624.html">常见的Web漏洞——反序列化漏洞 - FreeBuf网络安全行业门户</a></p>
 <p>简单来说就是排查参数是否是object类型</p>
-<h1 id="5-双向认证"><a href="#5-双向认证" class="headerlink" title="5-双向认证"></a>5-双向认证</h1><p><code>**网.apk</code>就是标准的双向认证，即便是做了uat认证，电脑也无法访问，只有流量走一遍app才能访问对应的网址接口</p>
+<h1 id="5-双向认证"><a href="#5-双向认证" class="headerlink" title="5-双向认证"></a>5-双向认证</h1><p>[<a href="https://bbs.kanxue.com/thread-280089-1.htm">原创] Frida解决证书绑定问题-Android安全-看雪安全社区｜专业技术交流与安全研究论坛</a></p>
+<p><a href="https://www.freebuf.com/sectool/331471.html">Frida自吐证书密码 - FreeBuf网络安全行业门户</a></p>
+<p><code>**网.apk</code>就是标准的双向认证，即便是做了uat认证，电脑也无法访问，只有流量走一遍app才能访问对应的网址接口</p>
 <p>yakit可以做国密网址的测试，双向认证的话要找到对应的客户端证书</p>
 <p>国密TCLP</p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">gmssl tlcp_client -host ip -port port -cacert ca.pem</span><br></pre></td></tr></table></figure>
