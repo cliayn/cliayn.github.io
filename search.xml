@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>next学习规划</title>
+    <url>/2026/01/30/next%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>经过面试学到了如下需要深入学习的技术和扩展的方面，简单记录如下：</p>
+<p>1-frida的使用（动态 dump dex）</p>
+<p>2-oss存储桶漏洞相关利用</p>
+<p>3-SpringBlade微服务框架</p>
+<p>4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object）</p>
+<p>5-可以多次面试寻找自己想学的技术</p>
+<span id="more"></span>
+
+<h1 id="1-frida的去壳"><a href="#1-frida的去壳" class="headerlink" title="1-frida的去壳"></a>1-frida的去壳</h1><p>学习文章：</p>
+<p><a href="https://juejin.cn/post/6962096676576165918">Android脱壳之整体脱壳原理与实践这里所说的壳都是指dex加壳,不涉及到so的加壳。 涉及到的代码分析基于AOSP - 掘金</a></p>
+<h2 id="Frida-动态-dump-dex"><a href="#Frida-动态-dump-dex" class="headerlink" title="Frida 动态 dump dex"></a><strong>Frida 动态 dump dex</strong></h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#应对的壳如下：</span><br><span class="line">Java 壳</span><br><span class="line">延迟加载 dex</span><br><span class="line">商业壳 / 自研壳</span><br></pre></td></tr></table></figure>
+
+<p>Hook dex 加载函数，把内存里的 dex dump 出来</p>
+<p>。。。</p>
+<h2 id="内存加载壳"><a href="#内存加载壳" class="headerlink" title="内存加载壳"></a><strong>内存加载壳</strong></h2><p>特征：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/data/app/ 下找不到 dex</span><br><span class="line">DexClassLoader 的路径是假的</span><br><span class="line">dex 在内存 buffer 里</span><br><span class="line">dex\n035\0</span><br></pre></td></tr></table></figure>
+
+<p>。。。。</p>
+<h2 id="Application-切换壳"><a href="#Application-切换壳" class="headerlink" title="Application 切换壳"></a>Application 切换壳</h2><p>待记录</p>
+<h2 id="备注"><a href="#备注" class="headerlink" title="备注"></a>备注</h2><p><strong>去壳后需要</strong><br>重打包 APK、 校验 dex 完整性、再 Hook</p>
+<h1 id="2-oss桶"><a href="#2-oss桶" class="headerlink" title="2-oss桶"></a>2-oss桶</h1><p><a href="https://www.freebuf.com/articles/others-articles/356583.html">对象存储(OSS)攻防案例 - FreeBuf网络安全行业门户</a></p>
+<p>①-Object 遍历②-Bucket 桶爆破③-特定的 Bucket 策略配置④任意文件上传与覆盖⑤Bucket 接管⑥Bucket 可修改</p>
+<p>待续</p>
+<h1 id="3-SpringBlade微服务框架"><a href="#3-SpringBlade微服务框架" class="headerlink" title="3-SpringBlade微服务框架"></a>3-SpringBlade微服务框架</h1><p>学习文章：</p>
+<p><a href="https://github.com/chillzhuang/SpringBlade">SpringBlade源码</a></p>
+<p><a href="https://www.freebuf.com/vuls/413556.html">浅识springblade框架漏洞 - FreeBuf网络安全行业门户</a></p>
+<p>fofa指纹：<code>icon_hash=&quot;1047841028&quot;</code>（长得像MC的mod铁剑）</p>
+<p><code>OWTOP</code>漏洞，值得注意的是：默认jwt密钥</p>
+<h1 id="4-反序列化框架的学习"><a href="#4-反序列化框架的学习" class="headerlink" title="4-反序列化框架的学习"></a>4-反序列化框架的学习</h1><p>学习文章：<br><a href="https://www.freebuf.com/articles/web/276624.html">常见的Web漏洞——反序列化漏洞 - FreeBuf网络安全行业门户</a></p>
+<p>简单来说就是排查参数是否是object类型</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常见进程自启处理</title>
+    <url>/2026/01/29/%E5%B8%B8%E8%A7%81%E8%BF%9B%E7%A8%8B%E8%87%AA%E5%90%AF/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h1><p>电脑弹出了两个广告，我一看小窗口，没有运行的第三方程序，我根据进程找了一下，发现一个是雷电模拟器的广告，一个是wps的广告，主要是wps的进程明明是手动启动的，但它还是每次自启了，顺便把云服务也带起来自启了，以下记录了完全关闭自启的几种方法，以后换电脑也能记得调。</p>
+<span id="more"></span>
+
+<h1 id="1-任务计划程序"><a href="#1-任务计划程序" class="headerlink" title="1.任务计划程序"></a>1.任务计划程序</h1><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">taskschd.msc</span><br></pre></td></tr></table></figure>
+
+<p><code>wps</code>它就有三个定时任务，简直难它天，我就说老关不掉</p>
+<h1 id="2-服务"><a href="#2-服务" class="headerlink" title="2.服务"></a>2.服务</h1><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">services.msc</span><br></pre></td></tr></table></figure>
+
+<p>像雷电模拟器之类的就会在这里</p>
+<h1 id="3-注册表（通用）"><a href="#3-注册表（通用）" class="headerlink" title="3.注册表（通用）"></a>3.注册表（通用）</h1><p>推荐工具<a href="https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns">Autoruns</a></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">regedit</span><br></pre></td></tr></table></figure>
+
+<p>上面两个方法一个关闭服务，一个关闭计划任务差不多可以了，但有些是dll这些进程在注册表里，只能采用注册表删除，建议用微软自己的工具<a href="https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns">Autoruns</a>来disable，防止删除了其他系统数据</p>
+<p><code>TSVNCache.exe</code>等，常见<strong>注册表启动项</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span><br><span class="line">HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ip伪造分析</title>
     <url>/2026/01/19/ip%E4%BC%AA%E9%80%A0%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>刚开始认为ip伪造只是简单的更改http请求里面的请求头，后面发现可以更改的地方还是比较多的，记录一下，目前学到的</p>
@@ -196,6 +264,21 @@
 <h1 id="有关事项：权限绕过"><a href="#有关事项：权限绕过" class="headerlink" title="有关事项：权限绕过"></a>有关事项：权限绕过</h1><p>参考<a href="https://forum.butian.net/share/2351">奇安信攻防社区-某OA 历史RCE分析</a></p>
 <p>在springmvc版本<code>&lt;5.3</code>之前后缀匹配模式参数<code>useSuffixPatternMatch</code>默认值为<code>true</code></p>
 <p>则访问<code>xx.js</code>、<code>xx.tmpl</code>等静态资源后缀可以进行权限绕过，访问漏洞路由</p>
+<h1 id="相关代码"><a href="#相关代码" class="headerlink" title="相关代码"></a>相关代码</h1><p><a href="https://worktile.com/kb/ask/1291430.html">如何获取服务器的绝对路径 • Worktile社区</a></p>
+<p>使用Java获取服务器的绝对路径</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">absolutePath</span> <span class="operator">=</span> getClass().getProtectionDomain().getCodeSource().getLocation().getPath();</span><br></pre></td></tr></table></figure>
+
+<p>使用PHP获取服务器的绝对路径</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="variable">$absolutePath</span> = <span class="variable">$_SERVER</span>[<span class="string">&#x27;DOCUMENT_ROOT&#x27;</span>];</span><br></pre></td></tr></table></figure>
+
+<p>使用Node.js获取服务器的绝对路径</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> absolutePath = path.<span class="title function_">resolve</span>(__dirname);</span><br></pre></td></tr></table></figure>
+
+<p>使用ASP.NET获取服务器的绝对路径</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">string</span> absolutePath = Server.MapPath(<span class="string">&quot;~&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>使用Python获取服务器的绝对路径</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">absolute_path = os.path.dirname(os.path.abspath(__file__))</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
