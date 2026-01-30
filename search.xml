@@ -8,7 +8,7 @@
 <p>2-oss存储桶漏洞相关利用</p>
 <p>3-SpringBlade微服务框架</p>
 <p>4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object）</p>
-<p>5-可以多次面试寻找自己想学的技术</p>
+<p>5-双向认证</p>
 <span id="more"></span>
 
 <h1 id="1-frida的去壳"><a href="#1-frida的去壳" class="headerlink" title="1-frida的去壳"></a>1-frida的去壳</h1><p>学习文章：</p>
@@ -33,6 +33,15 @@
 <p><code>OWTOP</code>漏洞，值得注意的是：默认jwt密钥</p>
 <h1 id="4-反序列化框架的学习"><a href="#4-反序列化框架的学习" class="headerlink" title="4-反序列化框架的学习"></a>4-反序列化框架的学习</h1><p>学习文章：<br><a href="https://www.freebuf.com/articles/web/276624.html">常见的Web漏洞——反序列化漏洞 - FreeBuf网络安全行业门户</a></p>
 <p>简单来说就是排查参数是否是object类型</p>
+<h1 id="5-双向认证"><a href="#5-双向认证" class="headerlink" title="5-双向认证"></a>5-双向认证</h1><p><code>**网.apk</code>就是标准的双向认证，即便是做了uat认证，电脑也无法访问，只有流量走一遍app才能访问对应的网址接口</p>
+<p>yakit可以做国密网址的测试，双向认证的话要找到对应的客户端证书</p>
+<p>国密TCLP</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">gmssl tlcp_client -host ip -port port -cacert ca.pem</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="其他；"><a href="#其他；" class="headerlink" title="其他；"></a>其他；</h1><p>可以多去面试看看在别人眼里的自己</p>
+<p>但无论如何，那仅仅是别人眼中的自己</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
