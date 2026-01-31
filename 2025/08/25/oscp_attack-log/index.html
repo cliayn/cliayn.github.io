@@ -487,6 +487,46 @@ document.addEventListener('page:loaded', () => {
     }));
 });
 </script>
+<div id="bg-toggle-btn" class="day-night-switch">
+  <i id="bg-toggle-icon" class="fa fa-moon"></i>
+</div>
 
+<script>
+(function() {
+  var btn = document.getElementById('bg-toggle-btn');
+  var icon = document.getElementById('bg-toggle-icon');
+  
+  // 定义图片路径
+  var pic1 = 'url("/images/background.jpg")'; // 默认/白天背景
+  var pic2 = 'url("/images/ai-background.png")'; // 切换/夜晚背景
+
+  // 检查本地存储中是否有记录，保持刷新后状态一致
+  var isNight = localStorage.getItem('isNight') === 'true';
+
+  // 初始化页面状态函数
+  function applyState() {
+    if (isNight) {
+      // 如果是夜晚模式：显示太阳图标，背景换成 pic2
+      document.body.style.backgroundImage = pic2;
+      icon.className = 'fa fa-sun'; 
+    } else {
+      // 如果是白天模式：显示月亮图标，背景换成 pic1
+      document.body.style.backgroundImage = pic1;
+      icon.className = 'fa fa-moon';
+    }
+  }
+
+  // 页面加载时先应用一次状态
+  applyState();
+
+  // 点击事件监听
+  btn.addEventListener('click', function() {
+    isNight = !isNight; // 状态反转
+    applyState(); // 应用新状态
+    // 将状态保存到浏览器缓存，防止刷新页面后重置
+    localStorage.setItem('isNight', isNight);
+  });
+})();
+</script>
 </body>
 </html>

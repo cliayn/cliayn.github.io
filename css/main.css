@@ -1258,7 +1258,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #abff5c;
+    background: #ed7373;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2860,4 +2860,35 @@ body {
   margin-bottom: 60px;
   -webkit-box-shadow: 0 0 5px #788072;
   -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
+/* 按钮样式 */
+.day-night-switch {
+  position: fixed; /* 固定定位 */
+  left: 20px; /* 距离左边 20px */
+  top: 50%; /* 垂直居中 */
+  transform: translateY(-50%); /* 精确垂直居中修正 */
+  width: 40px; /* 按钮宽度 */
+  height: 40px; /* 按钮高度 */
+  background: rgba(0,0,0,0.6); /* 背景黑底半透明 */
+  color: #fff; /* 图标白色 */
+  border-radius: 50%; /* 圆形 */
+  text-align: center; /* 内容居中 */
+  line-height: 40px; /* 行高=高度，垂直居中 */
+  cursor: pointer; /* 鼠标变小手 */
+  z-index: 9999; /* 层级很高，防止被遮挡 */
+  transition: all 0.3s; /* 动效 */
+  font-size: 18px; /* 图标大小 */
+}
+/* 鼠标悬停时的效果 */
+.day-night-switch:hover {
+  background: rgba(0,0,0,0.8);
+  transform: translateY(-50%) scale(1.1); /* 稍微放大 */
+}
+/* 这是一个重要的设置：覆盖 Next 主题默认背景，确保我们的图片能显示 */
+body {
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* 背景固定，不随滚动条滚动 */
+  background-position: center;
+  background-size: cover; /* 图片铺满屏幕 */
+  transition: background-image 0.5s ease; /* 背景切换时的柔和过渡 */
 }
