@@ -1258,7 +1258,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #ebfffc;
+    background: #ffff61;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2825,9 +2825,13 @@ header.header {
     padding: 10px 12px;
   }
 }
-.giscus {
-  max-width: unset;
+/* Hexo Next Giscus 外层容器米白色半透明 */
+.giscus-container {
+  background-color: rgba(244,244,244,0.7) !important;
+  padding: 12px;
+  border-radius: 10px;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 body {
   background-image: url("/images/background.jpg");
