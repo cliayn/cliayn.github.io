@@ -1258,7 +1258,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #455d16;
+    background: #deff39;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2891,4 +2891,33 @@ body {
   background-position: center;
   background-size: cover; /* 图片铺满屏幕 */
   transition: background-image 0.5s ease; /* 背景切换时的柔和过渡 */
+}
+/* 仅针对手机端（屏幕宽度小于 767px） */
+@media (max-width: 767px) {
+  .sidebar {
+    width: 100% !important;
+    background: #fff; /* 也可以设置为你喜欢的背景色 */
+  }
+  .sidebar-inner {
+    width: 100% !important;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+  }
+  body.sidebar-active {
+    overflow: hidden;
+  }
+}
+@media (max-width: 767px) {
+  .sidebar {
+    width: 100% !important;
+    left: 0 !important; /* 强制靠左对齐 */
+    right: 0 !important;
+    background: #fff;
+/* 解决部分 Scheme 下的位移偏差 */
+    transform: translateX(-100%); /* 隐藏时完全在左侧外 */
+  }
+  .sidebar-active .sidebar {
+    transform: translateX(0) !important;
+  }
 }
