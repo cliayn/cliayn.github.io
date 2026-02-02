@@ -21,15 +21,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="0-前言经过面试学到了如下需要深入学习的技术和扩展的方面，简单记录如下： 1-frida的使用（动态 dump dex） 2-oss存储桶漏洞相关利用 3-SpringBlade微服务框架 4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object） 5-双向认证">
+    <meta name="description" content="0-前言经过面试学到了如下需要深入学习的技术和扩展的方面，简单记录如下： 1-frida的使用（动态 dump dex）	–⑤ 2-oss存储桶漏洞相关利用 3-SpringBlade微服务框架 4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object） 5-双向认证(mTLS)		–①">
 <meta property="og:type" content="article">
 <meta property="og:title" content="next学习规划">
 <meta property="og:url" content="http://example.com/2026/01/30/next%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="0-前言经过面试学到了如下需要深入学习的技术和扩展的方面，简单记录如下： 1-frida的使用（动态 dump dex） 2-oss存储桶漏洞相关利用 3-SpringBlade微服务框架 4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object） 5-双向认证">
+<meta property="og:description" content="0-前言经过面试学到了如下需要深入学习的技术和扩展的方面，简单记录如下： 1-frida的使用（动态 dump dex）	–⑤ 2-oss存储桶漏洞相关利用 3-SpringBlade微服务框架 4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object） 5-双向认证(mTLS)		–①">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-01-30T01:09:14.000Z">
-<meta property="article:modified_time" content="2026-01-30T09:03:52.513Z">
+<meta property="article:modified_time" content="2026-02-02T06:50:48.425Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="article">
 <meta name="twitter:card" content="summary">
@@ -141,7 +141,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-frida%E7%9A%84%E5%8E%BB%E5%A3%B3"><span class="nav-number">2.</span> <span class="nav-text">1-frida的去壳</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-%E5%8A%A8%E6%80%81-dump-dex"><span class="nav-number">2.1.</span> <span class="nav-text">Frida 动态 dump dex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD%E5%A3%B3"><span class="nav-number">2.2.</span> <span class="nav-text">内存加载壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Application-%E5%88%87%E6%8D%A2%E5%A3%B3"><span class="nav-number">2.3.</span> <span class="nav-text">Application 切换壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E6%B3%A8"><span class="nav-number">2.4.</span> <span class="nav-text">备注</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-oss%E6%A1%B6"><span class="nav-number">3.</span> <span class="nav-text">2-oss桶</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-SpringBlade%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6"><span class="nav-number">4.</span> <span class="nav-text">3-SpringBlade微服务框架</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.</span> <span class="nav-text">4-反序列化框架的学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81"><span class="nav-number">6.</span> <span class="nav-text">5-双向认证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9B"><span class="nav-number">7.</span> <span class="nav-text">其他；</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-frida%E7%9A%84%E5%8E%BB%E5%A3%B3"><span class="nav-number">2.</span> <span class="nav-text">1-frida的去壳</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida-%E5%8A%A8%E6%80%81-dump-dex"><span class="nav-number">2.1.</span> <span class="nav-text">Frida 动态 dump dex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD%E5%A3%B3"><span class="nav-number">2.2.</span> <span class="nav-text">内存加载壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Application-%E5%88%87%E6%8D%A2%E5%A3%B3"><span class="nav-number">2.3.</span> <span class="nav-text">Application 切换壳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%87%E6%B3%A8"><span class="nav-number">2.4.</span> <span class="nav-text">备注</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-oss%E6%A1%B6"><span class="nav-number">3.</span> <span class="nav-text">2-oss桶</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-SpringBlade%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6"><span class="nav-number">4.</span> <span class="nav-text">3-SpringBlade微服务框架</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.</span> <span class="nav-text">4-反序列化框架的学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%A1%86%E6%9E%B6"><span class="nav-number">5.1.</span> <span class="nav-text">常见反序列化框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="nav-number">5.1.1.</span> <span class="nav-text">PHP反序列化漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E"><span class="nav-number">5.1.2.</span> <span class="nav-text">Java反序列化漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ASP-NET%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">5.1.3.</span> <span class="nav-text">ASP.NET反序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">5.1.4.</span> <span class="nav-text">Python反序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-js-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">5.1.5.</span> <span class="nav-text">Node.js 反序列化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81"><span class="nav-number">6.</span> <span class="nav-text">5-双向认证</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7"><span class="nav-number">6.1.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4"><span class="nav-number">6.2.</span> <span class="nav-text">常见命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%EF%BC%9B"><span class="nav-number">7.</span> <span class="nav-text">其他；</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -239,9 +239,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-01-30 09:09:14 / 修改时间：17:03:52" itemprop="dateCreated datePublished" datetime="2026-01-30T09:09:14+08:00">2026-01-30</time>
+      <time title="创建时间：2026-01-30 09:09:14" itemprop="dateCreated datePublished" datetime="2026-01-30T09:09:14+08:00">2026-01-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-02-02 14:50:48" itemprop="dateModified" datetime="2026-02-02T14:50:48+08:00">2026-02-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -260,14 +266,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.2k</span>
+      <span>2k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -278,11 +284,11 @@
     
     
     <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>经过面试学到了如下需要深入学习的技术和扩展的方面，简单记录如下：</p>
-<p>1-frida的使用（动态 dump dex）</p>
+<p>1-frida的使用（动态 dump dex）	–⑤</p>
 <p>2-oss存储桶漏洞相关利用</p>
 <p>3-SpringBlade微服务框架</p>
 <p>4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object）</p>
-<p>5-双向认证</p>
+<p>5-双向认证(mTLS)		–①</p>
 <span id="more"></span>
 
 <h1 id="1-frida的去壳"><a href="#1-frida的去壳" class="headerlink" title="1-frida的去壳"></a>1-frida的去壳</h1><p><strong><code>前言</code></strong></p>
@@ -311,13 +317,23 @@
 <p>fofa指纹：<code>icon_hash=&quot;1047841028&quot;</code>（长得像MC的mod铁剑）</p>
 <p><code>OWTOP</code>漏洞，值得注意的是：默认jwt密钥</p>
 <h1 id="4-反序列化框架的学习"><a href="#4-反序列化框架的学习" class="headerlink" title="4-反序列化框架的学习"></a>4-反序列化框架的学习</h1><p>学习文章：<br><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/276624.html">常见的Web漏洞——反序列化漏洞 - FreeBuf网络安全行业门户</a></p>
-<p>简单来说就是排查参数是否是object类型</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Libra1313/article/details/146106367">【2025】最新反序列化漏洞汇总，从零基础到精通，收藏这篇就够了！_反序列化漏洞有哪些-CSDN博客</a></p>
+<h2 id="常见反序列化框架"><a href="#常见反序列化框架" class="headerlink" title="常见反序列化框架"></a>常见反序列化框架</h2><h3 id="PHP反序列化漏洞"><a href="#PHP反序列化漏洞" class="headerlink" title="PHP反序列化漏洞"></a><strong>PHP反序列化漏洞</strong></h3><p>PHP中通常使用<code>serialize</code>函数进行序列化，使用<code>unserialize</code>函数进行反序列化</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/16664">PHP反序列化总结（POP链）-先知社区</a></p>
+<h3 id="Java反序列化漏洞"><a href="#Java反序列化漏洞" class="headerlink" title="Java反序列化漏洞"></a>Java反序列化漏洞</h3><p>Java中通常使用<code>Java.io.ObjectOutputStream</code>类中的<code>writeObject</code>方法进行序列化，<a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/1744">Java反序列化漏洞从入门到深入-先知社区</a></p>
+<h3 id="ASP-NET反序列化"><a href="#ASP-NET反序列化" class="headerlink" title="ASP.NET反序列化"></a>ASP.NET反序列化</h3><p>.NET框架包含多个序列化类，<code>BinaryFormatter</code>，<code>JavaScriptSerializer</code>，<code>XmlSerializer</code>，<code>DataContractSerializer</code></p>
+<h3 id="Python反序列化"><a href="#Python反序列化" class="headerlink" title="Python反序列化"></a>Python反序列化</h3><p>Python提供的<code>pickle</code>模块可以序列化对象，反序列化漏洞出现在 <code>__reduce__()</code>魔法函数上</p>
+<h3 id="Node-js-反序列化"><a href="#Node-js-反序列化" class="headerlink" title="Node.js 反序列化"></a>Node.js 反序列化</h3><p><code>node-serialize</code> 在反序列化时使用了 <code>eval()</code>，直接执行传入的数据</p>
 <h1 id="5-双向认证"><a href="#5-双向认证" class="headerlink" title="5-双向认证"></a>5-双向认证</h1><p>[<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-280089-1.htm">原创] Frida解决证书绑定问题-Android安全-看雪安全社区｜专业技术交流与安全研究论坛</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/sectool/331471.html">Frida自吐证书密码 - FreeBuf网络安全行业门户</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.cthousand.cn/2025/02/15/%E5%AE%89%E5%8D%93%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%A0%A1%E9%AA%8C%E7%BB%95%E8%BF%87/">双向证书效验绕过</a></p>
 <p><code>**网.apk</code>就是标准的双向认证，即便是做了uat认证，电脑也无法访问，只有流量走一遍app才能访问对应的网址接口</p>
 <p>yakit可以做国密网址的测试，双向认证的话要找到对应的客户端证书</p>
-<p>国密TCLP</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gmssl tlcp_client -host ip -port port -cacert ca.pem</span><br></pre></td></tr></table></figure>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p><strong><code>gmssl</code><strong>、<a target="_blank" rel="noopener" href="https://curl.gmssl.cn/"><strong><code>gmcurl</code></strong></a>、</strong><code>yakit</code><strong>、</strong><code>r0capture</code><strong>、</strong><code>python</code></strong></p>
+<p>r0capture导出的客户端证书默认路径在<code>/sdcard/Download/xx.p12</code>, 密码默认是<code>r0ysue</code></p>
+<h2 id="常见命令"><a href="#常见命令" class="headerlink" title="常见命令"></a>常见命令</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -<span class="keyword">in</span> test.p12 -clcerts -nokeys -out <span class="number">1</span>.crt -legacy</span><br><span class="line"></span><br><span class="line">openssl pkcs12 -<span class="keyword">in</span> test.p12 -nocerts -nodes -out <span class="number">1</span>.key -legacy</span><br><span class="line"></span><br><span class="line">gmssl tlcp_client -host <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> -cert <span class="number">1</span>.crt -key <span class="number">1</span>.key -pass &#x27;MyP@ssw0rd!&#x27;</span><br><span class="line"></span><br><span class="line">gmcurl --gmssl -v --cacert ca.crt --cert <span class="number">1</span>.crt --key <span class="number">1</span>.key:你的密码 --cert2 <span class="number">1</span>.crt --key2 <span class="number">1</span>.key:你的密码 https://[目标URL]</span><br></pre></td></tr></table></figure>
+
+
 
 
 
@@ -381,7 +397,7 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">145k</span>
+    <span title="站点总字数">146k</span>
   </span>
 </div>
 

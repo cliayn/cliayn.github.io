@@ -4,11 +4,11 @@
     <title>next学习规划</title>
     <url>/2026/01/30/next%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>经过面试学到了如下需要深入学习的技术和扩展的方面，简单记录如下：</p>
-<p>1-frida的使用（动态 dump dex）</p>
+<p>1-frida的使用（动态 dump dex）	–⑤</p>
 <p>2-oss存储桶漏洞相关利用</p>
 <p>3-SpringBlade微服务框架</p>
 <p>4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object）</p>
-<p>5-双向认证</p>
+<p>5-双向认证(mTLS)		–①</p>
 <span id="more"></span>
 
 <h1 id="1-frida的去壳"><a href="#1-frida的去壳" class="headerlink" title="1-frida的去壳"></a>1-frida的去壳</h1><p><strong><code>前言</code></strong></p>
@@ -37,13 +37,23 @@
 <p>fofa指纹：<code>icon_hash=&quot;1047841028&quot;</code>（长得像MC的mod铁剑）</p>
 <p><code>OWTOP</code>漏洞，值得注意的是：默认jwt密钥</p>
 <h1 id="4-反序列化框架的学习"><a href="#4-反序列化框架的学习" class="headerlink" title="4-反序列化框架的学习"></a>4-反序列化框架的学习</h1><p>学习文章：<br><a href="https://www.freebuf.com/articles/web/276624.html">常见的Web漏洞——反序列化漏洞 - FreeBuf网络安全行业门户</a></p>
-<p>简单来说就是排查参数是否是object类型</p>
+<p><a href="https://blog.csdn.net/Libra1313/article/details/146106367">【2025】最新反序列化漏洞汇总，从零基础到精通，收藏这篇就够了！_反序列化漏洞有哪些-CSDN博客</a></p>
+<h2 id="常见反序列化框架"><a href="#常见反序列化框架" class="headerlink" title="常见反序列化框架"></a>常见反序列化框架</h2><h3 id="PHP反序列化漏洞"><a href="#PHP反序列化漏洞" class="headerlink" title="PHP反序列化漏洞"></a><strong>PHP反序列化漏洞</strong></h3><p>PHP中通常使用<code>serialize</code>函数进行序列化，使用<code>unserialize</code>函数进行反序列化</p>
+<p><a href="https://xz.aliyun.com/news/16664">PHP反序列化总结（POP链）-先知社区</a></p>
+<h3 id="Java反序列化漏洞"><a href="#Java反序列化漏洞" class="headerlink" title="Java反序列化漏洞"></a>Java反序列化漏洞</h3><p>Java中通常使用<code>Java.io.ObjectOutputStream</code>类中的<code>writeObject</code>方法进行序列化，<a href="https://xz.aliyun.com/news/1744">Java反序列化漏洞从入门到深入-先知社区</a></p>
+<h3 id="ASP-NET反序列化"><a href="#ASP-NET反序列化" class="headerlink" title="ASP.NET反序列化"></a>ASP.NET反序列化</h3><p>.NET框架包含多个序列化类，<code>BinaryFormatter</code>，<code>JavaScriptSerializer</code>，<code>XmlSerializer</code>，<code>DataContractSerializer</code></p>
+<h3 id="Python反序列化"><a href="#Python反序列化" class="headerlink" title="Python反序列化"></a>Python反序列化</h3><p>Python提供的<code>pickle</code>模块可以序列化对象，反序列化漏洞出现在 <code>__reduce__()</code>魔法函数上</p>
+<h3 id="Node-js-反序列化"><a href="#Node-js-反序列化" class="headerlink" title="Node.js 反序列化"></a>Node.js 反序列化</h3><p><code>node-serialize</code> 在反序列化时使用了 <code>eval()</code>，直接执行传入的数据</p>
 <h1 id="5-双向认证"><a href="#5-双向认证" class="headerlink" title="5-双向认证"></a>5-双向认证</h1><p>[<a href="https://bbs.kanxue.com/thread-280089-1.htm">原创] Frida解决证书绑定问题-Android安全-看雪安全社区｜专业技术交流与安全研究论坛</a></p>
 <p><a href="https://www.freebuf.com/sectool/331471.html">Frida自吐证书密码 - FreeBuf网络安全行业门户</a></p>
+<p><a href="https://blog.cthousand.cn/2025/02/15/%E5%AE%89%E5%8D%93%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%A0%A1%E9%AA%8C%E7%BB%95%E8%BF%87/">双向证书效验绕过</a></p>
 <p><code>**网.apk</code>就是标准的双向认证，即便是做了uat认证，电脑也无法访问，只有流量走一遍app才能访问对应的网址接口</p>
 <p>yakit可以做国密网址的测试，双向认证的话要找到对应的客户端证书</p>
-<p>国密TCLP</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">gmssl tlcp_client -host ip -port port -cacert ca.pem</span><br></pre></td></tr></table></figure>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p><strong><code>gmssl</code><strong>、<a href="https://curl.gmssl.cn/"><strong><code>gmcurl</code></strong></a>、</strong><code>yakit</code><strong>、</strong><code>r0capture</code><strong>、</strong><code>python</code></strong></p>
+<p>r0capture导出的客户端证书默认路径在<code>/sdcard/Download/xx.p12</code>, 密码默认是<code>r0ysue</code></p>
+<h2 id="常见命令"><a href="#常见命令" class="headerlink" title="常见命令"></a>常见命令</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">openssl pkcs12 -<span class="keyword">in</span> test.p12 -clcerts -nokeys -out <span class="number">1</span>.crt -legacy</span><br><span class="line"></span><br><span class="line">openssl pkcs12 -<span class="keyword">in</span> test.p12 -nocerts -nodes -out <span class="number">1</span>.key -legacy</span><br><span class="line"></span><br><span class="line">gmssl tlcp_client -host <span class="number">127</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span> -cert <span class="number">1</span>.crt -key <span class="number">1</span>.key -pass &#x27;MyP@ssw0rd!&#x27;</span><br><span class="line"></span><br><span class="line">gmcurl --gmssl -v --cacert ca.crt --cert <span class="number">1</span>.crt --key <span class="number">1</span>.key:你的密码 --cert2 <span class="number">1</span>.crt --key2 <span class="number">1</span>.key:你的密码 https://[目标URL]</span><br></pre></td></tr></table></figure>
+
+
 
 
 
