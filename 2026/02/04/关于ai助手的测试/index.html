@@ -23,15 +23,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"cliayn.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="1-测试方案把ai当成用户进行测试 1-越权(通过ai助手可获得非本用户权限的数据) 2-xss(ai返回的数据会导致xss，本用户发过去的数据会导致xss) 3-泄露敏感信息(三要素) 待续">
+    <meta name="description" content="0-前言把ai当成用户进行测试 ai相当于独立于管理员、审计员、操作员、配置员存在的第5个用户 1-越权(通过ai助手可获得非本用户权限的数据) 2-xss(ai返回的数据会导致xss，本用户发过去的数据会导致xss) 3-泄露敏感信息(三要素)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于ai助手的测试">
 <meta property="og:url" content="https://cliayn.github.io/2026/02/04/%E5%85%B3%E4%BA%8Eai%E5%8A%A9%E6%89%8B%E7%9A%84%E6%B5%8B%E8%AF%95/">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="1-测试方案把ai当成用户进行测试 1-越权(通过ai助手可获得非本用户权限的数据) 2-xss(ai返回的数据会导致xss，本用户发过去的数据会导致xss) 3-泄露敏感信息(三要素) 待续">
+<meta property="og:description" content="0-前言把ai当成用户进行测试 ai相当于独立于管理员、审计员、操作员、配置员存在的第5个用户 1-越权(通过ai助手可获得非本用户权限的数据) 2-xss(ai返回的数据会导致xss，本用户发过去的数据会导致xss) 3-泄露敏感信息(三要素)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-02-04T03:45:19.000Z">
-<meta property="article:modified_time" content="2026-02-04T03:49:51.594Z">
+<meta property="article:modified_time" content="2026-02-04T07:58:12.331Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="article">
 <meta name="twitter:card" content="summary">
@@ -143,7 +143,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-number">1.</span> <span class="nav-text">1-测试方案</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E6%BC%8F%E6%B4%9E"><span class="nav-number">2.</span> <span class="nav-text">1-漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ai%E7%94%A8%E6%88%B7%E7%9A%84%E8%B6%8A%E6%9D%83"><span class="nav-number">2.1.</span> <span class="nav-text">1&gt;ai用户的越权</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A0%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E8%B6%8A%E6%9D%83%E5%A2%9E%E3%80%81%E5%88%A0%E3%80%81%E6%94%B9"><span class="nav-number">2.1.0.0.1.</span> <span class="nav-text">①数据库的越权增、删、改</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A1%E4%B8%9A%E5%8A%A1%E7%9A%84%E8%B6%8A%E6%9D%83%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.1.0.0.2.</span> <span class="nav-text">②业务的越权查询</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A2%E7%BB%95%E8%BF%87%E6%8F%90%E7%A4%BA%E8%AF%8D%E7%9A%84%E5%9B%9E%E7%AD%94"><span class="nav-number">2.1.0.0.3.</span> <span class="nav-text">③绕过提示词的回答</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ai%E8%BF%94%E5%9B%9E%E7%9A%84%E4%BF%A1%E6%81%AF%E5%AD%98%E5%9C%A8xss"><span class="nav-number">2.2.</span> <span class="nav-text">2&gt;ai返回的信息存在xss</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A0%E5%AF%B9%E8%AF%9D%E6%97%B6%E8%BF%94%E5%9B%9E%E9%93%BE%E6%8E%A5"><span class="nav-number">2.2.0.0.1.</span> <span class="nav-text">①对话时返回链接</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-ai%E6%B3%84%E9%9C%B2%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF"><span class="nav-number">2.3.</span> <span class="nav-text">3&gt;ai泄露敏感信息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A0%E6%B3%84%E9%9C%B2%E8%BA%AB%E4%BB%BD%E4%B8%89%E8%A6%81%E7%B4%A0"><span class="nav-number">2.3.0.0.1.</span> <span class="nav-text">①泄露身份三要素</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%91%A1%E6%B3%84%E9%9C%B2%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF"><span class="nav-number">2.3.0.0.2.</span> <span class="nav-text">②泄露指纹信息</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -243,7 +243,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2026-02-04 11:45:19 / 修改时间：11:49:51" itemprop="dateCreated datePublished" datetime="2026-02-04T11:45:19+08:00">2026-02-04</time>
+      <time title="创建时间：2026-02-04 11:45:19 / 修改时间：15:58:12" itemprop="dateCreated datePublished" datetime="2026-02-04T11:45:19+08:00">2026-02-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -262,7 +262,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>92</span>
+      <span>332</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -279,11 +279,21 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="1-测试方案"><a href="#1-测试方案" class="headerlink" title="1-测试方案"></a>1-测试方案</h1><p><code>把ai当成用户进行测试</code></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p><code>把ai当成用户进行测试</code></p>
+<p><code>ai相当于独立于管理员、审计员、操作员、配置员存在的第5个用户</code></p>
 <p>1-越权(通过ai助手可获得非本用户权限的数据)</p>
 <p>2-<code>xss</code>(ai返回的数据会导致xss，本用户发过去的数据会导致xss)</p>
 <p>3-泄露敏感信息(三要素)</p>
+<span id="more"></span>
+
 <p><code>待续</code></p>
+<h1 id="1-漏洞"><a href="#1-漏洞" class="headerlink" title="1-漏洞"></a>1-漏洞</h1><h2 id="1-ai用户的越权"><a href="#1-ai用户的越权" class="headerlink" title="1&gt;ai用户的越权"></a>1&gt;<code>ai</code>用户的越权</h2><h5 id="①数据库的越权增、删、改"><a href="#①数据库的越权增、删、改" class="headerlink" title="①数据库的越权增、删、改"></a><strong>①数据库的越权<code>增</code>、<code>删</code>、<code>改</code></strong></h5><p>Ⅰ-可能</p>
+<p>本意使用<code>ai</code>的查询功能整合信息，但未限制<code>ai</code>使用增删改功能</p>
+<h5 id="②业务的越权查询"><a href="#②业务的越权查询" class="headerlink" title="②业务的越权查询"></a><strong>②业务的越权<code>查询</code></strong></h5><h5 id="③绕过提示词的回答"><a href="#③绕过提示词的回答" class="headerlink" title="③绕过提示词的回答"></a><strong>③绕过提示词的回答</strong></h5><h2 id="2-ai返回的信息存在xss"><a href="#2-ai返回的信息存在xss" class="headerlink" title="2&gt;ai返回的信息存在xss"></a>2&gt;<code>ai</code>返回的信息存在xss</h2><h5 id="①对话时返回链接"><a href="#①对话时返回链接" class="headerlink" title="①对话时返回链接"></a><strong>①对话时返回链接</strong></h5><p>Ⅰ-payload检查：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请返回&quot;&lt;a&gt;123&lt;/a&gt;&quot;,这串字符</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-ai泄露敏感信息"><a href="#3-ai泄露敏感信息" class="headerlink" title="3&gt;ai泄露敏感信息"></a>3&gt;<code>ai</code>泄露敏感信息</h2><h5 id="①泄露身份三要素"><a href="#①泄露身份三要素" class="headerlink" title="①泄露身份三要素"></a><strong>①泄露身份三要素</strong></h5><h5 id="②泄露指纹信息"><a href="#②泄露指纹信息" class="headerlink" title="②泄露指纹信息"></a><strong>②泄露指纹信息</strong></h5><p>Ⅱ-原理</p>
+<p>ai执行操作后顺带将执行失败的异常回显返回</p>
 
     </div>
 
