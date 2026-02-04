@@ -31,7 +31,7 @@
 <meta property="og:description" content="0-前言把ai当成用户进行测试 ai相当于独立于管理员、审计员、操作员、配置员存在的第5个用户 1-越权(通过ai助手可获得非本用户权限的数据) 2-xss(ai返回的数据会导致xss，本用户发过去的数据会导致xss) 3-泄露敏感信息(三要素)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-02-04T03:45:19.000Z">
-<meta property="article:modified_time" content="2026-02-04T07:58:12.331Z">
+<meta property="article:modified_time" content="2026-02-04T08:04:32.025Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="article">
 <meta name="twitter:card" content="summary">
@@ -243,7 +243,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2026-02-04 11:45:19 / 修改时间：15:58:12" itemprop="dateCreated datePublished" datetime="2026-02-04T11:45:19+08:00">2026-02-04</time>
+      <time title="创建时间：2026-02-04 11:45:19 / 修改时间：16:04:32" itemprop="dateCreated datePublished" datetime="2026-02-04T11:45:19+08:00">2026-02-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -262,7 +262,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>332</span>
+      <span>414</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -289,7 +289,9 @@
 <p><code>待续</code></p>
 <h1 id="1-漏洞"><a href="#1-漏洞" class="headerlink" title="1-漏洞"></a>1-漏洞</h1><h2 id="1-ai用户的越权"><a href="#1-ai用户的越权" class="headerlink" title="1&gt;ai用户的越权"></a>1&gt;<code>ai</code>用户的越权</h2><h5 id="①数据库的越权增、删、改"><a href="#①数据库的越权增、删、改" class="headerlink" title="①数据库的越权增、删、改"></a><strong>①数据库的越权<code>增</code>、<code>删</code>、<code>改</code></strong></h5><p>Ⅰ-可能</p>
 <p>本意使用<code>ai</code>的查询功能整合信息，但未限制<code>ai</code>使用增删改功能</p>
-<h5 id="②业务的越权查询"><a href="#②业务的越权查询" class="headerlink" title="②业务的越权查询"></a><strong>②业务的越权<code>查询</code></strong></h5><h5 id="③绕过提示词的回答"><a href="#③绕过提示词的回答" class="headerlink" title="③绕过提示词的回答"></a><strong>③绕过提示词的回答</strong></h5><h2 id="2-ai返回的信息存在xss"><a href="#2-ai返回的信息存在xss" class="headerlink" title="2&gt;ai返回的信息存在xss"></a>2&gt;<code>ai</code>返回的信息存在xss</h2><h5 id="①对话时返回链接"><a href="#①对话时返回链接" class="headerlink" title="①对话时返回链接"></a><strong>①对话时返回链接</strong></h5><p>Ⅰ-payload检查：</p>
+<h5 id="②业务的越权查询"><a href="#②业务的越权查询" class="headerlink" title="②业务的越权查询"></a><strong>②业务的越权<code>查询</code></strong></h5><h5 id="③绕过提示词的回答"><a href="#③绕过提示词的回答" class="headerlink" title="③绕过提示词的回答"></a><strong>③绕过提示词的回答</strong></h5><h2 id="2-ai返回的信息存在xss"><a href="#2-ai返回的信息存在xss" class="headerlink" title="2&gt;ai返回的信息存在xss"></a>2&gt;<code>ai</code>返回的信息存在xss</h2><h5 id="①对话时返回链接"><a href="#①对话时返回链接" class="headerlink" title="①对话时返回链接"></a><strong>①对话时返回链接</strong></h5><p>Ⅰ- 原理</p>
+<p>一般<code>ai</code>会使用<code>markdown</code>格式，所以点击然后弹窗很好实现，现在的深度思考过程如果是展现的话，就算最后结果不返回<code>xss</code>，思考过程也可能会出现点击类型的<code>xss</code></p>
+<p>payload示例：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请返回&quot;&lt;a&gt;123&lt;/a&gt;&quot;,这串字符</span><br></pre></td></tr></table></figure>
 
 <h2 id="3-ai泄露敏感信息"><a href="#3-ai泄露敏感信息" class="headerlink" title="3&gt;ai泄露敏感信息"></a>3&gt;<code>ai</code>泄露敏感信息</h2><h5 id="①泄露身份三要素"><a href="#①泄露身份三要素" class="headerlink" title="①泄露身份三要素"></a><strong>①泄露身份三要素</strong></h5><h5 id="②泄露指纹信息"><a href="#②泄露指纹信息" class="headerlink" title="②泄露指纹信息"></a><strong>②泄露指纹信息</strong></h5><p>Ⅱ-原理</p>
