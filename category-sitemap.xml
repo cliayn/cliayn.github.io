@@ -9,8 +9,22 @@
 
 
     <url>
+        <loc>https://cliayn.github.io/categories/machine-learning/</loc>
+        <lastmod>2026-02-07T16:08:35.453Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://cliayn.github.io/categories/Dialogue-model/</loc>
+        <lastmod>2026-02-07T16:06:06.584Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>https://cliayn.github.io/categories/Cybersecurity/</loc>
-        <lastmod>2026-02-04T08:04:32.025Z</lastmod>
+        <lastmod>2026-02-06T06:29:42.709Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -60,13 +74,6 @@
     <url>
         <loc>https://cliayn.github.io/categories/Reverse/</loc>
         <lastmod>2025-06-24T02:58:53.933Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://cliayn.github.io/categories/machine-learning/</loc>
-        <lastmod>2025-03-04T06:50:22.743Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
