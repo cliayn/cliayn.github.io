@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>next主题的自定义文件</title>
+    <url>/2026/02/09/next%E4%B8%BB%E9%A2%98%E7%9A%84%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>记录一下<code>hexo</code>的<code>next</code>主题的一些文件是在哪些位置，以防下次想改又要去找</p>
+<p><code>NexT version 8.21.1</code></p>
+<span id="more"></span>
+
+<h1 id="1-位置"><a href="#1-位置" class="headerlink" title="1-位置"></a>1-位置</h1><h2 id="1-自定义样式"><a href="#1-自定义样式" class="headerlink" title="1&gt;自定义样式"></a>1&gt;自定义样式</h2><p>next主题下面的<code>_config.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.njk</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.njk</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.njk</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.njk</span></span><br><span class="line">  <span class="comment">#postBodyStart: source/_data/post-body-start.njk</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.njk</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.njk</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.njk</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#style: source/_data/styles.styl</span><br><span class="line">用于更改栏目的透明度、鼠标悬停时的效果、优化手机端的体验都可以从这里改</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#variable: source/_data/variables.styl</span><br><span class="line">圆角设置等</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#bodyEnd: source/_data/body-end.njk</span><br><span class="line">页面上新增标签按钮啥的</span><br></pre></td></tr></table></figure>
+
+<p>值得注意的是，<code>source/_data/body-end.njk</code>等这些是<code>blog</code>下面的<code>source</code>不是<code>next</code>主题下的<code>source</code></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\source\_data\body-end.njk</span><br></pre></td></tr></table></figure>
+
+<p>其他的我没用到，暂时就不说了</p>
+<h2 id="2-固有的样式更改"><a href="#2-固有的样式更改" class="headerlink" title="2&gt;固有的样式更改"></a>2&gt;固有的样式更改</h2><h3 id="Hexo-NexT-主题侧边栏"><a href="#Hexo-NexT-主题侧边栏" class="headerlink" title="Hexo NexT 主题侧边栏"></a>Hexo NexT 主题侧边栏</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\themes\next\layout\_partials\sidebar\site-overview.njk</span><br></pre></td></tr></table></figure>
+
+
+
+<p>待续。。。</p>
+]]></content>
+      <categories>
+        <category>article</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>frida的学习</title>
     <url>/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>之前用<code>frida</code>只晓得使用已经构建好的<code>js</code>，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决</p>
@@ -4815,6 +4848,7 @@
 <span id="more"></span>
 
 <p>连接–&gt;<a href="https://github.com/cliayn/cliayn.github.io/blob/master/image/web-js-freely/1.txt">连接函数</a>，断点自己找明文就行</p>
+<p>图源来自：<a href="https://xz.aliyun.com/news/14066">https://xz.aliyun.com/news/14066</a></p>
 <p><img src="/../image/web-js-freely/1.png" alt="该图取自先知社区"></p>
 <p>全局变量如下，例如加密函数a(t)，t是明码：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">window.enc=a</span><br><span class="line">//如果复杂则用下面的</span><br><span class="line"></span><br><span class="line">window.enc=function()&#123;xxxxx&#125;</span><br></pre></td></tr></table></figure>
@@ -4864,7 +4898,17 @@
 </blockquote>
 </blockquote>
 <p><img src="/../image/web-js-freely/2.jpg"></p>
-<h1 id="本地更改js文件"><a href="#本地更改js文件" class="headerlink" title="本地更改js文件"></a>本地更改js文件</h1><p>1&gt;无需多言，看得懂，会改，哪基本前端就没有什么秘密了</p>
+<h1 id="本地更改js文件"><a href="#本地更改js文件" class="headerlink" title="本地更改js文件"></a>本地更改js文件</h1><p>1&gt;看得懂，会改，基本前端就没有什么秘密了</p>
+<h3 id="1-高度混淆"><a href="#1-高度混淆" class="headerlink" title="[1]高度混淆"></a>[1]高度混淆</h3><h5 id="·1-启动器断点调试-堆栈溯源排查"><a href="#·1-启动器断点调试-堆栈溯源排查" class="headerlink" title="·1.启动器断点调试&#x2F;堆栈溯源排查"></a>·1.启动器断点调试&#x2F;堆栈溯源排查</h5><h6 id="工具："><a href="#工具：" class="headerlink" title="工具："></a><strong>工具：</strong></h6><ol>
+<li><strong>JavaScript Deobfuscator</strong> - 反混淆</li>
+<li><a href="https://github.com/jiyulany/Geetest-AST-">Geetest-AST-</a></li>
+</ol>
+<h3 id="2-多层反调试"><a href="#2-多层反调试" class="headerlink" title="[2]多层反调试"></a>[2]多层反调试</h3><h5 id="·1-debugger反调试"><a href="#·1-debugger反调试" class="headerlink" title="·1.debugger反调试"></a>·1.debugger反调试</h5><p>​			忽略或者修改存在debugger的源代码即可</p>
+<h5 id="·2-调试强制清空内容"><a href="#·2-调试强制清空内容" class="headerlink" title="·2.调试强制清空内容"></a>·2.调试强制清空内容</h5><p>​			找到dom</p>
+<h6 id="常见函数："><a href="#常见函数：" class="headerlink" title="常见函数："></a>常见函数：</h6><p>跳转、清空、卡死debugger</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> <span class="string">&quot;innerHTML&quot;</span>      <span class="comment">// 清空页面</span></span><br><span class="line">示例：<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">innerHTML</span> = <span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="number">2.</span> <span class="string">&quot;style&quot;</span>         <span class="comment">// 设置样式（如隐藏）</span></span><br><span class="line">示例：<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;none&quot;</span>;</span><br><span class="line"><span class="number">3.</span> <span class="string">&quot;onclick&quot;</span>       <span class="comment">// 设置点击事件</span></span><br><span class="line">示例：<span class="variable language_">document</span>[<span class="string">&#x27;body&#x27;</span>][<span class="title function_">a3_0x5ba0</span>(<span class="string">&#x27;0x2a1&#x27;</span>)] = <span class="keyword">function</span>(<span class="params"></span>)&#123;<span class="keyword">return</span> <span class="literal">false</span>;&#125;;</span><br><span class="line">示例：<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;<span class="keyword">return</span> <span class="literal">false</span>;&#125;;</span><br><span class="line"><span class="number">4.</span> <span class="string">&quot;onload&quot;</span>        <span class="comment">// 设置加载事件</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// 页面加载完成后执行反调试代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;页面加载完成，开始反调试...&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(检查到调试器())&#123;</span><br><span class="line">        <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&quot;about:blank&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="number">5.</span> <span class="string">&quot;href&quot;</span>          <span class="comment">// 如果是 location 对象</span></span><br><span class="line">示例：<span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&quot;about:blank&quot;</span>;</span><br><span class="line"><span class="number">6.</span> <span class="string">&quot;display&quot;</span>       <span class="comment">// 如果是 style.display</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;none&quot;</span>;</span><br><span class="line"><span class="number">7.</span> <span class="string">&quot;window&quot;</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&quot;about:blank&quot;</span>;</span><br><span class="line"><span class="number">8.</span> <span class="string">&quot;debugger&quot;</span></span><br><span class="line"><span class="comment">// 示例1：简单的无限debugger</span></span><br><span class="line">(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="keyword">debugger</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>​			</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
