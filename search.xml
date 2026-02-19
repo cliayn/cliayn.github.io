@@ -1,6 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>国密相关</title>
+    <url>/2026/02/19/%E5%9B%BD%E5%AF%86%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	抓包抓不到<code>TLCP</code>，记录一下国密相关的内容</p>
+<p>主要区别：<code>TLCP</code>四次交互后握手完成；<code>TLS</code>三次交互后握手完成</p>
+<table>
+<thead>
+<tr>
+<th><strong>维度</strong></th>
+<th><strong>TLCP (国密 SSL)</strong></th>
+<th><strong>TLS (标准)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>加密算法</strong></td>
+<td><strong>必须使用国密算法</strong> (SM2, SM3, SM4)</td>
+<td>使用国际算法 (RSA, ECDSA, AES, SHA)</td>
+</tr>
+<tr>
+<td><strong>证书要求</strong></td>
+<td><strong>双证书体系</strong>：必须包含签名证书和加密证书</td>
+<td><strong>单证书体系</strong>：一个证书既能签名也能加密</td>
+</tr>
+<tr>
+<td><strong>协议版本号</strong></td>
+<td>固定为 <code>0x0101</code></td>
+<td>TLS 1.2 为 <code>0x0303</code>，TLS 1.3 为 <code>0x0304</code></td>
+</tr>
+<tr>
+<td><strong>密钥交换</strong></td>
+<td>强制要求服务端提供加密证书用于预主密钥（Pre-master secret）的传递</td>
+<td>多采用 ECDHE 等前向安全机制，或 RSA 密钥交换</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<p>学习文章：<br><a href="https://cn-sec.com/archives/3849777.html">国密SSL系统抓包及TLCP分析 | CN-SEC 中文网</a>、<a href="https://blog.lyl.us.kg/index.php/archives/41/">手机APP抓取国密TLCP协议 - Hello World</a></p>
+<h1 id="1-抓包测试"><a href="#1-抓包测试" class="headerlink" title="1-抓包测试"></a>1-抓包测试</h1><h3 id="代理工具"><a href="#代理工具" class="headerlink" title="代理工具"></a>代理工具</h3><p><a href="https://www.gmssl.cn/gmssl/index.jsp">GMSSL - 国密SSL实验室</a>、<a href="https://github.com/go-gost/gost/releases/">gost</a>、<a href="https://github.com/2dust/v2rayN/releases/">v2rayn</a></p>
+<h3 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h3><p><a href="https://www.wireshark.org/download.html">wireshark</a></p>
+<p>待续。。。</p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常见加密区别</title>
+    <url>/2026/02/17/%E5%B8%B8%E8%A7%81%E5%8A%A0%E5%AF%86%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	之前认为<code>sm2</code>和<code>RSA</code>的<strong>公钥密码体系</strong>、<code>sm4</code>和<code>aes</code>的<strong>对称分组密码算法</strong>、<code>sm3</code>和<code>SHA-256</code>的<strong>密码哈希函数</strong>这些差不多，后面发现这些在表现效果上虽然差不多，但一些底层原理不一样可能会影响到一部分的应用形式；</p>
+<p>​	例如：<code>sm2</code>基于椭圆曲线离散对数，虽然也是对应两个数，但结果是点与线的对应关系，底层与<code>RSA</code>区别在于，<code>RSA</code>是两个数对应的值；导致的应用效果差别是：<code>RSA</code>密钥长，所以只能加密短数字(密钥)，<code>sm2</code>密钥短，能直接加密请求体</p>
+<span id="more"></span>
+
+<h1 id="1-公钥密码体系"><a href="#1-公钥密码体系" class="headerlink" title="1-公钥密码体系"></a>1-公钥密码体系</h1><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">RSA</th>
+<th align="left">SM2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>数学基础</strong></td>
+<td align="left">大整数分解</td>
+<td align="left">椭圆曲线离散对数</td>
+</tr>
+<tr>
+<td align="left"><strong>密钥长度</strong></td>
+<td align="left">很长（通常 2048 位或 3072 位）</td>
+<td align="left">很短（通常 256 位）</td>
+</tr>
+<tr>
+<td align="left"><strong>性能</strong></td>
+<td align="left">慢（尤其私钥操作）</td>
+<td align="left">快（尤其私钥操作）</td>
+</tr>
+<tr>
+<td align="left"><strong>证书格式</strong></td>
+<td align="left">传统<code>X.509</code> 证书多用 <code>RSA</code></td>
+<td align="left">国密证书专用 <code>OID</code> 标识</td>
+</tr>
+<tr>
+<td align="left"><strong>加密能力</strong></td>
+<td align="left">只能加密短数据</td>
+<td align="left">混合加密，可加密任意长数据</td>
+</tr>
+<tr>
+<td align="left"><strong>标准方程</strong></td>
+<td align="left">y^2 &#x3D; x^3 + ax + b \ mod p  (无穷远点 <em>O</em>)</td>
+<td align="left"><code>c</code>&#x3D;<code>m</code>^<code>e</code> <code>mod</code> <code>n</code> 和 <code>m</code>&#x3D;<code>c</code>^<code>d</code> <code>mod</code> <code>n</code>（模幂运算）</td>
+</tr>
+</tbody></table>
+<h1 id="2-对称分组密码算法"><a href="#2-对称分组密码算法" class="headerlink" title="2-对称分组密码算法"></a>2-对称分组密码算法</h1><h1 id="3-密码哈希函数"><a href="#3-密码哈希函数" class="headerlink" title="3-密码哈希函数"></a>3-密码哈希函数</h1>]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>next主题的自定义文件</title>
     <url>/2026/02/09/next%E4%B8%BB%E9%A2%98%E7%9A%84%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>记录一下<code>hexo</code>的<code>next</code>主题的一些文件是在哪些位置，以防下次想改又要去找</p>
@@ -78,9 +180,9 @@
     <url>/2026/02/07/%E7%AB%AF%E5%88%B0%E7%AB%AF%E8%AF%AD%E9%9F%B3%E5%AF%B9%E8%AF%9D%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>端到端语音对话模型的<code>github</code>项目：<br><a href="https://github.com/zai-org/GLM-4-Voice">GLM-4-Voice</a>、<a href="https://github.com/gpt-omni/mini-omni2">mini-omni2</a>、<a href="https://github.com/ictnlp/LLaMA-Omni2">LLaMA-Omni2</a></p>
 <p><strong>端到端语音对话模型</strong>是指一种直接从原始语音输入生成对应语音或文本响应的完整人工智能系统。它的核心思想是<strong>用一个统一的模型处理整个对话流程</strong>，而不是依赖多个独立的模块拼接</p>
-<p>注：omni代表“全模态”；</p>
+<p>注：omni代表“全模态”；拉取镜像最好用<code>socks5</code>协议或者<code>proxychains</code></p>
 <p><strong>“Omni” 模型的不同之处在于：</strong> 它把所有模态（听、说、读、写、看）全部塞进了一个大脑里进行<strong>端到端（End-to-End）</strong>处理。它直接理解音频信号，直接生成音频流。</p>
-<p>一块30系列的<code>8G</code>显卡正好能运行量化版本<code>int4</code>	</p>
+<p>一块30系列的<code>8G</code>显卡正好能运行量化版本<code>int4</code>或者<code>Q4_K_M</code>的量化。	</p>
 <span id="more"></span>
 
 <h1 id="1-mini-omni2"><a href="#1-mini-omni2" class="headerlink" title="1-mini-omni2"></a>1-mini-omni2</h1><p><code>conda</code>拉取完直接跑就行服务和网页即可</p>
@@ -125,7 +227,8 @@
 
 <h2 id="2-添加向量数据库"><a href="#2-添加向量数据库" class="headerlink" title="2&gt;添加向量数据库"></a>2&gt;添加向量数据库</h2><h3 id="①后台同步转写"><a href="#①后台同步转写" class="headerlink" title="①后台同步转写"></a>①后台同步转写</h3><p>输入（如果是语音，需转为文本—多一个步骤）拿去向量数据库检索，检索出来的内容拼接到<code>Prompt</code>里面</p>
 <h3 id="②语义向量直接匹配"><a href="#②语义向量直接匹配" class="headerlink" title="②语义向量直接匹配"></a>②语义向量直接匹配</h3><p>非常炸裂，将概念的文字转换成抽象的感觉再去匹配</p>
-<h3 id="两者方案对比"><a href="#两者方案对比" class="headerlink" title="两者方案对比"></a>两者方案对比</h3><p>**CLAP (纯向量方案)**：处理 5 秒音频大约需要 <strong>20-50ms</strong>。</p>
+<h3 id="两者方案对比"><a href="#两者方案对比" class="headerlink" title="两者方案对比"></a>两者方案对比</h3><p><code>下面的处理速度来自ai的推测：</code></p>
+<p>**CLAP (纯向量方案)**：处理 5 秒音频大约需要 <strong>20-50ms</strong>。</p>
 <p>**Whisper Tiny (转写方案)**：处理 5 秒音频大约需要 <strong>50-100ms</strong>。</p>
 <table>
 <thead>
@@ -337,6 +440,7 @@
     <url>/2026/01/30/next%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>经过面试学到了如下需要深入学习的技术和扩展的方面，简单记录如下：</p>
 <p>1-frida的使用（动态 dump dex）	–⑤</p>
+<p>​	2&gt;ida动态调试				 –⑥</p>
 <p>2-oss存储桶漏洞相关利用</p>
 <p>3-SpringBlade微服务框架</p>
 <p>4-反序列化框架的学习（未手动找到过这种漏洞，被动扫描出一次，特征：参数为object）</p>
@@ -774,7 +878,10 @@
 <p><a href="https://github.com/topjohnwu/Magisk/releases">Magisk 官方下载地址(用于root)</a></p>
 <p><a href="https://github.com/anaelle-dev/P7P_Magisk_init_boot">获取 <code>init_boot.img</code> 的第二个方法（注意版本号对应！）</a></p>
 <h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a><strong>操作流程</strong>：</h2><p><a href="https://post.smzdm.com/p/an9p9670/">24 年，Google Pixel 7 国内使用指南_手机_什么值得买</a></p>
-<h2 id="简要："><a href="#简要：" class="headerlink" title="简要："></a>简要：</h2><h3 id="解锁-Bootloader"><a href="#解锁-Bootloader" class="headerlink" title="解锁 Bootloader"></a>解锁 Bootloader</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># 重启手机 进入 bootloader 模式</span><br><span class="line">adb reboot bootloader</span><br><span class="line"></span><br><span class="line"># 进入 bootloader 模式之后</span><br><span class="line">fastboot flashing unlock</span><br><span class="line"></span><br><span class="line"># 没有重启就自己重启</span><br><span class="line">fastboot reboot</span><br></pre></td></tr></table></figure>
+<h2 id="简要："><a href="#简要：" class="headerlink" title="简要："></a>简要：</h2><h2 id="镜像选择"><a href="#镜像选择" class="headerlink" title="镜像选择"></a>镜像选择</h2><p> 推荐使用 <strong>Android 14 (AP1A&#x2F;AP2A 系列)</strong> 的稳定版</p>
+<p> 避免 <code>Verizon</code> 版本、运营商定制版</p>
+<p><code>完整OTA映射</code>与<code>factory</code>的区别，<code>OTA</code>主要用于救砖或全量升级；</p>
+<h3 id="解锁-Bootloader"><a href="#解锁-Bootloader" class="headerlink" title="解锁 Bootloader"></a>解锁 Bootloader</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line"># 重启手机 进入 bootloader 模式</span><br><span class="line">adb reboot bootloader</span><br><span class="line"></span><br><span class="line"># 进入 bootloader 模式之后</span><br><span class="line">fastboot flashing unlock</span><br><span class="line"></span><br><span class="line"># 没有重启就自己重启</span><br><span class="line">fastboot reboot</span><br></pre></td></tr></table></figure>
 
 <h3 id="下载线刷出厂映像"><a href="#下载线刷出厂映像" class="headerlink" title="下载线刷出厂映像"></a>下载线刷出厂映像</h3><p><a href="https://developers.google.com/android/images?hl=zh-cn">pixel出厂映像（注意版本号对应！）</a></p>
 <p><strong>#如果有代理可以选择flash进行线上刷机#</strong></p>
@@ -792,6 +899,32 @@
 <p>检查是否可以赋予root权限：</p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#电脑使用</span><br><span class="line">adb shell</span><br><span class="line">su</span><br><span class="line"></span><br><span class="line">#手机点击确定即可</span><br></pre></td></tr></table></figure>
 
+<h2 id="其余设置-可选"><a href="#其余设置-可选" class="headerlink" title="其余设置(可选)"></a>其余设置(可选)</h2><h3 id="设置新的国内检测地址"><a href="#设置新的国内检测地址" class="headerlink" title="设置新的国内检测地址"></a>设置新的国内检测地址</h3><p>用于解决wifi上的<code>!</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 设置 HTTP 地址</span><br><span class="line">adb shell settings put global captive_portal_http_url http://connectivitycheck.platform.hicloud.com/generate_204</span><br><span class="line"></span><br><span class="line"># 设置 HTTPS 地址</span><br><span class="line">adb shell settings put global captive_portal_https_url https://connectivitycheck.platform.hicloud.com/generate_204</span><br><span class="line"></span><br><span class="line"># 查看检测地址</span><br><span class="line">adb shell settings get global captive_portal_https_url</span><br><span class="line"></span><br><span class="line"># 删除地址</span><br><span class="line">adb shell settings delete global captive_portal_http_url</span><br><span class="line">adb shell settings delete global captive_portal_https_url</span><br></pre></td></tr></table></figure>
+
+<p><strong>开关飞行模式</strong> 一次</p>
+<p>下面是<code>ai</code>给的地址，我用了第二个能用；</p>
+<table>
+<thead>
+<tr>
+<th><strong>提供方</strong></th>
+<th><strong>地址</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>魅族</strong></td>
+<td><code>http://micaptive.meizu.com/generate_204</code></td>
+</tr>
+<tr>
+<td><strong>华为</strong></td>
+<td><code>http://connectivitycheck.platform.hicloud.com/generate_204</code></td>
+</tr>
+<tr>
+<td><strong>高通 (中国)</strong></td>
+<td><code>http://connectivitycheck.gstatic.com.cn/generate_204</code></td>
+</tr>
+</tbody></table>
+<h2 id="阻止更新"><a href="#阻止更新" class="headerlink" title="阻止更新"></a>阻止更新</h2><p>开发者模式禁用系统的自动更新</p>
 <h1 id="2-绕过"><a href="#2-绕过" class="headerlink" title="2-绕过"></a>2-绕过</h1><p>参考文章</p>
 <p><a href="https://zhuanlan.zhihu.com/p/470468650"><code>隐藏Root - Zygisk版面具过银行App等Root检测，妙用Shamiko模块 - 知乎</code></a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/564699416"><code>一例APP绕过root检测解密 - 知乎</code></a></p>
@@ -804,7 +937,8 @@
 <p>安卓 10+ 可能出现 “permission denied”，需要：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">su</span><br><span class="line">setenforce 0    <span class="comment"># 有些 ROM 必须关闭 SELinux</span></span><br><span class="line">getenforce</span><br></pre></td></tr></table></figure>
 
-<h2 id="绕过root"><a href="#绕过root" class="headerlink" title="绕过root"></a>绕过root</h2><p><strong>基础方案（过于久远）</strong>：<br> <code>Zygisk（Magisk 设置开启） + Zygisk-Assistant（或 Shamiko） + safetynet-fix（过于久远） + MagiskHidePropsConf（过于久远）</code></p>
+<h2 id="绕过root"><a href="#绕过root" class="headerlink" title="绕过root"></a>绕过root</h2><h3 id="工具推荐："><a href="#工具推荐：" class="headerlink" title="工具推荐："></a><strong>工具推荐：</strong></h3><p>​	<a href="https://github.com/Dr-TSNG/ZygiskNext">ZygiskNext</a>(绕过root)</p>
+<p><strong>基础方案（过于久远）</strong>：<br> <code>Zygisk（Magisk 设置开启） + Zygisk-Assistant（或 Shamiko） + safetynet-fix（过于久远） + MagiskHidePropsConf（过于久远）</code></p>
 <p><strong>通用方案：</strong></p>
 <p>文章介绍：<a href="https://www.cnblogs.com/ranbox/p/18461031">app逆向抓包技巧：ROOT检测绕过 - 七夜魔手 - 博客园</a></p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">frida -U -f com.example.app -l hook.js</span><br></pre></td></tr></table></figure>
