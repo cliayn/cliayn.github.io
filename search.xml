@@ -34,11 +34,10 @@
 <td>多采用 ECDHE 等前向安全机制，或 RSA 密钥交换</td>
 </tr>
 </tbody></table>
-<p><a href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/json/%E6%B9%96%E5%8D%97%E7%94%B5%E5%8A%9B2025%E5%B9%B4%E4%BF%A1%E6%81%AF%E5%AE%89%E8%A7%84%E9%A2%98%E5%BA%93.json">湖南电力2025年信息安规题库</a></p>
 <span id="more"></span>
 
 <p>学习文章：<br><a href="https://cn-sec.com/archives/3849777.html">国密SSL系统抓包及TLCP分析 | CN-SEC 中文网</a>、<a href="https://blog.lyl.us.kg/index.php/archives/41/">手机APP抓取国密TLCP协议 - Hello World</a></p>
-<h1 id="1-抓包测试"><a href="#1-抓包测试" class="headerlink" title="1-抓包测试"></a>1-抓包测试</h1><h3 id="代理工具"><a href="#代理工具" class="headerlink" title="代理工具"></a>代理工具</h3><p><a href="https://www.gmssl.cn/gmssl/index.jsp">GMSSL - 国密SSL实验室</a>、<a href="https://github.com/go-gost/gost/releases/">gost</a>、<a href="https://github.com/2dust/v2rayN/releases/">v2rayn</a></p>
+<h1 id="1-抓包测试"><a href="#1-抓包测试" class="headerlink" title="1-抓包测试"></a>1-抓包测试</h1><h3 id="代理工具"><a href="#代理工具" class="headerlink" title="代理工具"></a>代理工具</h3><p><a href="https://www.gmssl.cn/gmssl/index.jsp">GMSSL - 国密SSL实验室</a>&#x2F;<a href="https://www.gmproxy.cn/">GMProxy 国密开发测试工具</a>、<a href="https://github.com/go-gost/gost/releases/">gost</a>、<a href="https://github.com/2dust/v2rayN/releases/">v2rayn</a></p>
 <h3 id="抓包工具"><a href="#抓包工具" class="headerlink" title="抓包工具"></a>抓包工具</h3><p><a href="https://www.wireshark.org/download.html">wireshark</a></p>
 <p>待续。。。</p>
 ]]></content>
@@ -140,7 +139,8 @@
     <title>frida的学习</title>
     <url>/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>之前用<code>frida</code>只晓得使用已经构建好的<code>js</code>，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决</p>
-<p><a href="https://www.bilibili.com/video/BV1ZT421k7xw/">2024最新版Frida逆向与抓包实战教程，一周学完帮你少走99%弯路！【Python入门&#x2F;Frida逆向&#x2F;Hook入门&#x2F;APP抓包】_哔哩哔哩_bilibili</a></p>
+<p><a href="https://www.bilibili.com/video/BV1rsZaBBE3V/?vd_source=62ec56a0e96ac07702343ec20500f1cc">付费绝密开源 | 小肩膀出品安卓逆向课程_哔哩哔哩_bilibili</a></p>
+<p><a href="https://www.bilibili.com/video/BV1ZT421k7xw/">Python入门&#x2F;Frida逆向&#x2F;Hook入门&#x2F;APP抓包 哔哩哔哩_bilibili</a></p>
 <span id="more"></span>
 
 <p>工具：frida+jadx&#x2F;</p>
@@ -184,6 +184,7 @@
 <p>注：omni代表“全模态”；拉取镜像最好用<code>socks5</code>协议或者<code>proxychains</code></p>
 <p><strong>“Omni” 模型的不同之处在于：</strong> 它把所有模态（听、说、读、写、看）全部塞进了一个大脑里进行<strong>端到端（End-to-End）</strong>处理。它直接理解音频信号，直接生成音频流。</p>
 <p>一块30系列的<code>8G</code>显卡正好能运行量化版本<code>int4</code>或者<code>Q4_K_M</code>的量化。	</p>
+<p><a href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/json/%E6%B9%96%E5%8D%97%E7%94%B5%E5%8A%9B2025%E5%B9%B4%E4%BF%A1%E6%81%AF%E5%AE%89%E8%A7%84%E9%A2%98%E5%BA%93.json">湖南电力2025年信息安规题库</a></p>
 <span id="more"></span>
 
 <h1 id="1-mini-omni2"><a href="#1-mini-omni2" class="headerlink" title="1-mini-omni2"></a>1-mini-omni2</h1><p><code>conda</code>拉取完直接跑就行服务和网页即可</p>
