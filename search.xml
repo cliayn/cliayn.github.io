@@ -144,7 +144,7 @@
 <span id="more"></span>
 
 <p>工具：frida+jadx&#x2F;</p>
-<h1 id="1-Java层hook"><a href="#1-Java层hook" class="headerlink" title="1-Java层hook"></a>1-Java层hook</h1><p><code>js</code>是弱参数类型，<code>java</code>是强参数类型，注意转换</p>
+<h1 id="1-Java层hook-py"><a href="#1-Java层hook-py" class="headerlink" title="1-Java层hook(py)"></a>1-Java层hook(py)</h1><p><code>js</code>是弱参数类型，<code>java</code>是强参数类型，注意转换</p>
 <h2 id="普通方法"><a href="#普通方法" class="headerlink" title="普通方法"></a>普通方法</h2><h3 id="1-常规hook："><a href="#1-常规hook：" class="headerlink" title="1&gt;常规hook："></a>1&gt;常规hook：</h3><p><code>var</code> 类名 &#x3D; <code>java.use</code>(包名.类名);</p>
 <p><strong>类名.方法名.implementation &#x3D; 具体function函数</strong></p>
 <h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#特征--构造方法</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">xxx</span>();</span><br></pre></td></tr></table></figure>
@@ -168,7 +168,35 @@
 <h5 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h5><p><code>可以反射给其他语言例如C++来操作</code></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#类的构造器</span><br><span class="line">var clazz = Java.use(&#x27;java.lang.Class&#x27;);</span><br><span class="line">类名1.方法名.overload(&quot;com.xxx.xxx.对象&quot;).implementation = function(obj)&#123;</span><br><span class="line">	#利用java.cast得到类id</span><br><span class="line">	#getDeclaredField(&#x27;num&#x27;);得到字段id</span><br><span class="line">	var 类的id==&gt;test1 = Java.cast(对象.getClass(),clazz).getDeclaredField(&#x27;num&#x27;);</span><br><span class="line">	#参数设置，为可更改</span><br><span class="line">	test1.setAccessible(true);</span><br><span class="line">	var value = test1.get(实例化对象test);</span><br><span class="line">	console.log(value);</span><br><span class="line">	#更改属性类型的值</span><br><span class="line">	test1.setInt(实例化对象test,更改的int类型的值);</span><br><span class="line">	return this.test(实例化对象test);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
 
-]]></content>
+<h1 id="2-实际生产环境"><a href="#2-实际生产环境" class="headerlink" title="2-实际生产环境"></a>2-实际生产环境</h1><p><code>逆向思路与web的js逆向相似，但存在难点如下</code></p>
+<p>①app自杀逻辑Native 层（C&#x2F;C++）</p>
+<p>②模拟器架构不匹配</p>
+<p>③</p>
+<h2 id="常见知识学习"><a href="#常见知识学习" class="headerlink" title="常见知识学习"></a>常见知识学习</h2><h3 id="1–-常见调用栈"><a href="#1–-常见调用栈" class="headerlink" title="1–&gt;常见调用栈"></a>1–&gt;常见调用栈</h3><h6 id="①android-开头的类是-Android-系统自带的-SDK-标准库（系统-UI-框架库）"><a href="#①android-开头的类是-Android-系统自带的-SDK-标准库（系统-UI-框架库）" class="headerlink" title="①android.* 开头的类是 Android 系统自带的 SDK 标准库（系统 UI&#x2F;框架库）"></a>①<code>android.*</code> 开头的类是 Android 系统自带的 <strong>SDK 标准库（系统 UI&#x2F;框架库）</strong></h6><h6 id="②非-android-开头的类（例如-com-netease-nis-）：-这些是-App-自身的代码-或-第三方加固-安全-SDK-的代码"><a href="#②非-android-开头的类（例如-com-netease-nis-）：-这些是-App-自身的代码-或-第三方加固-安全-SDK-的代码" class="headerlink" title="②非 android 开头的类（例如 com.netease.nis.\*）： 这些是 App 自身的代码 或 第三方加固&#x2F;安全 SDK 的代码"></a>②<strong>非 <code>android</code> 开头的类（例如 <code>com.netease.nis.\*</code>）：</strong> 这些是 <strong>App 自身的代码</strong> 或 <strong>第三方加固&#x2F;安全 SDK 的代码</strong></h6><p>当 App 被“加壳”或集成了安全检测时，你会看到这些特定公司的包名。</p>
+<ul>
+<li><strong><code>com.netease.nis.\*</code> &#x2F; <code>com.netease.secure.\*</code></strong>: <strong>网易易盾</strong>。</li>
+<li><strong><code>com.tencent.StubShell.\*</code> &#x2F; <code>com.tencent.msdk.\*</code></strong>: <strong>腾讯乐固&#x2F;MSDK</strong>。</li>
+<li><strong><code>com.secshell.\*</code> &#x2F; <code>com.secneo.\*</code></strong>: <strong>梆梆加固</strong>。</li>
+<li><strong><code>com.aliyun.nex.\*</code></strong>: <strong>阿里聚安全</strong>。</li>
+<li><strong><code>com.qihoo.util.\*</code> &#x2F; <code>com.qihoo360.\*</code></strong>: <strong>360 加固</strong>。</li>
+</ul>
+<h6 id="③java-lang-是java的公开接口，有些脚本可以打印出app调用了哪些jdk的类"><a href="#③java-lang-是java的公开接口，有些脚本可以打印出app调用了哪些jdk的类" class="headerlink" title="③java.lang.*是java的公开接口，有些脚本可以打印出app调用了哪些jdk的类"></a>③<code>java.lang.*</code>是java的公开接口，有些脚本可以打印出app调用了哪些jdk的类</h6><h6 id="④dalvik-system-VMStack-getThreadStackTrace-Java-必须请求-Android-虚拟机（Dalvik-或-ART）-帮忙；虚拟机底层逻辑-dalvik-libcore"><a href="#④dalvik-system-VMStack-getThreadStackTrace-Java-必须请求-Android-虚拟机（Dalvik-或-ART）-帮忙；虚拟机底层逻辑-dalvik-libcore" class="headerlink" title="④dalvik.system.VMStack.getThreadStackTrace: Java 必须请求 Android 虚拟机（Dalvik 或 ART） 帮忙；虚拟机底层逻辑 (dalvik.* &#x2F; libcore.*)"></a>④<code>dalvik.system.VMStack.getThreadStackTrace</code><strong>:</strong> Java 必须请求 <strong>Android 虚拟机（Dalvik 或 ART）</strong> 帮忙；虚拟机底层逻辑 (<code>dalvik.*</code> &#x2F; <code>libcore.*</code>)</h6><p>这些属于 Android 运行环境（ART&#x2F;Dalvik）的最底层。</p>
+<ul>
+<li><strong><code>dalvik.system.VMStack</code></strong>: 负责处理虚拟机内部的堆栈，通常出现在调用栈的最顶部（因为你在获取堆栈）。</li>
+<li><strong><code>dalvik.system.DexClassLoader</code></strong>: 说明 App 正在动态加载插件或 <code>.dex</code> 文件（很多加固包会用到）。</li>
+<li><strong><code>libcore.io.\*</code></strong>: 处理底层的底层文件读写、网络连接。</li>
+</ul>
+<h6 id="⑤okhttp3-常见的第三方功能库"><a href="#⑤okhttp3-常见的第三方功能库" class="headerlink" title="⑤okhttp3.*常见的第三方功能库"></a>⑤<code>okhttp3.*</code>常见的第三方功能库</h6><p>如果调用栈里出现这些，说明正在执行某些具体功能（如网络请求、图片加载）：</p>
+<ul>
+<li><strong><code>okhttp3.\*</code> &#x2F; <code>retrofit2.\*</code></strong>: 正在进行网络请求。</li>
+<li><strong><code>com.google.gson.\*</code> &#x2F; <code>com.alibaba.fastjson.\*</code></strong>: 正在解析 JSON 数据。</li>
+<li><strong><code>com.bumptech.glide.\*</code></strong>: 正在加载图片。</li>
+<li><strong><code>kotlinx.coroutines.\*</code></strong>: 正在执行 Kotlin 协程（异步任务）。</li>
+</ul>
+<h6 id="⑥com-miui-com-samsung-等厂商自定义框架"><a href="#⑥com-miui-com-samsung-等厂商自定义框架" class="headerlink" title="⑥com.miui.*, com.samsung.* 等厂商自定义框架"></a>⑥<code>com.miui.*</code>, <code>com.samsung.*</code> 等厂商自定义框架</h6><h3 id="2–-因果链条"><a href="#2–-因果链条" class="headerlink" title="2–&gt;因果链条"></a>2–&gt;因果链条</h3><p>①调用栈的顺序是<strong>“后进先出”</strong>：最上面的是<strong>当前正在执行</strong>的方法、最下面的是<strong>最初启动</strong>的方法</p>
+<h3 id="3–-实用手法"><a href="#3–-实用手法" class="headerlink" title="3–&gt;实用手法"></a>3–&gt;实用手法</h3><p>①<strong>根据”1–&gt;”:<strong>可以</strong>忽略</strong>所有 <code>android.*</code> 或 <code>java.*</code> 开头的行</p>
+<p>②<strong>根据”2–&gt;”:<strong>可以优先断定在上面的是</strong>执行</strong>单位，直接<strong>hook执行方法</strong></p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><h3 id="1"><a href="#1" class="headerlink" title="1&gt;"></a>1&gt;</h3>]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
@@ -449,10 +477,11 @@
 <p>5-双向认证(mTLS)		–①</p>
 <span id="more"></span>
 
-<h1 id="1-frida的去壳"><a href="#1-frida的去壳" class="headerlink" title="1-frida的去壳"></a>1-frida的去壳</h1><p><strong><code>前言</code></strong></p>
+<h1 id="1-frida的去壳使用"><a href="#1-frida的去壳使用" class="headerlink" title="1-frida的去壳使用"></a>1-frida的<del><code>去壳</code></del>使用</h1><p><strong><code>前言</code></strong></p>
 <p><code>开发环境下的app一般属于无需去壳的，生产环境的app大多加固混淆以及反调试，UAT环境应该是用来保护证书的</code></p>
-<p><code>所以要学习去壳从而可以删除里面的反调试之类的代码，然后重打包App，进而可以用objection进行排查类找到hook点</code></p>
-<p>学习文章：</p>
+<p><del>所以要学习去壳从而可以删除里面的反调试之类的代码，然后重打包App，进而可以用objection进行排查类找到hook点</del></p>
+<p><code>好像不需要去壳也能hook手机app，只是找类/方法麻烦了一点</code></p>
+<h3 id="跳转到frida的学习以下有关1的信息仅记录开始状态"><a href="#跳转到frida的学习以下有关1的信息仅记录开始状态" class="headerlink" title="跳转到frida的学习以下有关1的信息仅记录开始状态"></a>跳转到<a href="https://cliayn.github.io/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/">frida的学习</a>以下有关1的信息仅记录开始状态</h3><p>学习文章：</p>
 <p><a href="https://www.anquanke.com/post/id/197657#h3-12">实用FRIDA进阶：内存漫游、hook anywhere、抓包-安全KER - 安全资讯平台</a></p>
 <p><a href="https://juejin.cn/post/6962096676576165918">Android脱壳之整体脱壳原理与实践这里所说的壳都是指dex加壳,不涉及到so的加壳。 涉及到的代码分析基于AOSP - 掘金</a></p>
 <p><strong>地狱笑话</strong>：<code>IDA 是尸检||Frida 是活体解剖</code></p>
