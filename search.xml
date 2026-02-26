@@ -136,7 +136,7 @@
       </tags>
   </entry>
   <entry>
-    <title>frida的学习</title>
+    <title>frida和逆向的学习</title>
     <url>/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>之前用<code>frida</code>只晓得使用已经构建好的<code>js</code>，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决，可以去看大佬们的<a href="https://github.com/hookmaster/frida-all-in-one"><code>frida</code>操作手册</a>，哔哩哔哩上也有课程<a href="https://www.bilibili.com/video/BV1rsZaBBE3V/?vd_source=62ec56a0e96ac07702343ec20500f1cc">小肩膀出品安卓逆向课程_哔哩哔哩_bilibili</a>、<a href="https://www.bilibili.com/video/BV1ZT421k7xw/">Python入门&#x2F;Frida逆向 哔哩哔哩_bilibili</a></p>
 <p>写在前言：单纯绕过root的话直接拖入白名单让它检测不到<code>su</code>环境即可</p>
@@ -262,13 +262,44 @@
 </tbody></table>
 <h3 id="2-找关键代码"><a href="#2-找关键代码" class="headerlink" title="2&gt;找关键代码"></a>2&gt;找关键代码</h3><p><code>找到关键点后，直接hook对应的方法输出测试，看是否是关键的判断点</code></p>
 <h4 id="①常用工具"><a href="#①常用工具" class="headerlink" title="①常用工具"></a>①常用工具</h4><p><a href="https://github.com/skylot/jadx">jadx</a></p>
-<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><h3 id="1-网易的常见解密逻辑"><a href="#1-网易的常见解密逻辑" class="headerlink" title="1&gt;网易的常见解密逻辑"></a>1&gt;网易的常见解密逻辑</h3><p>根据你看到的薄弱点（弹窗&#x2F;日志&#x2F;标题&#x2F;……）找到对应的解密逻辑，解密逻辑示例如下：</p>
-<p><img src="/../image/App-RE/%E8%A7%A3%E5%AF%86%E9%80%BB%E8%BE%91-%E7%BD%91%E6%98%93.png"></p>
+<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><h3 id="1-冈的常见解密逻辑"><a href="#1-冈的常见解密逻辑" class="headerlink" title="1&gt;冈的常见解密逻辑"></a>1&gt;冈的常见解密逻辑</h3><p>根据你看到的薄弱点（弹窗&#x2F;日志&#x2F;标题&#x2F;……）找到对应的解密逻辑，解密逻辑示例如下：</p>
+<p><img src="/../image/App-RE/%E8%A7%A3%E5%AF%86%E9%80%BB%E8%BE%91-%E5%86%88%E6%98%93.png"></p>
 <p>这是一种<strong>基于循环异或（XOR）算法的对称加密</strong></p>
 <p>密钥是：<code>byte[] bArr = &#123;78, 101, 116, ？？, ？？, ？？, ？？&#125;;</code></p>
 <p>ASCII 码解码为：<code>&quot;Net****&quot;</code> (网易)</p>
 <h3 id="2-打印技巧"><a href="#2-打印技巧" class="headerlink" title="2&gt;打印技巧"></a>2&gt;打印技巧</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 打印调用栈，看看是谁在调这个解密函数</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;[调用来源]: \n&quot;</span> + </span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;android.util.Log&quot;</span>).<span class="title function_">getStackTraceString</span>(<span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;java.lang.Exception&quot;</span>).$new()));</span><br></pre></td></tr></table></figure>
 
+<h1 id="3-so层简单的动态逆向"><a href="#3-so层简单的动态逆向" class="headerlink" title="3-so层简单的动态逆向"></a>3-so层简单的动态逆向</h1><p>工具：</p>
+<p><a href="https://github.com/zhkl0228/unidbg">unidbg</a>、ida.pro</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-逆向常识"><a href="#1-逆向常识" class="headerlink" title="1&gt;逆向常识"></a>1&gt;逆向常识</h3><ul>
+<li>在 Android 中，系统加载器（Linker）识别一个库到底叫什么，不是看它的文件名，而是看它 ELF 头部里 <code>DT_SONAME</code> 这个字段。</li>
+</ul>
+<p><img src="/../image/App-RE/%E9%80%86%E5%90%91%E5%B8%B8%E8%AF%86.png"></p>
+<h3 id="2-记录难点"><a href="#2-记录难点" class="headerlink" title="2&gt;记录难点"></a>2&gt;记录难点</h3><h4 id="①检查文件强制一致"><a href="#①检查文件强制一致" class="headerlink" title="①检查文件强制一致"></a>①检查文件强制一致</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[File Fake] 拦截到 maps 读取: /proc/self/maps</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">setupSyscallHooks</span><span class="params">()</span> &#123;</span><br><span class="line">    emulator.getSyscallHandler().addIOResolver(<span class="keyword">new</span> <span class="title class_">IOResolver</span>&lt;AndroidFileIO&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> FileResult&lt;AndroidFileIO&gt; <span class="title function_">resolve</span><span class="params">(Emulator&lt;AndroidFileIO&gt; emulator, String pathname, <span class="type">int</span> oflags)</span> &#123;</span><br><span class="line">            <span class="comment">// 匹配 maps 访问</span></span><br><span class="line">            <span class="keyword">if</span> (pathname.endsWith(<span class="string">&quot;/maps&quot;</span>) &amp;&amp; pathname.contains(<span class="string">&quot;/proc/&quot;</span>)) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;[File Fake] 拦截到 maps 读取: &quot;</span> + pathname);</span><br><span class="line"></span><br><span class="line">                <span class="type">File</span> <span class="variable">fakeMaps</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;unidbg-android/src/test/resources/nesec/fake_maps&quot;</span>);</span><br><span class="line">                <span class="keyword">if</span> (fakeMaps.exists()) &#123;</span><br><span class="line">                    <span class="comment">// 核心修改：利用接口提供的工厂方法创建对应的 FileIO 对象</span></span><br><span class="line">                    <span class="type">AndroidFileIO</span> <span class="variable">fileIO</span> <span class="operator">=</span> emulator.getFileSystem().createSimpleFileIO(fakeMaps, oflags, pathname);</span><br><span class="line">                    <span class="keyword">return</span> FileResult.success(fileIO);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;[!] 警告: 找不到 fake_maps 文件，请检查路径: &quot;</span> + fakeMaps.getAbsolutePath());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="②内存强制一致"><a href="#②内存强制一致" class="headerlink" title="②内存强制一致"></a>②内存强制一致</h4><p><code>导入java代码里面找到的关键的libxxx.so,强制对其.ELF 魔数校验（memcmp 返回 0 表示两段内存完全一致，也报错）</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[libc Monitor] memcmp 调用 | 长度: 4 | LR: libsecexe.so!0xe4410</span><br><span class="line">   -&gt; [Data] P1: 7f 45 4c 46  | .ELF</span><br><span class="line">   -&gt; [Data] P2: 7f 45 4c 46  | .ELF</span><br></pre></td></tr></table></figure>
+
+<p>报错如下：</p>
+<p><img src="/../image/App-RE/%E5%B4%A9%E6%BA%83%E6%8C%87%E4%BB%A4%E5%A4%84.png"></p>
+<p><code>ida.pro</code>查找对应的地址分析汇编得知如下：</p>
+<p>“内存指纹”：</p>
+<p>做一个循环，次数是 <strong>64次</strong>（<code>CMP X19, #0x40</code>，0x40 等于 64）。</p>
+<ul>
+<li>**<code>BLR X3</code>**：这里的 <code>X3</code> 存放的就是 <code>memcmp</code> 的地址。它在循环调用 <code>memcmp</code>。</li>
+<li><strong>两次关键比对</strong>：<ol>
+<li>**第一处 <code>CBNZ W0, loc_E4430</code>**：如果 <code>memcmp</code> 返回非 0（不相等），就跳走。</li>
+<li>**第二处 <code>CBZ W0, loc_E4414</code>**：如果 <code>memcmp</code> 返回 0（相等），就跳到 <code>loc_E4414</code>。</li>
+</ol>
+</li>
+<li><strong>返回值意义</strong>：<ul>
+<li>跳转到 <strong><code>loc_E4414</code><strong>：你会看到 <code>MOV W0, #1</code>。在 C 语言里，返回 1 通常代表“</strong>校验失败&#x2F;发现异常</strong>”。</li>
+<li>末尾的 <strong><code>MOV W0, #0</code><strong>：只有完整跑完 64 次循环且没有触发跳转，才会执行到这里，代表“</strong>校验通过&#x2F;安全</strong>”。</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
