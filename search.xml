@@ -587,10 +587,16 @@
 <p>5-双向认证(mTLS)		–①</p>
 <span id="more"></span>
 
+<p>下一步学习目标汇总：</p>
+<p>①部分逆向（java和so层的反反调试精进，js逆向的进一步深入学习）</p>
+<p>②主机渗透（开放服务的利用）</p>
+<p>③横向移动与权限加固（红队）</p>
+<p>④二次反序列化链、java的分析（漏洞分析的学习）</p>
+<p>⑤app、路由器等设备的漏洞排查（双向认证、TLCP的解密）</p>
 <h1 id="1-frida的去壳-使用"><a href="#1-frida的去壳-使用" class="headerlink" title="1-frida的去壳&#x2F;使用"></a>1-frida的去壳&#x2F;使用</h1><p><strong><code>前言</code></strong></p>
 <p><code>开发环境下的app一般属于无需去壳的，生产环境的app大多加固混淆以及反调试，UAT环境应该是用来保护证书的</code></p>
 <p><del>所以要学习去壳从而可以删除里面的反调试之类的代码，然后重打包App，进而可以用objection进行排查类找到hook点</del></p>
-<p><code>加固应该主要是防止重打包和逆向分析，简单的抓包，java层绕过反调试等操作，倒也不用花那么多时间特意去脱壳</code></p>
+<p><code>加固应该主要是防止重打包和逆向分析，简单的抓包，java层，so层的绕过反调试等操作，倒也不用花那么多时间特意去脱壳</code></p>
 <h3 id="跳转到frida的学习以下有关1的信息暂仅记录开始状态"><a href="#跳转到frida的学习以下有关1的信息暂仅记录开始状态" class="headerlink" title="跳转到frida的学习以下有关1的信息暂仅记录开始状态"></a>跳转到<a href="https://cliayn.github.io/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/">frida的学习</a>以下有关1的信息暂仅记录开始状态</h3><p>学习文章：</p>
 <p><a href="https://www.anquanke.com/post/id/197657#h3-12">实用FRIDA进阶：内存漫游、hook anywhere、抓包-安全KER - 安全资讯平台</a></p>
 <p><a href="https://juejin.cn/post/6962096676576165918">Android脱壳之整体脱壳原理与实践这里所说的壳都是指dex加壳,不涉及到so的加壳。 涉及到的代码分析基于AOSP - 掘金</a></p>
