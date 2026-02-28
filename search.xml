@@ -307,6 +307,7 @@
 
 <p>会遇到”寄存器污染”技术,就是上述的内存检查<em>64没有正常通过，就会返回一个异常值，虽然<code>routineAddr == 0</code> 拦截，但会导致非法内存读取，*<em>别拦截exit了，太<code>je</code>麻烦了</em></em></p>
 <h3 id="3-选择"><a href="#3-选择" class="headerlink" title="3&gt;选择"></a>3&gt;选择</h3><p>是应该“欺骗过程”让他自以为正常，还是“修正结果”强行抹平伤痕</p>
+<p>待续。。。</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
