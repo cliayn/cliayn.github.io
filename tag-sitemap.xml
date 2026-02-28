@@ -4,7 +4,28 @@
 
     <url>
         <loc>https://cliayn.github.io/tags/Notes/</loc>
-        <lastmod>2026-02-26T09:31:52.157Z</lastmod>
+        <lastmod>2026-02-27T08:58:46.310Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://cliayn.github.io/tags/key/</loc>
+        <lastmod>2026-02-27T07:51:56.701Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://cliayn.github.io/tags/js/</loc>
+        <lastmod>2026-02-27T07:51:56.701Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://cliayn.github.io/tags/web-net/</loc>
+        <lastmod>2026-02-27T07:51:56.701Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -33,27 +54,6 @@
     <url>
         <loc>https://cliayn.github.io/tags/Backend/</loc>
         <lastmod>2026-02-11T08:04:23.387Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://cliayn.github.io/tags/key/</loc>
-        <lastmod>2026-02-10T03:13:35.054Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://cliayn.github.io/tags/js/</loc>
-        <lastmod>2026-02-10T03:13:35.054Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://cliayn.github.io/tags/web-net/</loc>
-        <lastmod>2026-02-10T03:13:35.054Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

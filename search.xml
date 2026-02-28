@@ -140,9 +140,11 @@
     <url>/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>之前用<code>frida</code>只晓得使用已经构建好的<code>js</code>，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决，可以去看大佬们的<a href="https://github.com/hookmaster/frida-all-in-one"><code>frida</code>操作手册</a>，哔哩哔哩上也有课程<a href="https://www.bilibili.com/video/BV1rsZaBBE3V/?vd_source=62ec56a0e96ac07702343ec20500f1cc">小肩膀出品安卓逆向课程_哔哩哔哩_bilibili</a>、<a href="https://www.bilibili.com/video/BV1ZT421k7xw/">Python入门&#x2F;Frida逆向 哔哩哔哩_bilibili</a></p>
 <p>写在前言：单纯绕过root的话直接拖入白名单让它检测不到<code>su</code>环境即可</p>
+<p>体会就是：只要有执行权限的都避免不了被hook</p>
 <span id="more"></span>
 
-<p>工具：frida+jadx&#x2F;</p>
+<p>工具：<code>frida+jadx+ida.pro+unidbg</code></p>
+<p>可以先熟悉前端的<code>js</code>逆向再深入<code>app</code>的逆向，有很多相通的地方<a href="https://cliayn.github.io/2025/03/04/%E5%89%8D%E7%AB%AF%E6%B8%B8%E8%B5%B0/">前端游走</a></p>
 <h1 id="1-Java层hook-py"><a href="#1-Java层hook-py" class="headerlink" title="1-Java层hook(py)"></a>1-Java层hook(py)</h1><p><code>js</code>是弱参数类型，<code>java</code>是强参数类型，注意转换</p>
 <h2 id="普通方法"><a href="#普通方法" class="headerlink" title="普通方法"></a>普通方法</h2><h3 id="1-常规hook："><a href="#1-常规hook：" class="headerlink" title="1&gt;常规hook："></a>1&gt;常规hook：</h3><p><code>var</code> 类名 &#x3D; <code>java.use</code>(包名.类名);</p>
 <p><strong>类名.方法名.implementation &#x3D; 具体function函数</strong></p>
@@ -262,11 +264,11 @@
 </tbody></table>
 <h3 id="2-找关键代码"><a href="#2-找关键代码" class="headerlink" title="2&gt;找关键代码"></a>2&gt;找关键代码</h3><p><code>找到关键点后，直接hook对应的方法输出测试，看是否是关键的判断点</code></p>
 <h4 id="①常用工具"><a href="#①常用工具" class="headerlink" title="①常用工具"></a>①常用工具</h4><p><a href="https://github.com/skylot/jadx">jadx</a></p>
-<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><h3 id="1-冈的常见解密逻辑"><a href="#1-冈的常见解密逻辑" class="headerlink" title="1&gt;冈的常见解密逻辑"></a>1&gt;冈的常见解密逻辑</h3><p>根据你看到的薄弱点（弹窗&#x2F;日志&#x2F;标题&#x2F;……）找到对应的解密逻辑，解密逻辑示例如下：</p>
+<h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><h3 id="1-冈x的常见解密逻辑"><a href="#1-冈x的常见解密逻辑" class="headerlink" title="1&gt;冈x的常见解密逻辑"></a>1&gt;冈x的常见解密逻辑</h3><p>根据你看到的薄弱点（弹窗&#x2F;日志&#x2F;标题&#x2F;……）找到对应的解密逻辑，解密逻辑示例如下：</p>
 <p><img src="/../image/App-RE/%E8%A7%A3%E5%AF%86%E9%80%BB%E8%BE%91-%E5%86%88%E6%98%93.png"></p>
 <p>这是一种<strong>基于循环异或（XOR）算法的对称加密</strong></p>
 <p>密钥是：<code>byte[] bArr = &#123;78, 101, 116, ？？, ？？, ？？, ？？&#125;;</code></p>
-<p>ASCII 码解码为：<code>&quot;Net****&quot;</code> (网易)</p>
+<p>ASCII 码解码为：<code>&quot;Net****&quot;</code> (冈<code>yi</code>)</p>
 <h3 id="2-打印技巧"><a href="#2-打印技巧" class="headerlink" title="2&gt;打印技巧"></a>2&gt;打印技巧</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 打印调用栈，看看是谁在调这个解密函数</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;[调用来源]: \n&quot;</span> + </span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;android.util.Log&quot;</span>).<span class="title function_">getStackTraceString</span>(<span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;java.lang.Exception&quot;</span>).$new()));</span><br></pre></td></tr></table></figure>
 
 <h1 id="3-so层简单的动态逆向"><a href="#3-so层简单的动态逆向" class="headerlink" title="3-so层简单的动态逆向"></a>3-so层简单的动态逆向</h1><p>工具：</p>
@@ -286,7 +288,8 @@
 <p><img src="/../image/App-RE/%E5%B4%A9%E6%BA%83%E6%8C%87%E4%BB%A4%E5%A4%84.png"></p>
 <p><code>ida.pro</code>查找对应的地址分析汇编得知如下：</p>
 <p>“内存指纹”：</p>
-<p>做一个循环，次数是 <strong>64次</strong>（<code>CMP X19, #0x40</code>，0x40 等于 64）。</p>
+<p><img src="/../image/App-RE/ida-pro-%E5%86%88%E6%98%93.png"></p>
+<p>做一个循环，次数是 <strong>64次</strong>（<code>CMP X19, #0x40，0x40</code> 等于 64）。</p>
 <ul>
 <li>**<code>BLR X3</code>**：这里的 <code>X3</code> 存放的就是 <code>memcmp</code> 的地址。它在循环调用 <code>memcmp</code>。</li>
 <li><strong>两次关键比对</strong>：<ol>
@@ -300,6 +303,9 @@
 </ul>
 </li>
 </ul>
+<h4 id="③退出强制拦截"><a href="#③退出强制拦截" class="headerlink" title="③退出强制拦截"></a>③退出强制拦截</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 5. 监听 exit (反调试暴毙点) - 强行续命版</span><br><span class="line">Symbol exit = libc.findSymbolByName(&quot;exit&quot;);</span><br><span class="line">if (exit != null) &#123;</span><br><span class="line">    dobby.replace(exit, new ReplaceCallback() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public HookStatus onCall(Emulator&lt;?&gt; emulator, HookContext context, long originFunction) &#123;</span><br><span class="line">            int code = context.getIntArg(0);</span><br><span class="line">            long lr = context.getLR();</span><br><span class="line">            System.out.printf(&quot;\n[Anti-Exit] &gt;&gt;&gt; 拦截到自毁退出请求！Code: %d, LR: %s &lt;&lt;&lt;\n&quot;,</span><br><span class="line">                    code, getLrInfo(lr));</span><br><span class="line"></span><br><span class="line">            System.out.println(&quot;[Anti-Exit] 正在强行拦截 exit，不准退出，尝试让程序继续向下执行...&quot;);</span><br><span class="line"></span><br><span class="line">            // 【关键修改】：返回 HookStatus.RET(emulator, 0)</span><br><span class="line">            // 并且【不要】调用 originFunction。</span><br><span class="line">            // 这样易盾调用 exit() 后，会直接返回到它下一条指令，就像什么都没发生一样。</span><br><span class="line">            return HookStatus.RET(emulator, 0);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, true);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会遇到”寄存器污染”技术,就是上述的内存检查*64没有正常通过，就会返回一个异常值，导致读取后爆炸</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
@@ -5205,7 +5211,7 @@
 </blockquote>
 </blockquote>
 <p><img src="/../image/web-js-freely/2.jpg"></p>
-<h1 id="本地更改js文件"><a href="#本地更改js文件" class="headerlink" title="本地更改js文件"></a>本地更改js文件</h1><p>1&gt;能调试的前提下，深度混淆也能还原部分逻辑</p>
+<h1 id="混淆反调试应对"><a href="#混淆反调试应对" class="headerlink" title="混淆反调试应对"></a>混淆反调试应对</h1><p>1&gt;能调试的前提下，深度混淆也能还原部分逻辑</p>
 <h3 id="1-高度混淆"><a href="#1-高度混淆" class="headerlink" title="[1]高度混淆"></a>[1]高度混淆</h3><h5 id="·1-启动器断点调试-堆栈溯源排查"><a href="#·1-启动器断点调试-堆栈溯源排查" class="headerlink" title="·1.启动器断点调试&#x2F;堆栈溯源排查"></a>·1.启动器断点调试&#x2F;堆栈溯源排查</h5><h6 id="工具："><a href="#工具：" class="headerlink" title="工具："></a><strong>工具：</strong></h6><ol>
 <li><a href="https://github.com/ben-sb/javascript-deobfuscator">javascript-deobfuscator</a></li>
 <li><a href="https://github.com/jiyulany/Geetest-AST-">Geetest-AST-</a></li>
@@ -5220,6 +5226,39 @@
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> <span class="string">&quot;innerHTML&quot;</span>      <span class="comment">// 清空页面</span></span><br><span class="line">示例：<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">innerHTML</span> = <span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="number">2.</span> <span class="string">&quot;style&quot;</span>         <span class="comment">// 设置样式（如隐藏）</span></span><br><span class="line">示例：<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;none&quot;</span>;</span><br><span class="line"><span class="number">3.</span> <span class="string">&quot;onclick&quot;</span>       <span class="comment">// 设置点击事件</span></span><br><span class="line">示例：<span class="variable language_">document</span>[<span class="string">&#x27;body&#x27;</span>][<span class="title function_">a3_0x5ba0</span>(<span class="string">&#x27;0x2a1&#x27;</span>)] = <span class="keyword">function</span>(<span class="params"></span>)&#123;<span class="keyword">return</span> <span class="literal">false</span>;&#125;;</span><br><span class="line">示例：<span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;<span class="keyword">return</span> <span class="literal">false</span>;&#125;;</span><br><span class="line"><span class="number">4.</span> <span class="string">&quot;onload&quot;</span>        <span class="comment">// 设置加载事件</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="comment">// 页面加载完成后执行反调试代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;页面加载完成，开始反调试...&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(检查到调试器())&#123;</span><br><span class="line">        <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&quot;about:blank&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="number">5.</span> <span class="string">&quot;href&quot;</span>          <span class="comment">// 如果是 location 对象</span></span><br><span class="line">示例：<span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&quot;about:blank&quot;</span>;</span><br><span class="line"><span class="number">6.</span> <span class="string">&quot;display&quot;</span>       <span class="comment">// 如果是 style.display</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">style</span>.<span class="property">display</span> = <span class="string">&quot;none&quot;</span>;</span><br><span class="line"><span class="number">7.</span> <span class="string">&quot;window&quot;</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&quot;about:blank&quot;</span>;</span><br><span class="line"><span class="number">8.</span> <span class="string">&quot;debugger&quot;</span></span><br><span class="line"><span class="comment">// 示例1：简单的无限debugger</span></span><br><span class="line">(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="keyword">debugger</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
 
 <p>​			</p>
+<h1 id="IIFE-或-Webpack-应对"><a href="#IIFE-或-Webpack-应对" class="headerlink" title="IIFE 或 Webpack 应对"></a>IIFE 或 Webpack 应对</h1><h2 id="控制台命令"><a href="#控制台命令" class="headerlink" title="控制台命令"></a>控制台命令</h2><h3 id="1-调用栈trace"><a href="#1-调用栈trace" class="headerlink" title="[1]调用栈trace"></a>[1]调用栈<code>trace</code></h3><p><code>java、so逆向也常用trace</code></p>
+<h5 id="javascript的-trace"><a href="#javascript的-trace" class="headerlink" title="- javascript的 trace"></a>- javascript的 trace</h5><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">#控制台</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">trace</span>()</span><br></pre></td></tr></table></figure>
+
+<h5 id="Java-层的-trace"><a href="#Java-层的-trace" class="headerlink" title="- Java 层的 trace"></a>- Java 层的 trace</h5><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">#frida</span><br><span class="line"><span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> <span class="title class_">Exception</span> = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;java.lang.Exception&quot;</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Exception</span>.$new().<span class="title function_">getStackTrace</span>());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h5 id="so层的trace"><a href="#so层的trace" class="headerlink" title="- so层的trace"></a>- so层的trace</h5><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">#frida</span><br><span class="line"><span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(<span class="title function_">ptr</span>(<span class="string">&quot;0x123456&quot;</span>), &#123;</span><br><span class="line">    <span class="attr">onEnter</span>: <span class="keyword">function</span>(<span class="params">args</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Thread</span>.<span class="title function_">backtrace</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="title class_">Backtracer</span>.<span class="property">ACCURATE</span>)</span><br><span class="line">            .<span class="title function_">map</span>(<span class="title class_">DebugSymbol</span>.<span class="property">fromAddress</span>).<span class="title function_">join</span>(<span class="string">&quot;\n&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-动态的“指针”this"><a href="#2-动态的“指针”this" class="headerlink" title="[2]动态的“指针”this"></a>[2]动态的“指针”<code>this</code></h3><p><code>在 JavaScript 的面向对象编程中，必须通过 实例对象（也就是 this） 来调用它</code></p>
+<hr>
+<h5 id="javascript"><a href="#javascript" class="headerlink" title="- javascript"></a>- javascript</h5><p>   JS 的 <code>this</code> 是<strong>动态绑定</strong>的。它不看函数<strong>定义</strong>在哪里，只看函数<strong>被谁调用</strong>。</p>
+<ul>
+<li><strong>核心口诀</strong>：<strong>谁调用它，<code>this</code> 就指向谁。</strong></li>
+</ul>
+<p>四种应用(来自ai的回复)：</p>
+<h6 id="①-默认绑定（全局）"><a href="#①-默认绑定（全局）" class="headerlink" title="① 默认绑定（全局）"></a>① 默认绑定（全局）</h6><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">hello</span>(<span class="params"></span>) &#123; <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>); &#125;</span><br><span class="line"><span class="title function_">hello</span>(); <span class="comment">// 输出 window</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="②-隐式绑定（对象调用）"><a href="#②-隐式绑定（对象调用）" class="headerlink" title="② 隐式绑定（对象调用）"></a>② 隐式绑定（对象调用）</h6><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="title function_">findInfo</span>(<span class="params"></span>)&#123;<span class="variable language_">this</span>.<span class="property">loading</span>=!<span class="number">0</span>;<span class="keyword">let</span> e = <span class="string">&quot;/vm/xxx/xxx&quot;</span>,t=&#123;xxx&#125;;</span><br><span class="line">           <span class="variable language_">this</span>.<span class="title function_">getPost</span>(e,t).<span class="title function_">then</span>(<span class="function"><span class="params">e</span>=&gt;</span>&#123;xxx&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="property">test</span>=<span class="variable language_">this</span>;</span><br></pre></td></tr></table></figure>
+
+<h6 id="③-显式绑定（Hook-常客：call-apply-bind）"><a href="#③-显式绑定（Hook-常客：call-apply-bind）" class="headerlink" title="③ 显式绑定（Hook 常客：call &#x2F; apply &#x2F; bind）"></a>③ 显式绑定（Hook 常客：call &#x2F; apply &#x2F; bind）</h6><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 强制让 getPost 为 window 工作</span></span><br><span class="line">getPost.<span class="title function_">call</span>(<span class="variable language_">window</span>, url, data);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//用法--未实践</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="property">myEnc</span> = <span class="variable language_">this</span>.<span class="property">enc</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br></pre></td></tr></table></figure>
+
+<h6 id="④-箭头函数（固执派）"><a href="#④-箭头函数（固执派）" class="headerlink" title="④ 箭头函数（固执派）"></a>④ 箭头函数（固执派）</h6><p>箭头函数<strong>没有</strong>自己的 <code>this</code>，它会继承外层的 <code>this</code>。</p>
+<hr>
+<h5 id="java"><a href="#java" class="headerlink" title="- java"></a>- java</h5><p>  在 Java 里，<code>this</code> 永远指向<strong>当前实例对象</strong>。</p>
+<ul>
+<li><p><strong>用途</strong>：主要用于区分“成员变量”和“局部变量”（比如构造函数里 <code>this.name = name</code>）。</p>
+</li>
+<li><p><strong>特点</strong>：编译时就确定了，基本不会变，非常老实。</p>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
