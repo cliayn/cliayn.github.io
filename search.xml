@@ -1,6 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>双向证书效验</title>
+    <url>/2026/03/03/%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%95%88%E9%AA%8C/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	工作下的<code>uat</code>测试环境，采用了<code>TLCP</code>的双向认证，因为是测试环境可以<code>webview</code>+<code>iptables</code>取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。所用到的工具</p>
+<p><code>jadx</code>、<code>frida</code>、<code>bp/charles/mitm/yakit</code></p>
+<p>学习文章<a href="https://muhe-blog.github.io/2024/07/07/%E6%8A%93%E5%8C%85%E4%B9%8B%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%A0%A1%E9%AA%8C/">抓包之双向证书校验</a>、<a href="https://juejin.cn/post/7579298511071494144"><code>HTTPS</code> 双向认证抓包指南</a></p>
+<span id="more"></span>
+
+<h1 id="1-双向认证-mTLS"><a href="#1-双向认证-mTLS" class="headerlink" title="1-双向认证 (mTLS)"></a>1-双向认证 (<code>mTLS</code>)</h1><h3 id="①普通-HTTPS-通常只有单向认证"><a href="#①普通-HTTPS-通常只有单向认证" class="headerlink" title="①普通 HTTPS: 通常只有单向认证"></a>①<strong>普通 <code>HTTPS</code></strong>: 通常只有<strong>单向认证</strong></h3><h3 id="②常用协议"><a href="#②常用协议" class="headerlink" title="②常用协议"></a>②常用协议</h3><h4 id="Ⅰ-ISCP-gRPC-MQTT-VPN-CoAP"><a href="#Ⅰ-ISCP-gRPC-MQTT-VPN-CoAP" class="headerlink" title="Ⅰ.ISCP&#x2F;gRPC&#x2F;MQTT&#x2F;VPN&#x2F;CoAP"></a>Ⅰ.<code>ISCP</code>&#x2F;<code>gRPC</code>&#x2F;<code>MQTT</code>&#x2F;<code>VPN</code>&#x2F;<code>CoAP</code></h4><table>
+<thead>
+<tr>
+<th><strong>协议</strong></th>
+<th><strong>传输层</strong></th>
+<th><strong>核心用途</strong></th>
+<th><strong>为什么用双向认证</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>MQTT</strong></td>
+<td>TCP</td>
+<td>物联网设备通信</td>
+<td>防止恶意设备接入云端</td>
+</tr>
+<tr>
+<td><strong>gRPC</strong></td>
+<td>HTTP&#x2F;2</td>
+<td>内部微服务调用</td>
+<td>零信任架构，防止内网渗透</td>
+</tr>
+<tr>
+<td><strong>CoAP</strong></td>
+<td>UDP</td>
+<td>资源受限的硬件</td>
+<td>轻量化，同时保证身份合法</td>
+</tr>
+<tr>
+<td><strong>IPsec&#x2F;VPN</strong></td>
+<td>网络层</td>
+<td>企业远程接入</td>
+<td>确保只有公司授权的电脑能连内网</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>MQTT &#x2F; gRPC &#x2F; IPsec</strong></th>
+<th><strong>ISCP (TCLP常见)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>开放性</strong></td>
+<td>公开标准，谁都能实现</td>
+<td>私有&#x2F;半私有，通常随 SDK 分发</td>
+</tr>
+<tr>
+<td><strong>主要负载</strong></td>
+<td>JSON &#x2F; Protobuf &#x2F; 报文</td>
+<td><strong>音视频流</strong> + 实时控制指令</td>
+</tr>
+<tr>
+<td><strong>认证严苛度</strong></td>
+<td>只要证书对就行</td>
+<td>证书可能二次加密，且与 <code>AppID</code> 强绑定</td>
+</tr>
+<tr>
+<td><strong>实时性</strong></td>
+<td>较好</td>
+<td><strong>极高</strong>（针对音视频同步做了算法优化）</td>
+</tr>
+</tbody></table>
+<h1 id="2-私钥的存储"><a href="#2-私钥的存储" class="headerlink" title="2-私钥的存储"></a>2-私钥的存储</h1><p>私钥一般（<code>ai</code>回复）：</p>
+<ul>
+<li>存在 <strong><code>Android Keystore</code></strong></li>
+<li>或存于 <strong>硬件安全模块（<code>TEE</code>）</strong></li>
+<li>或存在 <strong>国密<code>SDK</code>内部结构体</strong></li>
+</ul>
+<p><strong>国密可能存在于<code>so</code>层</strong></p>
+<p>可以查看<code>send()</code> 栈里直接，直接输出</p>
+<p><code>libxxxsec.so!0x12345</code>等非常见的so层，自研层的需要用到<code>unidbg</code>和<code>ida.pro</code></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>app</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>阿里druid记录</title>
+    <url>/2026/03/02/%E9%98%BF%E9%87%8Cdruid%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>存在两个<code>druid</code>一个阿里版 <code>Druid</code> 后台和<code>Apache</code> 版 <code>Druid</code> 后台</p>
+<p>国内大多是阿里版本的druid一个内置在 JAR 包里的 <code>Servlet</code>（通常叫 <code>StatViewServlet</code>）</p>
+<p>两者差别是：</p>
+<p><a href="https://github.com/alibaba/druid">阿里版 Druid (数据库连接池)</a>、Apache 版 Druid (分析型数据库)</p>
+<span id="more"></span>
+
+<h1 id="1-阿里版-Druid"><a href="#1-阿里版-Druid" class="headerlink" title="1-阿里版 Druid"></a>1-阿里版 Druid</h1><h2 id="①主要查询接口"><a href="#①主要查询接口" class="headerlink" title="①主要查询接口"></a>①主要查询接口</h2><table>
+<thead>
+<tr>
+<th><strong>接口地址 (相对于 &#x2F;druid&#x2F;)</strong></th>
+<th><strong>功能描述</strong></th>
+<th><strong>核心字段说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>basic.json</code></strong></td>
+<td><strong>总览信息</strong></td>
+<td>Druid 版本、JVM 版本、操作系统、连接池类型。</td>
+</tr>
+<tr>
+<td><strong><code>datasource.json</code></strong></td>
+<td><strong>数据源统计</strong></td>
+<td>包含 ActiveCount（活跃连接）、PoolingCount（池内连接）、WaitThreadCount（等待线程）等。</td>
+</tr>
+<tr>
+<td><strong><code>sql.json</code></strong></td>
+<td><strong>SQL 执行详情</strong></td>
+<td>包含 SQL 语句、执行次数、最慢执行时间、读取行数、错误次数等。</td>
+</tr>
+<tr>
+<td><strong><code>wall.json</code></strong></td>
+<td><strong>防御墙统计</strong></td>
+<td>记录 SQL 注入防御情况，显示检查次数、被拦截次数等。</td>
+</tr>
+<tr>
+<td><strong><code>weburi.json</code></strong></td>
+<td><strong>URI 请求监控</strong></td>
+<td>监控每一个 Web 请求（URL）的次数、耗时、并发量。</td>
+</tr>
+<tr>
+<td><strong><code>websession.json</code></strong></td>
+<td><strong>Session 监控</strong></td>
+<td>监控用户会话状态。</td>
+</tr>
+<tr>
+<td><strong><code>spring.json</code></strong></td>
+<td><strong>Spring 方法监控</strong></td>
+<td>统计标注了监控注解的 Spring Bean 方法调用次数和耗时。</td>
+</tr>
+<tr>
+<td><strong><code>webapp.json</code></strong></td>
+<td><strong>Web 应用统计</strong></td>
+<td>整个 Web 应用层面的请求、Session 概览。</td>
+</tr>
+</tbody></table>
+<h2 id="②“改”与“删”类接口"><a href="#②“改”与“删”类接口" class="headerlink" title="②“改”与“删”类接口"></a>②“改”与“删”类接口</h2><table>
+<thead>
+<tr>
+<th><strong>接口地址</strong></th>
+<th><strong>动作</strong></th>
+<th><strong>功能说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>reset-all.json</code></strong></td>
+<td><strong>重置</strong></td>
+<td><strong>最常用</strong>。清空当前所有监控项（SQL、URI、Session 等）的统计值。</td>
+</tr>
+<tr>
+<td><strong><code>log-and-reset-all.json</code></strong></td>
+<td><strong>日志+重置</strong></td>
+<td>先将当前的监控快照记录到日志文件，然后执行重置。</td>
+</tr>
+<tr>
+<td><strong><code>activeConnectionStackTrace.json</code></strong></td>
+<td><strong>实时诊断</strong></td>
+<td>打印当前所有活跃连接的 <strong>线程堆栈</strong>。这常用于找出是谁占着连接不释放（寻找连接泄漏）。</td>
+</tr>
+</tbody></table>
+<p>想自己加个接口，可以去<a href="https://github.com/alibaba/druid">源码</a>里的这个包下看： <code>com.alibaba.druid.support.http.StatViewServlet</code> 及其相关的 <code>StatService</code> 实现</p>
+<h2 id="注意：遇到sql的话"><a href="#注意：遇到sql的话" class="headerlink" title="注意：遇到sql的话"></a>注意：遇到sql的话</h2><p>如果遇到了<code>sql</code>注入且存在druid组件则：<br><a href="https://m1r0ku.github.io/posts/Druid-WallFilter.html"><code>Druid WallFilter</code> 绕过浅析</a></p>
+<h1 id="2-Apache-版-Druid"><a href="#2-Apache-版-Druid" class="headerlink" title="2-Apache 版 Druid"></a>2-Apache 版 Druid</h1><table>
+<thead>
+<tr>
+<th><strong>类别</strong></th>
+<th><strong>接口路径</strong></th>
+<th><strong>功能说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SQL查询</strong></td>
+<td><code>POST /druid/v2/sql</code></td>
+<td><strong>最常用接口</strong>。发送 SQL 语句进行实时数据分析查询。</td>
+</tr>
+<tr>
+<td><strong>原生查询</strong></td>
+<td><code>POST /druid/v2</code></td>
+<td>发送 Druid 特有的 JSON 格式查询（Native Query），适合复杂聚合。</td>
+</tr>
+<tr>
+<td><strong>任务管理</strong></td>
+<td><code>POST /druid/indexer/v1/task</code></td>
+<td>提交数据导入任务（如从 S3 或本地文件导入数据）。</td>
+</tr>
+<tr>
+<td><strong>摄取控制</strong></td>
+<td><code>POST /druid/indexer/v1/supervisor</code></td>
+<td>管理 Kafka&#x2F;Kinesis 实时流摄取任务（启动、停止、重置）。</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Backend</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>国密相关</title>
     <url>/2026/02/19/%E5%9B%BD%E5%AF%86%E7%9B%B8%E5%85%B3/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	抓包抓不到<code>TLCP</code>，记录一下国密相关的内容</p>
@@ -141,9 +350,12 @@
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>之前用<code>frida</code>只晓得使用已经构建好的<code>js</code>，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决，可以去看大佬们的<a href="https://github.com/hookmaster/frida-all-in-one"><code>frida</code>操作手册</a>，哔哩哔哩上也有相关课程<a href="https://www.bilibili.com/video/BV178a9z5Ezc/?vd_source=62ec56a0e96ac07702343ec20500f1cc">吾爱破解安卓逆向入门教程《安卓逆向这档事》_哔哩哔哩_bilibili</a>、<a href="https://www.bilibili.com/video/BV1rsZaBBE3V/?vd_source=62ec56a0e96ac07702343ec20500f1cc">小肩膀出品安卓逆向课程_哔哩哔哩_bilibili</a>、<a href="https://www.bilibili.com/video/BV1ZT421k7xw/">Python入门&#x2F;Frida逆向 哔哩哔哩_bilibili</a>等（只能说哔哩哔哩大学名不虚传）</p>
 <p>写在前言：单纯绕过root的话直接拖入白名单让它检测不到<code>su</code>环境即可</p>
 <p>体会就是：只要有执行权限的都避免不了被hook</p>
+<p>用<code>ai</code>编写<code>unidbg</code>进行分析的化，如果是标准版的话，推荐用两个<code>ai</code>，一个专门处理报错，因为<code>ai</code>给的方法很多都不是标准的</p>
 <span id="more"></span>
 
+<p><code>app</code>里的<code>so</code>是我随便找的一个有加壳的，如有不合适的地方请联系我删除</p>
 <p>工具：<code>frida+jadx+ida.pro+unidbg</code></p>
+<p>注：<code>unidbg</code>有很多魔改版</p>
 <p>可以先熟悉前端的<code>js</code>逆向再深入<code>app</code>的逆向，有很多相通的地方<a href="https://cliayn.github.io/2025/03/04/%E5%89%8D%E7%AB%AF%E6%B8%B8%E8%B5%B0/">前端游走</a></p>
 <h1 id="1-Java层hook-py"><a href="#1-Java层hook-py" class="headerlink" title="1-Java层hook(py)"></a>1-Java层hook(py)</h1><p><code>js</code>是弱参数类型，<code>java</code>是强参数类型，注意转换</p>
 <h2 id="普通方法"><a href="#普通方法" class="headerlink" title="普通方法"></a>普通方法</h2><h3 id="1-常规hook："><a href="#1-常规hook：" class="headerlink" title="1&gt;常规hook："></a>1&gt;常规hook：</h3><p><code>var</code> 类名 &#x3D; <code>java.use</code>(包名.类名);</p>
@@ -271,17 +483,101 @@
 <p>ASCII 码解码为：<code>&quot;Net****&quot;</code> (冈<code>yi</code>)</p>
 <h3 id="2-打印技巧"><a href="#2-打印技巧" class="headerlink" title="2&gt;打印技巧"></a>2&gt;打印技巧</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 打印调用栈，看看是谁在调这个解密函数</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;[调用来源]: \n&quot;</span> + </span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;android.util.Log&quot;</span>).<span class="title function_">getStackTraceString</span>(<span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;java.lang.Exception&quot;</span>).$new()));</span><br></pre></td></tr></table></figure>
 
-<h1 id="3-so层简单的动态逆向"><a href="#3-so层简单的动态逆向" class="headerlink" title="3-so层简单的动态逆向"></a>3-so层简单的动态逆向</h1><p>工具：</p>
+<h1 id="3-so层简单的动态逆向"><a href="#3-so层简单的动态逆向" class="headerlink" title="3-so层简单的动态逆向"></a>3-so层简单的动态逆向</h1><p><a href="https://github.com/cliayn/cliayn.github.io/tree/master/tool/markdown/unidbg.md">代码</a></p>
+<p>工具：</p>
 <p><a href="https://github.com/zhkl0228/unidbg">unidbg</a>、ida.pro</p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-逆向常识"><a href="#1-逆向常识" class="headerlink" title="1&gt;逆向常识"></a>1&gt;逆向常识</h3><ul>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-常见问题和知识"><a href="#1-常见问题和知识" class="headerlink" title="1&gt;常见问题和知识"></a>1&gt;常见问题和知识</h3><h4 id="1-常见知识"><a href="#1-常见知识" class="headerlink" title="1&gt;&gt;常见知识"></a>1&gt;&gt;常见知识</h4><h5 id="①DT-SONAME-代表库名"><a href="#①DT-SONAME-代表库名" class="headerlink" title="①DT_SONAME 代表库名"></a>①<code>DT_SONAME</code> 代表库名</h5><ul>
 <li>在 Android 中，系统加载器（Linker）识别一个库到底叫什么，不是看它的文件名，而是看它 ELF 头部里 <code>DT_SONAME</code> 这个字段。</li>
 </ul>
 <p><img src="/../image/App-RE/%E9%80%86%E5%90%91%E5%B8%B8%E8%AF%86.png"></p>
-<h3 id="2-记录难点"><a href="#2-记录难点" class="headerlink" title="2&gt;记录难点"></a>2&gt;记录难点</h3><h4 id="1-检查正常运行的同时检查环境"><a href="#1-检查正常运行的同时检查环境" class="headerlink" title="1&gt;&gt;检查正常运行的同时检查环境"></a>1&gt;&gt;检查正常运行的同时检查环境</h4><h4 id="①检查文件强制一致"><a href="#①检查文件强制一致" class="headerlink" title="①检查文件强制一致"></a>①检查文件强制一致</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[File Fake] 拦截到 maps 读取: /proc/self/maps</span><br></pre></td></tr></table></figure>
+<h5 id="②trace与js逆向里相似"><a href="#②trace与js逆向里相似" class="headerlink" title="②trace与js逆向里相似"></a>②<code>trace</code>与<code>js</code>逆向里相似</h5><ul>
+<li>可以使用Trace进行汇编的导出，但请注意指令级的 Trace (<code>traceCode</code>) 颗粒度太细了，分分钟会爆炸。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">emulator.getMemory().addModuleListener(<span class="keyword">new</span> <span class="title class_">ModuleListener</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onLoaded</span><span class="params">(Emulator&lt;?&gt; emulator, Module <span class="keyword">module</span>)</span> &#123;</span><br><span class="line">        <span class="comment">// 只要加载的库名字包含你的壳文件名</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">module</span>.name.contains(<span class="string">&quot;secexe&quot;</span>) || <span class="keyword">module</span>.name.contains(<span class="string">&quot;nesec&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// 立即重定向 Trace</span></span><br><span class="line">                <span class="type">PrintStream</span> <span class="variable">traceStream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PrintStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;trace_output.txt&quot;</span>), <span class="literal">true</span>);</span><br><span class="line">                emulator.traceCode(<span class="keyword">module</span>.base, <span class="keyword">module</span>.base + <span class="keyword">module</span>.size).setRedirect(traceStream);</span><br><span class="line">                System.out.println(<span class="string">&quot;&gt;&gt;&gt; [Success] 已成功为 &quot;</span> + <span class="keyword">module</span>.name + <span class="string">&quot; 挂载 Trace 指令追踪&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">setupSyscallHooks</span><span class="params">()</span> &#123;</span><br><span class="line">    emulator.getSyscallHandler().addIOResolver(<span class="keyword">new</span> <span class="title class_">IOResolver</span>&lt;AndroidFileIO&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> FileResult&lt;AndroidFileIO&gt; <span class="title function_">resolve</span><span class="params">(Emulator&lt;AndroidFileIO&gt; emulator, String pathname, <span class="type">int</span> oflags)</span> &#123;</span><br><span class="line">            <span class="comment">// 匹配 maps 访问</span></span><br><span class="line">            <span class="keyword">if</span> (pathname.endsWith(<span class="string">&quot;/maps&quot;</span>) &amp;&amp; pathname.contains(<span class="string">&quot;/proc/&quot;</span>)) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;[File Fake] 拦截到 maps 读取: &quot;</span> + pathname);</span><br><span class="line"></span><br><span class="line">                <span class="type">File</span> <span class="variable">fakeMaps</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">File</span>(<span class="string">&quot;unidbg-android/src/test/resources/nesec/fake_maps&quot;</span>);</span><br><span class="line">                <span class="keyword">if</span> (fakeMaps.exists()) &#123;</span><br><span class="line">                    <span class="comment">// 核心修改：利用接口提供的工厂方法创建对应的 FileIO 对象</span></span><br><span class="line">                    <span class="type">AndroidFileIO</span> <span class="variable">fileIO</span> <span class="operator">=</span> emulator.getFileSystem().createSimpleFileIO(fakeMaps, oflags, pathname);</span><br><span class="line">                    <span class="keyword">return</span> FileResult.success(fileIO);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    System.err.println(<span class="string">&quot;[!] 警告: 找不到 fake_maps 文件，请检查路径: &quot;</span> + fakeMaps.getAbsolutePath());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/../image/App-RE/%E6%8C%87%E4%BB%A4%E7%BA%A7%E7%9A%84Trace.png" alt="奖池还在叠加"></p>
+<h5 id="③常用调用"><a href="#③常用调用" class="headerlink" title="③常用调用"></a>③常用调用</h5><p><code>自己写的汇编</code>(可以替代很多调用)</p>
+<p><code>fopen</code>、<code>open</code> 打开文件</p>
+<p><code>strstr</code>(查找子串）、<code>strcmp</code>字符串对比</p>
+<p><code>memcmp</code>、内存对比</p>
+<p><code>pthread_create</code>(创建检测线程)</p>
+<p><code>SVC #0</code>、<code>exit</code> (退出)</p>
+<h4 id="2-常见问题"><a href="#2-常见问题" class="headerlink" title="2&gt;&gt;常见问题"></a>2&gt;&gt;常见问题</h4><h5 id="①配环境"><a href="#①配环境" class="headerlink" title="①配环境"></a>①配环境</h5><h6 id="One-配置启动环境（如-libc-so-或-libdl-so）"><a href="#One-配置启动环境（如-libc-so-或-libdl-so）" class="headerlink" title="One.配置启动环境（如 libc.so 或 libdl.so）"></a><strong>One</strong>.配置启动环境（如 <code>libc.so</code> 或 <code>libdl.so</code>）</h6><p><img src="/../image/App-RE/%E7%BC%BA%E5%A4%B1lib%E7%8E%AF%E5%A2%83-%E6%8A%A5%E9%94%99.png"></p>
+<p><code>so层的实现方法也可以问ai，但是可能要改的方法名有很多,unidbg实现方法的接口如下：</code><br><code>unidbg-android/src/main/java/com/github/unidbg/Jni.java</code></p>
+<h6 id="Two-配置缺乏的java环境"><a href="#Two-配置缺乏的java环境" class="headerlink" title="Two.配置缺乏的java环境"></a><strong>Two</strong>.配置缺乏的<code>java</code>环境</h6><p><img src="/../image/App-RE/%E7%BC%BA%E5%A4%B1java%E7%8E%AF%E5%A2%83-%E6%8A%A5%E9%94%99.png"></p>
+<p><code>下面是问的ai给出的实现方法</code></p>
+<table>
+<thead>
+<tr>
+<th><strong>模拟项目</strong></th>
+<th><strong>Java 实现方式</strong></th>
+<th><strong>解决的问题</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>上下文 (Context)</strong></td>
+<td>继承 <code>AbstractJni</code> 并重写 <code>callObjectMethodV</code></td>
+<td><code>getContext()</code>, <code>getPackageName()</code>, <code>getAssets()</code></td>
+</tr>
+<tr>
+<td><strong>签名校验</strong></td>
+<td>模拟 <code>getPackageInfo</code> 返回 <code>Signature</code></td>
+<td>绕过 native 层对 App 签名的哈希校验。</td>
+</tr>
+<tr>
+<td><strong>设备 ID</strong></td>
+<td>模拟 <code>Settings.Secure.getString</code></td>
+<td>获取 <code>android_id</code>, <code>imei</code> 等设备唯一标识。</td>
+</tr>
+<tr>
+<td><strong>网络状态</strong></td>
+<td>模拟 <code>ConnectivityManager</code></td>
+<td>检测是否连网、是否使用代理（反调试）。</td>
+</tr>
+<tr>
+<td><strong>多线程&#x2F;Handler</strong></td>
+<td>实现 <code>Looper</code> 或 <code>Thread</code> 相关 <code>JNI</code></td>
+<td>解决部分加固混淆库对异步任务的依赖。</td>
+</tr>
+</tbody></table>
+<h3 id="2-记录难点"><a href="#2-记录难点" class="headerlink" title="2&gt;记录难点"></a>2&gt;记录难点</h3><p><strong><code>是应该“欺骗过程”让他自以为正常，还是“修正结果”强行抹平伤痕</code></strong></p>
+<h4 id="1-检查正常运行的同时检查环境"><a href="#1-检查正常运行的同时检查环境" class="headerlink" title="1&gt;&gt;检查正常运行的同时检查环境"></a>1&gt;&gt;检查正常运行的同时检查环境</h4><p>so层可能会效验的对象</p>
+<table>
+<thead>
+<tr>
+<th><strong>校验对象</strong></th>
+<th><strong>校验方式</strong></th>
+<th><strong>目的</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>代码段 (.text)</strong></td>
+<td>计算特定内存区域的 CRC32 或 MD5</td>
+<td>防止你修改汇编指令（比如把 <code>BNE</code> 改成 <code>BEQ</code>）</td>
+</tr>
+<tr>
+<td><strong>导入表 (GOT)</strong></td>
+<td>检查偏移量是否指向非标准的地址</td>
+<td>防止你使用 Inline Hook（Hook 之后地址会跳到你的代码区）</td>
+</tr>
+<tr>
+<td><strong>符号表</strong></td>
+<td>检查特定的导出符号是否被抹除</td>
+<td>防止被静态分析工具轻易识别</td>
+</tr>
+<tr>
+<td><strong>文件头 (ELF Header)</strong></td>
+<td>检查 <code>e_entry</code> 等字段</td>
+<td>防止文件被重新脱壳或重打包</td>
+</tr>
+</tbody></table>
+<h5 id="Ⅰ-自校验与反调试逻辑"><a href="#Ⅰ-自校验与反调试逻辑" class="headerlink" title="Ⅰ.自校验与反调试逻辑"></a>Ⅰ.自校验与反调试逻辑</h5><h6 id="①检查文件强制一致"><a href="#①检查文件强制一致" class="headerlink" title="①检查文件强制一致"></a>①检查文件强制一致</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[File Fake] 拦截到 maps 读取: /proc/self/maps</span><br></pre></td></tr></table></figure>
 
-<h4 id="②内存强制一致"><a href="#②内存强制一致" class="headerlink" title="②内存强制一致"></a>②内存强制一致</h4><p><code>导入java代码里面找到的关键的libxxx.so,强制对其.ELF 魔数校验（memcmp 返回 0 表示两段内存完全一致，也报错）</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">generateMockMaps</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">StringBuilder</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">    <span class="keyword">for</span> (Module <span class="keyword">module</span> : emulator.getMemory().getLoadedModules()) &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">line</span> <span class="operator">=</span> String.format(<span class="string">&quot;%08x-%08x r-xp 00000000 fc:00 %d %s\n&quot;</span>,</span><br><span class="line">                <span class="keyword">module</span>.base,</span><br><span class="line">                <span class="keyword">module</span>.base + <span class="keyword">module</span>.size,</span><br><span class="line">                <span class="number">1234567</span>,</span><br><span class="line">                <span class="keyword">module</span>.getPath().replace(<span class="string">&quot;/data/app/...&quot;</span>, <span class="string">&quot;/data/app/com.xxxx.app-1/lib/arm64/&quot;</span>)</span><br><span class="line">        );</span><br><span class="line">        sb.append(line);</span><br><span class="line">    &#125;</span><br><span class="line">    sb.append(<span class="string">&quot;bffff000-c0000000 rw-p 00000000 00:00 0 [stack]\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> sb.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="②分析伪代码"><a href="#②分析伪代码" class="headerlink" title="②分析伪代码"></a>②分析伪代码</h6><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假设 sub_E30B0 是底层处理函数</span></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="type">void</span> <span class="title">sub_E30B0</span><span class="params">(<span class="type">int</span> a1, <span class="type">void</span>* a2, <span class="type">int</span> a3, ...)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">sub_E2DC8</span><span class="params">(<span class="type">void</span>* arg0, <span class="type">int</span> arg1, ...)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 这里的寄存器保存是由编译器在进入变长参数函数时自动生成的</span></span><br><span class="line">    <span class="comment">// 它会将 X2-X7, Q0-Q7 全部压栈，以便后续 va_start 使用</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> flags = arg1;</span><br><span class="line">    <span class="type">void</span>* context_ptr = arg0;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 对应 TBZ W2, #6, loc_E2E40</span></span><br><span class="line">    <span class="comment">// 检查 arg1 的第 6 位 (0x40)</span></span><br><span class="line">    <span class="keyword">if</span> (flags &amp; <span class="number">0x40</span>) &#123;</span><br><span class="line">        <span class="comment">// 这部分代码在汇编中是在手动初始化类似 va_list 的结构</span></span><br><span class="line">        <span class="comment">// 比如设置 gr_offs = -48, vr_offs = -128 等</span></span><br><span class="line">        <span class="comment">// 通常见于需要手动转发变长参数的情况</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">loc_E<span class="number">2E40</span>:</span><br><span class="line">    <span class="comment">// 3. 对应 ORR W2, W2, #0x20000</span></span><br><span class="line">    flags |= <span class="number">0x20000</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 对应 MOV W0, #0xFFFFFF9C (即 -100)</span></span><br><span class="line">    <span class="comment">// 5. 调用子函数并传递参数</span></span><br><span class="line">    <span class="built_in">sub_E30B0</span>(<span class="number">-100</span>, context_ptr, flags);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 6. 函数返回</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="③补全环境"><a href="#③补全环境" class="headerlink" title="③补全环境"></a>③补全环境</h6><h5 id="Ⅱ-尝试更改退出逻辑"><a href="#Ⅱ-尝试更改退出逻辑" class="headerlink" title="Ⅱ.尝试更改退出逻辑"></a>Ⅱ.尝试更改退出逻辑</h5><h6 id="①内存强制一致"><a href="#①内存强制一致" class="headerlink" title="①内存强制一致"></a>①内存强制一致</h6><p><code>导入java代码里面找到的关键的libxxx.so,强制对其.ELF 魔数校验（memcmp 返回 0 表示两段内存完全一致，也报错）</code></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[libc Monitor] memcmp 调用 | 长度: 4 | LR: libsecexe.so!0xe4410</span><br><span class="line">   -&gt; [Data] P1: 7f 45 4c 46  | .ELF</span><br><span class="line">   -&gt; [Data] P2: 7f 45 4c 46  | .ELF</span><br></pre></td></tr></table></figure>
 
 <p>报错如下：</p>
@@ -303,11 +599,14 @@
 </ul>
 </li>
 </ul>
-<h4 id="③退出强制拦截"><a href="#③退出强制拦截" class="headerlink" title="③退出强制拦截"></a>③退出强制拦截</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 5. 监听 exit (反调试暴毙点) - 强行续命版</span><br><span class="line">Symbol exit = libc.findSymbolByName(&quot;exit&quot;);</span><br><span class="line">if (exit != null) &#123;</span><br><span class="line">    dobby.replace(exit, new ReplaceCallback() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public HookStatus onCall(Emulator&lt;?&gt; emulator, HookContext context, long originFunction) &#123;</span><br><span class="line">            int code = context.getIntArg(0);</span><br><span class="line">            long lr = context.getLR();</span><br><span class="line">            System.out.printf(&quot;\n[Anti-Exit] &gt;&gt;&gt; 拦截到自毁退出请求！Code: %d, LR: %s &lt;&lt;&lt;\n&quot;,</span><br><span class="line">                    code, getLrInfo(lr));</span><br><span class="line"></span><br><span class="line">            System.out.println(&quot;[Anti-Exit] 正在强行拦截 exit，不准退出，尝试让程序继续向下执行...&quot;);</span><br><span class="line"></span><br><span class="line">            // 【关键修改】：返回 HookStatus.RET(emulator, 0)</span><br><span class="line">            // 并且【不要】调用 originFunction。</span><br><span class="line">            // 这样易盾调用 exit() 后，会直接返回到它下一条指令，就像什么都没发生一样。</span><br><span class="line">            return HookStatus.RET(emulator, 0);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, true);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="②退出强制拦截"><a href="#②退出强制拦截" class="headerlink" title="②退出强制拦截"></a>②退出强制拦截</h6><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 5. 监听 exit (反调试暴毙点) - 强行续命版</span><br><span class="line">Symbol exit = libc.findSymbolByName(&quot;exit&quot;);</span><br><span class="line">if (exit != null) &#123;</span><br><span class="line">    dobby.replace(exit, new ReplaceCallback() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public HookStatus onCall(Emulator&lt;?&gt; emulator, HookContext context, long originFunction) &#123;</span><br><span class="line">            int code = context.getIntArg(0);</span><br><span class="line">            long lr = context.getLR();</span><br><span class="line">            System.out.printf(&quot;\n[Anti-Exit] &gt;&gt;&gt; 拦截到自毁退出请求！Code: %d, LR: %s &lt;&lt;&lt;\n&quot;,</span><br><span class="line">                    code, getLrInfo(lr));</span><br><span class="line"></span><br><span class="line">            System.out.println(&quot;[Anti-Exit] 正在强行拦截 exit，不准退出，尝试让程序继续向下执行...&quot;);</span><br><span class="line"></span><br><span class="line">            // 【关键修改】：返回 HookStatus.RET(emulator, 0)</span><br><span class="line">            // 并且【不要】调用 originFunction。</span><br><span class="line">            // 这样易盾调用 exit() 后，会直接返回到它下一条指令，就像什么都没发生一样。</span><br><span class="line">            return HookStatus.RET(emulator, 0);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, true);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>会遇到”寄存器污染”技术,就是上述的内存检查<em>64没有正常通过，就会返回一个异常值，虽然<code>routineAddr == 0</code> 拦截，但会导致非法内存读取，*<em>别拦截exit了，太<code>je</code>麻烦了</em></em></p>
-<h3 id="3-选择"><a href="#3-选择" class="headerlink" title="3&gt;选择"></a>3&gt;选择</h3><p>是应该“欺骗过程”让他自以为正常，还是“修正结果”强行抹平伤痕</p>
-<p>待续。。。</p>
+<p>会遇到”寄存器污染”技术,就是上述的内存检查*64没有正常通过，就会返回一个异常值，虽然<code>routineAddr == 0</code> 拦截，但会导致非法内存读取</p>
+<h3 id="3-操作"><a href="#3-操作" class="headerlink" title="3&gt;操作"></a>3&gt;操作</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">test</span><span class="params">(String apkPath, String libName)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="built_in">this</span>.apkPath = apkPath;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 初始化 64 位模拟器</span></span><br><span class="line">        emulator = AndroidEmulatorBuilder.for64Bit()</span><br><span class="line">                .setProcessName(<span class="string">&quot;com.kaoshibaodian.app&quot;</span>)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 开启系统调用日志并添加文件重定向拦截</span></span><br><span class="line">        emulator.getSyscallHandler().setVerbose(<span class="literal">true</span>);</span><br><span class="line">        emulator.getSyscallHandler().addIOResolver(<span class="built_in">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> <span class="type">Memory</span> <span class="variable">memory</span> <span class="operator">=</span> emulator.getMemory();</span><br><span class="line">        memory.setLibraryResolver(<span class="keyword">new</span> <span class="title class_">AndroidResolver</span>(<span class="number">23</span>));</span><br><span class="line"></span><br><span class="line">        emulator.getMemory().addModuleListener(<span class="keyword">new</span> <span class="title class_">ModuleListener</span>() &#123;            </span><br><span class="line">        &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    </span><br><span class="line">    	<span class="comment">// 3. 初始化虚拟机</span></span><br><span class="line">        vm = emulator.createDalvikVM(<span class="keyword">new</span> <span class="title class_">File</span>(apkPath));</span><br><span class="line">        vm.setVerbose(<span class="literal">true</span>);</span><br><span class="line">        vm.setJni(<span class="built_in">this</span>);</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">AndroidModule</span>(emulator, vm).register(memory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="1-找”动机”和”死因”"><a href="#1-找”动机”和”死因”" class="headerlink" title="1&gt;&gt;找”动机”和”死因”"></a>1&gt;&gt;找”动机”和”死因”</h4><p>待续。。。</p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>

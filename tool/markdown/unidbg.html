@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/.svg" color="#222">
+  <meta name="google-site-verification" content="GeY5VOyMNGR7Yc2xxf9IHlm8pT1aps_AeXRZfGerucs">
+  <meta name="msvalidate.01" content="63D9688A8F4C2AAAD74951EFBA3C541A">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"cliayn.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="记录的代码">
+<meta property="og:type" content="website">
+<meta property="og:title" content="unidbg代码记录">
+<meta property="og:url" content="https://cliayn.github.io/tool/markdown/unidbg.html">
+<meta property="og:site_name" content="乌篷船的博客">
+<meta property="og:description" content="记录的代码">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-04T03:20:41.760Z">
+<meta property="article:author" content="乌篷船">
+<meta property="article:tag" content="article">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://cliayn.github.io/tool/markdown/unidbg">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"https://cliayn.github.io/tool/markdown/unidbg.html","path":"tool/markdown/unidbg.html","title":"unidbg代码记录"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>unidbg代码记录 | 乌篷船的博客
+</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">乌篷船的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-sitemap fa-fw"></i>友情链接</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乌篷船"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乌篷船</p>
+  <div class="site-description" itemprop="description">记录笔记的网址</div>
+  
+  <div style="color: #002366; border-left: 3px solid #002366; padding-left: 5px; font-size: 12px; margin-top: 10px; text-align: left; line-height: 1.5;">
+    <strong>免责声明：<br></strong>本站所有渗透笔记仅供安全研究<br>禁止非法用途！
+  </div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:cliay55555@gmail.com" title="E-Mail → mailto:cliay55555@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+    
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Article/" rel="tag">Article</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app-test/" rel="tag">app-test</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+    
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">unidbg代码记录
+</h1>
+
+<div class="post-meta-container">
+    <div class="post-description">记录的代码</div>
+  <ul class="breadcrumb">
+            <li><a href="/tool/">TOOL</a></li>
+            <li><a href="/tool/markdown/">MARKDOWN</a></li>
+            <li>UNIDBG</li>
+  </ul>
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印退出的父类的汇编代码</span></span><br><span class="line"><span class="comment">// 既然 E2E4C 返回后就退出了，我们去分析调用 E2DC8 的父函数逻辑</span></span><br><span class="line"><span class="comment">// 我们直接对 E2DC8 的入口下钩子，打印它的调用栈信息</span></span><br><span class="line">                    <span class="type">long</span> <span class="variable">base</span> <span class="operator">=</span> <span class="keyword">module</span>.base;</span><br><span class="line">                    <span class="type">long</span> <span class="variable">sub_E2DC8</span> <span class="operator">=</span> base + <span class="number">0xE2DC8L</span>;</span><br><span class="line"></span><br><span class="line">                    emulator.getBackend().hook_add_new(<span class="keyword">new</span> <span class="title class_">com</span>.github.unidbg.arm.backend.CodeHook() &#123;</span><br><span class="line">                        <span class="meta">@Override</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAttach</span><span class="params">(UnHook unHook)</span> &#123;&#125;</span><br><span class="line">                        <span class="meta">@Override</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">detach</span><span class="params">()</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">hook</span><span class="params">(Backend backend, <span class="type">long</span> address, <span class="type">int</span> size, Object user)</span> &#123;</span><br><span class="line">                            <span class="keyword">if</span> (address == sub_E2DC8) &#123;</span><br><span class="line">                                <span class="comment">// 获取 LR，看看是谁调用的我</span></span><br><span class="line">                                <span class="type">long</span> <span class="variable">lr</span> <span class="operator">=</span> emulator.getContext().getLR();</span><br><span class="line">                                System.out.println(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;=========================================================&quot;</span>);</span><br><span class="line">                                System.out.println(<span class="string">&quot;&gt;&gt;&gt; [Found] sub_E2DC8 被调用！&quot;</span>);</span><br><span class="line">                                System.out.println(<span class="string">&quot;&gt;&gt;&gt; [Caller] 调用者地址 (LR): 0x&quot;</span> + Long.toHexString(lr));</span><br><span class="line">                                System.out.println(<span class="string">&quot;&gt;&gt;&gt; [Offset] 调用者在 SO 中的偏移: 0x&quot;</span> + Long.toHexString(lr - base));</span><br><span class="line"></span><br><span class="line">                                <span class="comment">// 打印调用者附近的指令，看看它是怎么处理返回值的</span></span><br><span class="line">                                <span class="type">byte</span>[] parentCode = emulator.getBackend().mem_read(lr, <span class="number">100</span>);</span><br><span class="line">                                <span class="keyword">try</span> (<span class="type">Capstone</span> <span class="variable">cs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Capstone</span>(Capstone.CS_ARCH_ARM64, Capstone.CS_MODE_ARM)) &#123;</span><br><span class="line">                                    Capstone.CsInsn[] insns = (Capstone.CsInsn[]) cs.disasm(parentCode, lr);</span><br><span class="line">                                    System.out.println(<span class="string">&quot;&gt;&gt;&gt; [Analysis] 调用者后续逻辑:&quot;</span>);</span><br><span class="line">                                    <span class="keyword">for</span> (Capstone.CsInsn insn : insns) &#123;</span><br><span class="line">                                        System.out.printf(<span class="string">&quot;    0x%x: %s %s%n&quot;</span>, insn.getAddress(), insn.mnemonic, insn.opStr);</span><br><span class="line">                                        <span class="keyword">if</span> (insn.mnemonic.startsWith(<span class="string">&quot;cb&quot;</span>) || insn.mnemonic.startsWith(<span class="string">&quot;tb&quot;</span>)) &#123;</span><br><span class="line">                                            System.err.println(<span class="string">&quot;        [!!!] 发现关键跳转！这可能就是判断自检是否通过的地方&quot;</span>);</span><br><span class="line">                                        &#125;</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125; <span class="keyword">catch</span> (Exception e) &#123;&#125;</span><br><span class="line">                                System.out.println(<span class="string">&quot;============================================================&quot;</span> + <span class="string">&quot;\n&quot;</span>);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;, sub_E2DC8, sub_E2DC8, <span class="literal">null</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//是否绕过壳加密</span></span><br><span class="line"></span><br><span class="line"><span class="type">Module</span> <span class="variable">libart</span> <span class="operator">=</span> emulator.getMemory().findModule(<span class="string">&quot;libart.so&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (libart != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="type">Symbol</span> <span class="variable">registerNatives</span> <span class="operator">=</span> libart.findSymbolByName(<span class="string">&quot;_ZN3art3JNI15RegisterNativesEP7_JNIEnvP7_jclassPK15JNINativeMethodi&quot;</span>);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (registerNatives != <span class="literal">null</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;&gt;&gt;&gt; [验证开始] 正在监控 RegisterNatives，等待壳释放核心逻辑...&quot;</span>);</span><br><span class="line"></span><br><span class="line">                    Dobby.getInstance(emulator).replace(registerNatives, <span class="keyword">new</span> <span class="title class_">ReplaceCallback</span>() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> HookStatus <span class="title function_">onCall</span><span class="params">(Emulator&lt;?&gt; emulator, <span class="type">long</span> originFunction)</span> &#123;</span><br><span class="line">                            <span class="comment">// 只要这个方法被调用，就说明壳已经开始注册函数了！</span></span><br><span class="line">                            System.out.println(<span class="string">&quot;\n#########################################################&quot;</span>);</span><br><span class="line">                            System.out.println(<span class="string">&quot;### [通过验证] 壳已成功绕过自检测，正在向系统提交解密后的算法！ ###&quot;</span>);</span><br><span class="line">                            System.out.println(<span class="string">&quot;#########################################################&quot;</span>);</span><br><span class="line"></span><br><span class="line">                            <span class="type">RegisterContext</span> <span class="variable">context</span> <span class="operator">=</span> emulator.getContext();</span><br><span class="line">                            <span class="type">long</span> <span class="variable">methodsPtr</span> <span class="operator">=</span> context.getPointerArg(<span class="number">2</span>).peer;</span><br><span class="line">                            <span class="type">int</span> <span class="variable">methodCount</span> <span class="operator">=</span> (<span class="type">int</span>) context.getLongArg(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">                            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; methodCount; i++) &#123;</span><br><span class="line">                                <span class="type">long</span> <span class="variable">structBase</span> <span class="operator">=</span> methodsPtr + (i * <span class="number">24L</span>);</span><br><span class="line">                                <span class="type">long</span> <span class="variable">namePtr</span> <span class="operator">=</span> emulator.getMemory().pointer(structBase).getPointer(<span class="number">0</span>).peer;</span><br><span class="line">                                <span class="type">long</span> <span class="variable">sigPtr</span> <span class="operator">=</span> emulator.getMemory().pointer(structBase + <span class="number">8</span>).getPointer(<span class="number">0</span>).peer;</span><br><span class="line">                                <span class="type">long</span> <span class="variable">fnPtr</span> <span class="operator">=</span> emulator.getMemory().pointer(structBase + <span class="number">16</span>).peer;</span><br><span class="line"></span><br><span class="line">                                <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> emulator.getMemory().pointer(namePtr).getString(<span class="number">0</span>);</span><br><span class="line">                                <span class="type">String</span> <span class="variable">signature</span> <span class="operator">=</span> emulator.getMemory().pointer(sigPtr).getString(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">                                System.out.println(String.format(<span class="string">&quot;&gt;&gt;&gt; [解密成功] 方法名: %s&quot;</span>, name));</span><br><span class="line">                                System.out.println(String.format(<span class="string">&quot;    - 签名: %s&quot;</span>, signature));</span><br><span class="line">                                System.out.println(String.format(<span class="string">&quot;    - 内存地址: 0x%x&quot;</span>, fnPtr));</span><br><span class="line"></span><br><span class="line">                                <span class="keyword">if</span> (<span class="keyword">module</span> != <span class="literal">null</span>) &#123;</span><br><span class="line">                                    System.out.println(String.format(<span class="string">&quot;    - IDA偏移(脱壳后): 0x%x&quot;</span>, fnPtr - <span class="keyword">module</span>.base));</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">return</span> HookStatus.RET(emulator, originFunction);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印退出那里的汇编代码</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                    <span class="type">long</span> <span class="variable">base</span> <span class="operator">=</span> <span class="keyword">module</span>.base;</span><br><span class="line">                    <span class="type">long</span> <span class="variable">tracePoint</span> <span class="operator">=</span> base + <span class="number">0xE2E4CL</span>;</span><br><span class="line"></span><br><span class="line">                    emulator.getBackend().hook_add_new(<span class="keyword">new</span> <span class="title class_">com</span>.github.unidbg.arm.backend.CodeHook() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAttach</span><span class="params">(UnHook unHook)</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">detach</span><span class="params">()</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">hook</span><span class="params">(Backend backend, <span class="type">long</span> address, <span class="type">int</span> size, Object user)</span> &#123;</span><br><span class="line">                            <span class="keyword">if</span> (address == tracePoint) &#123;</span><br><span class="line">                                <span class="comment">// 兼容性好的分隔线打印</span></span><br><span class="line">                                System.out.println(<span class="string">&quot;\n************************************************************&quot;</span>);</span><br><span class="line">                                System.out.println(<span class="string">&quot;&gt;&gt;&gt; [Critical Trace] 已越过文件读取点 (0x&quot;</span> + Long.toHexString(address) + <span class="string">&quot;)&quot;</span>);</span><br><span class="line"></span><br><span class="line">                                <span class="comment">// 关键：打印当前的 X0 寄存器，它是 sub_E30B0 的返回值（通常是文件描述符 FD）</span></span><br><span class="line">                                <span class="comment">// 如果 X0 为负数或 0，说明文件打开失败，这很可能导致后续的退出</span></span><br><span class="line">                                <span class="type">UnidbgPointer</span> <span class="variable">x0</span> <span class="operator">=</span> emulator.getContext().getPointerArg(<span class="number">0</span>);</span><br><span class="line">                                System.out.println(<span class="string">&quot;&gt;&gt;&gt; [Context] X0 (Return Value): &quot;</span> + x0);</span><br><span class="line"></span><br><span class="line">                                <span class="comment">// 读取内存中的机器码</span></span><br><span class="line">                                <span class="type">byte</span>[] code = emulator.getBackend().mem_read(address, <span class="number">200</span>);</span><br><span class="line"></span><br><span class="line">                                <span class="comment">// 使用 try-with-resources 自动释放 Capstone 资源</span></span><br><span class="line">                                <span class="keyword">try</span> (<span class="type">Capstone</span> <span class="variable">cs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Capstone</span>(Capstone.CS_ARCH_ARM64, Capstone.CS_MODE_ARM)) &#123;</span><br><span class="line">                                    <span class="comment">// 反汇编获取指令数组</span></span><br><span class="line">                                    Capstone.CsInsn[] insns = (Capstone.CsInsn[]) cs.disasm(code, address);</span><br><span class="line"></span><br><span class="line">                                    System.out.println(<span class="string">&quot;&gt;&gt;&gt; [Disasm] 后续 50 条指令预览:&quot;</span>);</span><br><span class="line">                                    <span class="keyword">for</span> (Capstone.CsInsn insn : insns) &#123;</span><br><span class="line">                                        <span class="comment">// 使用 insn.getAddress (兼容性最广)</span></span><br><span class="line">                                        <span class="type">String</span> <span class="variable">addrHex</span> <span class="operator">=</span> Long.toHexString(insn.getAddress());</span><br><span class="line">                                        System.out.printf(<span class="string">&quot;    0x%s: %s %s%n&quot;</span>, addrHex, insn.mnemonic, insn.opStr);</span><br><span class="line"></span><br><span class="line">                                        <span class="comment">// 1. 发现 SVC 说明它在跳过 libc 直接调内核</span></span><br><span class="line">                                        <span class="keyword">if</span> (<span class="string">&quot;svc&quot;</span>.equals(insn.mnemonic)) &#123;</span><br><span class="line">                                            System.err.println(<span class="string">&quot;        [!] 警告: 发现 SVC 系统调用，可能正在计算 Checksum 或检查调试器&quot;</span>);</span><br><span class="line">                                        &#125;</span><br><span class="line">                                        <span class="comment">// 2. 发现分支判断</span></span><br><span class="line">                                        <span class="keyword">if</span> (insn.mnemonic.startsWith(<span class="string">&quot;cb&quot;</span>) || insn.mnemonic.startsWith(<span class="string">&quot;b.&quot;</span>)) &#123;</span><br><span class="line">                                            System.out.println(<span class="string">&quot;        [?] 发现逻辑跳转，可能是校验结果的分支&quot;</span>);</span><br><span class="line">                                        &#125;</span><br><span class="line">                                        <span class="comment">// 3. 到达函数返回则停止，避免打印过多无用数据</span></span><br><span class="line">                                        <span class="keyword">if</span> (<span class="string">&quot;ret&quot;</span>.equals(insn.mnemonic)) &#123;</span><br><span class="line">                                            System.out.println(<span class="string">&quot;        [*] 函数逻辑结束点&quot;</span>);</span><br><span class="line">                                            <span class="keyword">break</span>;</span><br><span class="line">                                        &#125;</span><br><span class="line">                                    &#125;</span><br><span class="line">                                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                                    System.err.println(<span class="string">&quot;&gt;&gt;&gt; 反汇编失败: &quot;</span> + e.getMessage());</span><br><span class="line">                                &#125;</span><br><span class="line">                                System.out.println(<span class="string">&quot;************************************************************\n&quot;</span>);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;, tracePoint, tracePoint, <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查看RET的下一个地址</span></span><br><span class="line"></span><br><span class="line"><span class="type">long</span> <span class="variable">sub_E2DC8_Addr</span> <span class="operator">=</span> <span class="keyword">module</span>.base + <span class="number">0xE2DC8L</span>;</span><br><span class="line"></span><br><span class="line">                    emulator.getBackend().hook_add_new(<span class="keyword">new</span> <span class="title class_">com</span>.github.unidbg.arm.backend.CodeHook() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onAttach</span><span class="params">(UnHook unHook)</span> &#123;&#125;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">detach</span><span class="params">()</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">hook</span><span class="params">(Backend backend, <span class="type">long</span> address, <span class="type">int</span> size, Object user)</span> &#123;</span><br><span class="line">                            <span class="keyword">if</span> (address == sub_E2DC8_Addr) &#123;</span><br><span class="line">                                <span class="comment">// 1. 获取进入函数时的 LR 寄存器值</span></span><br><span class="line">                                com.github.unidbg.arm.context.<span class="type">RegisterContext</span> <span class="variable">context</span> <span class="operator">=</span> emulator.getContext();</span><br><span class="line">                                <span class="type">long</span> <span class="variable">lr</span> <span class="operator">=</span> context.getLR();</span><br><span class="line"></span><br><span class="line">                                <span class="comment">// 2. 计算在 SO 中的相对偏移</span></span><br><span class="line">                                <span class="type">long</span> <span class="variable">offset</span> <span class="operator">=</span> lr - <span class="keyword">module</span>.base;</span><br><span class="line"></span><br><span class="line">                                System.out.println(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;================ [RET Tracker] ================&quot;</span>);</span><br><span class="line">                                System.out.println(<span class="string">&quot;&gt;&gt;&gt; 目标函数 sub_E2DC8 被调用！&quot;</span>);</span><br><span class="line">                                System.out.println(<span class="string">&quot;&gt;&gt;&gt; 它执行完 RET 后，会返回到地址: 0x&quot;</span> + Long.toHexString(lr));</span><br><span class="line">                                System.out.println(<span class="string">&quot;&gt;&gt;&gt; 对应的 SO 偏移 (即调用者的下一条指令): 0x&quot;</span> + Long.toHexString(offset));</span><br><span class="line">                                System.out.println(<span class="string">&quot;===============================================&quot;</span> + <span class="string">&quot;\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">                                <span class="comment">// 3. (可选) 打印调用栈，看看到底经过了哪些函数</span></span><br><span class="line">                                <span class="comment">// emulator.getStackTrace().print(System.out);</span></span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;, sub_E2DC8_Addr, sub_E2DC8_Addr, <span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//检查自检测</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">					<span class="type">long</span> <span class="variable">base</span> <span class="operator">=</span> <span class="keyword">module</span>.base;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 监控点 2：读取内容 (0xE8A8C) ---</span></span><br><span class="line"><span class="comment">// 使用断点代替 Dobby Hook</span></span><br><span class="line">                    emulator.attach().addBreakPoint(base + <span class="number">0xE8A8CL</span>, <span class="keyword">new</span> <span class="title class_">BreakPointCallback</span>() &#123;</span><br><span class="line">                        <span class="comment">// 成员变量存地址</span></span><br><span class="line">                        <span class="keyword">private</span> UnidbgPointer bufferPtr;</span><br><span class="line"></span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">onHit</span><span class="params">(Emulator&lt;?&gt; emulator, <span class="type">long</span> address)</span> &#123;</span><br><span class="line">                            <span class="comment">// 在函数执行前 (pre-call 逻辑)</span></span><br><span class="line">                            <span class="comment">// 使用你的接口获取 X0</span></span><br><span class="line">                            <span class="type">RegisterContext</span> <span class="variable">ctx</span> <span class="operator">=</span> emulator.getContext();</span><br><span class="line">                            <span class="keyword">if</span> (ctx <span class="keyword">instanceof</span> Arm64RegisterContext) &#123;</span><br><span class="line">                                <span class="built_in">this</span>.bufferPtr = ((Arm64RegisterContext) ctx).getXPointer(<span class="number">0</span>);</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="comment">// 设置一个单次断点在 LR (返回地址) 处，模拟 post-call</span></span><br><span class="line">                            emulator.attach().addBreakPoint(ctx.getLR(), <span class="keyword">new</span> <span class="title class_">BreakPointCallback</span>() &#123;</span><br><span class="line">                                <span class="meta">@Override</span></span><br><span class="line">                                <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">onHit</span><span class="params">(Emulator&lt;?&gt; emulator, <span class="type">long</span> address)</span> &#123;</span><br><span class="line">                                    <span class="keyword">if</span> (bufferPtr != <span class="literal">null</span>) &#123;</span><br><span class="line">                                        <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> bufferPtr.getString(<span class="number">0</span>).trim();</span><br><span class="line">                                        <span class="keyword">if</span> (!content.isEmpty()) &#123;</span><br><span class="line">                                            System.out.println(<span class="string">&quot;[Content Read] 读取到行: &quot;</span> + content);</span><br><span class="line">                                        &#125;</span><br><span class="line">                                    &#125;</span><br><span class="line">                                    <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// 继续执行</span></span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;);</span><br><span class="line"></span><br><span class="line">                            <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// 继续执行</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// --- 监控点 3：比对逻辑 (0xE8AC8) ---</span></span><br><span class="line">                    emulator.attach().addBreakPoint(base + <span class="number">0xE8AC8L</span>, <span class="keyword">new</span> <span class="title class_">BreakPointCallback</span>() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">onHit</span><span class="params">(Emulator&lt;?&gt; emulator, <span class="type">long</span> address)</span> &#123;</span><br><span class="line">                            <span class="type">Arm64RegisterContext</span> <span class="variable">ctx</span> <span class="operator">=</span> emulator.getContext();</span><br><span class="line">                            <span class="type">UnidbgPointer</span> <span class="variable">arg0</span> <span class="operator">=</span> ctx.getXPointer(<span class="number">0</span>); <span class="comment">// 行内容</span></span><br><span class="line">                            <span class="type">UnidbgPointer</span> <span class="variable">arg1</span> <span class="operator">=</span> ctx.getXPointer(<span class="number">1</span>); <span class="comment">// 关键字</span></span><br><span class="line">                            <span class="keyword">try</span> &#123;</span><br><span class="line">                                System.out.println(<span class="string">&quot;[Match Check] 比对: &#x27;&quot;</span> + arg0.getString(<span class="number">0</span>) + <span class="string">&quot;&#x27; VS &#x27;&quot;</span> + arg1.getString(<span class="number">0</span>) + <span class="string">&quot;&#x27;&quot;</span>);</span><br><span class="line">                            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                                System.out.println(<span class="string">&quot;[Match Check] 原始地址: X0=&quot;</span> + arg0 + <span class="string">&quot;, X1=&quot;</span> + arg1);</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      </div>
+      
+      
+      
+    </div>
+  <ul class="breadcrumb">
+            <li><a href="/tool/">TOOL</a></li>
+            <li><a href="/tool/markdown/">MARKDOWN</a></li>
+            <li>UNIDBG</li>
+  </ul>
+
+    
+    
+
+
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa-regular fa-user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">乌篷船</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">173k</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/cliayn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"cliayn/cliayn.github.io","repo_id":"R_kgDOMkJBoA","category":"Announcements","category_id":"DIC_kwDOMkJBoM4C1rB-","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"light","lang":"zh-CN","crossorigin":"anonymous","input_position":"bottom","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
+<div id="bg-toggle-btn" class="day-night-switch">
+  <i id="bg-toggle-icon" class="fa fa-moon"></i>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('bg-toggle-btn');
+  var icon = document.getElementById('bg-toggle-icon');
+  
+  // 定义图片路径
+  var pic1 = 'url("/images/background.jpg")'; // 默认/白天背景
+  var pic2 = 'url("/images/ai-background.png")'; // 切换/夜晚背景
+
+  // 检查本地存储中是否有记录，保持刷新后状态一致
+  var isNight = localStorage.getItem('isNight') === 'true';
+
+  // 初始化页面状态函数
+  function applyState() {
+    if (isNight) {
+      // 如果是夜晚模式：显示太阳图标，背景换成 pic2
+      document.body.style.backgroundImage = pic2;
+      icon.className = 'fa fa-sun'; 
+    } else {
+      // 如果是白天模式：显示月亮图标，背景换成 pic1
+      document.body.style.backgroundImage = pic1;
+      icon.className = 'fa fa-moon';
+    }
+  }
+
+  // 页面加载时先应用一次状态
+  applyState();
+
+  // 点击事件监听
+  btn.addEventListener('click', function() {
+    isNight = !isNight; // 状态反转
+    applyState(); // 应用新状态
+    // 将状态保存到浏览器缓存，防止刷新页面后重置
+    localStorage.setItem('isNight', isNight);
+  });
+})();
+</script>
+</body>
+</html>
