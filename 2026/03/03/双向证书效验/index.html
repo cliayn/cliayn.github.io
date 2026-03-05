@@ -23,15 +23,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"cliayn.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="0-前言​	工作下的uat测试环境，采用了TLCP的双向认证，因为是测试环境可以webview+iptables取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。所用到的工具 jadx、frida、bp&#x2F;charles&#x2F;mitm&#x2F;yakit 学习文章抓包之双向证书校验、HTTPS 双向认证抓包指南">
+    <meta name="description" content="0-前言​	工作下的uat测试环境，采用了TLCP的双向认证，因为是测试环境可以webview+iptables取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。所用到的工具 jadx、frida、bp&#x2F;charles&#x2F;mitm&#x2F;yakit 学习文章抓包之双向证书校验、HTTPS 双向认证抓包指南、frida-analykit wireshark 流量抓包">
 <meta property="og:type" content="article">
 <meta property="og:title" content="双向证书效验">
 <meta property="og:url" content="https://cliayn.github.io/2026/03/03/%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%95%88%E9%AA%8C/">
 <meta property="og:site_name" content="乌篷船的博客">
-<meta property="og:description" content="0-前言​	工作下的uat测试环境，采用了TLCP的双向认证，因为是测试环境可以webview+iptables取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。所用到的工具 jadx、frida、bp&#x2F;charles&#x2F;mitm&#x2F;yakit 学习文章抓包之双向证书校验、HTTPS 双向认证抓包指南">
+<meta property="og:description" content="0-前言​	工作下的uat测试环境，采用了TLCP的双向认证，因为是测试环境可以webview+iptables取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。所用到的工具 jadx、frida、bp&#x2F;charles&#x2F;mitm&#x2F;yakit 学习文章抓包之双向证书校验、HTTPS 双向认证抓包指南、frida-analykit wireshark 流量抓包">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-02T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-03T09:33:47.368Z">
+<meta property="article:modified_time" content="2026-03-05T08:49:01.455Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="app">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
     <img class="site-author-image" itemprop="image" alt="乌篷船"
       src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">乌篷船</p>
-  <div class="site-description" itemprop="description">记录笔记的网址</div>
+  <div class="site-description" itemprop="description">记录笔记的网址<br>存在学习错误的地方请多指教</div>
   
   <div style="color: #002366; border-left: 3px solid #002366; padding-left: 5px; font-size: 12px; margin-top: 10px; text-align: left; line-height: 1.5;">
     <strong>免责声明：<br></strong>本站所有渗透笔记仅供安全研究<br>禁止非法用途！
@@ -226,7 +226,7 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="乌篷船的博客">
-      <meta itemprop="description" content="记录笔记的网址">
+      <meta itemprop="description" content="记录笔记的网址<br>存在学习错误的地方请多指教">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -245,9 +245,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-03-03 00:00:00 / 修改时间：17:33:47" itemprop="dateCreated datePublished" datetime="2026-03-03T00:00:00+08:00">2026-03-03</time>
+      <time title="创建时间：2026-03-03 00:00:00" itemprop="dateCreated datePublished" datetime="2026-03-03T00:00:00+08:00">2026-03-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-05 16:49:01" itemprop="dateModified" datetime="2026-03-05T16:49:01+08:00">2026-03-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -266,7 +272,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>717</span>
+      <span>757</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -285,7 +291,7 @@
     
     <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	工作下的<code>uat</code>测试环境，采用了<code>TLCP</code>的双向认证，因为是测试环境可以<code>webview</code>+<code>iptables</code>取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。所用到的工具</p>
 <p><code>jadx</code>、<code>frida</code>、<code>bp/charles/mitm/yakit</code></p>
-<p>学习文章<a target="_blank" rel="noopener" href="https://muhe-blog.github.io/2024/07/07/%E6%8A%93%E5%8C%85%E4%B9%8B%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%A0%A1%E9%AA%8C/">抓包之双向证书校验</a>、<a target="_blank" rel="noopener" href="https://juejin.cn/post/7579298511071494144"><code>HTTPS</code> 双向认证抓包指南</a></p>
+<p>学习文章<a target="_blank" rel="noopener" href="https://muhe-blog.github.io/2024/07/07/%E6%8A%93%E5%8C%85%E4%B9%8B%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%A0%A1%E9%AA%8C/">抓包之双向证书校验</a>、<a target="_blank" rel="noopener" href="https://juejin.cn/post/7579298511071494144"><code>HTTPS</code> 双向认证抓包指南</a>、<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-286510.htm">frida-analykit wireshark 流量抓包（上）</a></p>
 <span id="more"></span>
 
 <h1 id="1-双向认证-mTLS"><a href="#1-双向认证-mTLS" class="headerlink" title="1-双向认证 (mTLS)"></a>1-双向认证 (<code>mTLS</code>)</h1><h3 id="①普通-HTTPS-通常只有单向认证"><a href="#①普通-HTTPS-通常只有单向认证" class="headerlink" title="①普通 HTTPS: 通常只有单向认证"></a>①<strong>普通 <code>HTTPS</code></strong>: 通常只有<strong>单向认证</strong></h3><h3 id="②常用协议"><a href="#②常用协议" class="headerlink" title="②常用协议"></a>②常用协议</h3><h4 id="Ⅰ-ISCP-gRPC-MQTT-VPN-CoAP"><a href="#Ⅰ-ISCP-gRPC-MQTT-VPN-CoAP" class="headerlink" title="Ⅰ.ISCP&#x2F;gRPC&#x2F;MQTT&#x2F;VPN&#x2F;CoAP"></a>Ⅰ.<code>ISCP</code>&#x2F;<code>gRPC</code>&#x2F;<code>MQTT</code>&#x2F;<code>VPN</code>&#x2F;<code>CoAP</code></h4><table>
@@ -359,7 +365,8 @@
 </ul>
 <p><strong>国密可能存在于<code>so</code>层</strong></p>
 <p>可以查看<code>send()</code> 栈里直接，直接输出</p>
-<p><code>libxxxsec.so!0x12345</code>等非常见的so层，自研层的需要用到<code>unidbg</code>和<code>ida.pro</code></p>
+<p><code>libxxxsec.so!0x12345</code>等非常见的so层，自研层的可能需要用到<code>unidbg</code>和<code>ida.pro</code></p>
+<p>待续。。。</p>
 
     </div>
 
