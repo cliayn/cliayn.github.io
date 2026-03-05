@@ -1258,7 +1258,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #20f179;
+    background: #78b938;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2920,4 +2920,88 @@ body {
   .sidebar-active .sidebar {
     transform: translateX(0) !important;
   }
+}
+/* --- 整体分页容器：纯净半透明 --- */
+.pagination {
+  background: rgba(255,255,255,0.4) !important; /* 40% 透明度的纯白 */
+  backdrop-filter: none !important; /* 彻底关掉毛玻璃 */
+  border: 1px solid rgba(255,255,255,0.6) !important; /* 极淡的白线勾勒轮廓 */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.04) !important; /* 几乎看不见的柔和阴影 */
+  border-radius: 50px !important; /* 胶囊圆角 */
+  padding: 10px 25px !important;
+  margin-top: 40px !important;
+  text-align: center;
+}
+/* --- 页码按钮：淡雅小圆点 --- */
+.pagination .page-number,
+.pagination .prev,
+.pagination .next,
+.pagination .space {
+  background: rgba(255,255,255,0.5) !important; /* 按钮比底色稍白一点 */
+  color: #999 !important; /* 浅灰色文字 */
+  border: none !important; /* 去掉硬边框 */
+  border-radius: 50% !important; /* 圆形按钮 */
+  width: 38px !important;
+  height: 38px !important;
+  line-height: 38px !important;
+  display: inline-block !important;
+  margin: 0 8px !important;
+  transition: all 0.3s ease-in-out;
+  padding: 0 !important;
+}
+/* --- 当前页：淡雅珍珠白 --- */
+.pagination .page-number.current {
+  background: #fff !important; /* 选中时变成纯白 */
+  color: #555 !important; /* 文字加深，增加辨识度 */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08) !important; /* 选中项轻轻浮起 */
+  transform: scale(1.1); /* 稍微放大一点点 */
+}
+/* --- 悬停效果：灵动渐变 --- */
+.pagination .page-number:hover,
+.pagination .prev:hover,
+.pagination .next:hover {
+  background: rgba(255,255,255,0.9) !important; /* 悬停时接近实白 */
+  color: #333 !important;
+  transform: translateY(-3px); /* 轻微上移 */
+}
+/* 移除省略号的多余背景 */
+.pagination .space {
+  background: transparent !important;
+  color: #bbb !important;
+}
+/* --- “阅读全文”按钮：花瓣/花簇风格 --- */
+.post-button {
+  margin-top: 40px;
+  text-align: center; /* 居中显示更有仪式感 */
+}
+.post-button .btn {
+  background: rgba(255,192,203,0.2) !important; /* 极淡的樱花粉背景 */
+  color: #424242 !important; /* 柔和的文字颜色 */
+  padding: 8px 25px !important;
+  border: 1px solid rgba(255,182,193,0.4) !important; /* 淡淡的粉色边框 */
+/* 关键：不规则圆角创造“花瓣”感 */
+  border-radius: 30% 70% 70% 30%/30% 30% 70% 70% !important;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* 像花开一样的舒缓动画 */
+  box-shadow: 0 5px 15px rgba(255,182,193,0.1) !important;
+  text-decoration: none !important;
+  display: inline-block;
+}
+/* --- 悬停效果：花朵绽放 --- */
+.post-button .btn:hover {
+  background: #ff7675 !important; /* 悬停时颜色加深，像盛开 */
+  color: #fff !important;
+  border-color: transparent !important;
+/* 悬停时圆角变规则，模拟拉伸舒展 */
+  border-radius: 50px !important;
+  transform: translateY(-3px) scale(1.05); /* 向上轻跳并放大 */
+  box-shadow: 0 10px 20px rgba(255,118,117,0.3) !important;
+}
+/* --- 装饰性图标（可选）：给 >> 加点灵动 --- */
+.post-button .btn i {
+  margin-left: 5px;
+  font-size: 12px;
+  transition: transform 0.4s;
+}
+.post-button .btn:hover i {
+  transform: translateX(5px) rotate(15deg); /* 箭头微微旋转并右移 */
 }
