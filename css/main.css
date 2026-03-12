@@ -1258,7 +1258,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #17ff6f;
+    background: #50ff47;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2975,10 +2975,10 @@ body {
   text-align: center; /* 居中显示更有仪式感 */
 }
 .post-button .btn {
-  background: rgba(255,192,203,0.2) !important; /* 极淡的樱花粉背景 */
+  background: rgba(192,192,255,0.2) !important; /* 极淡的樱花粉背景 */
   color: #424242 !important; /* 柔和的文字颜色 */
   padding: 8px 25px !important;
-  border: 1px solid rgba(255,182,193,0.4) !important; /* 淡淡的粉色边框 */
+  border: 1px solid rgba(182,238,255,0.4) !important; /* 淡淡的粉色边框 */
 /* 关键：不规则圆角创造“花瓣”感 */
   border-radius: 30% 70% 70% 30%/30% 30% 70% 70% !important;
   transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); /* 像花开一样的舒缓动画 */
@@ -2988,7 +2988,7 @@ body {
 }
 /* --- 悬停效果：花朵绽放 --- */
 .post-button .btn:hover {
-  background: #ff7675 !important; /* 悬停时颜色加深，像盛开 */
+  background: #75b5ff !important; /* 悬停时颜色加深，像盛开 */
   color: #fff !important;
   border-color: transparent !important;
 /* 悬停时圆角变规则，模拟拉伸舒展 */
