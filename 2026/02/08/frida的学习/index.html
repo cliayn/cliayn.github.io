@@ -21,35 +21,35 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"cliayn.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.cliayn.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="0-前言之前用frida只晓得使用已经构建好的js，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决，可以去看大佬们的frida操作手册、某加固新版frida检测绕过-trace、某当劳 Frida 检测，哔哩哔哩上也有相关课程吾爱破解安卓逆向入门教程《安卓逆向这档事》_哔哩哔哩_bilibili、小肩膀出品安卓逆向课程_哔哩哔哩_bilibili、Python入门&#x2F;Frida">
 <meta property="og:type" content="article">
 <meta property="og:title" content="frida和逆向的学习">
-<meta property="og:url" content="https://cliayn.github.io/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/">
+<meta property="og:url" content="https://blog.cliayn.top/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/">
 <meta property="og:site_name" content="乌篷船的博客">
 <meta property="og:description" content="0-前言之前用frida只晓得使用已经构建好的js，还是系统的学习一下比较好，遇到一些自定义的类也可以自己解决，可以去看大佬们的frida操作手册、某加固新版frida检测绕过-trace、某当劳 Frida 检测，哔哩哔哩上也有相关课程吾爱破解安卓逆向入门教程《安卓逆向这档事》_哔哩哔哩_bilibili、小肩膀出品安卓逆向课程_哔哩哔哩_bilibili、Python入门&#x2F;Frida">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cliayn.github.io/image/App-RE/%E8%A7%A3%E5%AF%86%E9%80%BB%E8%BE%91-%E5%86%88%E6%98%93.png">
-<meta property="og:image" content="https://cliayn.github.io/image/App-RE/%E9%80%86%E5%90%91%E5%B8%B8%E8%AF%86.png">
-<meta property="og:image" content="https://cliayn.github.io/image/App-RE/%E6%8C%87%E4%BB%A4%E7%BA%A7%E7%9A%84Trace.png">
-<meta property="og:image" content="https://cliayn.github.io/image/App-RE/%E7%BC%BA%E5%A4%B1lib%E7%8E%AF%E5%A2%83-%E6%8A%A5%E9%94%99.png">
-<meta property="og:image" content="https://cliayn.github.io/image/App-RE/%E7%BC%BA%E5%A4%B1lib%E7%8E%AF%E5%A2%83-%E6%8A%A5%E9%94%99-2.png">
-<meta property="og:image" content="https://cliayn.github.io/image/App-RE/%E7%BC%BA%E5%A4%B1java%E7%8E%AF%E5%A2%83-%E6%8A%A5%E9%94%99.png">
-<meta property="og:image" content="https://cliayn.github.io/image/App-RE/%E5%B4%A9%E6%BA%83%E6%8C%87%E4%BB%A4%E5%A4%84.png">
-<meta property="og:image" content="https://cliayn.github.io/image/App-RE/ida-pro-%E5%86%88%E6%98%93.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/%E8%A7%A3%E5%AF%86%E9%80%BB%E8%BE%91-%E5%86%88%E6%98%93.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/%E9%80%86%E5%90%91%E5%B8%B8%E8%AF%86.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/%E6%8C%87%E4%BB%A4%E7%BA%A7%E7%9A%84Trace.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/%E7%BC%BA%E5%A4%B1lib%E7%8E%AF%E5%A2%83-%E6%8A%A5%E9%94%99.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/%E7%BC%BA%E5%A4%B1lib%E7%8E%AF%E5%A2%83-%E6%8A%A5%E9%94%99-2.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/%E7%BC%BA%E5%A4%B1java%E7%8E%AF%E5%A2%83-%E6%8A%A5%E9%94%99.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/%E5%B4%A9%E6%BA%83%E6%8C%87%E4%BB%A4%E5%A4%84.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/ida-pro-%E5%86%88%E6%98%93.png">
 <meta property="article:published_time" content="2026-02-08T02:45:32.000Z">
-<meta property="article:modified_time" content="2026-03-12T08:19:05.181Z">
+<meta property="article:modified_time" content="2026-03-19T09:22:18.237Z">
 <meta property="article:author" content="乌篷船">
 <meta property="article:tag" content="Notes">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cliayn.github.io/image/App-RE/%E8%A7%A3%E5%AF%86%E9%80%BB%E8%BE%91-%E5%86%88%E6%98%93.png">
+<meta name="twitter:image" content="https://blog.cliayn.top/image/App-RE/%E8%A7%A3%E5%AF%86%E9%80%BB%E8%BE%91-%E5%86%88%E6%98%93.png">
 
 
-<link rel="canonical" href="https://cliayn.github.io/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/">
+<link rel="canonical" href="https://blog.cliayn.top/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://cliayn.github.io/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/","path":"2026/02/08/frida的学习/","title":"frida和逆向的学习"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.cliayn.top/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/","path":"2026/02/08/frida的学习/","title":"frida和逆向的学习"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>frida和逆向的学习 | 乌篷船的博客</title>
@@ -101,7 +101,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-sitemap fa-fw"></i>友情链接</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-我的链接"><a href="/mylinks/" rel="section"><i class="fa fa-sitemap fa-fw"></i>我的链接</a></li><li class="menu-item menu-item-密文解密"><a href="/decrypt/" rel="section"><i class="fa fa-calendar fa-fw"></i>密文解密</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -171,18 +171,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">65</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -202,7 +202,7 @@
       <div class="widget-wrap">
           <div id="myCanvasContainer" class="widget tagcloud">
               <canvas width="250" height="250" id="resCanvas" style="width:100%">
-                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Article/" rel="tag">Article</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app-test/" rel="tag">app-test</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Article/" rel="tag">Article</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blue-Team/" rel="tag">Blue Team</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Classification/" rel="tag">Classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Injection/" rel="tag">Injection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Organize/" rel="tag">Organize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app-test/" rel="tag">app-test</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exe/" rel="tag">exe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p2p/" rel="tag">p2p</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
               </canvas>
           </div>
       </div>
@@ -226,7 +226,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://cliayn.github.io/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/">
+    <link itemprop="mainEntityOfPage" href="https://blog.cliayn.top/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -262,7 +262,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-03-12 16:19:05" itemprop="dateModified" datetime="2026-03-12T16:19:05+08:00">2026-03-12</time>
+      <time title="修改时间：2026-03-19 17:22:18" itemprop="dateModified" datetime="2026-03-19T17:22:18+08:00">2026-03-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -307,7 +307,7 @@
 <p><code>app</code>里的<code>so</code>是我随便找的一个有加壳的，如有不合适的地方请联系我删除，水平有限，记录的东西存在错误请多指教</p>
 <p>工具：<code>frida+jadx+ida.pro+unidbg+SoFixer</code></p>
 <p>注：<code>unidbg</code>有很多魔改版</p>
-<p>可以先熟悉前端的<code>js</code>逆向再深入<code>app</code>的逆向，有很多相通的地方<a href="https://cliayn.github.io/2025/03/04/%E5%89%8D%E7%AB%AF%E6%B8%B8%E8%B5%B0/">前端游走</a></p>
+<p>可以先熟悉前端的<code>js</code>逆向再深入<code>app</code>的逆向，有很多相通的地方<a target="_blank" rel="noopener" href="https://cliayn.github.io/2025/03/04/%E5%89%8D%E7%AB%AF%E6%B8%B8%E8%B5%B0/">前端游走</a></p>
 <h1 id="1-Java层hook-py"><a href="#1-Java层hook-py" class="headerlink" title="1-Java层hook(py)"></a>1-Java层hook(py)</h1><p><code>js</code>是弱参数类型，<code>java</code>是强参数类型，注意转换</p>
 <h2 id="普通方法"><a href="#普通方法" class="headerlink" title="普通方法"></a>普通方法</h2><h3 id="1-常规hook："><a href="#1-常规hook：" class="headerlink" title="1&gt;常规hook："></a>1&gt;常规hook：</h3><p><code>var</code> 类名 &#x3D; <code>java.use</code>(包名.类名);</p>
 <p><strong>类名.方法名.implementation &#x3D; 具体function函数</strong></p>
@@ -434,7 +434,7 @@
 <p>ASCII 码解码为：<code>&quot;Net****&quot;</code> (冈<code>yi</code>)</p>
 <h3 id="2-打印技巧"><a href="#2-打印技巧" class="headerlink" title="2&gt;打印技巧"></a>2&gt;打印技巧</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 打印调用栈，看看是谁在调这个解密函数</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;[调用来源]: \n&quot;</span> + </span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;android.util.Log&quot;</span>).<span class="title function_">getStackTraceString</span>(<span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;java.lang.Exception&quot;</span>).$new()));</span><br></pre></td></tr></table></figure>
 
-<h1 id="3-so层简单的动态逆向"><a href="#3-so层简单的动态逆向" class="headerlink" title="3-so层简单的动态逆向"></a>3-so层简单的动态逆向</h1><p><a href="https://cliayn.github.io/tool/markdown/unidbg.html">代码</a></p>
+<h1 id="3-so层简单的动态逆向"><a href="#3-so层简单的动态逆向" class="headerlink" title="3-so层简单的动态逆向"></a>3-so层简单的动态逆向</h1><p><a target="_blank" rel="noopener" href="https://cliayn.github.io/tool/markdown/unidbg.html">代码</a></p>
 <p>工具：</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/zhkl0228/unidbg">unidbg</a>、ida.pro、<a target="_blank" rel="noopener" href="https://github.com/F8LEFT/SoFixer">SoFixer</a></p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sofixer  -s soruce.so -o fix.so -m <span class="number">0</span>x0 -d </span><br><span class="line">-s 待修復的so路徑</span><br><span class="line">-o 修復後的so路徑</span><br><span class="line">-m 內存dump的基地址(<span class="number">16</span>位) <span class="number">0</span>xABC</span><br><span class="line">-d 輸出debug信息</span><br></pre></td></tr></table></figure>
@@ -614,7 +614,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://cliayn.github.io/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/" title="frida和逆向的学习">https://cliayn.github.io/2026/02/08/frida的学习/</a>
+      <a href="https://blog.cliayn.top/2026/02/08/frida%E7%9A%84%E5%AD%A6%E4%B9%A0/" title="frida和逆向的学习">https://blog.cliayn.top/2026/02/08/frida的学习/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
@@ -675,7 +675,7 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">185k</span>
+    <span title="站点总字数">245k</span>
   </span>
 </div>
 
@@ -703,7 +703,8 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -789,5 +790,9 @@ document.addEventListener('page:loaded', () => {
   });
 })();
 </script>
+<canvas class="fireworks" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
+<script src="/js/anime.min.js"></script>
+<script src="/js/fireworks.js"></script>
+<script src="/js/read-more-reveal.js"></script>
 </body>
 </html>
