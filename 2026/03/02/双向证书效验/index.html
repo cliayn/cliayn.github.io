@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/.svg" color="#222">
+  <meta name="google-site-verification" content="nQ1ot4TllsO_jg0_DRzKfQ4QLDbTG3fV22N4xxpzF3Q">
+  <meta name="msvalidate.01" content="63D9688A8F4C2AAAD74951EFBA3C541A">
+  <meta name="baidu-site-verification" content="codeva-bnmASICFhg">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.cliayn.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0-前言​	工作下的uat测试环境，采用了TLCP的双向认证，因为是测试环境可以webview+iptables取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。 开源项目SSL 实现-google 所用到的工具: jadx、frida、bp&#x2F;charles&#x2F;mitm&#x2F;yakit、wireshark、WSL2 学习文章抓包之双向证书校验、HTTPS 双向认">
+<meta property="og:type" content="article">
+<meta property="og:title" content="双向证书效验">
+<meta property="og:url" content="https://blog.cliayn.top/2026/03/02/%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%95%88%E9%AA%8C/">
+<meta property="og:site_name" content="乌篷船的博客">
+<meta property="og:description" content="0-前言​	工作下的uat测试环境，采用了TLCP的双向认证，因为是测试环境可以webview+iptables取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。 开源项目SSL 实现-google 所用到的工具: jadx、frida、bp&#x2F;charles&#x2F;mitm&#x2F;yakit、wireshark、WSL2 学习文章抓包之双向证书校验、HTTPS 双向认">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/entropy%E5%80%BC.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/wireshark-%E8%A7%A3%E5%AF%86.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/App-RE/wireshark-%E8%A7%A3%E5%AF%86-2.png">
+<meta property="article:published_time" content="2026-03-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-19T09:22:57.000Z">
+<meta property="article:author" content="乌篷船">
+<meta property="article:tag" content="app">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.cliayn.top/image/App-RE/entropy%E5%80%BC.png">
+
+
+<link rel="canonical" href="https://blog.cliayn.top/2026/03/02/%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%95%88%E9%AA%8C/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.cliayn.top/2026/03/02/%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%95%88%E9%AA%8C/","path":"2026/03/02/双向证书效验/","title":"双向证书效验"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>双向证书效验 | 乌篷船的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">乌篷船的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-我的链接"><a href="/mylinks/" rel="section"><i class="fa fa-sitemap fa-fw"></i>我的链接</a></li><li class="menu-item menu-item-密文解密"><a href="/decrypt/" rel="section"><i class="fa fa-calendar fa-fw"></i>密文解密</a></li><li class="menu-item menu-item-webrtc"><a href="/WebRTC/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>WebRTC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81-mTLS"><span class="nav-number">2.</span> <span class="nav-text">1-双向认证 (mTLS)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0%E6%99%AE%E9%80%9A-HTTPS-%E9%80%9A%E5%B8%B8%E5%8F%AA%E6%9C%89%E5%8D%95%E5%90%91%E8%AE%A4%E8%AF%81"><span class="nav-number">2.0.1.</span> <span class="nav-text">①普通 HTTPS: 通常只有单向认证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E5%B8%B8%E7%94%A8%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.0.2.</span> <span class="nav-text">②双向认证常用协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%85%A0-ISCP-gRPC-MQTT-VPN-CoAP"><span class="nav-number">2.0.2.1.</span> <span class="nav-text">Ⅰ.ISCP&#x2F;gRPC&#x2F;MQTT&#x2F;VPN&#x2F;CoAP</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%A7%81%E9%92%A5%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-number">3.</span> <span class="nav-text">2-私钥的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0%E5%B8%B8%E8%A7%84%E7%9A%84java%E5%B1%82%E8%AF%81%E4%B9%A6%E6%A0%A1%E9%AA%8C"><span class="nav-number">3.0.1.</span> <span class="nav-text">①常规的java层证书校验</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">3.0.1.0.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7"><span class="nav-number">3.0.1.0.2.</span> <span class="nav-text">工具:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1so%E5%B1%82%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81%E9%9A%BE%E7%82%B9"><span class="nav-number">3.0.2.</span> <span class="nav-text">②so层双向认证难点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%85%A0-native%E5%B1%82"><span class="nav-number">3.0.2.0.1.</span> <span class="nav-text">Ⅰ.native层</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%85%A1-%E9%AD%94%E6%94%B9-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8D%8F%E8%AE%AE%E9%80%9A%E4%BF%A1"><span class="nav-number">3.0.2.0.2.</span> <span class="nav-text">Ⅱ.魔改&#x2F;自定义协议通信</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%EF%BC%9AXref%E4%BD%9C%E7%94%A8"><span class="nav-number">3.0.3.</span> <span class="nav-text">注：Xref作用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%85%A0-pdf%E7%9A%84%E5%9C%B0%E5%9B%BE"><span class="nav-number">3.0.3.0.1.</span> <span class="nav-text">Ⅰ.pdf的地图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%85%A1-ida-pro%E6%90%9C%E7%B4%A2%E5%BC%95%E7%94%A8%E8%AF%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="nav-number">3.0.3.0.2.</span> <span class="nav-text">Ⅱ.ida.pro搜索引用该字符串的指令</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%93%8D%E4%BD%9C"><span class="nav-number">4.</span> <span class="nav-text">3-操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0frida-analykit-wireshark-%E6%B5%81%E9%87%8F%E6%8A%93%E5%8C%85"><span class="nav-number">4.0.1.</span> <span class="nav-text">①frida-analykit wireshark 流量抓包</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%85%A0-%E5%8E%9F%E7%90%86"><span class="nav-number">4.0.1.0.1.</span> <span class="nav-text">Ⅰ.原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%85%A1-%E6%B3%A8%E6%84%8F"><span class="nav-number">4.0.1.0.2.</span> <span class="nav-text">Ⅱ.注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1%E6%8F%90%E5%8F%96sslkey"><span class="nav-number">4.0.2.</span> <span class="nav-text">②提取sslkey</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A"><span class="nav-number">4.0.3.</span> <span class="nav-text">注意：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">启动脚本</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乌篷船"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乌篷船</p>
+  <div class="site-description" itemprop="description">记录笔记的网址<br>存在学习错误的地方请多指教</div>
+  
+  <div style="color: #002366; border-left: 3px solid #002366; padding-left: 5px; font-size: 12px; margin-top: 10px; text-align: left; line-height: 1.5;">
+    <strong>免责声明：<br></strong>本站所有渗透笔记仅供安全研究<br>禁止非法用途！
+  </div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:cliay55555@gmail.com" title="E-Mail → mailto:cliay55555@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+    
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Article/" rel="tag">Article</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blue-Team/" rel="tag">Blue Team</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Classification/" rel="tag">Classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Injection/" rel="tag">Injection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Organize/" rel="tag">Organize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app-test/" rel="tag">app-test</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exe/" rel="tag">exe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p2p/" rel="tag">p2p</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+    
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.cliayn.top/2026/03/02/%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%95%88%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乌篷船">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="乌篷船的博客">
+      <meta itemprop="description" content="记录笔记的网址<br>存在学习错误的地方请多指教">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="双向证书效验 | 乌篷船的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          双向证书效验
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-03-03 00:00:00" itemprop="dateCreated datePublished" datetime="2026-03-03T00:00:00+08:00">2026-03-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-19 17:22:57" itemprop="dateModified" datetime="2026-03-19T17:22:57+08:00">2026-03-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Cybersecurity/" itemprop="url" rel="index"><span itemprop="name">Cybersecurity</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>14 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	工作下的<code>uat</code>测试环境，采用了<code>TLCP</code>的双向认证，因为是测试环境可以<code>webview</code>+<code>iptables</code>取巧的办法绕过了双向认证，还是得学一下常见的生产环境下怎么获得客户端的证书之类的操作比较好。</p>
+<p>开源项目<a target="_blank" rel="noopener" href="https://github.com/google/boringssl"><code>SSL</code> 实现-<code>google</code></a></p>
+<p>所用到的工具:</p>
+<p><code>jadx</code>、<code>frida</code>、<code>bp/charles/mitm/yakit</code>、<code>wireshark</code>、<code>WSL2</code></p>
+<p>学习文章<a target="_blank" rel="noopener" href="https://muhe-blog.github.io/2024/07/07/%E6%8A%93%E5%8C%85%E4%B9%8B%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%A0%A1%E9%AA%8C/">抓包之双向证书校验</a>、<a target="_blank" rel="noopener" href="https://juejin.cn/post/7579298511071494144"><code>HTTPS</code> 双向认证抓包指南</a>、<a target="_blank" rel="noopener" href="https://github.com/ZSA233/android-reverse-examples/blob/main/002_frida-analykit-ssl-log-secret/README.md"><code>frida-analykit wireshark</code> 流量抓包（上）</a>、<a target="_blank" rel="noopener" href="https://github.com/ZSA233/android-reverse-examples/blob/main/003_frida-analykit-static-linked-boringssl/README.md"><code>frida-analykit wireshark</code> 流量抓包（下）</a></p>
+<p>主要记录<a target="_blank" rel="noopener" href="https://github.com/ZSA233">大佬</a>的<code>frida-analykit</code>的查看方法，更为详细的步骤可以跳转到大佬的项目观看</p>
+<span id="more"></span>
+
+<p><strong>操作准备(<code>WSL2</code>)</strong>:</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#记得开放对应端口防火墙然后再映射对应adb的端口---------无线调试	//要改源代码才行因为源代码默认只支持-U</span><br><span class="line">adb tcpip <span class="number">5555</span> 	#连接USB然后设定无限调试的端口</span><br><span class="line">#或者使用 adb pair <span class="number">192</span>.<span class="number">168</span>.xx.xx:xxx [匹配码]	 #匹配码匹配</span><br><span class="line">netsh interface portproxy add v4tov4 listenaddress=&lt;ip&gt; listenport=&lt;port&gt; connectaddress=&lt;ip&gt; connectport=&lt;port&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如果觉得太过于麻烦而且不安全你可以下载<a target="_blank" rel="noopener" href="https://github.com/dorssel/usbipd-win"><code>usbipd-win</code></a></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#直接把usb接口转发给wsl2--记得先关闭adb---------------USB调试</span><br><span class="line">usbipd list</span><br><span class="line">usbipd bind --busid=<span class="number">1</span>-<span class="number">3</span></span><br><span class="line">usbipd attach --wsl --busid=<span class="number">1</span>-<span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="1-双向认证-mTLS"><a href="#1-双向认证-mTLS" class="headerlink" title="1-双向认证 (mTLS)"></a>1-双向认证 (<code>mTLS</code>)</h1><h3 id="①普通-HTTPS-通常只有单向认证"><a href="#①普通-HTTPS-通常只有单向认证" class="headerlink" title="①普通 HTTPS: 通常只有单向认证"></a>①<strong>普通 <code>HTTPS</code></strong>: 通常只有<strong>单向认证</strong></h3><h3 id="②双向认证常用协议"><a href="#②双向认证常用协议" class="headerlink" title="②双向认证常用协议"></a>②双向认证常用协议</h3><h4 id="Ⅰ-ISCP-gRPC-MQTT-VPN-CoAP"><a href="#Ⅰ-ISCP-gRPC-MQTT-VPN-CoAP" class="headerlink" title="Ⅰ.ISCP&#x2F;gRPC&#x2F;MQTT&#x2F;VPN&#x2F;CoAP"></a>Ⅰ.<code>ISCP</code>&#x2F;<code>gRPC</code>&#x2F;<code>MQTT</code>&#x2F;<code>VPN</code>&#x2F;<code>CoAP</code></h4><table>
+<thead>
+<tr>
+<th><strong>协议</strong></th>
+<th><strong>传输层</strong></th>
+<th><strong>核心用途</strong></th>
+<th><strong>为什么用双向认证</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>MQTT</strong></td>
+<td>TCP</td>
+<td>物联网设备通信</td>
+<td>防止恶意设备接入云端</td>
+</tr>
+<tr>
+<td><strong>gRPC</strong></td>
+<td>HTTP&#x2F;2</td>
+<td>内部微服务调用</td>
+<td>零信任架构，防止内网渗透</td>
+</tr>
+<tr>
+<td><strong>CoAP</strong></td>
+<td>UDP</td>
+<td>资源受限的硬件</td>
+<td>轻量化，同时保证身份合法</td>
+</tr>
+<tr>
+<td><strong>IPsec&#x2F;VPN</strong></td>
+<td>网络层</td>
+<td>企业远程接入</td>
+<td>确保只有公司授权的电脑能连内网</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>MQTT &#x2F; gRPC &#x2F; IPsec</strong></th>
+<th><strong>ISCP (TCLP常见)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>开放性</strong></td>
+<td>公开标准，谁都能实现</td>
+<td>私有&#x2F;半私有，通常随 SDK 分发</td>
+</tr>
+<tr>
+<td><strong>主要负载</strong></td>
+<td>JSON &#x2F; Protobuf &#x2F; 报文</td>
+<td><strong>音视频流</strong> + 实时控制指令</td>
+</tr>
+<tr>
+<td><strong>认证严苛度</strong></td>
+<td>只要证书对就行</td>
+<td>证书可能二次加密，且与 <code>AppID</code> 强绑定</td>
+</tr>
+<tr>
+<td><strong>实时性</strong></td>
+<td>较好</td>
+<td><strong>极高</strong>（针对音视频同步做了算法优化）</td>
+</tr>
+</tbody></table>
+<h1 id="2-私钥的存储"><a href="#2-私钥的存储" class="headerlink" title="2-私钥的存储"></a>2-私钥的存储</h1><h3 id="①常规的java层证书校验"><a href="#①常规的java层证书校验" class="headerlink" title="①常规的java层证书校验"></a>①常规的<code>java</code>层证书校验</h3><p><code>依赖的是Android框架层的Java TLS API（HttpsURLConnection、SSLSocket、X509TrustManager等）</code></p>
+<h5 id="方法："><a href="#方法：" class="headerlink" title="方法："></a>方法：</h5><p>hook掉所有涉及到的常规证书校验的<code>java</code>层校验类来强制验证通过，或者<code>java</code>-<code>hook</code>自吐密钥或请求</p>
+<h5 id="工具"><a href="#工具" class="headerlink" title="工具:"></a>工具:</h5><p><code>JustTrustMe</code>、<code>objection</code>、<code>ssl_Pinning</code>、<code>r0capture</code>、<code>自吐密钥</code></p>
+<h3 id="②so层双向认证难点"><a href="#②so层双向认证难点" class="headerlink" title="②so层双向认证难点"></a>②so层双向认证难点</h3><h5 id="Ⅰ-native层"><a href="#Ⅰ-native层" class="headerlink" title="Ⅰ.native层"></a>Ⅰ.<code>native</code>层</h5><p>(特征值检查、汇编混淆、<code>so</code>自检)</p>
+<p>1&gt;<code>so</code>层证书&#x2F;密码提取困难</p>
+<p>2&gt;<code>so</code>层绕过服务器证书认证困难</p>
+<h5 id="Ⅱ-魔改-自定义协议通信"><a href="#Ⅱ-魔改-自定义协议通信" class="headerlink" title="Ⅱ.魔改&#x2F;自定义协议通信"></a>Ⅱ.魔改&#x2F;自定义协议通信</h5><p>(处理异常、解析异常)</p>
+<p>1&gt;代理服务器工具对<code>ISCP</code>&#x2F;<code>gRPC</code>&#x2F;<code>MQTT</code>&#x2F;<code>VPN</code>&#x2F;<code>CoAP</code>&#x2F;<code>TLCP</code>这些五花八门的协议不太支持</p>
+<hr>
+<p>私钥存储一般（<code>ai</code>回复）：</p>
+<ul>
+<li>存在 <strong><code>Android Keystore</code></strong></li>
+<li>或存于 <strong>硬件安全模块（<code>TEE</code>）</strong></li>
+<li>或存在 <strong>国密<code>SDK</code>内部结构体</strong></li>
+</ul>
+<p>可以查看<code>send()</code> 栈里直接输出<code>libxxxsec.so!0x12345</code>等非常见的so层，自研层的可能需要用到<code>unidbg</code>和<code>ida.pro</code>，处理<code>so</code>要是<code>entropy</code>还高得离谱像这样那就真是有福了<br><img src="/../image/App-RE/entropy%E5%80%BC.png"></p>
+<h3 id="注：Xref作用"><a href="#注：Xref作用" class="headerlink" title="注：Xref作用"></a>注：<code>Xref</code>作用</h3><h5 id="Ⅰ-pdf的地图"><a href="#Ⅰ-pdf的地图" class="headerlink" title="Ⅰ.pdf的地图"></a>Ⅰ.<code>pdf</code>的地图</h5><h5 id="Ⅱ-ida-pro搜索引用该字符串的指令"><a href="#Ⅱ-ida-pro搜索引用该字符串的指令" class="headerlink" title="Ⅱ.ida.pro搜索引用该字符串的指令"></a>Ⅱ.<code>ida.pro</code>搜索引用该字符串的指令</h5><hr>
+<h1 id="3-操作"><a href="#3-操作" class="headerlink" title="3-操作"></a>3-操作</h1><p><a target="_blank" rel="noopener" href="https://github.com/ZSA233/frida-analykit">大佬</a>提供了一个解决方案：<br>就是直接监听内存的密钥，然后用<code>wireshark</code>查看请求</p>
+<h3 id="①frida-analykit-wireshark-流量抓包"><a href="#①frida-analykit-wireshark-流量抓包" class="headerlink" title="①frida-analykit wireshark 流量抓包"></a>①<a target="_blank" rel="noopener" href="https://github.com/ZSA233/android-reverse-examples/blob/main/002_frida-analykit-ssl-log-secret/README.md"><code>frida-analykit wireshark</code> 流量抓包</a></h3><h5 id="Ⅰ-原理"><a href="#Ⅰ-原理" class="headerlink" title="Ⅰ.原理"></a>Ⅰ.原理</h5><p><a target="_blank" rel="noopener" href="https://github.com/google/boringssl"><code>SSL</code> 实现-<code>google</code></a>里面排查<code>ssl_log_secret</code>可得：</p>
+<p>​	<code>CLIENT_RANDOM</code> 这个常量字符串将作为我们定位<code>ssl_log_secret</code>的入口</p>
+<h5 id="Ⅱ-注意"><a href="#Ⅱ-注意" class="headerlink" title="Ⅱ.注意"></a>Ⅱ.注意</h5><p><code>com.frida_analykit.ssl_log_secret</code>测试<code>app</code>如果安装不了，可以看自己的手机架构</p>
+<p><code>build.gradle</code>的<code>android</code>参数里增加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ndk &#123;</span><br><span class="line">    abiFilters.add(&quot;arm64-v8a&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradlew.bat clean assembleDebug</span><br></pre></td></tr></table></figure>
+
+<h3 id="②提取sslkey"><a href="#②提取sslkey" class="headerlink" title="②提取sslkey"></a>②提取<code>sslkey</code></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#常规so</span></span><br><span class="line">script.jsh(<span class="string">&#x27;SSLTools&#x27;</span>).attachBoringsslKeylogFunc(&#123; <span class="string">&#x27;libname&#x27;</span>: <span class="string">&#x27;libssl.so&#x27;</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/App-RE/wireshark-%E8%A7%A3%E5%AF%86.png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ---------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 第一阶段：建立连接与对象代理</span></span><br><span class="line"><span class="comment"># ---------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># script.jsh 是该框架特有的方法，用于在 Python 中“映射” JS 层的全局对象</span></span><br><span class="line"><span class="comment"># 就像是在 Python 里建立了一个通往手机 App 内存的“遥控器”</span></span><br><span class="line">proc = script.jsh(<span class="string">&#x27;Process&#x27;</span>)     <span class="comment"># 遥控 App 里的【进程与模块】</span></span><br><span class="line">ssltools = script.jsh(<span class="string">&#x27;SSLTools&#x27;</span>) <span class="comment"># 遥控 App 里的【SSL 调试工具】</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 第二阶段：目标排查（防止“空挂钩”）</span></span><br><span class="line"><span class="comment"># ---------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 我们不能盲目 Hook，必须先确认这个库（.so 文件）是否已经加载到 App 的内存里了</span></span><br><span class="line"><span class="comment"># 场景：如果是 Flutter 应用，SSL 逻辑通常在 libflutter.so 里</span></span><br><span class="line">libflutter = proc.findModuleByName(<span class="string">&#x27;libflutter.so&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 【重要】查看模块信息</span></span><br><span class="line"><span class="comment"># 如果输出为 None 或者报错，说明 App 还没运行到相关功能，你需要去点点 App 界面</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;libflutter 模块详情: <span class="subst">&#123;libflutter.value&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------------------------------------------------------</span></span><br><span class="line"><span class="comment"># 第三阶段：实施挂钩（三种常见方案）</span></span><br><span class="line"><span class="comment"># ---------------------------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="comment">### 方案 A：针对系统/标准库（最基础）</span></span><br><span class="line"><span class="comment"># 适用于大部分使用系统 WebView 或标准 Http 连接的 App</span></span><br><span class="line"><span class="comment"># 指向 libssl.so，脚本会自动在里面搜索 ssl_log_secret 函数</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[*] 正在尝试挂钩 libssl.so...&quot;</span>)</span><br><span class="line">ssltools.attachBoringsslKeylogFunc(&#123; <span class="string">&#x27;libname&#x27;</span>: <span class="string">&#x27;libssl.so&#x27;</span> &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">### 方案 B：针对 Flutter 应用（精准定位）</span></span><br><span class="line"><span class="comment"># 如果 libflutter.value 有值，说明找到了文件。</span></span><br><span class="line"><span class="comment"># 我们直接把这个“模块对象”传给 Hook 函数，这比传名字更稳，不容易出错。</span></span><br><span class="line"><span class="keyword">if</span> libflutter.value:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;[*] 发现 Flutter 库，正在通过对象指针实施 Hook...&quot;</span>)</span><br><span class="line">    ssltools.attachBoringsslKeylogFunc(&#123; <span class="string">&#x27;mod&#x27;</span>: libflutter &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">### 方案 C：针对延迟加载的库（如 WebView）</span></span><br><span class="line"><span class="comment"># 注意：像 libmonochrome_64.so 这种库，只有在你点击“打开网页”后才会出现</span></span><br><span class="line"><span class="comment"># 所以操作顺序是：手机点击打开网页 -&gt; 执行下面这行代码</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;[*] 正在尝试挂钩 WebView 核心库...&quot;</span>)</span><br><span class="line">ssltools.attachBoringsslKeylogFunc(&#123; <span class="string">&#x27;libname&#x27;</span>: <span class="string">&#x27;libmonochrome_64.so&#x27;</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/App-RE/wireshark-%E8%A7%A3%E5%AF%86-2.png"></p>
+<h3 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h3><p>如果 <code>App</code> 根本不用 <code>OpenSSL/BoringSSL</code>，而是自研了一套加密协议，仍然需要从头开始分析</p>
+<h1 id="启动脚本"><a href="#启动脚本" class="headerlink" title="启动脚本"></a>启动脚本</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#开头要运行</span></span><br><span class="line">npm run watch </span><br><span class="line">python frida-analykit/main.py bootup-server </span><br><span class="line">./ptpython_spawn.sh</span><br></pre></td></tr></table></figure>
+
+<p>命令太多了所以整合成了一个启动的脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./service.sh start     <span class="comment"># 启动（含前台 ptpython）</span></span><br><span class="line">./service.sh stop      <span class="comment"># 停止后台服务</span></span><br><span class="line">./service.sh status    <span class="comment"># 查看状态</span></span><br><span class="line">./service.sh restart   <span class="comment"># 重启</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line"></span><br><span class="line">LOG_DIR=<span class="string">&quot;logs&quot;</span></span><br><span class="line">PID_DIR=<span class="string">&quot;pids&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$LOG_DIR</span>&quot;</span> <span class="string">&quot;<span class="variable">$PID_DIR</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ========= 通用函数 =========</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">is_running</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> pid=<span class="variable">$1</span></span><br><span class="line">    <span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$pid</span>&quot;</span> ] &amp;&amp; <span class="built_in">kill</span> -0 <span class="string">&quot;<span class="variable">$pid</span>&quot;</span> 2&gt;/dev/null; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">return</span> 0</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="built_in">return</span> 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start_daemon</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> name=<span class="variable">$1</span></span><br><span class="line">    <span class="built_in">local</span> cmd=<span class="variable">$2</span></span><br><span class="line">    <span class="built_in">local</span> log_file=<span class="string">&quot;<span class="variable">$LOG_DIR</span>/<span class="variable">$name</span>.log&quot;</span></span><br><span class="line">    <span class="built_in">local</span> pid_file=<span class="string">&quot;<span class="variable">$PID_DIR</span>/<span class="variable">$name</span>.pid&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        old_pid=$(<span class="built_in">cat</span> <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> is_running <span class="string">&quot;<span class="variable">$old_pid</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;[!] <span class="variable">$name</span> already running (PID <span class="variable">$old_pid</span>)&quot;</span></span><br><span class="line">            <span class="built_in">return</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;[!] removing stale PID file for <span class="variable">$name</span>&quot;</span></span><br><span class="line">            <span class="built_in">rm</span> -f <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[+] starting <span class="variable">$name</span> ...&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">nohup</span> bash -c <span class="string">&quot;</span></span><br><span class="line"><span class="string">        while true; do</span></span><br><span class="line"><span class="string">            echo &#x27;[*] <span class="subst">$(date)</span> starting <span class="variable">$name</span>&#x27;</span></span><br><span class="line"><span class="string">            <span class="variable">$cmd</span></span></span><br><span class="line"><span class="string">            echo &#x27;[!] <span class="subst">$(date)</span> <span class="variable">$name</span> crashed, restarting in 2s...&#x27;</span></span><br><span class="line"><span class="string">            sleep 2</span></span><br><span class="line"><span class="string">        done</span></span><br><span class="line"><span class="string">    &quot;</span> &gt; <span class="string">&quot;<span class="variable">$log_file</span>&quot;</span> 2&gt;&amp;1 &amp;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> $! &gt; <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[+] <span class="variable">$name</span> started (PID <span class="subst">$(cat $pid_file)</span>)&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stop_daemon</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> name=<span class="variable">$1</span></span><br><span class="line">    <span class="built_in">local</span> pid_file=<span class="string">&quot;<span class="variable">$PID_DIR</span>/<span class="variable">$name</span>.pid&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ ! -f <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;[!] <span class="variable">$name</span> not running (no pid file)&quot;</span></span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    pid=$(<span class="built_in">cat</span> <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> is_running <span class="string">&quot;<span class="variable">$pid</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">kill</span> <span class="string">&quot;<span class="variable">$pid</span>&quot;</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;[+] stopped <span class="variable">$name</span> (PID <span class="variable">$pid</span>)&quot;</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;[!] <span class="variable">$name</span> already stopped&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">rm</span> -f <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">status_daemon</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> name=<span class="variable">$1</span></span><br><span class="line">    <span class="built_in">local</span> pid_file=<span class="string">&quot;<span class="variable">$PID_DIR</span>/<span class="variable">$name</span>.pid&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> [ -f <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        pid=$(<span class="built_in">cat</span> <span class="string">&quot;<span class="variable">$pid_file</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> is_running <span class="string">&quot;<span class="variable">$pid</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;[RUNNING] <span class="variable">$name</span> (PID <span class="variable">$pid</span>)&quot;</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&quot;[DEAD] <span class="variable">$name</span> (stale PID <span class="variable">$pid</span>)&quot;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;[STOPPED] <span class="variable">$name</span>&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># ========= 业务控制 =========</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;========== START ==========&quot;</span></span><br><span class="line"></span><br><span class="line">    start_daemon <span class="string">&quot;npm_watch&quot;</span> <span class="string">&quot;npm run watch&quot;</span></span><br><span class="line">    start_daemon <span class="string">&quot;frida&quot;</span> <span class="string">&quot;python frida-analykit/main.py bootup-server&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[*] 启动 ptpython（前台）...&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;[*] 退出 ptpython 后不会影响后台服务&quot;</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;-----------------------------------&quot;</span></span><br><span class="line"></span><br><span class="line">    ./ptpython_spawn.sh</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stop</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;========== STOP ==========&quot;</span></span><br><span class="line"></span><br><span class="line">    stop_daemon <span class="string">&quot;npm_watch&quot;</span></span><br><span class="line">    stop_daemon <span class="string">&quot;frida&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">status</span></span>() &#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;========== STATUS ==========&quot;</span></span><br><span class="line"></span><br><span class="line">    status_daemon <span class="string">&quot;npm_watch&quot;</span></span><br><span class="line">    status_daemon <span class="string">&quot;frida&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">restart</span></span>() &#123;</span><br><span class="line">    stop</span><br><span class="line">    <span class="built_in">sleep</span> 1</span><br><span class="line">    start</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># ========= 入口 =========</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> <span class="keyword">in</span></span><br><span class="line">    start)</span><br><span class="line">        start</span><br><span class="line">        ;;</span><br><span class="line">    stop)</span><br><span class="line">        stop</span><br><span class="line">        ;;</span><br><span class="line">    restart)</span><br><span class="line">        restart</span><br><span class="line">        ;;</span><br><span class="line">    status)</span><br><span class="line">        status</span><br><span class="line">        ;;</span><br><span class="line">    *)</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;Usage: <span class="variable">$0</span> &#123;start|stop|restart|status&#125;&quot;</span></span><br><span class="line">        <span class="built_in">exit</span> 1</span><br><span class="line">        ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>乌篷船
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.cliayn.top/2026/03/02/%E5%8F%8C%E5%90%91%E8%AF%81%E4%B9%A6%E6%95%88%E9%AA%8C/" title="双向证书效验">https://blog.cliayn.top/2026/03/02/双向证书效验/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/app/" rel="tag"># app</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/03/01/%E9%98%BF%E9%87%8Cdruid%E8%AE%B0%E5%BD%95/" rel="prev" title="阿里druid记录">
+                  <i class="fa fa-angle-left"></i> 阿里druid记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/03/16/hexo%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2/" rel="next" title="hexo自动部署">
+                  hexo自动部署 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa-regular fa-user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">乌篷船</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">246k</span>
+  </span>
+</div><script src="https://cliayn.github.io/js/typed.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 获取你在 _config.yml 中定义的感悟列表
+    // 注意：Hexo 在渲染时会将 config 变量注入
+    var sayings = ["可以自由支配的时间，也就是真正的财富。","我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)"];
+    
+    if (sayings && sayings.length > 0) {
+      // 找到 NexT 的 subtitle 元素
+      var subtitleElement = document.querySelector('.site-subtitle');
+      
+      if (subtitleElement) {
+        // 清空原有文字
+        subtitleElement.innerHTML = '<span id="typed-subtitle"></span>';
+        
+        // 初始化 Typed.js
+        new Typed('#typed-subtitle', {
+          strings: sayings,
+          typeSpeed: 70,     // 打字速度
+          backSpeed: 30,     // 回退速度
+          backDelay: 5000,   // 展示后的停顿时间（毫秒）
+          loop: true,        // 是否循环
+          smartBackspace: true
+        });
+      }
+    }
+  });
+</script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/cliayn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+<div id="bg-toggle-btn" class="day-night-switch">
+  <i id="bg-toggle-icon" class="fa fa-moon"></i>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('bg-toggle-btn');
+  var icon = document.getElementById('bg-toggle-icon');
+  
+  // 定义图片路径
+  var pic1 = 'url("/images/background.jpg")'; // 默认/白天背景
+  var pic2 = 'url("/images/ai-background.png")'; // 切换/夜晚背景
+
+  // 检查本地存储中是否有记录，保持刷新后状态一致
+  var isNight = localStorage.getItem('isNight') === 'true';
+
+  // 初始化页面状态函数
+  function applyState() {
+    if (isNight) {
+      // 如果是夜晚模式：显示太阳图标，背景换成 pic2
+      document.body.style.backgroundImage = pic2;
+      icon.className = 'fa fa-sun'; 
+    } else {
+      // 如果是白天模式：显示月亮图标，背景换成 pic1
+      document.body.style.backgroundImage = pic1;
+      icon.className = 'fa fa-moon';
+    }
+  }
+
+  // 页面加载时先应用一次状态
+  applyState();
+
+  // 点击事件监听
+  btn.addEventListener('click', function() {
+    isNight = !isNight; // 状态反转
+    applyState(); // 应用新状态
+    // 将状态保存到浏览器缓存，防止刷新页面后重置
+    localStorage.setItem('isNight', isNight);
+  });
+})();
+</script>
+<canvas class="fireworks" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
+<script src="/js/anime.min.js"></script>
+<script src="/js/fireworks.js"></script>
+<script src="/js/read-more-reveal.js"></script>
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/.svg" color="#222">
+  <meta name="google-site-verification" content="nQ1ot4TllsO_jg0_DRzKfQ4QLDbTG3fV22N4xxpzF3Q">
+  <meta name="msvalidate.01" content="63D9688A8F4C2AAAD74951EFBA3C541A">
+  <meta name="baidu-site-verification" content="codeva-bnmASICFhg">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.cliayn.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0-前言刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试 app测试较为麻烦、主要麻烦存在：app虚拟机检测，app代理检测，approot环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法，国密tls，双向认证，反调试 关于鸿蒙系统有关文章如下：[讨论]「鸿蒙安全测试」从0到1学习100问-Harmo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="app测试">
+<meta property="og:url" content="https://blog.cliayn.top/2025/10/10/app%E6%B5%8B%E8%AF%95/">
+<meta property="og:site_name" content="乌篷船的博客">
+<meta property="og:description" content="0-前言刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试 app测试较为麻烦、主要麻烦存在：app虚拟机检测，app代理检测，approot环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法，国密tls，双向认证，反调试 关于鸿蒙系统有关文章如下：[讨论]「鸿蒙安全测试」从0到1学习100问-Harmo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.cliayn.top/image/app-Debug/phone-debug.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/app-Debug/Google-Debug.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/app-Debug/app-debug-1.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/app-Debug/app-debug-2.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/app-Debug/show-debug.png">
+<meta property="og:image" content="https://blog.cliayn.top/image/app-Debug/show-debug-2.png">
+<meta property="article:published_time" content="2025-10-10T02:30:17.000Z">
+<meta property="article:modified_time" content="2026-03-04T18:35:47.000Z">
+<meta property="article:author" content="乌篷船">
+<meta property="article:tag" content="app-test">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.cliayn.top/image/app-Debug/phone-debug.png">
+
+
+<link rel="canonical" href="https://blog.cliayn.top/2025/10/10/app%E6%B5%8B%E8%AF%95/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.cliayn.top/2025/10/10/app%E6%B5%8B%E8%AF%95/","path":"2025/10/10/app测试/","title":"app测试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>app测试 | 乌篷船的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">乌篷船的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-我的链接"><a href="/mylinks/" rel="section"><i class="fa fa-sitemap fa-fw"></i>我的链接</a></li><li class="menu-item menu-item-密文解密"><a href="/decrypt/" rel="section"><i class="fa fa-calendar fa-fw"></i>密文解密</a></li><li class="menu-item menu-item-webrtc"><a href="/WebRTC/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>WebRTC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-root-%E8%A7%A3%E9%94%81BootLoader"><span class="nav-number">2.</span> <span class="nav-text">1-root+解锁BootLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">操作流程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E8%A6%81%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">简要：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E9%80%89%E6%8B%A9"><span class="nav-number">2.3.</span> <span class="nav-text">镜像选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E9%94%81-Bootloader"><span class="nav-number">2.3.1.</span> <span class="nav-text">解锁 Bootloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E7%BA%BF%E5%88%B7%E5%87%BA%E5%8E%82%E6%98%A0%E5%83%8F"><span class="nav-number">2.3.2.</span> <span class="nav-text">下载线刷出厂映像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Magisk-%E8%BD%AF%E4%BB%B6%E5%B9%B6%E6%89%93%E8%A1%A5%E4%B8%81"><span class="nav-number">2.3.3.</span> <span class="nav-text">安装 Magisk 软件并打补丁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BD%99%E8%AE%BE%E7%BD%AE-%E5%8F%AF%E9%80%89"><span class="nav-number">2.4.</span> <span class="nav-text">其余设置(可选)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E6%96%B0%E7%9A%84%E5%9B%BD%E5%86%85%E6%A3%80%E6%B5%8B%E5%9C%B0%E5%9D%80"><span class="nav-number">2.4.1.</span> <span class="nav-text">设置新的国内检测地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BB%E6%AD%A2%E6%9B%B4%E6%96%B0"><span class="nav-number">2.5.</span> <span class="nav-text">阻止更新</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%BB%95%E8%BF%87"><span class="nav-number">3.</span> <span class="nav-text">2-绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%95%E8%BF%87root"><span class="nav-number">3.1.</span> <span class="nav-text">绕过root</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90%EF%BC%9A"><span class="nav-number">3.1.1.</span> <span class="nav-text">工具推荐：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E7%BC%96%E8%AF%91-%E9%80%86%E5%90%91%EF%BC%9A"><span class="nav-number">3.2.</span> <span class="nav-text">反编译&#x2F;\逆向：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85%E7%9B%B8%E5%85%B3%E8%BD%AF%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">3-安装相关软件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Frida%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%88windows%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">Frida使用方法（windows）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-tcpdump%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">4.2.</span> <span class="nav-text">Android-tcpdump的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#adb%E6%93%8D%E4%BD%9C"><span class="nav-number">4.3.</span> <span class="nav-text">adb操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%8B%E6%9C%BA%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">4.4.</span> <span class="nav-text">手机设置代理服务器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">4-测试方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%85%B7%E4%BD%93%E8%90%BD%E5%AE%9E"><span class="nav-number">6.</span> <span class="nav-text">5-具体落实</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%91%A0%E8%B0%83%E8%AF%95%E6%83%85%E5%86%B5%EF%BC%88%E6%97%A0%E9%9C%80root%EF%BC%89"><span class="nav-number">6.1.</span> <span class="nav-text">①调试情况（无需root）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">6.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%93%8D"><span class="nav-number">6.1.2.</span> <span class="nav-text">实操</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%91%A0%E6%97%A0%E8%B0%83%E8%AF%95%E6%83%85%E5%86%B5%EF%BC%88%E9%9C%80root%EF%BC%89"><span class="nav-number">6.2.</span> <span class="nav-text">①无调试情况（需root）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E4%B8%BE%E4%BE%8B"><span class="nav-number">7.</span> <span class="nav-text">6-举例</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乌篷船"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乌篷船</p>
+  <div class="site-description" itemprop="description">记录笔记的网址<br>存在学习错误的地方请多指教</div>
+  
+  <div style="color: #002366; border-left: 3px solid #002366; padding-left: 5px; font-size: 12px; margin-top: 10px; text-align: left; line-height: 1.5;">
+    <strong>免责声明：<br></strong>本站所有渗透笔记仅供安全研究<br>禁止非法用途！
+  </div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:cliay55555@gmail.com" title="E-Mail → mailto:cliay55555@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+    
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Article/" rel="tag">Article</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blue-Team/" rel="tag">Blue Team</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Classification/" rel="tag">Classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Injection/" rel="tag">Injection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Organize/" rel="tag">Organize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app-test/" rel="tag">app-test</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exe/" rel="tag">exe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p2p/" rel="tag">p2p</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+    
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.cliayn.top/2025/10/10/app%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乌篷船">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="乌篷船的博客">
+      <meta itemprop="description" content="记录笔记的网址<br>存在学习错误的地方请多指教">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="app测试 | 乌篷船的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          app测试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-10-10 10:30:17" itemprop="dateCreated datePublished" datetime="2025-10-10T10:30:17+08:00">2025-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-05 02:35:47" itemprop="dateModified" datetime="2026-03-05T02:35:47+08:00">2026-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Article/" itemprop="url" rel="index"><span itemprop="name">Article</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>11 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>刚接触手机测试用传统抓包甚至都抓不到包，用wireshark抓包则数据乱码，搞了一台pixel手机用作app测试</p>
+<p>app测试较为麻烦、主要麻烦存在：app虚拟机检测，app代理检测，app<code>root</code>环境检测，app证书固定，app请求体存在加密或签名，app加壳，app自定义算法，国密tls，双向认证，反调试</p>
+<p>关于鸿蒙系统有关文章如下：<br>[<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-288067.htm">讨论]「鸿蒙安全测试」从0到1学习100问-HarmonyOS-看雪安全社区｜专业技术交流与安全研究论坛</a></p>
+<p>记录学习笔记如下</p>
+<span id="more"></span>
+
+<p>目前我只会app的webview，然后用web的测试方法进行测试，好在测试环境都支持webview</p>
+<p>注：鸿蒙5脱离了安卓系统</p>
+<p>注：国密网址测试可以用yakit</p>
+<h1 id="1-root-解锁BootLoader"><a href="#1-root-解锁BootLoader" class="headerlink" title="1-root+解锁BootLoader"></a>1-root+解锁BootLoader</h1><p>参考文章<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/581342570">如何root一台Google Pixel 7 Pro</a></p>
+<p>默认电脑装有<a target="_blank" rel="noopener" href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"><code>adb</code></a>，手机开启<code>usb调试</code></p>
+<p>注（需要获取对应版本号）：</p>
+<p>设置 → 关于手机 → Android 版本 → Android 版本号 &#x2F; 版本号（Build number）</p>
+<p><strong>所需网址</strong>：</p>
+<p><a target="_blank" rel="noopener" href="https://developers.google.com/android/images?hl=zh-cn">pixel出厂映像（注意版本号对应！）</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/topjohnwu/Magisk/releases">Magisk 官方下载地址(用于root)</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/anaelle-dev/P7P_Magisk_init_boot">获取 <code>init_boot.img</code> 的第二个方法（注意版本号对应！）</a></p>
+<h2 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a><strong>操作流程</strong>：</h2><p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/an9p9670/">24 年，Google Pixel 7 国内使用指南_手机_什么值得买</a></p>
+<h2 id="简要："><a href="#简要：" class="headerlink" title="简要："></a>简要：</h2><h2 id="镜像选择"><a href="#镜像选择" class="headerlink" title="镜像选择"></a>镜像选择</h2><p> 推荐使用 <strong>Android 14 (AP1A&#x2F;AP2A 系列)</strong> 的稳定版</p>
+<p> 避免 <code>Verizon</code> 版本、运营商定制版</p>
+<p><code>完整OTA映射</code>与<code>factory</code>的区别，<code>OTA</code>主要用于救砖或全量升级；</p>
+<h3 id="解锁-Bootloader"><a href="#解锁-Bootloader" class="headerlink" title="解锁 Bootloader"></a>解锁 Bootloader</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 重启手机 进入 bootloader 模式</span><br><span class="line">adb reboot bootloader</span><br><span class="line"></span><br><span class="line"># 进入 bootloader 模式之后</span><br><span class="line">fastboot flashing unlock</span><br><span class="line"></span><br><span class="line"># 没有重启就自己重启</span><br><span class="line">fastboot reboot</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载线刷出厂映像"><a href="#下载线刷出厂映像" class="headerlink" title="下载线刷出厂映像"></a>下载线刷出厂映像</h3><p><a target="_blank" rel="noopener" href="https://developers.google.com/android/images?hl=zh-cn">pixel出厂映像（注意版本号对应！）</a></p>
+<p><strong>#如果有代理可以选择flash进行线上刷机#</strong></p>
+<p>下载后：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 进入到解压的文件夹中</span><br><span class="line"></span><br><span class="line"># 重启手机 进入 bootloader 模式</span><br><span class="line">adb reboot bootloader</span><br><span class="line"></span><br><span class="line"># mac 电脑 执行刷入</span><br><span class="line">./flash-all.sh </span><br><span class="line"></span><br><span class="line"># windows 电脑</span><br><span class="line">flash-all.bat</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-Magisk-软件并打补丁"><a href="#安装-Magisk-软件并打补丁" class="headerlink" title="安装 Magisk 软件并打补丁"></a>安装 Magisk 软件并打补丁</h3><p><a target="_blank" rel="noopener" href="https://github.com/topjohnwu/Magisk/releases"><code>Magisk</code> <code>GitHub</code>下载地址(用于root或者其他组件)</a></p>
+<p>安装好后点击「安装 → 选择并修补一个文件」选择对应的<code>init_boot.img</code>安装（正常来说出厂映像就有对应的init_boot.img，也可以采用下面的第二个方法，这是别人用magisk编译好的，注意编译版本）</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/anaelle-dev/P7P_Magisk_init_boot">获取 <code>init_boot.img</code> 的第二个方法（注意版本号对应！）</a></p>
+<p>选择刚刚的 <code>init_boot.img</code></p>
+<p>打完补丁后，会生成一个 <code>magisk_patched-xxx.img</code></p>
+<p>adb pull拖出来然后用电脑执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb reboot bootloader</span><br><span class="line">fastboot flash init_boot magisk_patched-xxx.img</span><br><span class="line">fastboot reboot</span><br></pre></td></tr></table></figure>
+
+<p>检查是否可以赋予root权限：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#电脑使用</span><br><span class="line">adb shell</span><br><span class="line">su</span><br><span class="line"></span><br><span class="line">#手机点击确定即可</span><br></pre></td></tr></table></figure>
+
+<h2 id="其余设置-可选"><a href="#其余设置-可选" class="headerlink" title="其余设置(可选)"></a>其余设置(可选)</h2><h3 id="设置新的国内检测地址"><a href="#设置新的国内检测地址" class="headerlink" title="设置新的国内检测地址"></a>设置新的国内检测地址</h3><p>用于解决wifi上的<code>!</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 设置 HTTP 地址</span><br><span class="line">adb shell settings put global captive_portal_http_url http://connectivitycheck.platform.hicloud.com/generate_204</span><br><span class="line"></span><br><span class="line"># 设置 HTTPS 地址</span><br><span class="line">adb shell settings put global captive_portal_https_url https://connectivitycheck.platform.hicloud.com/generate_204</span><br><span class="line"></span><br><span class="line"># 查看检测地址</span><br><span class="line">adb shell settings get global captive_portal_https_url</span><br><span class="line"></span><br><span class="line"># 删除地址</span><br><span class="line">adb shell settings delete global captive_portal_http_url</span><br><span class="line">adb shell settings delete global captive_portal_https_url</span><br></pre></td></tr></table></figure>
+
+<p><strong>开关飞行模式</strong> 一次</p>
+<p>下面是<code>ai</code>给的地址，我用了第二个能用；</p>
+<table>
+<thead>
+<tr>
+<th><strong>提供方</strong></th>
+<th><strong>地址</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>魅族</strong></td>
+<td><code>http://micaptive.meizu.com/generate_204</code></td>
+</tr>
+<tr>
+<td><strong>华为</strong></td>
+<td><code>http://connectivitycheck.platform.hicloud.com/generate_204</code></td>
+</tr>
+<tr>
+<td><strong>高通 (中国)</strong></td>
+<td><code>http://connectivitycheck.gstatic.com.cn/generate_204</code></td>
+</tr>
+</tbody></table>
+<h2 id="阻止更新"><a href="#阻止更新" class="headerlink" title="阻止更新"></a>阻止更新</h2><p>开发者模式禁用系统的自动更新</p>
+<h1 id="2-绕过"><a href="#2-绕过" class="headerlink" title="2-绕过"></a>2-绕过</h1><p>参考文章</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/470468650"><code>隐藏Root - Zygisk版面具过银行App等Root检测，妙用Shamiko模块 - 知乎</code></a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/564699416"><code>一例APP绕过root检测解密 - 知乎</code></a></p>
+<p><strong>—–通用：frida -Uf com.xxx -l xxx.js—–</strong></p>
+<p><strong>—–通用：更改源码中检测条件为永真—–</strong></p>
+<p>绕过虚拟机–直接买真机</p>
+<p>绕过认证和代理–hook+分析包</p>
+<p>通用：<strong>采用frida-server的js注入绕过root或者ssl pinning等</strong></p>
+<p>注：</p>
+<p>安卓 10+ 可能出现 “permission denied”，需要：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su</span><br><span class="line">setenforce 0    <span class="comment"># 有些 ROM 必须关闭 SELinux</span></span><br><span class="line">getenforce</span><br></pre></td></tr></table></figure>
+
+<h2 id="绕过root"><a href="#绕过root" class="headerlink" title="绕过root"></a>绕过root</h2><h3 id="工具推荐："><a href="#工具推荐：" class="headerlink" title="工具推荐："></a><strong>工具推荐：</strong></h3><p>​	<a target="_blank" rel="noopener" href="https://github.com/Dr-TSNG/ZygiskNext">ZygiskNext</a>(绕过root)</p>
+<p><strong>基础方案（过于久远）</strong>：<br> <code>Zygisk（Magisk 设置开启） + Zygisk-Assistant（或 Shamiko） + safetynet-fix（过于久远） + MagiskHidePropsConf（过于久远）</code></p>
+<p><strong>通用方案：</strong></p>
+<p>文章介绍：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ranbox/p/18461031">app逆向抓包技巧：ROOT检测绕过 - 七夜魔手 - 博客园</a></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">frida -U -f com.example.app -l hook.js</span><br></pre></td></tr></table></figure>
+
+<h2 id="反编译-逆向："><a href="#反编译-逆向：" class="headerlink" title="反编译&#x2F;\逆向："></a><strong>反编译&#x2F;\逆向</strong>：</h2><p>安卓生态：classes.dex<code>或</code>classes*.dex）</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/skylot/jadx">jadx</a></p>
+<p>鸿蒙生态：看到 <code>.hap</code>、<code>.har</code>、<code>panda</code>、<code>.abc</code>、大量 <code>.so</code>、或 <code>resources</code> 结构</p>
+<p>（使用 HAP 解包工具 &#x2F; ark 相关工具）</p>
+<p>苹果生态：<code>.ipa</code></p>
+<p> IDA&#x2F;Ghidra 反汇编</p>
+<table>
+<thead>
+<tr>
+<th>对比点</th>
+<th>安卓 &#x2F; 鸿蒙兼容包</th>
+<th>鸿蒙原生（Ark）</th>
+<th>苹果生态（iOS&#x2F;macOS）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代码语言</td>
+<td>Java &#x2F; Kotlin &#x2F; ArkTS</td>
+<td>ArkTS &#x2F; C++</td>
+<td>Objective-C &#x2F; Swift</td>
+</tr>
+<tr>
+<td>字节码</td>
+<td>DEX &#x2F; Panda bytecode</td>
+<td>Panda bytecode &#x2F; AOT</td>
+<td><strong>LLVM Bitcode → ARM64 本地机器码</strong></td>
+</tr>
+<tr>
+<td>运行时</td>
+<td>ART &#x2F; ArkVM</td>
+<td>ArkVM</td>
+<td><strong>无虚拟机</strong>（直接在 Darwin 内核上执行）</td>
+</tr>
+<tr>
+<td>包格式</td>
+<td><code>.apk</code> &#x2F; <code>.hap</code></td>
+<td><code>.hap</code> &#x2F; <code>.app</code></td>
+<td><code>.ipa</code>（其实是 zip 格式）</td>
+</tr>
+<tr>
+<td>可否被 JADX 反编译</td>
+<td>✅ dex 可反编译</td>
+<td>❌（需要专用 Ark 工具）</td>
+<td>❌ 完全不同体系，不能用 jadx</td>
+</tr>
+<tr>
+<td>典型反编译工具</td>
+<td>JADX, apktool</td>
+<td>arkdecompiler, DevEco unpacker</td>
+<td>Hopper、IDA、Ghidra、class-dump、frida、Cycript</td>
+</tr>
+</tbody></table>
+<h1 id="3-安装相关软件"><a href="#3-安装相关软件" class="headerlink" title="3-安装相关软件"></a>3-安装相关软件</h1><p>参考文章</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/73008784">APP逆向神器之Frida【Android初级篇】 - 知乎</a></p>
+<p>所需工具：</p>
+<p><a target="_blank" rel="noopener" href="https://www.androidtcpdump.com/android-tcpdump/downloads">Tcpdump</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.gmproxy.cn/">国密测试工具</a></p>
+<p><a target="_blank" rel="noopener" href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"><code>adb</code></a>+<strong><code>pip install frida-tools</code></strong>    (windows)</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/frida/frida/releases">frida服务器（手机上）</a>或者使用<a target="_blank" rel="noopener" href="https://github.com/ViRb3/magisk-frida">magisk-frida放到magisk里直接自启</a></p>
+<h2 id="Frida使用方法（windows）"><a href="#Frida使用方法（windows）" class="headerlink" title="Frida使用方法（windows）"></a>Frida使用方法（windows）</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">frida -U -l exploit.js -f xxx #启动app并注入脚本</span><br><span class="line">frida-ps -U</span><br><span class="line">frida-ps -Ua</span><br><span class="line">frida -U -l exploit.js &quot;XXXX&quot; #app已经启动 注入脚本</span><br></pre></td></tr></table></figure>
+
+<p><strong>Android的Frida服务端运行(需root)</strong></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ViRb3/magisk-frida">magisk-frida放到magisk里自启</a></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#该符号代表后台运行&#x27;&amp;&#x27;</span><br><span class="line">frida-server &amp;</span><br><span class="line"></span><br><span class="line"># 或用 nohup</span><br><span class="line"></span><br><span class="line"># 可以写一个模块控制frida-server放到magisk里</span><br><span class="line">/data/adb/modules</span><br></pre></td></tr></table></figure>
+
+<h2 id="Android-tcpdump的使用"><a href="#Android-tcpdump的使用" class="headerlink" title="Android-tcpdump的使用"></a>Android-tcpdump的使用</h2><p><strong>实时抓取所有包</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">tcpdump -i any -nnvvXSs 0</span><br><span class="line"><span class="comment">#`-i any`：监听所有网卡</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#`-nn`：不解析域名/IP/端口</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#`-vv`：更详细</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#`-X`：显示包的十六进制和 ASCII</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#`-s 0`：抓取完整包</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#监听lo输出ip和端口</span></span><br><span class="line">tcpdump -i lo -n -tttt -q tcp</span><br></pre></td></tr></table></figure>
+
+<p><strong>实时抓取指定端口的包（以 58384 为例）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tcpdump -i any port 58384 -nnvvXSs 0</span><br><span class="line">抓取 TCP：</span><br><span class="line">tcpdump -i any tcp port 58384 -nnvvXSs 0</span><br><span class="line">抓取 UDP：</span><br><span class="line">tcpdump -i any udp port 58384 -nnvvXSs 0</span><br></pre></td></tr></table></figure>
+
+<p><strong>抓取所有包并保存到 &#x2F;sdcard&#x2F;xxx</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tcpdump -i any -s 0 -w /sdcard/test.pcap</span><br><span class="line"><span class="comment">#建议加时间戳：</span></span><br><span class="line">tcpdump -i any -s 0 -w /sdcard/tcpdump_$(<span class="built_in">date</span> +%Y%m%d_%H%M%S).pcap</span><br><span class="line"><span class="comment">#抓取特定端口并保存：</span></span><br><span class="line">tcpdump -i any port 58384 -s 0 -w /sdcard/58384.pcap</span><br></pre></td></tr></table></figure>
+
+<h2 id="adb操作"><a href="#adb操作" class="headerlink" title="adb操作"></a>adb操作</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#设置全局代理</span><br><span class="line">adb shell settings put global http_proxy 127.0.0.1:8080</span><br><span class="line">#开启端口映射</span><br><span class="line">adb reverse tcp:8080 tcp:8080</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#取消代理</span><br><span class="line">adb shell settings put global http_proxy :0</span><br><span class="line">#取消映射</span><br><span class="line">adb reverse --remove-all</span><br><span class="line"></span><br><span class="line">#上传</span><br><span class="line">adb push &lt;本地文件路径&gt; &lt;手机路径&gt;</span><br><span class="line">#下载</span><br><span class="line">adb pull &lt;手机路径&gt; &lt;本地路径&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="手机设置代理服务器"><a href="#手机设置代理服务器" class="headerlink" title="手机设置代理服务器"></a>手机设置代理服务器</h2><p>推荐软件</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ginuerzh/gost">gost</a>(root)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#监听10808端口</span></span><br><span class="line">./gost -L socks5://0.0.0.0:10808  &gt;/dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/2dust/v2rayNG">v2rayn</a>(最新)</p>
+<p>配置文件：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/cliayn/cliayn.github.io/blob/master/tool/v2rayNG-phone-json/test.json">https://github.com/cliayn/cliayn.github.io/blob/master/tool/v2rayNG-phone-json/test.json</a></p>
+<h1 id="4-测试方法"><a href="#4-测试方法" class="headerlink" title="4-测试方法"></a>4-测试方法</h1><p>1.找到app的密钥和服务器证书和客户端证书，向外联ip直接测试【困难】</p>
+<p>​	如果能够获取到App内部的密钥和证书，那么我们可以模拟客户端直接与服务器进行TLCP通信。但这通常需要逆向工程来提取这些材料，而且如果App做了保护，可能比较困难。另外，如果通信过程中有客户端证书认证，那么我们需要同时获取客户端证书和私钥。如果成功，这种方法可以直接模拟客户端与服务器通信，进行自动化测试。</p>
+<p>2.frida找到发包的网络库hook，然后测试【容易】</p>
+<p>​	使用Frida hook网络库，可以拦截和修改App发出的请求，从而观察和测试通信。这种方法不需要获取证书和密钥，但需要知道App使用的是什么网络库，以及如何hook。对于TLCP这种协议，如果网络库是标准的（如OpenSSL、GMSSL等），那么可能有现成的hook方法。这种方法可以动态分析App的通信，也可以修改通信数据，进行安全测试。</p>
+<p>3.用app内的调试模式进行测试【极简】—【无需root】</p>
+<p>​	如果App有调试模式，那么可能可以通过调试模式获取更多的日志信息或者直接进行测试。这需要App本身支持，并且通常需要知道如何开启调试模式。如果调试模式能够提供详细的通信日志或者允许我们直接本地发送测试请求，那么这将是最简单的方法。</p>
+<h1 id="5-具体落实"><a href="#5-具体落实" class="headerlink" title="5-具体落实"></a>5-具体落实</h1><h2 id="①调试情况（无需root）"><a href="#①调试情况（无需root）" class="headerlink" title="①调试情况（无需root）"></a>①调试情况（无需root）</h2><p>需要<a target="_blank" rel="noopener" href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip"><code>adb</code></a></p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>1.手机对外开启一个代理服务器0.0.0.0:10808</p>
+<p>2.局域网设备通过代理服务器访问手机app的进程监听ip:port&#x3D;&gt;127.0.0.1:2222</p>
+<p>3.数据包可以通过手机app的调试模式(webview)获得，可以进行接口测试</p>
+<p>自动化测试最好还是需要root</p>
+<h3 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h3><p>1&gt;打开手机调试模式</p>
+<p>注：要先点击版本号打开开发者选项</p>
+<p><img src="/../image/app-Debug/phone-debug.png"></p>
+<p>2&gt;打开电脑Google的chrome:&#x2F;&#x2F;inspect&#x2F;#devices</p>
+<p><img src="/../image/app-Debug/Google-Debug.png"></p>
+<p>3&gt;打开手机app的调试开关中的xweb或者其他webview、TBS X5等，<strong>最重要的是打开webview调试</strong></p>
+<p><img src="/../image/app-Debug/app-debug-1.png"></p>
+<p><img src="/../image/app-Debug/app-debug-2.png"></p>
+<p>4&gt;点击Google中弹出的</p>
+<p><img src="/../image/app-Debug/show-debug.png"></p>
+<p><img src="/../image/app-Debug/show-debug-2.png"></p>
+<p>5&gt;利用postman–&gt;bp–&gt;手机代理进行测试，或者直接在调试模式下用断点和rpc远程调用测试；</p>
+<h2 id="①无调试情况（需root）"><a href="#①无调试情况（需root）" class="headerlink" title="①无调试情况（需root）"></a>①无调试情况（需root）</h2><p><strong>未完待续</strong></p>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7195489874409373755">商密TLCP协议浅析</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yurang/p/11505741.html">Wireshark解密HTTPS流量的两种方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://muhe-blog.github.io/2024/04/07/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9B%BD%E5%AF%86%E7%AB%99%E7%82%B9%E6%8A%93%E5%8C%85%E6%B5%81%E7%A8%8B/">国密站点抓包流程</a></p>
+<p>用于测试的apk举例</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ctfs/write-ups-2015/raw/master/seccon-quals-ctf-2015/binary/reverse-engineering-android-apk-1/rps.apk">CTF用于测试的apk-x86</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dineshshetty/Android-InsecureBankv2/releases/tag/2.3.1">银行测试apk-arm</a></p>
+<h1 id="6-举例"><a href="#6-举例" class="headerlink" title="6-举例"></a>6-举例</h1><p>企业微信小程序h5：</p>
+<p>测试方式：</p>
+<p>1.企微app内部打开网址<a target="_blank" rel="noopener" href="http://debugxweb.qq.com/?inspector=true%EF%BC%8C%E6%89%93%E5%BC%80%E8%B0%83%E8%AF%95%E6%A8%A1%E5%BC%8F%E5%90%8E%E7%9B%B4%E6%8E%A5%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95app%EF%BC%8C%E6%89%93%E5%BC%80chrome://inspect/#devices%E8%B0%83%E8%AF%95%E5%8D%B3%E5%8F%AF">http://debugxweb.qq.com/?inspector=true，打开调试模式后直接访问测试app，打开chrome://inspect/#devices调试即可</a></p>
+<p>2.点击需要测试的小程序直接抓包，获取code等信息，直接url放到浏览器运行，可能需要放入本地cookie[iptables-需要root]</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>乌篷船
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.cliayn.top/2025/10/10/app%E6%B5%8B%E8%AF%95/" title="app测试">https://blog.cliayn.top/2025/10/10/app测试/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/app-test/" rel="tag"># app-test</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/09/24/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E6%8C%96%E6%8E%98%E6%B5%81%E7%A8%8B/" rel="prev" title="渗透测试基本流程">
+                  <i class="fa fa-angle-left"></i> 渗透测试基本流程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/10/%E5%81%9A%E6%B5%8B%E8%AF%95%E8%A6%81%E5%87%86%E5%A4%87%E7%9A%84%E5%B7%A5%E5%85%B7/" rel="next" title="做测试要准备的工具">
+                  做测试要准备的工具 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa-regular fa-user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">乌篷船</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">246k</span>
+  </span>
+</div><script src="https://cliayn.github.io/js/typed.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 获取你在 _config.yml 中定义的感悟列表
+    // 注意：Hexo 在渲染时会将 config 变量注入
+    var sayings = ["可以自由支配的时间，也就是真正的财富。","我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)"];
+    
+    if (sayings && sayings.length > 0) {
+      // 找到 NexT 的 subtitle 元素
+      var subtitleElement = document.querySelector('.site-subtitle');
+      
+      if (subtitleElement) {
+        // 清空原有文字
+        subtitleElement.innerHTML = '<span id="typed-subtitle"></span>';
+        
+        // 初始化 Typed.js
+        new Typed('#typed-subtitle', {
+          strings: sayings,
+          typeSpeed: 70,     // 打字速度
+          backSpeed: 30,     // 回退速度
+          backDelay: 5000,   // 展示后的停顿时间（毫秒）
+          loop: true,        // 是否循环
+          smartBackspace: true
+        });
+      }
+    }
+  });
+</script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/cliayn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+<div id="bg-toggle-btn" class="day-night-switch">
+  <i id="bg-toggle-icon" class="fa fa-moon"></i>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('bg-toggle-btn');
+  var icon = document.getElementById('bg-toggle-icon');
+  
+  // 定义图片路径
+  var pic1 = 'url("/images/background.jpg")'; // 默认/白天背景
+  var pic2 = 'url("/images/ai-background.png")'; // 切换/夜晚背景
+
+  // 检查本地存储中是否有记录，保持刷新后状态一致
+  var isNight = localStorage.getItem('isNight') === 'true';
+
+  // 初始化页面状态函数
+  function applyState() {
+    if (isNight) {
+      // 如果是夜晚模式：显示太阳图标，背景换成 pic2
+      document.body.style.backgroundImage = pic2;
+      icon.className = 'fa fa-sun'; 
+    } else {
+      // 如果是白天模式：显示月亮图标，背景换成 pic1
+      document.body.style.backgroundImage = pic1;
+      icon.className = 'fa fa-moon';
+    }
+  }
+
+  // 页面加载时先应用一次状态
+  applyState();
+
+  // 点击事件监听
+  btn.addEventListener('click', function() {
+    isNight = !isNight; // 状态反转
+    applyState(); // 应用新状态
+    // 将状态保存到浏览器缓存，防止刷新页面后重置
+    localStorage.setItem('isNight', isNight);
+  });
+})();
+</script>
+<canvas class="fireworks" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
+<script src="/js/anime.min.js"></script>
+<script src="/js/fireworks.js"></script>
+<script src="/js/read-more-reveal.js"></script>
+</body>
+</html>

