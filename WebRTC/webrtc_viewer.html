@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/.svg" color="#222">
+  <meta name="google-site-verification" content="nQ1ot4TllsO_jg0_DRzKfQ4QLDbTG3fV22N4xxpzF3Q">
+  <meta name="msvalidate.01" content="63D9688A8F4C2AAAD74951EFBA3C541A">
+  <meta name="baidu-site-verification" content="codeva-bnmASICFhg">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha256-5eIC48iZUHmSlSUz9XtjRyK2mzQkHScZY1WdMaoz74E=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.cliayn.top","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.21.1","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideDownBigOut"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="WebRTC 播放器    * { box-sizing: border-box; margin: 0; padding: 0; }    body {     font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, sans-serif;     background: #0a0a0f;     color: #e8e8f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="乌篷船的博客">
+<meta property="og:url" content="https://blog.cliayn.top/WebRTC/webrtc_viewer.html">
+<meta property="og:site_name" content="乌篷船的博客">
+<meta property="og:description" content="WebRTC 播放器    * { box-sizing: border-box; margin: 0; padding: 0; }    body {     font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, sans-serif;     background: #0a0a0f;     color: #e8e8f">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-09T13:13:02.165Z">
+<meta property="article:modified_time" content="2026-06-07T15:58:53.000Z">
+<meta property="article:author" content="乌篷船">
+<meta property="article:tag" content="python,网络安全,娱乐">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.cliayn.top/WebRTC/webrtc_viewer">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"https://blog.cliayn.top/WebRTC/webrtc_viewer.html","path":"WebRTC/webrtc_viewer.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | 乌篷船的博客
+</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">乌篷船的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-我的链接"><a href="/mylinks/" rel="section"><i class="fa fa-sitemap fa-fw"></i>我的链接</a></li><li class="menu-item menu-item-密文解密"><a href="/decrypt/" rel="section"><i class="fa fa-calendar fa-fw"></i>密文解密</a></li><li class="menu-item menu-item-webrtc"><a href="/WebRTC/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>WebRTC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">WebRTC 播放器</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="乌篷船"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">乌篷船</p>
+  <div class="site-description" itemprop="description">记录笔记的网址<br>存在学习错误的地方请多指教</div>
+  
+  <div style="color: #002366; border-left: 3px solid #002366; padding-left: 5px; font-size: 12px; margin-top: 10px; text-align: left; line-height: 1.5;">
+    <strong>免责声明：<br></strong>本站所有渗透笔记仅供安全研究<br>禁止非法用途！
+  </div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:cliay55555@gmail.com" title="E-Mail → mailto:cliay55555@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+
+    
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas width="250" height="250" id="resCanvas" style="width:100%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android-Studio/" rel="tag">Android Studio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Article/" rel="tag">Article</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Attack-Analysis/" rel="tag">Attack Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Backend/" rel="tag">Backend</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blue-Team/" rel="tag">Blue Team</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Burp-Suite/" rel="tag">Burp Suite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Classification/" rel="tag">Classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Computer-info/" rel="tag">Computer-info</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cybersecurity/" rel="tag">Cybersecurity</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-correcting/" rel="tag">Error correcting</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Honeypot/" rel="tag">Honeypot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information/" rel="tag">Information</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Information-Gathering/" rel="tag">Information Gathering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Injection/" rel="tag">Injection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intranet/" rel="tag">Intranet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Intrusion-Detection/" rel="tag">Intrusion Detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LLM/" rel="tag">LLM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Notes/" rel="tag">Notes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Official-account/" rel="tag">Official account</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Organize/" rel="tag">Organize</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Red-team/" rel="tag">Red team</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/" rel="tag">Test</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Traffic-Analysis/" rel="tag">Traffic Analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Two-dimensional/" rel="tag">Two-dimensional</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows-update/" rel="tag">Windows update</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/" rel="tag">api</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app-test/" rel="tag">app-test</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/article/" rel="tag">article</a><span class="tag-list-count">24</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer/" rel="tag">computer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/console/" rel="tag">console</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exe/" rel="tag">exe</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/host/" rel="tag">host</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jwt/" rel="tag">jwt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jython/" rel="tag">jython</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/key/" rel="tag">key</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keys/" rel="tag">keys</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/n2n/" rel="tag">n2n</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/p2p/" rel="tag">p2p</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/payload/" rel="tag">payload</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/poc/" rel="tag">poc</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/" rel="tag">project</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/qBitTorrent/" rel="tag">qBitTorrent</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rss/" rel="tag">rss</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/" rel="tag">web</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web-net/" rel="tag">web-net</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%89%E6%AC%A1%E5%85%83/" rel="tag">三次元</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="tag">数据集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%97/" rel="tag">狗</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" rel="tag">语言模型</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+    
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta-container">
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebRTC 播放器</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0a0f;
+    color: #e8e8f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 860px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6c63ff, #3ecfcf);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo svg { width: 18px; height: 18px; fill: white; }
+  .header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+  .header p { font-size: 13px; color: #7a7a9a; margin-top: 1px; }
+
+  /* Join panel */
+  .join-panel {
+    background: #13131e;
+    border: 1px solid #22223a;
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #7a7a9a;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+  .field input {
+    width: 100%;
+    background: #0a0a0f;
+    border: 1px solid #22223a;
+    border-radius: 10px;
+    color: #e8e8f0;
+    font-size: 15px;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+  }
+  .field input:focus { border-color: #6c63ff; }
+  .field input::placeholder { color: #3a3a5a; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s; padding: 12px 20px;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #6c63ff, #4fc3f7);
+    color: white;
+    width: 100%;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-danger {
+    background: #2a0f0f;
+    border: 1px solid #5a1f1f;
+    color: #ff6b6b;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+  .btn-danger:hover { background: #3a1515; }
+
+  /* Status bar */
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #0a0a0f;
+    border: 1px solid #22223a;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .dot.idle    { background: #3a3a5a; }
+  .dot.connecting { background: #f0a500; animation: pulse 1s infinite; }
+  .dot.connected  { background: #3ecf8e; }
+  .dot.error      { background: #ff6b6b; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .status-text { color: #7a7a9a; }
+  .status-text span { color: #e8e8f0; font-weight: 500; }
+
+  /* Video area */
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #0a0a0f;
+    border: 1px solid #22223a;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  video {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: none;
+  }
+  video.visible { display: block; }
+
+  .placeholder {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 14px; color: #3a3a5a;
+  }
+  .placeholder svg { width: 52px; height: 52px; opacity: 0.5; }
+  .placeholder p { font-size: 14px; }
+  .placeholder.hidden { display: none; }
+
+  /* Controls overlay */
+  .controls-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: linear-gradient(transparent, rgba(10,10,15,0.85));
+    display: flex; align-items: center; justify-content: space-between;
+    opacity: 0; transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .video-wrap:hover .controls-overlay { opacity: 1; pointer-events: all; }
+  .ctrl-left { display: flex; align-items: center; gap: 10px; }
+  .ctrl-btn {
+    background: rgba(255,255,255,0.12); border: none; border-radius: 7px;
+    color: white; width: 34px; height: 34px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .ctrl-btn:hover { background: rgba(255,255,255,0.22); }
+  .ctrl-btn svg { width: 16px; height: 16px; fill: white; }
+  .vol-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 80px; height: 3px; border-radius: 2px;
+    background: rgba(255,255,255,0.3); outline: none; cursor: pointer;
+  }
+  .vol-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 13px; height: 13px;
+    border-radius: 50%; background: white; cursor: pointer;
+  }
+  .time-label { font-size: 12px; color: rgba(255,255,255,0.7); }
+
+  /* Log */
+  .log-panel {
+    background: #0d0d18;
+    border: 1px solid #1a1a2e;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .log-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid #1a1a2e;
+    font-size: 12px; font-weight: 500; color: #4a4a6a;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .log-body {
+    padding: 10px 14px;
+    max-height: 130px;
+    overflow-y: auto;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .log-body::-webkit-scrollbar { width: 4px; }
+  .log-body::-webkit-scrollbar-track { background: transparent; }
+  .log-body::-webkit-scrollbar-thumb { background: #22223a; border-radius: 2px; }
+  .log-line { display: flex; gap: 10px; }
+  .log-time { color: #3a3a5a; flex-shrink: 0; }
+  .log-info  { color: #7a7aaa; }
+  .log-ok    { color: #3ecf8e; }
+  .log-warn  { color: #f0a500; }
+  .log-err   { color: #ff6b6b; }
+
+  /* Peer chips */
+  .peers-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .peer-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: #1a1a2e; border: 1px solid #2a2a44;
+    border-radius: 20px; padding: 4px 12px; font-size: 12px;
+    cursor: pointer; transition: border-color 0.15s;
+  }
+  .peer-chip:hover { border-color: #6c63ff; }
+  .peer-chip .pdot { width: 6px; height: 6px; border-radius: 50%; background: #3ecf8e; }
+  .peer-chip.active { border-color: #6c63ff; background: #1a1528; }
+  .peers-empty { font-size: 13px; color: #3a3a5a; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </div>
+    <div>
+      <h1>WebRTC 播放器</h1>
+      <p>通过 WebRTC 接收树莓派推流</p>
+    </div>
+  </div>
+
+  <!-- Join Panel -->
+  <div class="join-panel">
+    <div class="row">
+      <div class="field">
+        <label>信令服务器地址</label>
+        <input type="text" id="serverUrl" value="wss://your-server.partykit.dev/parties/main/" placeholder="wss://...">
+      </div>
+      <div class="field">
+        <label>房间号</label>
+        <input type="text" id="roomId" placeholder="如：room1234" maxlength="20">
+      </div>
+    </div>
+    <div class="status-bar">
+      <div class="dot idle" id="statusDot"></div>
+      <div class="status-text" id="statusText">未连接 — 输入房间号后点击加入</div>
+      <div style="margin-left:auto; display:flex; gap:8px;" id="ctrlBtns">
+        <button class="btn-danger btn" id="disconnectBtn" style="display:none" onclick="disconnect()">断开</button>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="joinBtn" onclick="joinRoom()">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      加入房间
+    </button>
+  </div>
+
+  <!-- Peers -->
+  <div id="peersSection" style="display:none">
+    <div style="font-size:12px;color:#4a4a6a;text-transform:uppercase;letter-spacing:.8px;font-weight:500;margin-bottom:10px;">房间内的推流端</div>
+    <div class="peers-row" id="peersList">
+      <span class="peers-empty">等待推流端上线…</span>
+    </div>
+  </div>
+
+  <!-- Video -->
+  <div class="video-wrap" id="videoWrap">
+    <div class="placeholder" id="placeholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <rect x="2" y="6" width="20" height="14" rx="3"/>
+        <path d="M16 3l-4 3-4-3"/>
+        <circle cx="12" cy="13" r="3"/>
+      </svg>
+      <p>等待视频流…</p>
+    </div>
+    <video id="videoEl" autoplay playsinline controls></video>
+    <div class="controls-overlay">
+      <div class="ctrl-left">
+        <button class="ctrl-btn" onclick="toggleMute()" id="muteBtn" title="静音">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+        </button>
+        <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="100" oninput="setVolume(this.value)">
+      </div>
+      <button class="ctrl-btn" onclick="toggleFullscreen()" title="全屏">
+        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div class="log-panel">
+    <div class="log-header">
+      <span>连接日志</span>
+      <span id="logCount" style="color:#3a3a5a">0 条</span>
+    </div>
+    <div class="log-body" id="logBody"></div>
+  </div>
+
+</div>
+
+<script>
+  // ── State ─────────────────────────────────────────────────────────────────
+  let ws = null;
+  let myId = null;
+  let pc = null;
+  let activePeer = null;
+  let muted = false;
+  let logLines = 0;
+
+  const STUN_SERVERS = [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun1.l.google.com:19302' },
+  ];
+
+  // ── Logging ───────────────────────────────────────────────────────────────
+  function log(msg, type = 'info') {
+    const body = document.getElementById('logBody');
+    const now = new Date();
+    const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = `<span class="log-time">${t}</span><span class="log-${type}">${msg}</span>`;
+    body.appendChild(line);
+    body.scrollTop = body.scrollHeight;
+    logLines++;
+    document.getElementById('logCount').textContent = logLines + ' 条';
+  }
+
+  // ── Status ────────────────────────────────────────────────────────────────
+  function setStatus(text, state) {
+    document.getElementById('statusText').textContent = text;
+    const dot = document.getElementById('statusDot');
+    dot.className = 'dot ' + state;
+  }
+
+  // ── Join Room ─────────────────────────────────────────────────────────────
+  function joinRoom() {
+    const serverUrl = document.getElementById('serverUrl').value.trim();
+    const roomId = document.getElementById('roomId').value.trim();
+    if (!serverUrl || !roomId) { log('请填写服务器地址和房间号', 'warn'); return; }
+
+    document.getElementById('joinBtn').disabled = true;
+    setStatus('正在连接信令服务器…', 'connecting');
+    log(`连接 ${serverUrl}${roomId}`, 'info');
+
+    try {
+      ws = new WebSocket(serverUrl + roomId);
+    } catch(e) {
+      log('WebSocket 地址格式错误: ' + e.message, 'err');
+      reset(); return;
+    }
+
+    ws.onopen = () => {
+      log('信令服务器已连接', 'ok');
+    };
+
+    ws.onmessage = (ev) => {
+      let data;
+      try { data = JSON.parse(ev.data); } catch { return; }
+      handleSignal(data);
+    };
+
+    ws.onerror = () => {
+      log('WebSocket 错误', 'err');
+      setStatus('连接错误', 'error');
+    };
+
+    ws.onclose = () => {
+      log('信令连接已关闭', 'warn');
+      if (activePeer) setStatus('连接断开', 'error');
+      else setStatus('未连接', 'idle');
+    };
+  }
+
+  // ── Signal Handling ───────────────────────────────────────────────────────
+  function handleSignal(data) {
+    switch(data.type) {
+      case 'ok':
+        myId = data.id;
+        log(`分配到 ID: ${myId}`, 'ok');
+        setStatus(`已连接信令服务器 · ID: ${myId}`, 'connecting');
+        document.getElementById('disconnectBtn').style.display = '';
+        document.getElementById('peersSection').style.display = '';
+        send({ type: 'join_room', payload: { room_id: document.getElementById('roomId').value.trim() } });
+        break;
+
+      case 'same_network_clients':
+        log(`房间内现有 ${data.clients.length} 个推流端`, 'info');
+        data.clients.forEach(addPeer);
+        if (data.clients.length === 1) connectToPeer(data.clients[0]);
+        break;
+
+      case 'new_peer':
+        log(`新推流端上线: ${data.peer_id}`, 'ok');
+        addPeer(data.peer_id);
+        if (!activePeer) connectToPeer(data.peer_id);
+        break;
+
+      case 'peer_left':
+        log(`推流端下线: ${data.peer_id}`, 'warn');
+        removePeer(data.peer_id);
+        if (activePeer === data.peer_id) { closePc(); setStatus('推流端已断开', 'error'); }
+        break;
+
+      case 'offer':
+        log(`收到 offer (来自 ${data.from})`, 'info');
+        handleOffer(data.from, data.payload);
+        break;
+
+      case 'answer':
+        log(`收到 answer`, 'ok');
+        if (pc) pc.setRemoteDescription(new RTCSessionDescription({ type:'answer', sdp: data.payload.sdp }));
+        break;
+
+      case 'ice':
+        if (pc && data.payload) {
+          pc.addIceCandidate(new RTCIceCandidate(data.payload)).catch(()=>{});
+        }
+        break;
+
+      case 'error':
+        log('服务器错误: ' + data.msg, 'err');
+        break;
+    }
+  }
+
+  // ── Peer List UI ──────────────────────────────────────────────────────────
+  function addPeer(peerId) {
+    const list = document.getElementById('peersList');
+    if (list.querySelector(`[data-peer="${peerId}"]`)) return;
+    list.querySelector('.peers-empty')?.remove();
+    const chip = document.createElement('div');
+    chip.className = 'peer-chip';
+    chip.dataset.peer = peerId;
+    chip.innerHTML = `<span class="pdot"></span>${peerId}`;
+    chip.onclick = () => connectToPeer(peerId);
+    list.appendChild(chip);
+  }
+
+  function removePeer(peerId) {
+    document.querySelector(`[data-peer="${peerId}"]`)?.remove();
+    const list = document.getElementById('peersList');
+    if (!list.children.length) list.innerHTML = '<span class="peers-empty">等待推流端上线…</span>';
+  }
+
+  // ── WebRTC ────────────────────────────────────────────────────────────────
+  function connectToPeer(peerId) {
+    if (pc) closePc();
+    activePeer = peerId;
+    document.querySelectorAll('.peer-chip').forEach(c => c.classList.toggle('active', c.dataset.peer === peerId));
+    setStatus(`正在与 ${peerId} 建立 WebRTC 连接…`, 'connecting');
+    log(`向 ${peerId} 发送 connect_request`, 'info');
+    send({ type: 'connect_request', target: peerId, payload: {} });
+  }
+
+  async function handleOffer(fromId, payload) {
+    closePc();
+    activePeer = fromId;
+    pc = createPc(fromId);
+    await pc.setRemoteDescription(new RTCSessionDescription({ type:'offer', sdp: payload.sdp }));
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    send({ type: 'answer', target: fromId, payload: { sdp: answer.sdp } });
+    log('已发送 SDP answer', 'ok');
+  }
+
+  function createPc(peerId) {
+    const p = new RTCPeerConnection({ iceServers: STUN_SERVERS });
+
+    p.onicecandidate = ({ candidate }) => {
+      if (candidate) send({ type: 'ice', target: peerId, payload: candidate.toJSON() });
+    };
+
+    p.onconnectionstatechange = () => {
+      log(`连接状态: ${p.connectionState}`, p.connectionState === 'connected' ? 'ok' : 'info');
+      if (p.connectionState === 'connected') setStatus(`● 正在播放 · 推流端: ${peerId}`, 'connected');
+      if (['failed','disconnected'].includes(p.connectionState)) setStatus('连接中断', 'error');
+    };
+
+    p.ontrack = ({ streams }) => {
+      const vid = document.getElementById('videoEl');
+      if (streams[0]) {
+        vid.srcObject = streams[0];
+        vid.classList.add('visible');
+        document.getElementById('placeholder').classList.add('hidden');
+        log('媒体流已接收，开始播放 ▶', 'ok');
+      }
+    };
+
+    p.oniceconnectionstatechange = () => {
+      log(`ICE 状态: ${p.iceConnectionState}`, 'info');
+    };
+
+    return p;
+  }
+
+  function closePc() {
+    if (pc) { try { pc.close(); } catch{} pc = null; }
+    const vid = document.getElementById('videoEl');
+    vid.srcObject = null;
+    vid.classList.remove('visible');
+    document.getElementById('placeholder').classList.remove('hidden');
+    activePeer = null;
+    document.querySelectorAll('.peer-chip').forEach(c => c.classList.remove('active'));
+  }
+
+  // ── Controls ──────────────────────────────────────────────────────────────
+  function toggleMute() {
+    const vid = document.getElementById('videoEl');
+    muted = !muted;
+    vid.muted = muted;
+    document.getElementById('muteBtn').style.opacity = muted ? '0.4' : '1';
+  }
+
+  function setVolume(v) {
+    document.getElementById('videoEl').volume = v / 100;
+  }
+
+  function toggleFullscreen() {
+    const wrap = document.getElementById('videoWrap');
+    if (!document.fullscreenElement) wrap.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  }
+
+  function disconnect() {
+    closePc();
+    if (ws) { ws.close(); ws = null; }
+    myId = null;
+    setStatus('已断开', 'idle');
+    document.getElementById('joinBtn').disabled = false;
+    document.getElementById('disconnectBtn').style.display = 'none';
+    document.getElementById('peersSection').style.display = 'none';
+    document.getElementById('peersList').innerHTML = '<span class="peers-empty">等待推流端上线…</span>';
+    log('已手动断开连接', 'warn');
+  }
+
+  // ── Send helper ───────────────────────────────────────────────────────────
+  function send(obj) {
+    if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
+  }
+
+  log('页面已加载，等待操作', 'info');
+</script>
+</body>
+</html>
+
+      </div>
+      
+      
+      
+    </div>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa-regular fa-user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">乌篷船</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">251k</span>
+  </span>
+</div><script src="https://cliayn.github.io/js/typed.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 获取你在 _config.yml 中定义的感悟列表
+    // 注意：Hexo 在渲染时会将 config 变量注入
+    var sayings = ["可以自由支配的时间，也就是真正的财富。","我当然是正态分布下的蠢材<br>可是啊<br>人生=δ(x−相信)"];
+    
+    if (sayings && sayings.length > 0) {
+      // 找到 NexT 的 subtitle 元素
+      var subtitleElement = document.querySelector('.site-subtitle');
+      
+      if (subtitleElement) {
+        // 清空原有文字
+        subtitleElement.innerHTML = '<span id="typed-subtitle"></span>';
+        
+        // 初始化 Typed.js
+        new Typed('#typed-subtitle', {
+          strings: sayings,
+          typeSpeed: 70,     // 打字速度
+          backSpeed: 30,     // 回退速度
+          backDelay: 5000,   // 展示后的停顿时间（毫秒）
+          loop: true,        // 是否循环
+          smartBackspace: true
+        });
+      }
+    }
+  });
+</script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/cliayn" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+
+
+<div id="bg-toggle-btn" class="day-night-switch">
+  <i id="bg-toggle-icon" class="fa fa-moon"></i>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('bg-toggle-btn');
+  var icon = document.getElementById('bg-toggle-icon');
+  
+  // 定义图片路径
+  var pic1 = 'url("/images/background.jpg")'; // 默认/白天背景
+  var pic2 = 'url("/images/ai-background.png")'; // 切换/夜晚背景
+
+  // 检查本地存储中是否有记录，保持刷新后状态一致
+  var isNight = localStorage.getItem('isNight') === 'true';
+
+  // 初始化页面状态函数
+  function applyState() {
+    if (isNight) {
+      // 如果是夜晚模式：显示太阳图标，背景换成 pic2
+      document.body.style.backgroundImage = pic2;
+      icon.className = 'fa fa-sun'; 
+    } else {
+      // 如果是白天模式：显示月亮图标，背景换成 pic1
+      document.body.style.backgroundImage = pic1;
+      icon.className = 'fa fa-moon';
+    }
+  }
+
+  // 页面加载时先应用一次状态
+  applyState();
+
+  // 点击事件监听
+  btn.addEventListener('click', function() {
+    isNight = !isNight; // 状态反转
+    applyState(); // 应用新状态
+    // 将状态保存到浏览器缓存，防止刷新页面后重置
+    localStorage.setItem('isNight', isNight);
+  });
+})();
+</script>
+<canvas class="fireworks" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
+<script src="/js/anime.min.js"></script>
+<script src="/js/fireworks.js"></script>
+<script src="/js/read-more-reveal.js"></script>
+</body>
+</html>

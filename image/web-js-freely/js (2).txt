@@ -1,0 +1,61 @@
+var demo = new Hlclient("ws://127.0.0.1:12080/ws?group=zzz");
+
+
+demo.regAction("post", function (resolve, param) {
+    var encryptedNumber = enc(String(param));
+    var sendResult = pass(encryptedNumber);
+    resolve(sendResult);
+});
+
+
+
+demo.regAction("sendSms", function (resolve, param) {
+    var encryptedMobile = enc(String(param)); 
+    var data = { mobile: encryptedMobile, smsmode: "1" };
+    var sendResult = sms(data);
+    resolve(sendResult); 
+});
+
+demo.regAction("hello3", function (resolve,param) {
+    //这里还是param参数 param里面的key 是先这里写，但到时候传接口就必须对应的上
+    res=hlg(param["user"],param["status"])
+    resolve(res);
+})
+
+function mYe(t, e, n, r) {
+    return xn({
+        url: "/auth/login",
+        headers: {
+            isToken: !1
+        },
+        method: "post",
+        data: {
+            username: t,
+            password: e,
+            code: n,
+            uuid: r
+        }
+    })
+}
+
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://example.com/endpoint', true); // 或者 'POST'
+xhr.setRequestHeader('Cookie', 'username=15888888888; rememberMe=true');
+xhr.setRequestHeader('Content-Type', 'application/json'); // 根据需要设置
+// 你还可以添加其他自定义请求头
+
+// 如果是 POST 请求，你可能需要添加 body
+// xhr.send(JSON.stringify({ key: 'value' }));
+xhr.send();
+
+xhr.onload = function() {
+  if (xhr.status >= 200 && xhr.status < 300) {
+    console.log('Response:', xhr.responseText);
+  } else {
+    console.error('Request failed with status:', xhr.status);
+  }
+};
+
+xhr.onerror = function() {
+  console.error('Request failed');
+};
