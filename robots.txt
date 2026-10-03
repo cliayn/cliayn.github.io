@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# 屏蔽无意义页面
+Disallow: /search/
+Disallow: /404.html
+
+Sitemap: https://cliayn.github.io/sitemap.xml
